@@ -103,10 +103,10 @@ echo '<li><a href="' . $appurl . '/invoice"><span>' . img('/tango/24x24/apps/acc
     // Create Invoice
     if ($_ENV['Contact']['id']) {
         echo '<li><a href="' . $appurl . '/invoice/create?c=' . $_ENV['Contact']['id'] . '">' . img('/tango/24x24/actions/list-add.png','New Invoice') . ' Create</a></li>';
-        echo '<li><hr /></li>';
+        // echo '<li><hr /></li>';
     } else {
         echo '<li><a href="' . $appurl . '/invoice/create">' . img('/tango/24x24/actions/list-add.png','New Invoice') . ' Create</a></li>';
-        echo '<li><hr /></li>';
+        // echo '<li><hr /></li>';
     }
     if (!empty($_ENV['Invoice']['id'])) {
         echo '<li><a href="' . $appurl . '/invoice/view?i=' . $_ENV['Invoice']['id'] . '">' . img('/silk/1.3/layout.png','Invoice') . '&nbsp;&laquo;Invoice #' . $_ENV['Invoice']['id'] . '</a></li>';

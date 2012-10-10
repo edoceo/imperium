@@ -44,11 +44,11 @@ echo '<link href="//gcdn.org/fancybox/2.1.0/fancybox.css" rel="stylesheet">';
 
 <!-- Content Header -->
 <div id="head">
-<div id="logo"><?php
-$img = '<img alt="logo" src="' . $_ENV['Application']['logo'] . '" />';
-echo radix::link('/',$img);
-?></div>
 <?php
+
+// Logo Issue
+echo '<div id="logo"><img alt="logo" src="' . $_ENV['Application']['logo'] . '" /></div>';
+
 echo '<h1>' . $_ENV['title'] . '</h1>';
 if (!empty($this->title_one)) {
   echo '<h2>' . $this->title_one . '</h2>';
@@ -100,3 +100,5 @@ $(document).ready(function() {
 </script>
 </body>
 </html>
+<?php
+// echo radix::dump($_ENV);
