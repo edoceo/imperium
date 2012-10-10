@@ -10,6 +10,8 @@ header('Cache-Control: no-cache, must-revalidate');
 header('Cache-Control: no-cache, must-revalidate');
 
 require_once(dirname(dirname(__FILE__)) . '/boot.php');
+require_once('Radix/Session.php');
+radix_session::init();
 
 // Zend Session
 // Zend_Session::start(array(
@@ -84,6 +86,7 @@ require_once(dirname(dirname(__FILE__)) . '/boot.php');
 if (!empty($_GET['_t'])) {
     $opts['theme'] = $_GET['_t'];
 }
+
 radix::init($opts);
 radix::exec();
 radix::view();
