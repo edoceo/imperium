@@ -15,34 +15,39 @@ set_include_path(implode(PATH_SEPARATOR,$path));
 define('APP_ROOT',dirname(__FILE__));
 
 require_once('Radix.php');
-
-// require_once('Radix/Filter.php');
-
-// require_once('Radix/SHM.php');
-require_once('Radix/SQL.php');
+require_once('Radix/ACL.php');
+require_once('Radix/db/sql.php');
 require_once('Radix/SQL_Record.php');
 
-// Load Configuration into ENV
+// Load Application Config
 $_ENV = parse_ini_file(APP_ROOT . '/etc/boot.ini',true);
+// Merge Local
+// $x = dirname(__FILE__).'/imperium-local.ini';
+// if ( (is_file($x)) && (is_readable($x)) ) {
+//     $x = parse_ini_file($x,true);
+//     $_ENV = array_replace_recursive($_ENV,$x);
+// }
 // Merge Host
-if ($x = getenv('IMPERIUM_CONFG')) {
+if ($x = getenv('IMPERIUM_CONFIG')) {
     $x = APP_ROOT . '/etc/' . $x . '.ini';
     if ( (is_file($x)) && (is_readable($x)) ) {
-        $_ENV = array_merge($_ENV,parse_ini_file($x,true));
+        $x = parse_ini_file($x,true);
+        $_ENV = array_replace_recursive($_ENV,$x);
     }
 }
+$_ENV = array_change_key_case($_ENV);
 
-switch ($_ENV['Database']['kind']) {
+switch ($_ENV['database']['kind']) {
 case 'pgsql':
-    Radix_SQL::init('pgsql:' . $_ENV['Database']['path'],$_ENV['Database']['user'],$_ENV['Database']['pass']);
+    radix_db_sql::init('pgsql:' . $_ENV['database']['path'],$_ENV['database']['user'],$_ENV['database']['pass']);
     break;
 case 'sqlite':
-    Radix_SQL::init('sqlite:' . APP_ROOT . '/var/' . $_ENV['Database']['file']);
+    radix_db_sql::init('sqlite:' . APP_ROOT . '/var/' . $_ENV['database']['file']);
     break;
 default:
     // Fail
 }
-unset($_ENV['Database']); // exclude from ENV
+unset($_ENV['database']); // exclude from ENV
 
 function html($x) { return htmlspecialchars($x,ENT_QUOTES,'UTF-8',false); }
 function stub($x)

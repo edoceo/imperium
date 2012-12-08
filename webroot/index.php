@@ -13,16 +13,6 @@ require_once(dirname(dirname(__FILE__)) . '/boot.php');
 require_once('Radix/Session.php');
 radix_session::init();
 
-// Zend Session
-// Zend_Session::start(array(
-//   // 'cookie_path' => '/imperium',
-//   'name'=> 'imperium',
-//   'use_cookies'=>true,
-//   'use_only_cookies'=>true
-// ));
-// $x = new Zend_Session_Namespace('default',true);
-// Zend_Registry::set('session',$x);
-
 // Zend_Controller_Front
 // $front = Zend_Controller_Front::getInstance();
 // $front->setControllerDirectory('../approot/controllers');
@@ -81,13 +71,20 @@ radix_session::init();
 // }
 // // Root Gets all Access
 // $acl->allow('root');
-// Zend_Registry::set('acl',$acl);
+
+radix_acl::permit('null','login');
+radix_acl::permit('root','*');
 
 if (!empty($_GET['_t'])) {
     $opts['theme'] = $_GET['_t'];
 }
 
 radix::init($opts);
+if (empty($_SESSION['user'])) {
+    if (radix::$path != '/sign-in') {
+        radix::redirect('/sign-in');
+    }
+}
 radix::exec();
 radix::view();
 radix::send();

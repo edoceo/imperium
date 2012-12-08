@@ -47,7 +47,7 @@ echo '<link href="//gcdn.org/fancybox/2.1.0/fancybox.css" rel="stylesheet">';
 <?php
 
 // Logo Issue
-echo '<div id="logo"><img alt="logo" src="' . $_ENV['Application']['logo'] . '" /></div>';
+echo '<div id="logo"><img alt="logo" src="' . $_ENV['application']['logo'] . '" /></div>';
 
 echo '<h1>' . $_ENV['title'] . '</h1>';
 if (!empty($this->title_one)) {
