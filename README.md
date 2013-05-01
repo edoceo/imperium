@@ -22,6 +22,7 @@ Export the latest version to some location on the system such as `/opt/edoceo/im
 
 {{{
     svn export https://edoceo-imperium.googlecode.com/svn/trunk /opt/edoceo/imperium
+    git clone https://github.com/edoceo/imperium /opt/edoceo/imperium
 }}}
 
 Create the database user and the database itself
@@ -38,5 +39,6 @@ Change to the `approot/sql` directory then run each of those files in order.
     # for f in *; do psql -U imperium -f $f; done
 }}}
 
-Then update the configuration in `approot/etc/imperium.ini` accordingly
+Copy `approot/etc/imperium.ini` to `approot/etc/imperium-local.ini`.
+Edit imperium-local.ini to configure proper values for your environment.
 

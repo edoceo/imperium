@@ -21,6 +21,7 @@ $path[] = get_include_path();
 set_include_path(implode(PATH_SEPARATOR,$path));
 
 define('APP_ROOT',dirname(__FILE__));
+define('APP_NAME','Edoceo Imperium');
 
 // Use Zend Loader (>=1.8)
 require_once('Zend/Loader/Autoloader.php');
