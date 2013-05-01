@@ -1,28 +1,36 @@
 <?php
 /**
-    Edoceo Imperium Front-Controller
+    @file
+    @brief Web Handler for Edoceo Imperium
 */
 
 // Uncomment to get Outputs
-$s0 = microtime(true);
-
-header('Cache-Control: no-cache, must-revalidate');
-header('Cache-Control: no-cache, must-revalidate');
+// $s0 = microtime(true);
 
 require_once(dirname(dirname(__FILE__)) . '/boot.php');
-require_once('Radix/Session.php');
-radix_session::init();
+
+header('Cache-Control: no-cache, must-revalidate');
+
+// Zend Session
+Zend_Session::start(array(
+  // 'cookie_path' => '/imperium',
+  'name'=> 'imperium',
+  'use_cookies'=>true,
+  'use_only_cookies'=>true
+));
+$x = new Zend_Session_Namespace('default',true);
+Zend_Registry::set('session',$x);
 
 // Zend_Controller_Front
-// $front = Zend_Controller_Front::getInstance();
-// $front->setControllerDirectory('../approot/controllers');
+$front = Zend_Controller_Front::getInstance();
+$front->setControllerDirectory('../approot/controllers');
 //$front->throwExceptions(true);
 //$front->setParam('noErrorHandler', true);
 
 // Add Routes
-// $router = $front->getRouter();
-// // Controller/Action/ID Default
-// $router->addRoute('c-a-id',new Zend_Controller_Router_Route('/:controller/:action/:id'));
+$router = $front->getRouter();
+// Controller/Action/ID Default
+$router->addRoute('c-a-id',new Zend_Controller_Router_Route('/:controller/:action/:id'));
 
 // Email Actions
 //$router->addRoute('email-folder-view',
@@ -31,63 +39,73 @@ radix_session::init();
 //    new Zend_Controller_Router_Route_Regex('email/([\w\.\-]+@[\w\.\-]+)/(\d+)',array('controller'=>'Email','action'=>'viewMessage')));
 
 // Login / Logout
-// Undo Some Here
-// $router->addRoute('hash',new Zend_Controller_Router_Route('hash/:hash',array('controller'=>'Index','action'=>'hash')));
-// $router->addRoute('login',new Zend_Controller_Router_Route('login',array('controller'=>'Index','action'=>'login')));
-// $router->addRoute('logout',new Zend_Controller_Router_Route('logout',array('controller'=>'Index','action'=>'logout')));
-// // Checkout Link for Invoices
-// $router->addRoute('checkout-invoice',new Zend_Controller_Router_Route('checkout/invoice/:hash',array('controller'=>'checkout','action'=>'invoice')));
-// //$router->addRoute('accounting-wizard',new Zend_Controller_Router_Route('/accounts/wizard',array('controller'=>'account_wizard')));
+$router->addRoute('hash',new Zend_Controller_Router_Route('hash/:hash',array('controller'=>'Index','action'=>'hash')));
+$router->addRoute('login',new Zend_Controller_Router_Route('login',array('controller'=>'Index','action'=>'login')));
+$router->addRoute('logout',new Zend_Controller_Router_Route('logout',array('controller'=>'Index','action'=>'logout')));
+
+// Checkout Link for Invoices
+$router->addRoute('checkout-invoice',new Zend_Controller_Router_Route('checkout/invoice/:hash',array('controller'=>'checkout','action'=>'invoice')));
+//$router->addRoute('accounting-wizard',new Zend_Controller_Router_Route('/accounts/wizard',array('controller'=>'account_wizard')));
 
 // Zend_Acl Create Access Control List
-//$acl = new Zend_Acl();
-//$acl->add( new Zend_Acl_Resource('index') );
-//$acl->add( new Zend_Acl_Resource('error') );
+$acl = new Zend_Acl();
+$acl->add( new Zend_Acl_Resource('index') );
+$acl->add( new Zend_Acl_Resource('error') );
 // @todo These should be added on-demand like for other modules
 //$acl->add( new Zend_Acl_Resource('contact') );
 //$acl->add( new Zend_Acl_Resource('contact.controller') );
 //$acl->add( new Zend_Acl_Resource('invoice') );
 //$acl->add( new Zend_Acl_Resource('workorder') );
 //$acl->add( new Zend_Acl_Resource('workorder.item') );
-//$acl->addRole( new Zend_Acl_Role('null') );
-//$acl->addRole( new Zend_Acl_Role('root') );
-//$acl->addRole( new Zend_Acl_Role('user'), 'null' ); // inherit from null
+
+$acl->addRole( new Zend_Acl_Role('null') );
+$acl->addRole( new Zend_Acl_Role('root') );
+$acl->addRole( new Zend_Acl_Role('user'), 'null' ); // inherit from null
 //$acl->addRole( new Zend_Acl_Role($username), 'root' ); // inherit from root
 
 // Zend_Auth
-// $auth = Zend_Auth::getInstance();
+$auth = Zend_Auth::getInstance();
+
 // Force Global Login
-// $x = App_Config::get('Application.auto_username');
-// if (!empty($x)) {
-//     $auth->authenticate( new App_Auth($x,App_Config::get('Application.auto_password') ) );
-// }
-// 
-// // If Someone is logged in then they inherit from the 'User' role
-// if ($auth->hasIdentity()) {
-//     $cu = $auth->getIdentity();
-//     if (!$acl->hasRole($cu->username)) {
-//         $acl->addRole( new Zend_Acl_Role($cu->username), 'user' );
-//     }
-// }
-// // Root Gets all Access
-// $acl->allow('root');
-
-radix_acl::permit('null','login');
-radix_acl::permit('root','*');
-
-if (!empty($_GET['_t'])) {
-    $opts['theme'] = $_GET['_t'];
+$x = $_ENV['application']['auto_username'];
+if (!empty($x)) {
+    $auth->authenticate( new App_Auth($x,$_ENV['application']['auto_password'] ) );
 }
 
-radix::init($opts);
-if (empty($_SESSION['user'])) {
-    if (radix::$path != '/sign-in') {
-        radix::redirect('/sign-in');
+// If Someone is logged in then they inherit from the 'User' role
+if ($auth->hasIdentity()) {
+    $cu = $auth->getIdentity();
+    if (!$acl->hasRole($cu->username)) {
+        $acl->addRole( new Zend_Acl_Role($cu->username), 'user' );
+    }
+    $fn = APP_ROOT . '/approot/etc/' . $cu->username . '.ini';
+    if (is_file($fn)) {
+        $cfg = parse_ini_file($fn,true);
+        $cfg = array_change_key_case($cfg);
+        $_ENV = array_merge_recursive($_ENV,$cfg);
     }
 }
-radix::exec();
-radix::view();
-radix::send();
+
+// Root Gets all Access
+$acl->allow('root');
+
+Zend_Registry::set('acl',$acl);
+
+Zend_Layout::startMvc();
+$l = Zend_Layout::getMvcInstance();
+// User Specified
+if (!empty($_GET['_t'])) {
+    $l->setLayout($_GET['_t']);
+}
+
+// Configure View Renderer
+$vr = Zend_Controller_Action_HelperBroker::getStaticHelper('viewRenderer');
+$vr->initView();
+$vr->view->doctype('HTML5');
+$vr->view->setLfiProtection(false);
+
+// Dispatch
+$front->dispatch();
 
 // Output Statistics
 if (!empty($s0)) {
