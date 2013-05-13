@@ -7,23 +7,8 @@
     @note can't decide between command line args and/or forcing ENV vars
 */
 
-// Configurations
-$cli_opt = getopt('c:d:',array('config:','date:'));
-if (empty($cli_opt['config']) && !empty($cli_opt['c'])) $cli_opt['config'] = $cli_opt['c'];
-if (!empty($cli_opt['config'])) putenv('IMPERIUM_CONFIG=' . $cli_opt['config']);
-
-// Bootstrapper
-require_once(dirname(dirname(dirname(__FILE__))) . '/boot.php');
-// require_once(dirname(dirname(dirname(__FILE__))) . '/approot/controllers/WorkorderController.php');
-
-$auth = Zend_Auth::getInstance();
-$db = Zend_Registry::get('db');
-
-$time = mktime(0,0,0);
-if (!empty($cli_opt['d'])) $cli_opt['date'] = $cli_opt['d'];
-if (!empty($cli_opt['date'])) $time = strtotime($cli_opt['date']);
-$date = strftime('%Y-%m-%d',$time);
-
+// CLI
+require_once(dirname(dirname(__FILE__)) . '/lib/cli.php');
 
 echo 'Imperium WorkOrder Subscription Processor: ' . $date . "\n";
 
@@ -38,9 +23,11 @@ $res = $db->fetchAll($sql,array('Active','Monthly',$date));
 foreach ($res as $wo) {
     $span = floor(($time - strtotime($wo->date)) / 86400);
     $diff = $span % 30;
-    echo "Monthly: $wo->id span:$span diff:$diff \n";
+    $wait = 30 - $diff;
+    echo "Monthly: $wo->id span:$span; diff:$diff; wait:$wait;\n";
     if ($diff == 0) {
         wo2iv($wo->id);
+        echo "** Need to Send It\n";
     }
 }
 
@@ -50,9 +37,11 @@ $res = $db->fetchAll($sql,array('Active','Quarterly',$date));
 foreach ($res as $wo) {
     $span = floor(($time - strtotime($wo->date)) / 86400);
     $diff = ($span % 90);
-    echo "Quarterly: #$wo->id span:$span diff:$diff \n";
+    $wait = 90 - $diff;
+    echo "Quarterly: #$wo->id span:$span; diff:$diff; wait:$wait;\n";
     if ($diff == 0) {
         wo2iv($wo->id);
+        echo "** Need to Send It\n";
     }
 }
 
@@ -61,9 +50,14 @@ $res = $db->fetchAll($sql,array('Active','Yearly',$date));
 foreach ($res as $wo) {
     $span = floor(($time - strtotime($wo->date)) / 86400);
     $diff = ($span % 365);
-    echo "Yearly: #$wo->id span:$span diff:$diff \n";
+    $wait = 365 - $diff;
+    echo "Yearly: #$wo->id span:$span; diff:$diff; wait:$wait;\n";
     if ($diff == 0) {
-        wo2iv($wo->id);
+        $iv = wo2iv($wo->id);
+        if ($iv->id) {
+            // Send
+            echo "** Need to Send It\n";
+        }
     }
 }
 
@@ -76,5 +70,7 @@ function wo2iv($id)
     $iv = $wo->toInvoice();
 
     echo "wo2iv: WorkOrder #{$wo->id} => Invoice #{$iv->id}\n";
+    
+    return $iv;
 
 }
