@@ -1,0 +1,145 @@
+<?php
+/**
+  Contact Address View
+	  Display form for Contact Address
+
+*/
+
+echo '<form action="' . $this->appurl . '/contact.address/save" method="post">';
+
+echo '<div>';
+echo $this->formHidden('id',$this->ContactAddress->id);
+echo $this->formHidden('contact_id',$this->ContactAddress->contact_id);
+echo '</div>';
+
+$kind_input = $this->formSelect('kind',$this->ContactAddress->kind,null,ContactAddress::$kind_list);
+$opts = array('size'=>32);
+
+echo "<table>";
+echo "<tr><td class='b r'>Kind:</td><td>$kind_input</td></tr>";
+echo "<tr><td class='b r'>Recipient:</td><td>".$this->formText('rcpt',$this->ContactAddress->rcpt,$opts)."</td></tr>";
+echo "<tr><td class='b r'>Address</td><td>".$this->formTextarea('address',$this->ContactAddress->address,array('cols'=>32,'rows'=>3))."</td></tr>";
+echo "<tr><td class='b r'>City:</td><td>" . $this->formText('city',$this->ContactAddress->city,$opts)."</td></tr>";
+echo "<tr><td class='b r'>State:</td><td>" . $this->formText('state',$this->ContactAddress->state,array('size'=>12))."</td></tr>";
+echo "<tr><td class='b r'>Postal:</td><td>" . $this->formText('post_code',$this->ContactAddress->post_code,array('size'=>12))."</td></tr>";
+echo "<tr><td class='b r'>Country:</td><td>".$this->formText('country',$this->ContactAddress->country,$opts)."</td></tr>";
+echo '</table>';
+
+echo '<div class="bf">';
+echo $this->formSubmit('c','Save');
+echo $this->formSubmit('c','Validate');
+if ($this->ContactAddress->id ) {
+  echo $this->formSubmit('c','Delete');
+}
+echo '</div>';
+
+echo '</form>';
+
+$addr = $this->ContactAddress->address . ' ' . $this->ContactAddress->city . ', ' . $this->ContactAddress->state . ' ' . $this->ContactAddress->post_code . ' ' . $this->ContactAddress->country;
+$addr = preg_replace('/\s+/ms',' ',$addr);
+
+echo '<div id="gmap" style="height:320px; width:100%;"></div>';
+?>
+<script src="//maps.google.com/maps/api/js?sensor=true" type="text/javascript"></script>
+<script>
+
+function map_lat_lng(x)
+{
+    if (typeof(x) != 'string') {
+        alert('bad:' + typeof(x));
+        return false;
+    }
+    if (x.length == 0) {
+        return;
+    }
+    x = x.toString();
+    if (x.match(/([\d\.\-],[\d\.\-]+)/)) {
+        return x.split(",");
+    }
+    return x;
+}
+
+function map_mark(addr,name,html)
+{
+    if (typeof(addr) == 'undefined') {
+        return;
+    }
+    if (addr.length == 0) {
+        return;
+    }
+
+    var m = new google.maps.Marker({
+        draggable:false,
+        flat:true,
+        icon:'//gcdn.org/silk/1.3/star.png',
+        map:map,
+        title:name
+    });
+    var mi = new google.maps.MarkerImage();
+    // mi.size = new google.maps.Size(33,33);
+    // mi.origin = new google.maps.Point(0,0);
+    // mi.anchor = new google.maps.Point(0,0);
+    mi.url = '//gcdn.org/silk/1.3/star.png';
+    // mi.anchor = new google.maps.Point(0,0);
+
+    m.icon = mi;
+
+    if (html) {
+        var iw = new google.maps.InfoWindow({content:html});
+        google.maps.event.addListener(m, 'click', function() { iw.open(map,m); });
+        google.maps.event.addListener(m, 'dragend', function(e) { iw.setContent(e.toString()); iw.open(map,m); });
+    }
+
+    var p = map_lat_lng(addr);
+    switch (typeof(p)) {
+    case 'object':
+        p = new google.maps.LatLng(p[0],p[1]);
+        m.setPosition(p);
+        map.setCenter(p);
+        break;
+    case 'string':
+        gc = new google.maps.Geocoder();
+        if (p.match(/^[\d\.\,\-]+$/)) {
+            return; // Ignore Lat,Lng Pattern
+        }
+        gc.geocode( { address:p }, function(res, ret) {
+            if (ret === google.maps.GeocoderStatus.OK) {
+                m.setPosition(res[0].geometry.location);
+                map.setCenter(res[0].geometry.location);
+            }
+        });
+        break;
+    default:
+        alert('what type?');
+    }
+
+    if (typeof(m) == 'undefined') {
+        alert('markAddress returning undefined!');
+    }
+
+}
+
+(function() {
+
+    var opt = {
+        disableDefaultUI:false,
+        disableDoubleClickZoom:true,
+        keyboardShortcuts:false,
+        mapTypeId:google.maps.MapTypeId.ROADMAP,
+        streetViewControl:false,
+        zoom:16
+    };
+
+    map = new google.maps.Map(document.getElementById('gmap'),opt);
+    map_mark("<?php echo $addr; ?>",'Name of Address','HTML of Address');
+
+})();
+</script>
+<?php
+
+// History
+$args = array(
+//     'ajax' => true,
+    'list' => $this->ContactAddress->getHistory()
+);
+echo $this->partial('../elements/diff-list.phtml',$args);
