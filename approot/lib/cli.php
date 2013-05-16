@@ -30,7 +30,6 @@ if (empty($cu)) {
 }
 
 $uri = parse_url($_ENV['mail']['smtp']);
-print_r($uri);
 $_ENV['smtp_from'] = $uri['user'];
 
 // Email Summary

@@ -1,0 +1,87 @@
+<?php
+/**
+    Work Order Items View
+
+    Shows details about a Work Order Item
+
+    @copyright  2008 Edoceo, Inc
+    @package    edoceo-imperium
+    @link       http://imperium.edoceo.com
+    @since      File available since Release 1013
+*/
+
+if (empty($this->WorkOrderItem)) {
+    echo '<p class="fail">Failed to load a Work Order Item</p>';
+    return;
+}
+
+echo '<form action="'. $this->link('/workorder/item?' . http_build_query(array('id'=>$this->WorkOrderItem->id))) . '" method="post">';
+echo '<table>';
+
+// Name
+echo "<tr><td class='b r'>Name:</td><td colspan='3'>".$this->formText('name',$this->WorkOrderItem->name,array('maxlength'=>'64','style'=>'width: 80%;'))."</td></tr>";
+
+
+// Kind & Date
+$k = $this->formSelect('kind',$this->WorkOrderItem->kind,null,WorkOrderItem::$kind_list);
+$d = $this->formText('date',$this->WorkOrderItem->date,array('id'=>'woi_date','size'=>12));
+echo "<tr><td class='b r'>Kind:</td><td>$k</td><td class='b r'>Date:</td><td>$d</td></tr>";
+
+// Estimate: Quantity, Rate, Unit, Tax
+$q = $this->formText('e_quantity',$this->WorkOrderItem->e_quantity,array('maxlength'=>8,'onblur'=>'toNumeric(this);','size'=>6));
+$r = $this->formText('e_rate',$this->WorkOrderItem->e_rate,array('maxlength'=>12,'onblur'=>'toNumeric(this);','size'=>8));
+$u = $this->formSelect('e_unit',$this->WorkOrderItem->e_unit,null,Base_Unit::getList());
+$t = $this->formText('e_tax_rate',tax_rate_format($this->WorkOrderItem->e_tax_rate),array('maxlength'=>8,'onblur'=>'toNumeric(this);','size'=>4));
+echo "<tr><td class='b r'>Estimate:</td><td class='nw'>$q&nbsp;<strong>@</strong>&nbsp;$r&nbsp;<strong>per</strong>&nbsp;$u<td class='b r'>Tax Rate:</td><td>$t&nbsp;%</td></tr>";
+
+// Cost: Quantity, Rate, Unit, Tax
+$q = $this->formText('a_quantity',$this->WorkOrderItem->a_quantity,array('maxlength'=>8,'onblur'=>'toNumeric(this);','size'=>6));
+$r = $this->formText('a_rate',$this->WorkOrderItem->a_rate,array('maxlength'=>12,'onblur'=>'toNumeric(this);','size'=>8));
+$u = $this->formSelect('a_unit',$this->WorkOrderItem->a_unit,null,Base_Unit::getList());
+$t = $this->formText('a_tax_rate',tax_rate_format($this->WorkOrderItem->a_tax_rate),array('maxlength'=>8,'onblur'=>'toNumeric(this);','size'=>4));
+echo "<tr><td class='b r'>Actual:</td><td class='nw'>$q&nbsp;<strong>@</strong>&nbsp;$r&nbsp;<strong>per</strong>&nbsp;$u<td class='b r'>Tax Rate:</td><td>$t&nbsp;%</td></tr>";
+
+//echo "<tr><td class='b r'>Request:</td><td colspan='3'>".$this->formTextarea('request',$this->WorkOrderItem->request,array('cols'=>64,'rows'=>'4'))."</td></tr>";
+echo '<tr><td class="l">Note:</td><td colspan="3">' . $this->formTextarea('note',$this->WorkOrderItem->note,array('cols'=>64,'rows'=>4)) . '</td></tr>';
+echo "<tr>";
+echo "<td class='l'><span title='The Status of this Item, Completed Items will be Billed when creating an Invoice'>Status:</span></td><td>";
+echo '<input name="status" type="text" value="' . $this->WorkOrderItem->status . '">';
+echo "</td>";
+
+//$input = $imperiumForm->select('percent_complete',$this->WorkOrderItem->percent_complete,$percent_list);
+//echo "<td class='b r'>% Completed:</td><td>$input</td>";
+echo "</tr>";
+
+// Notify
+echo '<tr><td class="l">';
+echo '<span title="Input an email address here and a notification email will be sent">Notify:</span></td>';
+echo '<td colspan="3">' . $this->formText('notify',$this->WorkOrderItem->notify,array('size'=>'64')) . '</td>';
+echo '</tr>';
+
+echo "</table>";
+
+echo '<div class="cmd">';
+echo '<input name="workorder_id" type="hidden" value="' . $this->WorkOrderItem->workorder_id . '">';
+echo $this->formSubmit('c','Save');
+if (!empty($this->WorkOrderItem->id)) {
+    echo $this->formSubmit('c','Delete');
+}
+echo '</div>';
+
+echo '</form>';
+
+// History
+$args = array(
+    'list' => $this->WorkOrderItem->getHistory()
+);
+echo $this->partial('../elements/diff-list.phtml',$args);
+
+?>
+<script type="text/javascript">
+$('#woi_date').datepicker();
+$('#name').focus();
+$('#notify').autocomplete({
+    source:'/imperium/contact/ajax',
+    change:function(event, ui) { if (ui.item) {  $("#notify").val(ui.item.id); $("#notify").val(ui.item.contact); } }
+}); 
+</script>
