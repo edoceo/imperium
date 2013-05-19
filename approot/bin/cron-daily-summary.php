@@ -17,8 +17,9 @@ $sql.= '  FROM workorder_item';
 $sql.= '  JOIN workorder ON workorder_item.workorder_id = workorder.id ';
 $sql.= '  JOIN contact ON workorder.contact_id = contact.id ';
 $sql.= '  WHERE workorder_item.status = ? ';
+$sql.= "   AND workorder.status IN (?) "; 
 $sql.= '  ORDER BY workorder_item.workorder_id';
-$res = $db->fetchAll($sql,array('Pending'));
+$res = $db->fetchAll($sql,array('Pending','Active'));
 
 echo "Pending Work:\n";
 _draw_details($res);
