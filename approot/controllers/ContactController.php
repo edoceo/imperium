@@ -326,6 +326,120 @@ class ContactController extends ImperiumController
             $this->view->Contact->name
         );
     }
+    
+    /**
+        Address Action
+    */
+    function addressAction()
+    {
+        $this->kind_list = ContactAddress::$kind_list;
+
+        $mode = 'create';
+        $x = intval($_GET['w']);
+        if (!empty($x)) {
+            $mode = 'create';
+        }
+        $x = intval($_GET['id']);
+        if (!empty($x)) {
+            $mode = 'view';
+        }
+        if (count($_POST)) {
+            $mode = 'save';
+        }
+
+        switch ($mode) {
+        case 'create':
+            // Create
+            $this->view->Contact = new Contact($this->_s->Contact->id);
+            $this->view->ContactAddress = new ContactAddress(null);
+            $this->view->ContactAddress->contact_id = $this->view->Contact->id;
+            $this->view->title = array('Contact',$this->view->Contact->name,'Address','New');
+            break;
+            // $this->render('view');
+        case 'save':
+
+            $ca = new ContactAddress($_POST['id']);
+
+            // Copy from Post to Address
+            foreach (array('id','contact_id','kind','rcpt','address','city','state','post_code','country') as $x) {
+                $ca->$x = $_POST[$x];
+            }
+
+            switch (strtolower($_POST['a'])) {
+            // Delete Requested?
+            case 'delete':
+                $ca->delete();
+                $this->_s->msg = 'Contact Address ' . $ca->kind . ' was deleted';
+                $this->redirect('/contact/view?c=' . $this->_s->Contact->id);
+                break;
+            case 'save':
+                $ca->save();
+                $this->redirect('/contact/view?c=' . $this->_s->Contact->id);
+            // Use Google to Validate
+            case 'validate':
+                $ca = $this->addressValidate($ca);
+                $this->view->ContactAddress = new ContactAddress($_GET['id']);
+                $this->view->Contact = new Contact($this->view->ContactAddress->contact_id);
+                $this->view->title = array('Contact',$this->view->Contact->name,'Address',$this->view->ContactAddress->kind);
+                return(0);
+                break;
+            }
+            break;
+        case 'view':
+            $this->view->ContactAddress = new ContactAddress($_GET['id']);
+            $this->view->Contact = new Contact($this->view->ContactAddress->contact_id);
+            $this->view->title = array('Contact',$this->view->Contact->name,'Address',$this->view->ContactAddress->kind);
+            break;
+        default:
+            throw new Exception("Unhandled Mode: '$mode'",__LINE__);
+        }
+    }
+    
+    /**
+        @param $a ContactAddress Object
+    */
+    function addressValidate($ca)
+    {
+        // Build Address
+        //$address = null;
+        //foreach (array('address','city','state','post_code','country') as $x) {
+        //  $address.= ' ' . $this->_request->getPost($x);
+        //}
+        // Lookup Address
+        $map_url = 'http://maps.google.com/maps/geo?output=xml&key=' . $_ENV['google']['map_key'];
+        $http = new Zend_Http_Client($map_url . '&q=' . urlencode($ca));
+        $http->setCookieJar(true);
+        $http->setHeaders('Accept','application/xml');
+        $http->setHeaders('User-Agent','Edoceo Imperium Google GeoCoder 0.2');
+        $page = $http->request();
+        //Zend_Debug::dump($page);
+        // Parse Response
+        $xml = simplexml_load_string($page->getBody());
+        // Zend_Debug::dump($xml->asXML());
+        switch (intval($xml->Response->Status->code)) {
+        case 200:
+            // Success - Parse Address
+            $ad = $xml->Response->Placemark->AddressDetails->Country;
+            $ca->address = (string)$ad->AdministrativeArea->Locality->Thoroughfare->ThoroughfareName;
+            $ca->city = (string)$ad->AdministrativeArea->Locality->LocalityName;
+            $ca->state = (string)$ad->AdministrativeArea->AdministrativeAreaName;
+            $ca->post_code = (string)$ad->AdministrativeArea->Locality->PostalCode->PostalCodeNumber;
+            $ca->country = (string)$ad->CountryNameCode;
+            // Coordinates
+            $buf = explode(',',(string)$xml->Response->Placemark->Point->coordinates);
+            $ca->lat = $buf[1];
+            $ca->lon = $buf[0];
+            $this->_s->msg = 'Contact Address #' . $ca->kind . ' was validated';
+            break;
+        case 610:
+            $this->_s->msg = 'Failed to Geocode Error: #' . intval($xml->Response->Status->code);
+            break;
+        case 620:
+            $this->_s->msg = 'Failed to Geocode Error: #' . intval($xml->Response->Status->code) . ': Requests too frequent';
+            break;
+        }
+        return $ca;
+    }
 
     /**
         Handles AJAX requests

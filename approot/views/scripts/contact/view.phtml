@@ -223,7 +223,7 @@ if ($this->Contact->id == 0) {
 // Sub Addresses
 $i = img('/silk/1.3/report_add.png','Add Address');
 echo '<h2 id="ContactAddressHead">Addresses';
-echo '<span class="s">[ <a class="fb" href="' . $this->link('/contact.address/create') . '">' . $i . '</a> ]</span>';
+echo '<span class="s">[ <a class="fb" href="' . $this->link('/contact/address?a=make') . '">' . $i . '</a> ]</span>';
 echo '</h2>';
 if ($this->ContactAddressList) {
     echo "<div id='ContactAddressList'>";

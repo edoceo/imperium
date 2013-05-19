@@ -1,0 +1,63 @@
+<?php
+/**
+    @file
+    @search Imperium Search View
+*/
+
+if (empty($this->SearchTerm)) {
+    echo '<p class="info">No search performed</p>';
+    return(0);
+}
+
+if (count($this->SearchList) == 0) {
+    echo '<p class="info">No results found for: ' . $this->SearchTerm . '</p>';
+    return(0);
+}
+
+echo '<dl>';
+
+foreach ($this->SearchList as $k=>$item) {
+
+    if (!($item instanceof stdClass)) {
+        echo '<dt>Error Item' . $k . '</dt>';
+    }
+
+    $html = htmlspecialchars($item->name);
+    $html.= ' <span class="s">(' . sprintf('%01d%%', $item->sort*100) . ')</span>';
+
+    $link = $this->link('/' . $item->link_to . '/view?id=' . $item->link_id,$html);
+
+    // Special Case Links
+    switch ($item->link_to) {
+    case 'account_journal':
+        $link = $this->link('/account/transaction?id=' . $item->link_id,$html);
+        break;
+    case 'base_note':
+        $link = $this->link('/note/view?id=' . $item->link_id,$html);
+        break;
+    case 'contact':
+        $link = $this->link('/contact/view?c=' . $item->link_id,$html);
+        break;
+    case 'contact_address':
+        $link = $this->link('/contact/address?id=' . $item->link_id,$html);
+        break;
+    case 'invoice':
+        $link = $this->link('/invoice/view?i=' . $item->link_id,$html);
+        break;
+    case 'invoice_item':
+        $link = $this->link('/invoice/item?id=' . $item->link_id,$html);
+        break;
+    case 'workorder':
+        $link = $this->link('/workorder/view?w=' . $item->link_id,$html);
+        break;
+    case 'workorder_item':
+        $link = $this->link('/workorder/item?id=' . $item->link_id,$html);
+        break;
+    default:
+        die($item->link_to);
+    }
+
+    echo '<dt>' . $link . '</dt>';
+    echo '<dd>' . $item->snip . '</dd>';
+
+}

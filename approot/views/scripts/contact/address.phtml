@@ -1,11 +1,10 @@
 <?php
 /**
-  Contact Address View
-	  Display form for Contact Address
-
+    @file
+	@brief Display form for Contact Address
 */
 
-echo '<form action="' . $this->appurl . '/contact.address/save" method="post">';
+echo '<form method="post">';
 
 echo '<div>';
 echo $this->formHidden('id',$this->ContactAddress->id);
@@ -26,10 +25,10 @@ echo "<tr><td class='b r'>Country:</td><td>".$this->formText('country',$this->Co
 echo '</table>';
 
 echo '<div class="bf">';
-echo $this->formSubmit('c','Save');
-echo $this->formSubmit('c','Validate');
+echo $this->formSubmit('a','Save');
+echo $this->formSubmit('a','Validate');
 if ($this->ContactAddress->id ) {
-  echo $this->formSubmit('c','Delete');
+    echo $this->formSubmit('a','Delete');
 }
 echo '</div>';
 
