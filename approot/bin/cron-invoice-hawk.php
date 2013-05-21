@@ -34,11 +34,12 @@ if ( (!empty($argv[1])) && (intval($argv[1]) > 0) ) {
 $order = ' ORDER BY contact_id, id ASC ';
 
 $sql = sprintf($sql,$_ENV['invoice']['hawk_days_min']); // ,Invoice::FLAG_HAWK,Invoice::FLAG_HAWK);
-echo "$sql\n";
+// echo "$sql\n";
 
 // $res = $db->fetchAll($sql,array(strftime('%Y-%m-%d',$time),array('Active')));
 $res = $db->fetchAll("$sql AND status in ('Active') $order",array($cli_opt['diff']));
 echo "You have " . count($res) . " Active Invoices to POST\n";
+echo "\n";
 
 $res = $db->fetchAll("$sql AND status IN ('Hawk','Sent') $order",array($cli_opt['diff']));
 echo "You have " . count($res) . " Active Invoices Past Due\n";
@@ -70,7 +71,6 @@ foreach ($res as $rec) {
     //} else {
     //    $mail->addTo($co->email);
     //}
-    $mail->addTo('busby@edoceo.com');
 
     // $EmailComposeMessage = new stdClass();
     // $EmailComposeMessage->to = $co->email;
