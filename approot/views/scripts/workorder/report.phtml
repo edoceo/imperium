@@ -1,0 +1,83 @@
+<?php
+/**
+    @file
+    @brief WorkOrder Index View - Shows Paginated Results of the Index View
+*/
+
+?>
+<style>
+.chart rect {
+  fill: steelblue;
+  stroke: white;
+}
+</style>
+
+<div id="chart-area"></div>
+
+<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+<script>
+var dataD = <?php echo json_encode($this->DataByDay,JSON_PRETTY_PRINT); ?>;
+var dataW = <?php echo json_encode($this->DataByWeek,JSON_PRETTY_PRINT); ?>;
+var dataM = <?php echo json_encode($this->DataByMonth,JSON_PRETTY_PRINT); ?>;
+
+var margin = {top: 20, right: 20, bottom: 30, left: 50},
+    width = 960 - margin.left - margin.right,
+    height = 500 - margin.top - margin.bottom;
+
+var parseDate = d3.time.format("%d-%b-%y").parse;
+
+var x = d3.time.scale()
+    .domain([0, 1])
+    .range([0, width]);
+
+var y = d3.scale.linear()
+    .domain([0, 100])
+    .range([height, 0]);
+
+var xAxis = d3.svg.axis()
+    .scale(x)
+    .orient("bottom");
+
+var yAxis = d3.svg.axis()
+    .scale(y)
+    .orient("left");
+
+var line = d3.svg.line()
+    .x(function(d) { return x(d.date); })
+    .y(function(d) { return y(d.close); });
+
+var svg = d3.select("body")
+    .append("svg")
+        .attr('class','chart')
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom);
+//    .append("g")
+//        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+svg.selectAll('rect')
+    .data(dataM)
+    .enter().append('rect')
+        .attr('x',function(d,i) {
+            return x(i) - .5;
+        })
+        .attr('y',function(d) {
+            // return height - y(parseInt(d.sum)) - .5;
+            return parseInt(d.sum) - .5;
+        })
+        .attr('width',8)
+        .attr('height',function(d) {
+            return parseInt(d.sum);
+        });
+
+
+</script>
+<?php
+
+Zend_Debug::dump($this->DataByDay);
+
+
+Zend_Debug::dump($this->DataByWeek);
+
+
+Zend_Debug::dump($this->DataByMonth);
+
