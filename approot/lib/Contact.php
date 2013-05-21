@@ -1,8 +1,7 @@
 <?php
 /**
-    Contact Model
-
-    Contacts: Person, Company and Vendor DataObjects
+    @file
+    @brief Contact Model; Contacts: Person, Company and Vendor DataObjects
 
     @copyright  2008 Edoceo, Inc
     @package    edoceo-imperium
@@ -134,7 +133,7 @@ class Contact extends ImperiumBase
 
         return $x;
     }
-    
+
     /**
         Get their Account Object
         @return Account
