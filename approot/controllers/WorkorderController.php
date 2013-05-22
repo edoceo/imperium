@@ -358,22 +358,24 @@ class WorkorderController extends ImperiumController
         $sql.= ' FROM workorder_item ';
         $sql.= ' WHERE date <= ? AND date >= ?';
         $sql.= ' GROUP BY date, workorder_id, kind ';
-        $sql.= ' ORDER BY date, workorder_id ';
+        $sql.= ' ORDER BY date DESC, workorder_id ';
+        $sql.= ' LIMIT 60 ';
 
         $date_alpha = strftime('%Y-%m-%d',$time_alpha);
-        $date_omega = strftime('%Y-%m-%d',$time_alpha - (86400 * 30));
+        $date_omega = strftime('%Y-%m-%d',$time_alpha - (86400 * 30 * 36));
 
         $this->view->DataByDay = $this->_d->fetchAll($sql,array($date_alpha,$date_omega));
 
         // Last 6 Months by Week
-        $sql = "SELECT date_trunc('week',date) as date, workorder_id, kind, sum(a_rate * a_quantity) ";
+        $sql = "SELECT date_trunc('week',date) as date, sum(a_rate * a_quantity) as value ";
         $sql.= ' FROM workorder_item ';
         $sql.= ' WHERE date <= ? AND date >= ?';
-        $sql.= ' GROUP BY date, workorder_id, kind ';
-        $sql.= ' ORDER BY date, workorder_id ';
+        $sql.= ' GROUP BY 1 ';
+        $sql.= ' ORDER BY date DESC';
+        $sql.= ' LIMIT 60 ';
 
         $date_alpha = strftime('%Y-%m-%d',$time_alpha);
-        $date_omega = strftime('%Y-%m-%d',$time_alpha - (86400 * 30 * 6));
+        $date_omega = strftime('%Y-%m-%d',$time_alpha - (86400 * 30 * 36));
 
         $this->view->DataByWeek = $this->_d->fetchAll($sql,array($date_alpha,$date_omega));
 
@@ -382,10 +384,11 @@ class WorkorderController extends ImperiumController
         $sql.= ' FROM workorder_item ';
         $sql.= ' WHERE date <= ? AND date >= ?';
         $sql.= ' GROUP BY date, workorder_id, kind ';
-        $sql.= ' ORDER BY date, workorder_id ';
+        $sql.= ' ORDER BY date DESC, workorder_id ';
+        $sql.= ' LIMIT 60 ';
 
         $date_alpha = strftime('%Y-%m-%d',$time_alpha);
-        $date_omega = strftime('%Y-%m-%d',$time_alpha - (86400 * 30 * 13));
+        $date_omega = strftime('%Y-%m-%d',$time_alpha - (86400 * 30 * 36));
 
         $this->view->time_alpha = $time_alpha;
         $this->view->DataByMonth = $this->_d->fetchAll($sql,array($date_alpha,$date_omega));
