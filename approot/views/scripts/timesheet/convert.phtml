@@ -1,0 +1,45 @@
+<?php
+/**
+    Time Sheets Convert to Work Order Item
+
+*/
+
+echo $this->form('Timesheet',array('action'=>null,'method'=>'post'));
+
+echo '<table>';
+
+echo '<tr><td class="l">Work Order:</td><td colspan="3">' . $this->formSelect('workorder_id',null,null,$this->WorkorderList) . '</td></tr>';
+
+// Kind & Date
+$k = $this->formSelect('kind',$this->WorkOrderItem->kind,null,WorkOrderItem::$kind_list); 
+$d = $this->formText('date',$this->WorkOrderItem->date,array('size'=>12));
+echo "<tr><td class='l'>Kind:</td><td>$k</td><td class='b r'>Date:</td><td>$d</td></tr>";
+
+// Cost: Quantity, Rate, Unit, Tax
+$q = $this->formText('a_quantity',$this->WorkOrderItem->quantity,array('maxlength'=>8,'onblur'=>'toNumeric(this);','size'=>6));
+$r = $this->formText('a_rate',$this->WorkOrderItem->rate,array('maxlength'=>12,'onblur'=>'toNumeric(this);','size'=>8));
+$u = $this->formSelect('a_unit',$this->WorkOrderItem->unit,null,Base_Unit::getList());
+$t = $this->formText('a_tax_rate',$this->WorkOrderItem->tax_rate,array('maxlength'=>8,'onblur'=>'toNumeric(this);','size'=>4));
+echo "<tr><td class='l'>Cost:</td><td class='nw'>$q&nbsp;<strong>@</strong>&nbsp;$r&nbsp;<strong>per</strong>&nbsp;$u<td class='b r'>Tax Rate:</td><td>$t&nbsp;%</td></tr>";
+
+// Name
+echo "<tr><td class='l'>Name:</td><td colspan='3'>".$this->formText('name',$this->WorkOrderItem->name,array('maxlength'=>'64','style'=>'width: 100%;'))."</td></tr>";
+//echo "<tr><td class='l'>Request:</td><td colspan='3'>".$this->formTextarea('request',$this->WorkOrderItem->request,array('cols'=>64,'rows'=>'4'))."</td></tr>";
+echo '<tr><td class="l">Note:</td><td colspan="3">' . $this->formTextarea('note',$this->WorkOrderItem->note,array('cols'=>64,'rows'=>4)) . '</td></tr>';
+echo "<tr>";
+echo "<td class='l'><span title='The Status of this Item, Completed Items will be Billed when creating an Invoice'>Status:</span></td><td>";
+echo $this->formSelect('status_id',$this->WorkOrderItem->status_id,null,WorkOrderItem::$status_list);
+echo "</td>";
+echo "</tr>";
+
+// Notify
+echo "<tr><td class='l'><span title='Input and email address here and a notification email will be sent'>Notify:</span></td><td colspan='3'>".$this->formText('notify',$this->WorkOrderItem->notify,array('size'=>'64'))."</td></tr>";
+
+echo "</table>";
+
+echo '<div class="bf">';
+echo $this->formSubmit('c','Save');
+echo $this->formSubmit('c','Delete');
+echo '</div>';
+
+echo '</form>';

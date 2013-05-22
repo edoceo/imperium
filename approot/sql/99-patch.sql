@@ -2,6 +2,9 @@
 -- @file
 -- @brief Random Patches
 
+DROP VIEW general_ledger;
+DROP VIEW workorder_item_invoice_item;
+
 ALTER TABLE workorder ADD COLUMN kind varchar(32);
 UPDATE workorder SET kind = 'Single' WHERE kind_id = 100;
 UPDATE workorder SET kind = 'Project' WHERE kind_id = 200;
@@ -60,6 +63,7 @@ alter table workorder rename column colour to star;
 
 alter table workorder_item drop column notify;
 alter table workorder_item drop column datetime;
+alter table workorder_item drop percent_complete;
 
 alter table invoice rename column description to note;
 alter table invoice_item rename column description to note;
@@ -96,3 +100,8 @@ alter table account_journal alter column note type text;
 
 -- alter table account add column contact_id int null references contact(id);
 alter table contact add column account_id int null references account(id);
+
+begin;
+ALTER TABLE workorder_item ADD COLUMN time_alpha time without time zone;
+ALTER TABLE workorder_item ADD COLUMN time_omega time without time zone;
+commit;
