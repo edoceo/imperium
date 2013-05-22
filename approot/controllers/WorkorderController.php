@@ -436,13 +436,13 @@ class WorkorderController extends ImperiumController
             // Save Request
             $wo = new WorkOrder($_POST['workorder_id']);
             $woi = new WorkOrderItem($id);
-            $set = array('kind','date',
-              't_alpha','t_omega',
+            $set = array(
+              'kind','date','time_alpha','time_omega',
               'e_rate','e_quantity','e_unit','e_tax_rate',
               'a_rate','a_quantity','a_unit','a_tax_rate',
               'name','note','status','notify');
             foreach ($set as $x) {
-                $woi->$x = $_POST[$x];
+                $woi->$x = trim($_POST[$x]);
             }
             $woi = $wo->addWorkOrderItem($woi);
 

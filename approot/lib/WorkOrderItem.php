@@ -18,13 +18,13 @@ class WorkOrderItem extends ImperiumBase
 	// const STATUS_PENDING = 1000;
 	// const STATUS_COMPLETE = 3000;
 
-  public static $kind_list = array(
+    public static $kind_list = array(
 		'Labour'=>'Labour',
 		'Parts'=>'Parts',
 		'Registration'=>'Registration',
 		'Subscription'=>'Subscription',
 		'Travel'=>'Travel'
-		);
+    );
 
 //   public static $status_list = array(
 // 		self::STATUS_PENDING=>'Pending',
@@ -39,6 +39,10 @@ class WorkOrderItem extends ImperiumBase
 		$this->date = date('Y-m-d');
         $this->quantity = 1;
 		parent::__construct($x);
+        if (empty($this->time_alpha)) {
+            $this->time_alpha = strftime('%H:%M:00',mktime(date('H')-1,0,0));
+            $this->time_omega = strftime('%H:%M:00',mktime(date('H')+1,0,0));
+        }
 	}
 
 	// function __get($x) {

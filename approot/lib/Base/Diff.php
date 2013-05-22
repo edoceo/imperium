@@ -54,13 +54,13 @@ class Base_Diff extends Zend_Db_Table
             throw new Exception(sprintf('Cannot Describe Table: %s',$x),__LINE__);
         }
         foreach ($cols as $c) {
-            
+
             $name = $c['COLUMN_NAME'];
-            
+
             if (in_array($name,self::$_skip_list)) {
                 continue;
             }
-            
+
             switch ($c['DATA_TYPE']) {
             case 'bool':
             case 'bytea':
@@ -74,6 +74,7 @@ class Base_Diff extends Zend_Db_Table
             case 'int4':
             case 'numeric':
             case 'text':
+            case 'time':
             case 'timestamp':
             case 'varchar':
                 if ( strval($o0->$name) != strval($o1->$name) ) {
@@ -94,6 +95,7 @@ class Base_Diff extends Zend_Db_Table
             }
         }
     }
+
     /**
         Create a Note for this Object
     */
@@ -105,7 +107,7 @@ class Base_Diff extends Zend_Db_Table
         if (is_array($note)) {
             $note = implode(";\n",$note);
         }
-        
+
         $t = new Zend_Db_Table(array('name'=>'base_diff'));
         $r = array();
         $r['auth_user_id'] = 1;
