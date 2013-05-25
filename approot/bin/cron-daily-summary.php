@@ -17,13 +17,17 @@ $sql.= '  FROM workorder_item';
 $sql.= '  JOIN workorder ON workorder_item.workorder_id = workorder.id ';
 $sql.= '  JOIN contact ON workorder.contact_id = contact.id ';
 $sql.= '  WHERE workorder_item.status = ? ';
-$sql.= "   AND workorder.status IN (?) "; 
+$sql.= '   AND workorder.status = ? '; 
 $sql.= '  ORDER BY workorder_item.workorder_id';
 $res = $db->fetchAll($sql,array('Pending','Active'));
 
-echo "Pending Work:\n";
-_draw_details($res);
-
+echo "## Pending Work:\n";
+if (count($res)) {
+    _draw_details($res);
+} else {
+    echo "  No Pending Work\n";
+}
+echo "\n";
 
 // echo "Active Work:\n";
 // _draw_details($res);
@@ -39,25 +43,40 @@ $sql.= '  WHERE workorder_item.date = ? AND workorder_item.status = ? ';
 $sql.= '  ORDER BY workorder_item.workorder_id';
 $res = $db->fetchAll($sql,array($date,'Complete'));
 
-echo "Completed:\n";
-_draw_details($res);
+if (count($res)) {
+    echo "## Completed:\n";
+    _draw_details($res);
+} else {
+    echo "  No Completed Work\n";
+}
+
 
 function _draw_details($res)
 {
-    $pre = null;
+    $wox = null;
     $sum = 0;
     foreach ($res as $woi) {
-        if ($pre != $woi->workorder_id) {
+        if ($wox != $woi->workorder_id) {
             if (!empty($sum)) {
-                echo "  Sum:  $sum\n";
+                echo '  Sum:  ' . number_format($sum) . "\n";
+                $sum = 0;
             }
             echo "WorkOrder #{$woi->workorder_id} ({$woi->contact_name})\n";
         }
-        echo "  {$woi->a_quantity} @ {$woi->a_rate}/{$woi->a_unit} - {$woi->name}\n";
-        $pre = $woi->workorder_id;
-        $sum += ($woi->a_rate * $woi->a_quantity);
+
+        if (!empty($woi->a_quantity)) {
+            echo "  {$woi->a_quantity} @ {$woi->a_rate}/{$woi->a_unit} - {$woi->name}\n";
+            $sum += ($woi->a_quantity * $woi->a_rate);
+        } else {
+            echo "  {$woi->e_quantity} @ {$woi->e_rate}/{$woi->e_unit} - {$woi->name}\n";
+            $sum += ($woi->e_quantity * $woi->e_rate);
+        }
+
+        $wox = $woi->workorder_id;
+
     }
     if (!empty($sum)) {
-        echo "  Sum: $sum\n";
+        echo '  Sum:  ' . number_format($sum) . "\n";
+        $sum = 0;
     }
 }
