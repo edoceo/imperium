@@ -455,7 +455,10 @@ class InvoiceController extends ImperiumController
             $this->_s->ReturnFail = sprintf('/invoice/view?i=%d&sent=fail',$Invoice->id);
             $this->_redirect('/email/compose');
             break;
+
         case 'void':
+            // Voiding out an Invoice
+            $Invoice->note = trim($_POST['note']);
             $Invoice->status = 'Void';
             $Invoice->setFlag(Invoice::FLAG_VOID);
             $Invoice->bill_amount = 0;
