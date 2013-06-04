@@ -11,20 +11,6 @@
 
 // Autocomplete for Company, Kind and Status
 $script_append = <<<EOF
-$("#company").autocomplete({
-    source: "{$this->link('/contact/ajax?field=company')}",
-    change: function(event, ui) { if (ui.item) { $("#parent_id").val(ui.item.id); } }
-});
-$("#kind").autocomplete({
-    source: "{$this->link('/contact/ajax?field=kind')}"
-});
-$("#status").autocomplete({
-    source: "{$this->link('/contact/ajax?field=status')}"
-});
-$("#contact-google-view").click(function() {
-    var u = "{$this->link('/contact/ajax?field=google')}";
-    $("#contact-google-area").load(u);
-});
 EOF;
 
 echo '<form action="' . $this->link('/contact/save') . '?c=' . $this->Contact->id . '" method="post">';
@@ -207,14 +193,40 @@ echo $this->formSubmit('c','Delete');
 echo '</div>';
 echo '</form>';
 
-if (!empty($script_append)) {
-    echo '<script type="text/javascript">' . "\n";
-    echo '$(document).ready(function() { ' . "\n";
-    echo $script_append;
-    echo '});' . "\n";
-    echo '</script>' . "\n";
-}
-
+?>
+<script>
+$(document).ready(function() {
+    $("#company").autocomplete({
+        source: "<?php echo $this->link('/contact/ajax?field=company'); ?>",
+        change: function(event, ui) { if (ui.item) { $("#parent_id").val(ui.item.id); } }
+    });
+    $("#contact").autocomplete({
+        source: "<?php echo $this->link('/contact/ajax?field=contact'); ?>",
+        focus: function(event, ui) {
+            if (ui.item) {
+                $("#contact").val(ui.item.contact);
+                event.preventDefault();
+            }
+        },
+        select: function(event, ui) {
+            if (!ui.item) return;
+            $("#contact").val(ui.item.contact);
+            event.preventDefault();
+        }
+    });
+    $("#kind").autocomplete({
+        source: "<?php echo $this->link('/contact/ajax?field=kind'); ?>"
+    });
+    $("#status").autocomplete({
+        source: "<?php echo $this->link('/contact/ajax?field=status'); ?>"
+    });
+    $("#contact-google-view").click(function() {
+        var u = "<?php echo $this->link('/contact/ajax?field=google'); ?>";
+        $("#contact-google-area").load(u);
+    });
+});
+</script>
+<?php
 
 if ($this->Contact->id == 0) {
     return(0);
