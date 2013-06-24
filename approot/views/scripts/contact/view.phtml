@@ -165,16 +165,17 @@ echo '</tr>';
 //     $AccountList[$x->id] = $x->full_name;
 // }
 
-echo '<tr><td class="l">Account:</td><td colspan="3">';
-// if (!empty($this->Account->id)) {
-//     echo '<a href="' . $this->link('/account/ledger?' . http_build_query(array('id'=>$this->Account->id))) . '">' . $this->Account->full_name . '</a>:';
-// } else {
-//     echo '<a href="' . $this->link('/account') . '">Find / Attach</a>';
-// }                                                     
-// echo $this->formSelect('account_id',$this->Contact->account_id,null,$AccountList);
-echo '<input id="account" type="text" value="' . $this->Account->full_name . '">';
-echo '<input id="account_id" type="hidden" value="' . $this->Account->id . '">';
-echo ' - was: ' . $this->Contact->account_id;
+echo '<tr>';
+echo '<td class="l">';
+if (!empty($this->Account->id)) {
+    echo '<a href="' . $this->link('/account/ledger?' . http_build_query(array('id'=>$this->Account->id))) . '">Account</a>:';
+} else {
+    echo 'Account';
+}
+echo '</td><td colspan="3">';
+echo '<input id="account" style="width:20em;" type="text" value="' . $this->Account->full_name . '">';
+echo '<input id="account_id" name="account_id" type="hidden" value="' . $this->Account->id . '">';
+// echo ' - was: ' . $this->Contact->account_id;
 echo '</td></tr>';
 
 // Google Contact Detail
