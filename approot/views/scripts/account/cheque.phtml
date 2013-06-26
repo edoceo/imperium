@@ -1,0 +1,38 @@
+<?php
+/**
+	Account Cheque Writer
+*/
+
+echo $this->form('AccountCheque',array('action'=>$this->appurl.'/account/cheque','method'=>'post'));
+
+echo '<table>';
+
+$list = array();
+$list[0] = 'None';
+$list += $this->ExpenseAccountList;
+echo "<tr><td class='b r'>Expense:</td><td colspan='2'>" . $this->formSelect('expense_account_id',null,null,$list) . "</td></tr>";
+
+$list = array();
+$list[0] = 'None';
+$list += $this->AssetAccountList;
+echo "<tr><td class='b r'>Asset:</td><td colspan='2'>" . $this->formSelect('asset_account_id',null,null,$list) . "</td></tr>";
+
+// Cheque Number and Date
+echo '<tr>';
+echo '<td>Cheque:</td><td>' . $this->formText('number',null,array('size'=>8)) . '</td>';
+echo '<td>Date:</td><td>' . $this->formText('date',null,array('size'=>8)) . '</td>';
+echo '</tr>';
+// Pay To
+echo '<tr><td>Pay To:</td><td colspan="2">' . $this->formText('payto',null,array('size'=>50)) . '</td></tr>';
+// Amount
+echo '<tr><td>Amount:</td><td colspan="2">' . $this->formText('amount_t',null,array('size'=>50)) . '</td><td>' . $this->formText('amount_n',null,array('size'=>8)) . '</td></tr>';
+// ABA Routing
+echo '<tr><td>ABA/Routing:</td><td>' . $this->formText('routing',null,array('size'=>12)) . '&nbsp;' . $this->formText('account',null,array('size'=>16)) . '</td></tr>';
+// Memo
+echo '<tr><td>Memo:</td><td colspan="2">' . $this->formText('memo',null,array('size'=>50)) . '</td></tr>';
+
+echo '</table>';
+
+echo '<div class="bf">' . $this->formSubmit('c','Print') . '</div>';
+
+echo '</form>';

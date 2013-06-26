@@ -1,0 +1,78 @@
+<?php
+/**
+  Account Journal View
+  Displays a list of the transactions in a journal style format (showing all affected accounts)
+    
+*/
+
+$AccountList = array();
+$AccountList[-1] = 'All - General Ledger';
+foreach ($this->AccountList as $item) {
+    $AccountList[$item->id] = $item->full_name;
+}
+
+echo '<form method="get">';
+echo '<table>';
+echo '<tr><td class="l">Account:</td><td colspan="3">' . $this->formSelect('id',$this->Account->id,null,$AccountList) . '</td></tr>';
+echo '<tr>';
+echo '<td class="l">From:</td>';
+echo "<td>" . $this->formText('d0',$this->date_alpha,array('size'=>12)) . "</td>";
+echo "<td>&nbsp;to&nbsp;</td>";
+echo "<td>" . $this->formText('d1',$this->date_omega,array('size'=>12)) . "</td>";
+echo "<td><input name='c' type='submit' value='View' /></td>";
+echo '<td><input name="c" type="submit" value="Post" /></td>';
+echo '</tr>';
+echo '</table>';
+echo '</form>';;
+
+$cr_total=$dr_total=0;
+
+echo '<table class="w">';
+echo '<tr><th>Date</th><th>Account</th><th>JE</th><th>Debit</th><th>Credit</th><th>Balance</th></tr>';
+
+echo '<tr class="rero">';
+echo '<td class="c">-Open-</td><td colspan="4">Opening Balance</td><td class="b r">' . number_format($this->openBalance,2) . '</td>';
+echo '</tr>';
+
+
+foreach ($this->JournalEntryList as $x) {
+
+    $le = new AccountLedgerEntry($x);
+
+    echo '<tr class="rero">';
+    // Date
+    echo '<td class="c">' . $this->link('/account/transaction?id=' . $le->account_journal_id, date('m/d/y',strtotime($le->date)) ) . '</td>';
+    // Name & Note
+    echo '<td style="overflow: hidden;">';
+    echo $le->account_name;
+    if (strlen($le->note)) {
+        echo ' <span class="s">(' .  $le->note  . ')</span>';
+    }
+    echo '</td>';
+    // Journal Entry ID
+    echo '<td>' . $le->kind . $le->account_journal_id . '</td>';
+    // Debit / Credit
+    if ($le->amount < 0) {
+        echo '<td class="r">' . number_format(abs($le->amount),2) . '</td><td>&nbsp;</td>';
+        $dr_total += $le->amount;
+    } else {
+        echo '<td>&nbsp;</td><td class="r">' . number_format(abs($le->amount),2) . '</td>';
+        $cr_total += $le->amount;
+    }
+  echo '<td class="r">' . number_format( ($cr_total + $dr_total) * -1,2) . '</td>';
+  echo '</tr>';
+}
+echo '<tr class="ro">';
+echo '<td class="b" colspan="3">Total:</td>';
+echo '<td class="b r">&curren;' . number_format($dr_total * -1,2) . '</td>';
+echo '<td class="b r">&curren;' . number_format($cr_total,2) . '</td>';
+echo '<td class="b r">&curren;' . number_format( ($cr_total + $dr_total) * -1,2) . '</td>';
+echo '</tr>';
+
+echo '</table>';
+
+echo '<script type="text/javascript">';
+echo '$("#d0").datepicker(); ';
+echo '$("#d1").datepicker(); ';
+echo '</script>';
+

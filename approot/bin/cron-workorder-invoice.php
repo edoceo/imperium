@@ -10,7 +10,12 @@
 // CLI
 require_once(dirname(dirname(__FILE__)) . '/lib/cli.php');
 
-echo 'Imperium WorkOrder Subscription Processor: ' . $date . "\n";
+$date = strftime('%Y-%m-%d');
+
+$dim = intval(date('t')); // Days in Month
+$dom = intval(date('j')); // Day of Month
+
+echo 'Imperium WorkOrder Subscription Processor: ' . $date . " ($dom/$dim)\n";
 
 // Find Processable Subscriptions
 $sql = 'SELECT * FROM workorder ';
@@ -20,20 +25,29 @@ $sql.= ' ORDER BY id ASC ';
 // Monthly Subscription
 // Triggers with current Day of Month == Work Order Day of Month 
 $res = $db->fetchAll($sql,array('Active','Monthly',$date));
+echo "WO: " . count($res) . " Monthly Subscriptions\n";
 foreach ($res as $wo) {
-    $span = floor(($time - strtotime($wo->date)) / 86400);
-    $diff = $span % 30;
-    $wait = 30 - $diff;
-    echo "Monthly: $wo->id span:$span; diff:$diff; wait:$wait;\n";
-    if ($diff == 0) {
-        wo2iv($wo->id);
-        echo "** Need to Send It\n";
+    $wod = intval(date('j',strtotime($wo->date)));
+    echo "WO: #{$wo->id} Triggers on $wod";
+    if ($wod >= $dim) {
+        echo " (skew $wod to $dim)";
+        $wod = $dim;
+    }
+    echo "\n";
+    if ($wod == $dom) {
+        // echo "Monthly: $wo->id span:$span; diff:$diff; wait:$wait;\n";
+        if ($diff == 0) {
+            if (wo2iv($wo->id)) {
+                echo "** Need to Send It\n";
+            }
+        }
     }
 }
 
 // Quarterly Subscription
 // Triggers when: Day == Work Order Day of Month + 90
 $res = $db->fetchAll($sql,array('Active','Quarterly',$date));
+echo 'WO ' . count($res) . " Quarterly Subscriptions\n";
 foreach ($res as $wo) {
     $span = floor(($time - strtotime($wo->date)) / 86400);
     $diff = ($span % 90);
@@ -47,6 +61,7 @@ foreach ($res as $wo) {
 
 // Yearly Subscription
 $res = $db->fetchAll($sql,array('Active','Yearly',$date));
+echo 'WO ' . count($res) . " Yearly Subscriptions\n";
 foreach ($res as $wo) {
     $span = floor(($time - strtotime($wo->date)) / 86400);
     $diff = ($span % 365);
@@ -67,10 +82,48 @@ foreach ($res as $wo) {
 function wo2iv($id)
 {
     $wo = new WorkOrder($id);
-    $iv = $wo->toInvoice();
+    try {
+        $iv = $wo->toInvoice();
+    } catch (Exception $e) {
+        echo "EE " . $e . "\n";
+        return false;
+    }
 
-    echo "wo2iv: WorkOrder #{$wo->id} => Invoice #{$iv->id}\n";
-    
+    echo "WO #{$wo->id} => IV #{$iv->id} for ${$iv->bill_amount}\n";
+
+    // Post to their Account
+    $C = new Contact($iv->contact_id);
+
+    // Generate a Transaction to Post to This Clients Account Receivable
+    $aje = new AccountJournalEntry();
+    $aje->date = $iv->date;
+    $aje->note = 'Charge for Invoice #' . $iv->id;
+    $aje->save();
+
+    // Debit Accounts Receivable for this Client
+    $ale = new AccountLedgerEntry();
+    $ale->account_id = $_ENV['account']['receive_account_id'];
+    $ale->account_journal_id = $aje->id;
+    $ale->amount = abs($iv->bill_amount) * -1;
+    $ale->link_to = ImperiumBase::getObjectType('contact');
+    $ale->link_id = $iv->contact_id;
+    $ale->save();
+
+    // Credit Customer Account - or Revenue for Instant Revenue?
+    // Old Query, Why from account by contact?
+    $ale = new AccountLedgerEntry();
+    if ($C->account_id) {
+        $ale->account_id = $C->account_id;
+    } else {
+        $ale->account_id = $_ENV['account']['revenue_account_id'];
+    }
+    $ale->account_journal_id = $aje->id;
+    $ale->amount = abs($iv->bill_amount);
+    $ale->link_to = ImperiumBase::getObjectType($iv);
+    $ale->link_id = $iv->id;
+    $ale->save();
+    echo "IV Posted {$aje->note} " . number_format($ale->amount,2) . "\n";
+
     return $iv;
 
 }

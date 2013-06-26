@@ -14,7 +14,7 @@
 class Invoice extends ImperiumBase
 {
     const FLAG_OPEN = 0x00000001;
-    const FLAG_POST = 0x00001000;
+    // const FLAG_POST = 0x00001000;
     const FLAG_SENT = 0x00040000;
     const FLAG_HAWK = 0x00080000;
     const FLAG_VOID = 0x00400000;
@@ -37,6 +37,7 @@ class Invoice extends ImperiumBase
         }
         return null;
     }
+
     /**
         Create an Invoice
     */
@@ -52,7 +53,9 @@ class Invoice extends ImperiumBase
         $this->tax_total = 0;
         $this->bill_address_id = null;
         $this->ship_address_id = null;
+
         parent::__construct($x);
+
         // Now to Stuff with this new Data!
         // @todo Update Properties
         // @todo Update due_diff to the number of days until or after payment is due
@@ -63,6 +66,7 @@ class Invoice extends ImperiumBase
         $now_date = new Zend_Date();
         $this->due_diff = floor(($now_date->get(Zend_Date::TIMESTAMP) - $due_date->get(Zend_Date::TIMESTAMP)) / 86400);
     }
+
     /**
         Invoice Model save()
     */
@@ -74,6 +78,7 @@ class Invoice extends ImperiumBase
         parent::save();
         $this->_updateBalance();
     }
+
     /**
     */
     function delete()
@@ -85,6 +90,7 @@ class Invoice extends ImperiumBase
         $db->query("delete from invoice where id = $id");
         return true;
     }
+
     /**
         Determines if this Invoice is Hawk-able
         @return true|false
@@ -101,6 +107,7 @@ class Invoice extends ImperiumBase
 
         return !$this->hasFlag(self::FLAG_HAWK);
     }
+
     /**
         Imperium Specific Functions
     */
@@ -114,6 +121,7 @@ class Invoice extends ImperiumBase
             $this->_updateBalance();
         }
     }
+
     /**
     */
     function delInvoiceItem($id)
@@ -132,6 +140,7 @@ class Invoice extends ImperiumBase
         $db = Zend_Registry::get('db');
         return $db->fetchAll('SELECT * FROM invoice_item WHERE invoice_id = ? ORDER BY line, rate DESC, quantity DESC',array($this->id));
     }
+
     /**
         Invoice::getWorkOrders
         Returns a list of WorkOrders that have contributed to this Invoice
@@ -196,6 +205,7 @@ class Invoice extends ImperiumBase
         $rs = $db->fetchAll($sql);
         return $rs;
     }
+
     /**
         Sum of Transactions
     */
@@ -218,6 +228,7 @@ class Invoice extends ImperiumBase
         $rs = $db->fetchOne($sql);
         return $rs;
     }
+
     /**
         Update Balance
         Updates the Invoice Balance after it's been saved
@@ -240,5 +251,11 @@ class Invoice extends ImperiumBase
         $w = array('id = ?'=>$this->id);
         $t = new Zend_Db_Table(array('name'=>'invoice'));
         $t->update($r,$w);
+
+        $this->bill_amount = $r['bill_amount'];
+        $this->paid_amount = $r['paid_amount'];
+        $this->sub_total = $r['sub_total'];
+        $this->tax_total = $r['tax_total'];
+
     }
 }
