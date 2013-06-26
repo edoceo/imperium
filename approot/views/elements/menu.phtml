@@ -18,9 +18,6 @@ $appurl = Zend_Controller_Front::getInstance()->getBaseUrl();;
 $here = $this->controller . '/' . $this->action;
 
 $c = $this->controller == 'index' ? '/' : ('/' . $this->controller);
-//$a = $this->action == 'index' ? null : '/' . $this->action;
-//$m = $c . $a;
-
 
 echo '<ul class="cssMenu menu">';
 echo '<li><a href="' . $appurl . '/" title="Dashboard"><span>' . img('/tango/24x24/places/user-desktop.png') . ' Dashboard' . '</span></a>';
@@ -96,8 +93,8 @@ echo '<li><a href="' . $appurl . '/workorder"><span>' . img('/tango/24x24/action
     } else {
         echo '<li><a href="' . $appurl . '/workorder/create">' . img('/tango/24x24/actions/list-add.png','New Service Order') . ' Create</a></li>';
     }
-    
-    // echo '<li><a href="' . $appurl . '/workorder/index/active' . img('/silk/1.3/table_lightning.png','List Active') . '&nbsp;Active</a></li>';
+
+    echo '<li><a href="' . $appurl . '/workorder/report">' . img('/silk/1.3/chart_bar_edit.png','Reports') . ' Reports</a></li>';
     // echo '<li><a href="' . $appurl . '/workorder/index/project' . img('/silk/1.3/table_lightning.png','List Projects') . '&nbsp;Projects</a></li>';
     //$menu[] = array('/service_orders/index/project',img('/silk/1.3/table_lightning.png','List Projects').'&nbsp;Projects');
     echo '</ul>';
@@ -122,6 +119,7 @@ echo '<li><a href="' . $appurl . '/invoice"><span>' . img('/tango/24x24/apps/acc
     // echo '<li><a href="' . $appurl . '/invoice/filter/active">' , img('/silk/1.3/money_add.png','Active').'&nbsp;Active</a></li>';
     // echo '<li><a href="' . $appurl . '/invoice/filter/past_due">' , img('/silk/1.3/money_add.png','Past Due').'&nbsp;Past Due</a></li>';
     // echo '<li><a href="' . $appurl . '/invoice/filter/paid">' , img('/silk/1.3/money_add.png','Paid').'&nbsp;Paid</a></li>';
+    echo '<li><a href="' . $appurl . '/invoice/report">' . img('/silk/1.3/chart_bar_edit.png','Reports') . ' Reports</a></li>';
     echo '</ul>';
 echo '</li>';
 
@@ -146,7 +144,7 @@ echo '<li><a href="' . $appurl . '/account"><span>' . img('/tango/24x24/mimetype
     echo '<li><hr /></li>';
     echo '<li><a href="' . $appurl . '/account.form',img('/silk/1.3/application_view_detail.png','Tax Forms').'&nbsp;Tax Schedules</a></li>';
 
-    
+
     echo '</ul>';
 echo '</li>';
 

@@ -1,0 +1,39 @@
+<?php
+/**
+	@file
+	@brief Show Pagination Options
+
+    @see http://developer.yahoo.com/ypatterns/pattern.php?pattern=searchpagination
+
+*/
+
+$list = array();
+
+if ($this->pageCount) {
+    // Previous page link 
+    if (isset($this->previous)) { 
+        $list[] = '<a href="?' . http_build_query(array_merge($_GET,array('page'=>(intval($_GET['page'])-1)))) . '">&laquo;&laquo;</a>';
+    } else {
+        $list[] = '<span class="no">&laquo;&laquo;</span>';
+    }
+
+    // Numbered page links
+    foreach ($this->pagesInRange as $page) { 
+        if ($page == $this->current) {
+            $list[] = '<span class="hi">&nbsp;' . $page . '&nbsp;</span>';
+        } else {
+            $list[] = '<a href="?' . http_build_query(array_merge($_GET,array('page'=>$page))) .'">&nbsp;' . $page .'&nbsp;</a>';
+        }
+    }
+
+    // Next page link 
+    if (isset($this->next)) { 
+        $list[] = '<a href="?' . http_build_query(array_merge($_GET,array('page'=>(intval($_GET['page'])+1)))) . '">&raquo;&raquo;</a>';
+    } else {
+        $list[] = '<span class="no">&raquo;&raquo;</span>';
+    }
+}
+
+echo '<div class="page_list">';
+echo implode('|',$list);
+echo '</div>';
