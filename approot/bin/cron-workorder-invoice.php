@@ -10,8 +10,6 @@
 // CLI
 require_once(dirname(dirname(__FILE__)) . '/lib/cli.php');
 
-$date = strftime('%Y-%m-%d');
-
 $dim = intval(date('t')); // Days in Month
 $dom = intval(date('j')); // Day of Month
 

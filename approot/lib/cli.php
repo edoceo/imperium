@@ -14,6 +14,7 @@ if (!empty($cli_opt['config'])) putenv('IMPERIUM_CONFIG=' . $cli_opt['config']);
 $time = mktime(0,0,0);
 if (!empty($cli_opt['d'])) $cli_opt['date'] = $cli_opt['d'];
 if (!empty($cli_opt['date'])) $time = strtotime($cli_opt['date']);
+$date = strftime('%Y-%m-%d',$time);
 
 if (isset($cli_opt['s']) || isset($cli_opt['send'])) $cli_opt['send'] = true;
 
