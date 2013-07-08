@@ -47,13 +47,13 @@ echo "You have " . count($res) . " Active Invoices Past Due\n";
 foreach ($res as $rec) {
 
     $iv = new Invoice($rec->id);
-    echo trim("Invoice #{$iv->id} {$iv->date} ({$iv->status} - {$rec->days}) to {$co->name}#{$iv->contact_id} {$co->email} ");
-
     $co = new Contact($iv->contact_id);
     if (empty($co->email)) {
         echo " * Fail No Email!\n";
         continue;
     }
+
+    echo trim("Invoice #{$iv->id} {$iv->date} ({$iv->status} - {$rec->days}) to {$co->name}#{$iv->contact_id} {$co->email} ");
 
     // Mark Invoice to Hawk Status
     if ($iv->status == 'Active') {

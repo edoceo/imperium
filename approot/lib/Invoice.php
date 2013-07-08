@@ -165,27 +165,6 @@ class Invoice extends ImperiumBase
         if (intval($this->id)==0) {
             return null;
         }
-        // @note This is from the old PHP and or Cake system - remove?
-        /*
-        $this->Contact->data = $this->data;
-        $contact_account_id = $this->Contact->getAccountId();
-
-        if ($contact_account_id)
-        {
-            $sql = "select al.id,al.account_id,al.amount,aj.id as account_journal_id,aj.date,aj.note,a.name as account_name from account_ledger al ";
-            $sql.= " join account_journal aj on al.account_journal_id = aj.id ";
-            $sql.= " join account a on al.account_id = a.id ";
-            $sql.= " where al.account_id = $contact_account_id and al.link_to=" . self::OBJECT_TYPE . " and al.object_id=$id";
-            //$sql.= sprintf(" where account_id=$cl->account_id and account_ledger.link_to=%d and account_ledger.object_id=%d",ObjectType::INVOICE,$iv->id);
-            $sql.= " order by aj.date,al.amount";
-            //echo $sql;
-            $rs = $this->query($sql);
-            return $rs;
-        }
-        else
-        {
-        */
-        //}
 
         $db = Zend_Registry::get('db');
         $sql = 'SELECT al.id,al.account_id,al.amount,aj.id as account_journal_id,aj.date,aj.note,a.name as account_name ';
@@ -196,11 +175,7 @@ class Invoice extends ImperiumBase
         $sql.= ' WHERE ';
         // $sql.= " a.kind = 'Asset: Accounts Receivable' AND ";
         $sql.= sprintf(' al.link_to = %d AND al.link_id = %d',self::getObjectType($this),$this->id);
-        $sql.= ' ORDER BY aj.date ASC, al.amount ASC';
-        //$sql = $db->select();
-        //$sql->from('general_ledger');
-        //$sql->where('link_to = ?', self::getObjectType($this));
-        //$sql->where('link_id = ?',$this->id);
+        $sql.= ' ORDER BY aj.date ASC, al.amount DESC';
 
         $rs = $db->fetchAll($sql);
         return $rs;
