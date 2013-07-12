@@ -38,6 +38,27 @@ INSERT INTO account (id,active, name, parent_id, balance, link_to, link_id, flag
 
 select setval('account_id_seq',(select id from account order by id desc limit 1),true);
 
+INSERT INTO base_enum (link,name,sort) VALUES ('contact-kind','Contact',100);
+INSERT INTO base_enum (link,name,sort) VALUES ('contact-kind','Company',200);
+INSERT INTO base_enum (link,name,sort) VALUES ('contact-kind','Vendor',300);
+
+INSERT INTO base_enum (link,name,sort) VALUES ('contact-status','Active',100);
+INSERT INTO base_enum (link,name,sort) VALUES ('contact-status','Archive',400);
+
+INSERT INTO base_enum (link,name,sort) VALUES ('invoice-kind','Active',100);
+INSERT INTO base_enum (link,name,sort) VALUES ('invoice-kind','Archive',400);
+
+INSERT INTO base_enum (link,name,sort) VALUES ('invoice-status','Active',100);
+INSERT INTO base_enum (link,name,sort) VALUES ('invoice-status','Archive',400);
+
+
+INSERT INTO base_enum (link,name,sort) VALUES ('workorder','Single',100);
+INSERT INTO base_enum (link,name,sort) VALUES ('workorder','Project',200);
+INSERT INTO base_enum (link,name,sort) VALUES ('workorder','Monthly',300);
+INSERT INTO base_enum (link,name,sort) VALUES ('workorder','Quarterly',400);
+INSERT INTO base_enum (link,name,sort) VALUES ('workorder','Yearly',500);
+
+
 --
 -- Base Object Descriptors
 --

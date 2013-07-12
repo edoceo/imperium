@@ -321,6 +321,11 @@ class ContactController extends ImperiumController
 
         $this->_s->Contact = $c;
 
+        $sql = 'SELECT name AS id,name FROM base_enum WHERE link = ? ORDER BY sort';
+        $this->view->KindList = $this->_d->fetchPairs($sql,array('contact-kind'));
+        print_r($this->view->KindList);
+        $this->view->StatusList = $this->_d->fetchPairs($sql,array('contact-status'));
+
         $this->view->title = array(
             $this->view->Contact->kind,
             $this->view->Contact->name

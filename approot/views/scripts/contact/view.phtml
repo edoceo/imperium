@@ -103,11 +103,10 @@ echo '</tr>';
 // }
 // echo '</tr>';
 
-// Kind
+// Kind & Status
 echo '<tr>';
-echo "<td class='l'>Kind:</td><td>" . $this->formText('kind',$this->Contact->kind) . "</td>";
-// Status
-echo '<td class="l">Status:</td><td>' . $this->formText('status',$this->Contact->status) . '</td>';
+echo '<td class="l">Kind:</td><td>' . $this->formSelect('kind',$this->Contact->kind,null,$this->KindList) . '</td>';
+echo '<td class="l">Status:</td><td>' . $this->formSelect('status',$this->Contact->status,null,$this->StatusList) . '</td>';
 echo '</tr>';
 
 // Channels
@@ -215,12 +214,12 @@ $(document).ready(function() {
             event.preventDefault();
         }
     });
-    $("#kind").autocomplete({
-        source: "<?php echo $this->link('/contact/ajax?field=kind'); ?>"
-    });
-    $("#status").autocomplete({
-        source: "<?php echo $this->link('/contact/ajax?field=status'); ?>"
-    });
+    // $("#kind").autocomplete({
+    //     source: "<?php echo $this->link('/contact/ajax?field=kind'); ?>"
+    // });
+    // $("#status").autocomplete({
+    //     source: "<?php echo $this->link('/contact/ajax?field=status'); ?>"
+    // });
     $("#contact-google-view").click(function() {
         var u = "<?php echo $this->link('/contact/ajax?field=google'); ?>";
         $("#contact-google-area").load(u);
