@@ -415,20 +415,6 @@ ALTER SEQUENCE auth_user_pref_id_seq OWNED BY auth_user_pref.id;
 
 
 --
--- TOC entry 1629 (class 1259 OID 42104)
--- Dependencies: 6
--- Name: auth_user_temp; Type: TABLE; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE TABLE auth_user_temp (
-    id integer NOT NULL,
-    uid integer NOT NULL,
-    name character varying(32) NOT NULL,
-    data text
-);
-
-
---
 -- TOC entry 1630 (class 1259 OID 42110)
 -- Dependencies: 6
 -- Name: base_alert_id_seq; Type: SEQUENCE; Schema: public; Owner: -
@@ -1344,16 +1330,6 @@ ALTER TABLE ONLY auth_user
 
 ALTER TABLE ONLY auth_user_pref
     ADD CONSTRAINT auth_user_pref_pkey PRIMARY KEY (id);
-
-
---
--- TOC entry 2017 (class 2606 OID 42340)
--- Dependencies: 1629 1629
--- Name: auth_user_temp_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
---
-
-ALTER TABLE ONLY auth_user_temp
-    ADD CONSTRAINT auth_user_temp_pkey PRIMARY KEY (id);
 
 
 --
