@@ -486,7 +486,7 @@ ALTER SEQUENCE base_diff_id_seq OWNED BY base_diff.id;
 --
 
 CREATE TABLE base_enum (
-    id integer NOT NULL,
+    id serial primary key,
     code integer,
     sort integer,
     link character varying(64) NOT NULL,

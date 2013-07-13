@@ -21,11 +21,11 @@ CREATE SEQUENCE base_enum_id_seq
 ALTER SEQUENCE base_enum_id_seq OWNED BY base_enum.id;
 
 BEGIN;
-INSERT INTO base_enum (id,link,name,sort) VALUES (1,'workorder','Single',100);
-INSERT INTO base_enum (id,link,name,sort) VALUES (2,'workorder','Project',200);
-INSERT INTO base_enum (id,link,name,sort) VALUES (3,'workorder','Monthly',300);
-INSERT INTO base_enum (id,link,name,sort) VALUES (4,'workorder','Quarterly',400);
-INSERT INTO base_enum (id,link,name,sort) VALUES (5,'workorder','Yearly',500);
+INSERT INTO base_enum (link,name,sort) VALUES ('workorder','Single',100);
+INSERT INTO base_enum (link,name,sort) VALUES ('workorder','Project',200);
+INSERT INTO base_enum (link,name,sort) VALUES ('workorder','Monthly',300);
+INSERT INTO base_enum (link,name,sort) VALUES ('workorder','Quarterly',400);
+INSERT INTO base_enum (link,name,sort) VALUES ('workorder','Yearly',500);
 COMMIT;
 
 -- Migrate WorkOrder to Invoice
@@ -104,4 +104,9 @@ alter table contact add column account_id int null references account(id);
 begin;
 ALTER TABLE workorder_item ADD COLUMN time_alpha time without time zone;
 ALTER TABLE workorder_item ADD COLUMN time_omega time without time zone;
+commit;
+
+begin
+alter table account_period drop column id;
+alter table account_period add primary key (date_alpha,date_omega);
 commit;

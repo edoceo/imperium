@@ -94,7 +94,8 @@ echo '<tr>';
 // echo '<td class="l">Kind:</td><td><input id="kind" name="kind" type="text" value="' . $this->Invoice->kind . '">';
 // echo '<script type="text/javascript">$("#kind").autocomplete({ minLength:0, source:["Single","Project","Subscription/Monthly","Subscription/Quarterly","Subscription/Yearly"] });</script>';
 // echo '</td>';
-echo '<td class="l">Status:</td><td><input name="status" size="16" type="text" value="' . $this->Invoice->status . '" /></td>';
+// echo '<td class="l">Status:</td><td><input name="status" size="16" type="text" value="' . $this->Invoice->status . '" /></td>';
+echo '<td class="l">Status:</td><td>' . $this->formSelect('status',$this->Invoice->status,null,$this->StatusList) . '</td>';
 echo '</tr>';
 
 echo '</table>';

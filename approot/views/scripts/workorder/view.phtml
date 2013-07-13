@@ -19,7 +19,7 @@ if (count($this->jump_list)) {
             $list[] = '<span class="hi">#' . $x . '</span>';
         } elseif ($x < $this->WorkOrder->id ) {
             $list[] = '<a href="' . $this->link('/workorder/view?w=' . $x) . '">&laquo; #' . $x . '</a>';
-        } else { 
+        } else {
             $list[] = '<a href="' . $this->link('/workorder/view?w=' . $x) . '">#' . $x . ' &raquo;</a>';
         }
     }
@@ -36,12 +36,6 @@ echo '<tr>';
 if (empty($this->Contact->id)) {
     echo '<td class="l">Contact:</td>';
     echo '<td><input id="contact_name" name="contact_name" type="text" />';
-    echo '<script type="text/javascript">';
-    echo '$("#contact_name").autocomplete({ ';
-    echo ' source: "' . $this->link('/contact/ajax') . '", ';
-    echo ' change: function(event, ui) { if (ui.item) { $("#contact_id").val(ui.item.id); } } ';
-    echo '}); ';
-    echo '</script>';
     echo '</td>';
 } else {
     echo "<td class='l'>Contact:</td><td>" . $this->link("/contact/view?c={$this->Contact->id}","{$this->Contact->name}");
@@ -58,9 +52,7 @@ echo '<td>';
 echo $this->formText('requester',$this->WorkOrder->requester);
 echo '</td>';
 // Kind
-echo '<td class="l">Kind:</td><td><input id="kind" name="kind" type="text" value="' . $this->WorkOrder->kind . '">';
-echo '<script type="text/javascript">$("#kind").autocomplete({ minLength:0, source:["Single","Project","Monthly","Quarterly","Yearly"] });</script>';
-echo '</td>';
+echo '<td class="l">Kind:</td><td>' . $this->formSelect('kind',$this->WorkOrder->kind,null,$this->KindList) . '</td>';
 echo '</tr>';
 
 // Rate & Units & Status
@@ -226,7 +218,7 @@ if (count($this->WorkOrderItemList) > 0) {
 
             $e_cost_full += ($woi->e_quantity * $woi->e_rate);
             $e_size_full += $woi->e_quantity;
- 
+
         }
         echo '</td>';
 
@@ -290,16 +282,21 @@ function drawSummaryRow($e_size,$e_cost,$a_size,$a_cost,$name='Sub Total')
 ?>
 
 <script type="text/javascript">
+$('#contact_name').autocomplete({
+    source: '<?php echo $this->link('/contact/ajax') ?>',
+    change: function(event, ui) { if (ui.item) { $('#contact_id').val(ui.item.id); } }
+});
 $('#wo_date').datepicker();
 $('#requester').autocomplete({
-    source: "<?php echo $this->link('/contact/ajax'); ?>",
-    change: function(event, ui) { 
+    source: '<?php echo $this->link('/contact/ajax'); ?>',
+    change: function(event, ui) {
         if (ui.item) {
             $('#account').val(ui.item.label);
             $('#account_id').val(ui.item.id);
         }
     }
 });
+$('#kind').autocomplete({ minLength:0, source:['Single','Project','Monthly','Quarterly','Yearly'] });
 // $('#add_contact_name').autocomplete({
 //     source:'<?php echo $this->link('/contact/ajax'); ?>',
 //     change:function(event, ui) { if (ui.item) {  $("#add_contact_id").val(ui.item.id); $("#add_contact_name").val(ui.item.contact); } }

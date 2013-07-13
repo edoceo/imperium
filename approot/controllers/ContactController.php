@@ -24,7 +24,13 @@ class ContactController extends ImperiumController
         $acl = Zend_Registry::get('acl');
         $acl->add( new Zend_Acl_Resource('contact') );
         $acl->allow('user','contact');
+
         parent::init();
+
+        $sql = 'SELECT name AS id,name FROM base_enum WHERE link = ? ORDER BY sort';
+        $this->view->KindList = $this->_d->fetchPairs($sql,array('contact-kind'));
+        $this->view->StatusList = $this->_d->fetchPairs($sql,array('contact-status'));
+
     }
 
     /**
@@ -320,11 +326,6 @@ class ContactController extends ImperiumController
         $this->view->Account = $c->getAccount();
 
         $this->_s->Contact = $c;
-
-        $sql = 'SELECT name AS id,name FROM base_enum WHERE link = ? ORDER BY sort';
-        $this->view->KindList = $this->_d->fetchPairs($sql,array('contact-kind'));
-        print_r($this->view->KindList);
-        $this->view->StatusList = $this->_d->fetchPairs($sql,array('contact-status'));
 
         $this->view->title = array(
             $this->view->Contact->kind,

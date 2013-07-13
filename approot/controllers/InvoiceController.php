@@ -23,7 +23,13 @@ class InvoiceController extends ImperiumController
             $acl->add( new Zend_Acl_Resource('invoice') );
         }
         $acl->allow('user','invoice');
+
         parent::init();
+
+        $sql = 'SELECT name AS id,name FROM base_enum WHERE link = ? ORDER BY sort';
+        $this->view->KindList = $this->_d->fetchPairs($sql,array('invoice-kind'));
+        $this->view->StatusList = $this->_d->fetchPairs($sql,array('invoice-status'));
+
     }
     /**
         Invoice Index Action

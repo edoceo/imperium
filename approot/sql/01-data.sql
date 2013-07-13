@@ -49,14 +49,19 @@ INSERT INTO base_enum (link,name,sort) VALUES ('invoice-kind','Active',100);
 INSERT INTO base_enum (link,name,sort) VALUES ('invoice-kind','Archive',400);
 
 INSERT INTO base_enum (link,name,sort) VALUES ('invoice-status','Active',100);
-INSERT INTO base_enum (link,name,sort) VALUES ('invoice-status','Archive',400);
+INSERT INTO base_enum (link,name,sort) VALUES ('invoice-status','Sent',201);
+INSERT INTO base_enum (link,name,sort) VALUES ('invoice-status','Hawk',300);
+INSERT INTO base_enum (link,name,sort) VALUES ('invoice-status','Loss',400);
+INSERT INTO base_enum (link,name,sort) VALUES ('invoice-status','Paid',600);
+-- INSERT INTO base_enum (link,name,sort) VALUES ('invoice-status','Archive',400);
+-- INSERT INTO base_enum (link,name,sort) VALUES ('invoice-status','Trade',400);
+INSERT INTO base_enum (link,name,sort) VALUES ('invoice-status','Void',900);
 
-
-INSERT INTO base_enum (link,name,sort) VALUES ('workorder','Single',100);
-INSERT INTO base_enum (link,name,sort) VALUES ('workorder','Project',200);
-INSERT INTO base_enum (link,name,sort) VALUES ('workorder','Monthly',300);
-INSERT INTO base_enum (link,name,sort) VALUES ('workorder','Quarterly',400);
-INSERT INTO base_enum (link,name,sort) VALUES ('workorder','Yearly',500);
+INSERT INTO base_enum (link,name,sort) VALUES ('workorder-kind','Single',100);
+INSERT INTO base_enum (link,name,sort) VALUES ('workorder-kind','Project',200);
+INSERT INTO base_enum (link,name,sort) VALUES ('workorder-kind','Monthly',300);
+INSERT INTO base_enum (link,name,sort) VALUES ('workorder-kind','Quarterly',400);
+INSERT INTO base_enum (link,name,sort) VALUES ('workorder-kind','Yearly',500);
 
 
 --
