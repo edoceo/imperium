@@ -166,15 +166,19 @@ echo '</tr>';
 
 echo '<tr>';
 echo '<td class="l">';
-if (!empty($this->Account->id)) {
-    echo '<a href="' . $this->link('/account/ledger?' . http_build_query(array('id'=>$this->Account->id))) . '">Account</a>:';
-} else {
+if (empty($this->Account->id)) {
     echo 'Account';
+} else {
+    echo '<a href="' . $this->link('/account/ledger?' . http_build_query(array('id'=>$this->Account->id))) . '">Account</a>:';
 }
 echo '</td><td colspan="3">';
-echo '<input id="account" style="width:20em;" type="text" value="' . $this->Account->full_name . '">';
-echo '<input id="account_id" name="account_id" type="hidden" value="' . $this->Account->id . '">';
-// echo ' - was: ' . $this->Contact->account_id;
+if (empty($this->Account->id)) {
+    echo '<button name="c" title="Create new Account for this Contact" type="submit" value="create-account">Create</button>';
+} else {
+    echo '<input id="account" style="width:20em;" type="text" value="' . $this->Account->full_name . '">';
+    echo '<input id="account_id" name="account_id" type="hidden" value="' . $this->Account->id . '">';
+    // echo ' - was: ' . $this->Contact->account_id;
+}
 echo '</td></tr>';
 
 // Google Contact Detail

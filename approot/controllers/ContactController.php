@@ -238,8 +238,27 @@ class ContactController extends ImperiumController
     function saveAction()
     {
         $id = intval($_GET['c']);
+
         // Delete Requested?
-        if (strtolower($_POST['c']) == 'delete') {
+        switch (strtolower($_POST['c'])) {
+        case 'create-account':
+            $c = new Contact($id);
+
+            $a = new Account();
+            $a->kind = 'Sub: Customer';
+            $a->code = $id;
+            $a->name = $c->name;
+            $a->parent_id = $_ENV['account']['contact_ledger_container_id'];
+            $a->active = 't';
+            $a->link_to = 'contact';
+            $a->link_id = $id;
+
+            $this->_s->Account = $a;
+
+            $this->redirect('/account/create');
+
+            break;
+        case 'delete':
 
             /*
             $c_so = $this->WorkOrder->findCount('WorkOrder.contact_id=' . $id);

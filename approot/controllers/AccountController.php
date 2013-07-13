@@ -19,6 +19,7 @@ class AccountController extends ImperiumController
         $acl->allow('user','account');
         parent::init();
     }
+
     /**
         Account Controller internal preDispatch
     */
@@ -44,7 +45,6 @@ class AccountController extends ImperiumController
             $this->view->Month = isset($_GET['m']) ? $_GET['m'] : date('m');
             $this->view->Year = isset($_GET['y']) ? $_GET['y'] : date('Y');
         }
-
 
         // Period Processing?
         if ($this->view->Period == 'm') {
@@ -80,7 +80,7 @@ class AccountController extends ImperiumController
         $this->_s->AccountPeriod->date_alpha = $this->view->date_alpha;
         $this->_s->AccountPeriod->date_omega = $this->view->date_omega;
 
-    // Build other View Data (Month, Year, Period)
+        // Build other View Data (Month, Year, Period)
         $this->view->MonthList = array();
         for ($i=1;$i<=12;$i++) {
             $this->view->MonthList[$i] = sprintf('%02d',$i) . ' ' . strftime('%B',mktime(0,0,0,$i));
@@ -92,19 +92,38 @@ class AccountController extends ImperiumController
             $this->view->YearList[$i] = $i;
         }
 
-        $this->view->PeriodList = array('m'=>'Monthly','q'=>'Quarterly','y'=>'Yearly');
+        $this->view->PeriodList = array(
+            'm'=>'Monthly',
+            'q'=>'Quarterly',
+            'y'=>'Yearly'
+        );
+
         // Account List
+        $this->view->AccountPeriod = $this->_s->AccountPeriod;
         $this->view->AccountList = Account::listAccounts();
         $this->view->AccountPairList = Account::listAccountPairs();
         // Account Kind List
         $this->view->AccountKindList = Account::$kind_list;
     }
+
     /**
         Index Action
     */
     function indexAction()
     {
         $this->view->title = array('Accounting','Chart of Accounts');
+
+        // Find period containting this date
+        // $sql = 'SELECT * FROM account_period WHERE date_alpha <= ? AND date_omega >= ?';
+        // $arg = array(
+        //     $this->view->date_alpha,
+        //     $this->view->date_omega,
+        // );
+        // $x = $this->_d->fetchRow($sql,$arg);
+        // if (empty($x)) {
+        //     $this->_s->fail[] = 'Invalid Account Period';
+        // }
+        // $this->view->AccountPeriod = $x;
     }
     
     /**
@@ -268,7 +287,12 @@ class AccountController extends ImperiumController
     function createAction()
     {
         $this->view->title = array('Account','Create');
-        $this->view->Account = new Account();
+        $a = new Account();
+        if (!empty($this->_s->Account)) {
+            $a = $this->_s->Account;
+            unset($this->_s->Account);
+        }
+        $this->view->Account = $a;
         $this->view->AccountTaxLineList = AccountTaxFormLine::listTaxLines();
         $this->render('view');
     }
