@@ -11,11 +11,8 @@
 error_reporting( (E_ALL | E_STRICT) ^ E_NOTICE );
 
 $path = array();
-// $path[] = dirname(__FILE__) . '/lib';
-$path[] = dirname(__FILE__) . '/approot/lib';
-// Use this for a Zend Trunk or Specific Version
-$path[] = '/opt/Zend-1.11';
-// Get PHPs stuffs
+$path[] = dirname(__FILE__) . '/lib';
+$path[] = '/opt/edoceo/lib/radix';
 $path[] = get_include_path();
 
 set_include_path(implode(PATH_SEPARATOR,$path));
@@ -23,18 +20,22 @@ set_include_path(implode(PATH_SEPARATOR,$path));
 define('APP_ROOT',dirname(__FILE__));
 define('APP_NAME','Edoceo Imperium');
 
+require_once('Radix.php');
+require_once('Radix/ACL.php');
+require_once('Radix/Session.php');
+
 // Use Zend Loader (>=1.8)
-require_once('Zend/Loader/Autoloader.php');
-$al = Zend_Loader_Autoloader::getInstance();
-$al->setFallbackAutoloader(true);
+// require_once('Zend/Loader/Autoloader.php');
+// $al = Zend_Loader_Autoloader::getInstance();
+// $al->setFallbackAutoloader(true);
 
 // Load Application Config
-$_ENV = parse_ini_file(dirname(__FILE__).'/approot/etc/imperium.ini',true);
+$_ENV = parse_ini_file(APP_ROOT . '/etc/boot.ini',true);
 $_ENV = array_change_key_case($_ENV);
 // Zend_Debug::dump($_ENV);
 
 // Merge Local
-$x = dirname(__FILE__).'/approot/etc/imperium-local.ini';
+$x = APP_ROOT . '/etc/imperium-local.ini';
 if ( (is_file($x)) && (is_readable($x)) ) {
     $x = parse_ini_file($x,true);
     $x = array_change_key_case($x);
@@ -43,12 +44,11 @@ if ( (is_file($x)) && (is_readable($x)) ) {
 }
 // Merge Host
 if ($x = getenv('IMPERIUM_CONFIG')) {
-    $x = APP_ROOT . '/approot/etc/' . $x . '.ini';
+    $x = APP_ROOT . '/etc/' . $x . '.ini';
     if ( (is_file($x)) && (is_readable($x)) ) {
         $x = parse_ini_file($x,true);
         $x = array_change_key_case($x);
         $_ENV = array_merge_recursive($_ENV,$x);
-        // Zend_Debug::dump($_ENV);
     }
 }
 // Reduce to Singular Values
@@ -67,21 +67,31 @@ ini_set('date.timezone',$_ENV['application']['zone']);
 date_default_timezone_set($_ENV['application']['zone']);
 
 // Zend Locale
-//$locale  = new Zend_Locale('en');
-Zend_Locale::setDefault('en_US');
-Zend_Registry::set('Zend_Locale', new Zend_Locale('en_US'));
+// $locale  = new Zend_Locale('en');
+// Zend_Locale::setDefault('en_US');
+// Zend_Registry::set('Zend_Locale', new Zend_Locale('en_US'));
 
 // Date Options
-Zend_Date::setOptions(array('extend_month' => false,'format_type'=>'iso'));
+// Zend_Date::setOptions(array('extend_month' => false,'format_type'=>'iso'));
 
 // Zend Database
-$x = $_ENV['database'];
-unset($x['adapter']);
-$x = Zend_Db::factory($_ENV['database']['adapter'],$x);
-$x->setFetchMode(Zend_Db::FETCH_OBJ);
-// set client_encoding='utf-8';
-Zend_Registry::set('db',$x);
-Zend_Db_Table_Abstract::setDefaultAdapter($x);
+//$x = $_ENV['database'];
+//unset($x['adapter']);
+//$x = Zend_Db::factory($_ENV['database']['adapter'],$x);
+//$x->setFetchMode(Zend_Db::FETCH_OBJ);
+//// set client_encoding='utf-8';
+//Zend_Registry::set('db',$x);
+//Zend_Db_Table_Abstract::setDefaultAdapter($x);
+
+
+// Zend Session
+// Zend_Session::start(array(
+//   // 'cookie_path' => '/imperium',
+//   'name'=> 'imperium',
+//   'use_cookies'=>true,
+//   'use_only_cookies'=>true
+// ));
+// $x = new Zend_Session_Namespace('default',true);
 
 /**
     Internal Hax0r Functions
