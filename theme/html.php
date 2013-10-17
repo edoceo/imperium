@@ -41,13 +41,13 @@ echo '<header>';
 // echo ImperiumView::mruDraw();
 echo '</header>';
 
-echo '<h1>' . $_ENV['title'] . '</h1>';
-if (!empty($this->title_one)) {
-    echo '<h2>' . $this->title_one . '</h2>';
-}
-if (!empty($this->title_two)) {
-    echo $this->title_two;
-}
+// echo '<h1>' . $_ENV['title'] . '</h1>';
+// if (!empty($this->title_one)) {
+//     echo '<h2>' . $this->title_one . '</h2>';
+// }
+// if (!empty($this->title_two)) {
+//     echo $this->title_two;
+// }
 
 // Menu for Authenticated Users Only
 // $auth = Zend_Auth::getInstance();
@@ -56,12 +56,12 @@ if (!empty($this->title_two)) {
 echo '<div id="core">';
 
 // Title for Printing Only (po)
-echo '<div class="po">';
-echo '<h1>' . $_ENV['title'] . '</h1>';
-if (!empty($this->title_one)) {
-  echo '<h2>' . $this->title_one . '</h2>';
-}
-echo '</div>';
+// echo '<div class="po">';
+// echo '<h1>' . $_ENV['title'] . '</h1>';
+// if (!empty($this->title_one)) {
+//   echo '<h2>' . $this->title_one . '</h2>';
+// }
+// echo '</div>';
 
 echo radix_session::flash();
 
