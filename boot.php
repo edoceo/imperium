@@ -14,7 +14,6 @@ $path = array();
 $path[] = dirname(__FILE__) . '/lib';
 $path[] = '/opt/edoceo/lib/radix';
 $path[] = get_include_path();
-
 set_include_path(implode(PATH_SEPARATOR,$path));
 
 define('APP_ROOT',dirname(__FILE__));
@@ -24,47 +23,15 @@ require_once('Radix.php');
 require_once('Radix/ACL.php');
 require_once('Radix/Session.php');
 
-// Use Zend Loader (>=1.8)
-// require_once('Zend/Loader/Autoloader.php');
-// $al = Zend_Loader_Autoloader::getInstance();
-// $al->setFallbackAutoloader(true);
+require_once('App.php');
+require_once('ImperiumBase.php');
+require_once('ImperiumView.php');
+require_once('Contact.php');
+require_once('Invoice.php');
+require_once('WorkOrder.php');
 
 // Load Application Config
-$_ENV = parse_ini_file(APP_ROOT . '/etc/boot.ini',true);
-$_ENV = array_change_key_case($_ENV);
-// Zend_Debug::dump($_ENV);
-
-// Merge Local
-$x = APP_ROOT . '/etc/imperium-local.ini';
-if ( (is_file($x)) && (is_readable($x)) ) {
-    $x = parse_ini_file($x,true);
-    $x = array_change_key_case($x);
-    $_ENV = array_merge_recursive($_ENV,$x);
-    // Zend_Debug::dump($_ENV);
-}
-// Merge Host
-if ($x = getenv('IMPERIUM_CONFIG')) {
-    $x = APP_ROOT . '/etc/' . $x . '.ini';
-    if ( (is_file($x)) && (is_readable($x)) ) {
-        $x = parse_ini_file($x,true);
-        $x = array_change_key_case($x);
-        $_ENV = array_merge_recursive($_ENV,$x);
-    }
-}
-// Reduce to Singular Values
-foreach ($_ENV as $k0=>$opt) {
-    foreach ($opt as $k1=>$x) {
-        if (is_array($_ENV[$k0][$k1])) {
-            while (count($_ENV[$k0][$k1]) > 1) {
-                array_shift($_ENV[$k0][$k1]);
-            }
-            $_ENV[$k0][$k1] = $_ENV[$k0][$k1][0];
-        }
-    }
-}
-
-ini_set('date.timezone',$_ENV['application']['zone']);
-date_default_timezone_set($_ENV['application']['zone']);
+App::load_config();
 
 // Zend Locale
 // $locale  = new Zend_Locale('en');
@@ -82,16 +49,9 @@ date_default_timezone_set($_ENV['application']['zone']);
 //// set client_encoding='utf-8';
 //Zend_Registry::set('db',$x);
 //Zend_Db_Table_Abstract::setDefaultAdapter($x);
-
-
-// Zend Session
-// Zend_Session::start(array(
-//   // 'cookie_path' => '/imperium',
-//   'name'=> 'imperium',
-//   'use_cookies'=>true,
-//   'use_only_cookies'=>true
-// ));
-// $x = new Zend_Session_Namespace('default',true);
+require_once('Radix/db/sql.php');
+radix_db_sql::init("pgsql:host={$_ENV['database']['hostname']};dbname={$_ENV['database']['database']}",$_ENV['database']['username'],$_ENV['database']['password']);
+App::$db = new radix_db_sql();
 
 /**
     Internal Hax0r Functions

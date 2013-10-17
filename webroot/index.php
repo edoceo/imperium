@@ -71,6 +71,7 @@ if (!empty($_GET['_t'])) {
     $opt['theme'] = $_GET['_t'];
 }
 radix::init($opt);
+$stat = radix::stat();
 radix::exec();
 radix::view();
 radix::send();
