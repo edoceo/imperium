@@ -27,6 +27,7 @@ require_once('App.php');
 require_once('ImperiumBase.php');
 require_once('ImperiumView.php');
 require_once('Contact.php');
+require_once('ContactChannel.php');
 require_once('Invoice.php');
 require_once('WorkOrder.php');
 
