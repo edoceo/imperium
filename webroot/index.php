@@ -11,6 +11,23 @@ require_once(dirname(dirname(__FILE__)) . '/boot.php');
 
 header('Cache-Control: no-cache, must-revalidate');
 
+// Zend_Controller_Front
+// $front = Zend_Controller_Front::getInstance();
+// $front->setControllerDirectory('../approot/controllers');
+//$front->throwExceptions(true);
+//$front->setParam('noErrorHandler', true);
+
+// Add Routes
+// $router = $front->getRouter();
+// Controller/Action/ID Default
+// $router->addRoute('c-a-id',new Zend_Controller_Router_Route('/:controller/:action/:id'));
+
+// Email Actions
+//$router->addRoute('email-folder-view',
+//    new Zend_Controller_Router_Route_Regex('email/([\w\.\-]+@[\w\.\-]+)',array('controller'=>'Email','action'=>'viewFolder')));
+//$router->addRoute('email-message-view',
+//    new Zend_Controller_Router_Route_Regex('email/([\w\.\-]+@[\w\.\-]+)/(\d+)',array('controller'=>'Email','action'=>'viewMessage')));
+
 // Login / Logout
 // $router->addRoute('hash',new Zend_Controller_Router_Route('hash/:hash',array('controller'=>'Index','action'=>'hash')));
 // $router->addRoute('login',new Zend_Controller_Router_Route('login',array('controller'=>'Index','action'=>'login')));
