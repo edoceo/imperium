@@ -65,7 +65,7 @@ foreach ($data['list'] as $x) {
     echo '<td>' . trim(substr($item->note,0,$x)) . '</td>';
     //echo "<td>". $html->link($item['Contact']['name'],'/contacts/view/'.$item['Contact']['id']) . "</td>";
     if (isset($item->contact_name)) {
-        echo '<td>' . radix::link('/contact/view?c='.$item->contact_id, $item->contact_name) . '</td>';
+        echo '<td><a href="' . radix::link('/contact/view?c='.$item->contact_id) . '">' . html($item->contact_name) . '</a></td>';
     } else {
         echo '<td>&nbsp;</td>';
     }
