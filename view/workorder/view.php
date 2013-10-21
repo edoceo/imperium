@@ -18,16 +18,16 @@ if (count($this->jump_list)) {
         if ($x == $this->WorkOrder->id) {
             $list[] = '<span class="hi">#' . $x . '</span>';
         } elseif ($x < $this->WorkOrder->id ) {
-            $list[] = '<a href="' . $this->link('/workorder/view?w=' . $x) . '">&laquo; #' . $x . '</a>';
+            $list[] = '<a href="' . radix::link('/workorder/view?w=' . $x) . '">&laquo; #' . $x . '</a>';
         } else {
-            $list[] = '<a href="' . $this->link('/workorder/view?w=' . $x) . '">#' . $x . ' &raquo;</a>';
+            $list[] = '<a href="' . radix::link('/workorder/view?w=' . $x) . '">#' . $x . ' &raquo;</a>';
         }
     }
     echo implode(' | ',$list);
     echo '</div>';
 }
 
-echo '<form action="' . $this->link('/workorder/save?w=' . $this->WorkOrder->id) . '" method="post">';
+echo '<form action="' . radix::link('/workorder/save?w=' . $this->WorkOrder->id) . '" method="post">';
 echo star($this->WorkOrder->star ? $this->WorkOrder->star : 'star_' );
 echo '<table>';
 
@@ -38,27 +38,27 @@ if (empty($this->Contact->id)) {
     echo '<td><input id="contact_name" name="contact_name" type="text" />';
     echo '</td>';
 } else {
-    echo "<td class='l'>Contact:</td><td>" . $this->link("/contact/view?c={$this->Contact->id}","{$this->Contact->name}");
-    echo "<br />Primary Phone: " . $this->partial('../elements/stub-channel.phtml',array('data'=>$this->Contact->phone)) . "</td>";
+    echo "<td class='l'>Contact:</td><td>" . radix::link("/contact/view?c={$this->Contact->id}","{$this->Contact->name}");
+    echo "<br />Primary Phone: " . radix::block('stub-channel',array('data'=>$this->Contact->phone)) . "</td>";
 }
 // Date
-echo '<td class="l">Date:</td><td>' . $this->formText('date',$this->WorkOrder->date,array('id'=>'wo_date','size'=>12)) . '</td>';
+echo '<td class="l">Date:</td><td>' . radix_html_form::text('date',$this->WorkOrder->date,array('id'=>'wo_date','size'=>12)) . '</td>';
 echo '</tr>';
 
 // Requester & Kind
 echo '<tr>';
 echo '<td class="l">Requester:</td>';
 echo '<td>';
-echo $this->formText('requester',$this->WorkOrder->requester);
+echo radix_html_form::text('requester',$this->WorkOrder->requester);
 echo '</td>';
 // Kind
-echo '<td class="l">Kind:</td><td>' . $this->formSelect('kind',$this->WorkOrder->kind,null,$this->KindList) . '</td>';
+echo '<td class="l">Kind:</td><td>' . radix_html_form::select('kind',$this->WorkOrder->kind,null,$this->KindList) . '</td>';
 echo '</tr>';
 
 // Rate & Units & Status
 echo '<tr>';
-$r = $this->formText('base_rate',$this->WorkOrder->base_rate,array('class'=>'rate'));
-$u = $this->formSelect('base_unit',$this->WorkOrder->base_unit,null,Base_Unit::getList());
+$r = radix_html_form::text('base_rate',$this->WorkOrder->base_rate,array('class'=>'rate'));
+$u = radix_html_form::select('base_unit',$this->WorkOrder->base_unit,null,Base_Unit::getList());
 echo "<td class='l'>Base Rate:</td><td class='nw'>$r/$u</td>";
 // Status
 echo '<td class="l">Status:</td><td>' . $this->WorkOrder->status . '</td>';
@@ -75,9 +75,9 @@ echo '</table>';
 
 // Hidden Fields & Buttons
 echo '<div class="cmd">';
-echo $this->formHidden('id',$this->WorkOrder->id);
-echo $this->formHidden('contact_id',$this->WorkOrder->contact_id);
-echo $this->formSubmit('c','Save');
+echo radix_html_form::hidden('id',$this->WorkOrder->id);
+echo radix_html_form::hidden('contact_id',$this->WorkOrder->contact_id);
+echo radix_html_form::button('c','Save');
 
 if (!empty($_ENV['workorder.workflow'])) {
     $list = array();
