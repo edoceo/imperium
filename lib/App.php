@@ -1,6 +1,7 @@
 <?php
 /**
-
+	@file
+	@brief Application Static Class
 */
 
 class App
@@ -39,10 +40,7 @@ class App
 		foreach ($_ENV as $k0=>$opt) {
 		    foreach ($opt as $k1=>$x) {
 		        if (is_array($_ENV[$k0][$k1])) {
-		            while (count($_ENV[$k0][$k1]) > 1) {
-		                array_shift($_ENV[$k0][$k1]);
-		            }
-		            $_ENV[$k0][$k1] = $_ENV[$k0][$k1][0];
+		            $_ENV[$k0][$k1] = array_pop($_ENV[$k0][$k1]);
 		        }
 		    }
 		}
@@ -50,5 +48,6 @@ class App
 
 		ini_set('date.timezone',$_ENV['application']['zone']);
 		date_default_timezone_set($_ENV['application']['zone']);
+
 	}
 }
