@@ -20,13 +20,13 @@
 echo '<ul class="cssMenu menu">';
 echo '<li><a href="' . radix::link('/') . '" title="Dashboard"><span>' . img('/tango/24x24/places/user-desktop.png') . ' Dashboard' . '</span></a>';
     echo '<ul>';
-    echo '<li><a class="fancybox fancybox.ajax" href="' . radix::link('/note/create?l=r') . '">' . img('/tango/24x24/apps/accessories-text-editor.png','New Note') . '&nbsp;New Note</a></li>';
-    echo '<li><a class="fancybox fancybox.ajax" href="' . radix::link('/file/create?l=r') . '">' . img('/tango/24x24/actions/document-new.png','New File') . '&nbsp;New File</a></li>';
+    echo '<li><a class="fancybox fancybox.ajax" href="' . radix::link('/note/edit?l=r') . '">' . img('/tango/24x24/apps/accessories-text-editor.png','New Note') . '&nbsp;New Note</a></li>';
+    echo '<li><a class="fancybox fancybox.ajax" href="' . radix::link('/file/edit?l=r') . '">' . img('/tango/24x24/actions/document-new.png','New File') . '&nbsp;New File</a></li>';
 
-    // echo '<li><a href="' . radix::link('/task/create">' . img('/silk/1.3/note_add.png','Add Task') . '&nbsp;Task</a></li>';
-    // echo '<li><a href="' . radix::link('/alert/create">' . img('/silk/1.3/bell_add.png','New Alert') . '&nbsp;New Alert</a></li>';
+    // echo '<li><a href="' . radix::link('/task/edit">' . img('/silk/1.3/note_add.png','Add Task') . '&nbsp;Task</a></li>';
+    // echo '<li><a href="' . radix::link('/alert/edit">' . img('/silk/1.3/bell_add.png','New Alert') . '&nbsp;New Alert</a></li>';
     echo '<li><a href="' . radix::link('/timesheet') . '">' . img('/tango/24x24/actions/appointment-new.png','New Timer') . ' Time Sheet</a></li>';
-    echo '<li><a class="fancybox fancybox.ajax" href="' . radix::link('/timer/create') . '">' . img('/tango/24x24/actions/appointment-new.png','New Timer') . '&nbsp;New Timer</a></li>';
+    echo '<li><a class="fancybox fancybox.ajax" href="' . radix::link('/timer/edit') . '">' . img('/tango/24x24/actions/appointment-new.png','New Timer') . '&nbsp;New Timer</a></li>';
     echo '<li><hr /></li>';
 
     // Somehow get the list of possible Status and use that to build a list here, colours as well.
@@ -47,19 +47,19 @@ echo '<li><a href="' . radix::link('/contact') . '"><span>' . img('/tango/24x24/
     if (!empty($_ENV['contact']['id'])) {
         echo '<li><a href="' . radix::link('/contact/view?c=' . $_ENV['contact']['id']) . '">' . img('/silk/1.3/user.png','Back to Contact') . '&nbsp;&laquo;' . $this->Contact->name . '</a></li>';
         echo '<li><hr /></li>';
-        echo '<li><a href="' . radix::link('/contact.channel/create?c=' . $_ENV['contact']['id']) . '">' . img('/silk/1.3/add.png','Add Contact Channel') . '&nbsp;Add Channel</a></li>';
-        // echo '<li><a href="' . radix::link('/task/create/link/' . $this->Contact->link() . '">' . img('/silk/1.3/note_add.png','Add Task') . '&nbsp;Add Task</a></li>';
-        // echo '<li><a href="' . radix::link('/history/create/link/' . $this->Contact->link() . '">' . img('/silk/1.3/note_add.png','Add Note') . '&nbsp;Add History</a></li>';
-        //$menu[] = array('/timer/create',$html->image('clock_add.png').'&nbsp;Clean');
-        //$menu[] = array('/timer/create',$html->image('clock_add.png').'&nbsp;Search');
-        //$menu[] = array('/timer/create',$html->image('clock_add.png').'&nbsp;Lists');
-        //$menu[] = array('/timer/create',$html->image('clock_add.png').'&nbsp;Help');
+        echo '<li><a href="' . radix::link('/contact.channel/edit?c=' . $_ENV['contact']['id']) . '">' . img('/silk/1.3/add.png','Add Contact Channel') . '&nbsp;Add Channel</a></li>';
+        // echo '<li><a href="' . radix::link('/task/edit/link/' . $this->Contact->link() . '">' . img('/silk/1.3/note_add.png','Add Task') . '&nbsp;Add Task</a></li>';
+        // echo '<li><a href="' . radix::link('/history/edit/link/' . $this->Contact->link() . '">' . img('/silk/1.3/note_add.png','Add Note') . '&nbsp;Add History</a></li>';
+        //$menu[] = array('/timer/edit',$html->image('clock_add.png').'&nbsp;Clean');
+        //$menu[] = array('/timer/edit',$html->image('clock_add.png').'&nbsp;Search');
+        //$menu[] = array('/timer/edit',$html->image('clock_add.png').'&nbsp;Lists');
+        //$menu[] = array('/timer/edit',$html->image('clock_add.png').'&nbsp;Help');
         echo '<li><hr /></li>';
     }
-    echo '<li><a href="' . radix::link('/contact/create') . '">' . img('/tango/24x24/actions/contact-new.png','New Contact') . ' New Contact</a></li>';
-    echo '<li><a href="' . radix::link('/contact/index/kind/contacts') . '">' . img('/silk/1.3/user_green.png','View Contacts').'&nbsp;Contacts</a></li>';
-    echo '<li><a href="' . radix::link('/contact/index/kind/companies') . '">' . img('/silk/1.3/building.png','View Companies').'&nbsp;Companies</a></li>';
-    echo '<li><a href="' . radix::link('/contact/index/kind/vendors') . '">' . img('/silk/1.3/lorry.png','View Vendors').'&nbsp;Vendors</a></li>';
+    echo '<li><a href="' . radix::link('/contact/edit') . '">' . img('/tango/24x24/actions/contact-new.png','New Contact') . ' New Contact</a></li>';
+    echo '<li><a href="' . radix::link('/contact?kind=contacts') . '">' . img('/silk/1.3/user_green.png','View Contacts').'&nbsp;Contacts</a></li>';
+    echo '<li><a href="' . radix::link('/contact?kind=companies') . '">' . img('/silk/1.3/building.png','View Companies').'&nbsp;Companies</a></li>';
+    echo '<li><a href="' . radix::link('/contact?kind=vendors') . '">' . img('/silk/1.3/lorry.png','View Vendors').'&nbsp;Vendors</a></li>';
     echo '<li><a href="' . radix::link('/contact/labels') . '">' . img('/silk/1.3/lorry.png','Mailing Labels').'&nbsp;Mail Labels</a></li>';
     //echo '<li><a href="' . radix::link('/contact/export') . '">' . img('/silk/1.3/lorry.png','Export').'&nbsp;Export</a></li>';
     echo '<li><a href="' . radix::link('/contact/sync') . '">' . img('/silk/1.3/lorry.png','Import').'&nbsp;Sync</a></li>';
@@ -87,9 +87,9 @@ echo '<li><a href="' . radix::link('/workorder') . '"><span>' . img('/tango/24x2
     }
 
     if ($_ENV['contact']['id']) {
-        echo '<li><a href="' . radix::link('/workorder/create?c=' . $_ENV['contact']['id']) . '">' . img('/tango/24x24/actions/list-add.png','New Service Order') . ' Create</a></li>';
+        echo '<li><a href="' . radix::link('/workorder/edit?c=' . $_ENV['contact']['id']) . '">' . img('/tango/24x24/actions/list-add.png','New Service Order') . ' Create</a></li>';
     } else {
-        echo '<li><a href="' . radix::link('/workorder/create') . '">' . img('/tango/24x24/actions/list-add.png','New Service Order') . ' Create</a></li>';
+        echo '<li><a href="' . radix::link('/workorder/edit') . '">' . img('/tango/24x24/actions/list-add.png','New Service Order') . ' Create</a></li>';
     }
 
     echo '<li><a href="' . radix::link('/workorder/report') . '">' . img('/silk/1.3/chart_bar_edit.png','Reports') . ' Reports</a></li>';
@@ -110,9 +110,9 @@ echo '<li><a href="' . radix::link('/invoice') . '"><span>' . img('/tango/24x24/
 
     // Create Invoice
     if ($_ENV['contact']['id']) {
-        echo '<li><a href="' . radix::link('/invoice/create?c=' . $_ENV['contact']['id']) . '">' . img('/tango/24x24/actions/list-add.png','New Invoice') . ' Create</a></li>';
+        echo '<li><a href="' . radix::link('/invoice/edit?c=' . $_ENV['contact']['id']) . '">' . img('/tango/24x24/actions/list-add.png','New Invoice') . ' Create</a></li>';
     } else {
-        echo '<li><a href="' . radix::link('/invoice/create') . '">' . img('/tango/24x24/actions/list-add.png','New Invoice') . ' Create</a></li>';
+        echo '<li><a href="' . radix::link('/invoice/edit') . '">' . img('/tango/24x24/actions/list-add.png','New Invoice') . ' Create</a></li>';
     }
     // echo '<li><a href="' . radix::link('/invoice/filter/active') . '">' , img('/silk/1.3/money_add.png','Active').'&nbsp;Active</a></li>';
     // echo '<li><a href="' . radix::link('/invoice/filter/past_due') . '">' , img('/silk/1.3/money_add.png','Past Due').'&nbsp;Past Due</a></li>';
@@ -126,7 +126,7 @@ echo '<li><a href="' . radix::link('/account') . '"><span>' . img('/tango/24x24/
     echo '<ul>';
     echo '<li><a href="' . radix::link('/account/transaction') . '">' . img('/silk/1.3/money_add.png','Transaction').' Transaction</a></li>';
     echo '<li><hr /></li>';
-    echo '<li><a href="' . radix::link('/account/create') . '">' . img('/tango/24x24/actions/list-add.png','New Account') . ' New Account</a></li>';
+    echo '<li><a href="' . radix::link('/account/edit') . '">' . img('/tango/24x24/actions/list-add.png','New Account') . ' New Account</a></li>';
     // $menu1[] = array('/account/transaction',img('/silk/1.3/money_add.png','Transaction').'&nbsp;Transaction</a></li>';
     echo '<li><a href="' . radix::link('/account/cheque') . '">',img('/silk/1.3/money_add.png','Cheque').'&nbsp;Cheque</a></li>';
     echo '<li><a href="' . radix::link('/account.wizard') . '">',img('/silk/1.3/money_add.png','Wizard').'&nbsp;Wizard</a></li>';
@@ -259,13 +259,13 @@ case 'email/message':
 // ToDo Menu Set
 // Work Order Menu Set
 case 'workorder.item/index':
-case 'workorder.item/create':
+case 'workorder.item/edit':
 case 'workorder.item/view':
     $menu1[] = array('/workorder/view?w='.$this->WorkOrder->id,img('/silk/1.3/table.png','Back to Work Order').'&nbsp;&laquo;Work Order #'.$this->WorkOrder->id);
     break;
 // Timesheet Menu Set
 case 'timesheet/index':
-    $menu1[] = array('/timesheet/create',' Create');
+    $menu1[] = array('/timesheet/edit',' Create');
     break;
 }
 

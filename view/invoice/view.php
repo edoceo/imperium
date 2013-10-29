@@ -23,14 +23,14 @@ if (count($this->jump_list)) {
         } else {
             $text = '#' . $x['id'] . ' &raquo;';
         }
-        $list[] = '<a href="' . $this->link('/invoice/view?i=' . $x['id']) . '">' . $text . '</a>';
+        $list[] = '<a href="' . radix::link('/invoice/view?i=' . $x['id']) . '">' . $text . '</a>';
     }
     echo '<div class="jump_list">';
     echo implode(' | ',$list);
     echo '</div>';
 }
 
-echo '<form action="' . $this->link('/invoice/save?i=' . $this->Invoice->id) . '" method="post">';
+echo '<form action="' . radix::link('/invoice/save?i=' . $this->Invoice->id) . '" method="post">';
 echo '<div style="float:right;">';
 echo star($this->Invoice->star ? $this->Invoice->star : 'star_' );
 echo '</div>';
@@ -43,20 +43,20 @@ if (empty($this->Contact->id)) {
     echo '<td><input id="contact_name" name="contact_name" type="text" />';
     echo '<script type="text/javascript">';
     echo '$("#contact_name").autocomplete({ ';
-    echo ' source: "' . $this->link('/contact/ajax') . '", ';
+    echo ' source: "' . radix::link('/contact/ajax') . '", ';
     echo ' change: function(event, ui) { if (ui.item) { $("#contact_id").val(ui.item.id); } } ';
     echo '}); ';
     echo '</script>';
     echo '</td>';
 } else {
     echo '<td class="b r">Contact:</td>';
-    echo '<td>' . $this->link('/contact/view?c='.$this->Contact->id,$this->Contact->name);
+    echo '<td>' . radix::link('/contact/view?c='.$this->Contact->id,$this->Contact->name);
     echo '</td>';
 }
 
 // Date & Due Information
 echo '<td class="b r">Date:</td><td>';
-echo $this->formText('date',$this->Invoice->date,array('id'=>'iv_date','size'=>'12'));
+echo radix_html_form::text('date',$this->Invoice->date,array('id'=>'iv_date','size'=>'12'));
 if ($this->Invoice->due_diff < 0) {
     echo '&nbsp;<span class="s">Due in ' . abs($this->Invoice->due_diff) . ' days</span>';
 } else {
@@ -73,15 +73,15 @@ if (is_array($this->ContactAddressList)) {
     $list+= $this->ContactAddressList;
 }
 
-$input = $this->formSelect('bill_address_id',$this->Invoice->bill_address_id,null,$list,null);
+$input = radix_html_form::select('bill_address_id',$this->Invoice->bill_address_id,null,$list,null);
 echo '<tr>';
 echo '<td class="b r">Bill To:</td><td>' . $input . '</td>';
 
-$input = $this->formSelect('ship_address_id',$this->Invoice->ship_address_id,null,$list,null);
+$input = radix_html_form::select('ship_address_id',$this->Invoice->ship_address_id,null,$list,null);
 echo '<td class="b r">Ship To:</td><td>' . $input . '</td>';
 echo '</tr>';
 
-echo "<tr><td class='b r'>Note:</td><td colspan='3'>".$this->formTextarea('note',$this->Invoice->note,array('style'=>'height:3em;width:90%;')) . '</td></tr>';
+echo "<tr><td class='b r'>Note:</td><td colspan='3'>" . radix_html_form::textarea('note',$this->Invoice->note,array('style'=>'height:3em;width:90%;')) . '</td></tr>';
 echo '<tr><td class="l">Bill Total:</td><td class="l">' . number_format($this->Invoice->bill_amount,2)."</td></tr>";
 echo '<tr><td class="l">Paid Total:</td><td class="l"';
 if ($this->Invoice->paid_amount < $this->Invoice->bill_amount) {
@@ -95,7 +95,7 @@ echo '<tr>';
 // echo '<script type="text/javascript">$("#kind").autocomplete({ minLength:0, source:["Single","Project","Subscription/Monthly","Subscription/Quarterly","Subscription/Yearly"] });</script>';
 // echo '</td>';
 // echo '<td class="l">Status:</td><td><input name="status" size="16" type="text" value="' . $this->Invoice->status . '" /></td>';
-echo '<td class="l">Status:</td><td>' . $this->formSelect('status',$this->Invoice->status,null,$this->StatusList) . '</td>';
+echo '<td class="l">Status:</td><td>' . radix_html_form::select('status',$this->Invoice->status,null,$this->StatusList) . '</td>';
 echo '</tr>';
 
 echo '</table>';
@@ -105,9 +105,9 @@ echo '</table>';
 
 // Buttons
 echo '<div class="cmd">';
-echo $this->formHidden('id',$this->Invoice->id);
-echo $this->formHidden('contact_id',$this->Invoice->contact_id);
-echo $this->formSubmit('c','Save');
+echo radix_html_form::hidden('id',$this->Invoice->id);
+echo radix_html_form::hidden('contact_id',$this->Invoice->contact_id);
+echo '<input name="a" type="submit" value="Save">';
 
 // Hawk Monitoring?
 if ($this->Invoice->hasFlag(Invoice::FLAG_HAWK)) {
@@ -135,22 +135,22 @@ echo '</form>';
 // Invoice Notes
 if (!empty($this->Invoice->id)) {
 
-    $url = $this->link('/note/create?i=' . $this->Invoice->id);
+    $url = radix::link('/note/create?i=' . $this->Invoice->id);
     $arg = array(
         'list' => $this->InvoiceNoteList,
         'page' => $url,
     );
-    echo $this->partial('../elements/note-list.phtml',$arg);
+    echo radix::block('note-list',$arg);
 }
 
 // Invoice Items
 // $base = Zend_Controller_Front::getInstance()->getBaseUrl();
 $item_total = 0;
 $item_tax_total = 0;
-//$link = $this->link('/invoice/item');
+//$link = radix::link('/invoice/item');
 
 echo '<h2>Invoice Items ';
-echo '<span class="s">[ <a class="fancybox fancybox.ajax" href="' . $this->link('/invoice/item?i=' . $this->Invoice->id) . '">';
+echo '<span class="s">[ <a class="fancybox fancybox.ajax" href="' . radix::link('/invoice/item?i=' . $this->Invoice->id) . '">';
 echo img('/tango/24x24/actions/list-add.png','Add Item');
 echo '</a> ]</span>';
 echo '</h2>';
@@ -171,7 +171,7 @@ if ((isset($this->InvoiceItemList)) && (is_array($this->InvoiceItemList)) && (co
         }
 
         echo '<tr class="rero">';
-        echo '<td class="b"><a class="fancybox fancybox.ajax" href="' . $this->link('/invoice/item?id=' . $ivi->id) . '">' .$ivi->name . '</a></td>';
+        echo '<td class="b"><a class="fancybox fancybox.ajax" href="' . radix::link('/invoice/item?id=' . $ivi->id) . '">' .$ivi->name . '</a></td>';
         echo '<td class="c b">' .number_format($ivi->quantity,2) . '</td>';
         echo '<td class="r">' . number_format($ivi->rate,2) . '/' . $ivi->unit . '</td>';
         echo '<td class="r">' . number_format($item_subtotal, 2) . '</td>';
@@ -204,12 +204,12 @@ if ( count($this->InvoiceTransactionList) > 0) {
 
         $sum+= $le->amount;
 
-        $link = $this->link('/account/transaction?id=' . $le->account_journal_id, ImperiumView::niceDate($le->date));
+        $link = radix::link('/account/transaction?id=' . $le->account_journal_id, ImperiumView::niceDate($le->date));
 
         echo '<tr>';
         echo '<td class="c">' . $link . '</td>';
 
-        $link = $this->link('/account/journal?id=' . $le->account_id, $le->account_name);
+        $link = radix::link('/account/journal?id=' . $le->account_id, $le->account_name);
         echo '<td>' . $link;
         if (strlen($le->note)) {
             echo '/'.$le->note;
@@ -224,15 +224,15 @@ if ( count($this->InvoiceTransactionList) > 0) {
         echo '</tr>';
     }
     echo '<tr class="ro">';
-  echo '<td class="b" colspan="2">Amount Due:</td>';
-  echo '<td><td class="b r">&curren;' . number_format($sum,2) . '</td>';
-  echo '</tr>';
+	echo '<td class="b" colspan="2">Amount Due:</td>';
+	echo '<td><td class="b r">&curren;' . number_format($sum,2) . '</td>';
+	echo '</tr>';
     echo '</table>';
 }
 
 // History
 $args = array('list' => $this->Invoice->getHistory());
-echo $this->partial('../elements/diff-list.phtml',$args);
+echo radix::block('diff-list',$args);
 
 echo '<script type="text/javascript">';
 echo '$("#iv_date").datepicker(); ';

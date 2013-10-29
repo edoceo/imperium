@@ -16,8 +16,8 @@ EOF;
 echo '<form action="' . $this->link('/contact/save') . '?c=' . $this->Contact->id . '" method="post">';
 
 echo '<div>';
-echo $this->formHidden('id',$this->Contact->id);
-echo $this->formHidden('parent_id',$this->Contact->parent_id);
+echo radix_html_form::hidden('id',$this->Contact->id);
+echo radix_html_form::hidden('parent_id',$this->Contact->parent_id);
 echo '</div>';
 
 echo '<table>';
@@ -26,18 +26,19 @@ echo '<table>';
 echo '<tr>';
 echo '<td class="l">';
 if (!empty($this->Contact->parent_id)) {
-    echo '<a href="' . $this->link('/contact/view?c=' . $this->Contact->parent_id) . '">Company:</a>';
+    echo '<a href="' . radix::link('/contact/view?c=' . $this->Contact->parent_id) . '">Company:</a>';
 } else {
     echo 'Company:';
 }
-echo '</td><td>' . $this->formText('company',$this->Contact->company,array('style'=>'width: 100%')) . '</td>';
-echo '<td class="l">Phone:</td><td>' . $this->formText('phone',$this->Contact->phone,array('style'=>'width: 80%')) . '</td>';
+echo '</td><td>' . radix_html_form::text('company', $this->Contact->company) . '</td>';
+echo '<td class="l">Phone:</td><td>' . radix_html_form::text('phone', $this->Contact->phone) . '</td>';
 echo '</tr>';
 
 // Contact and Email
 echo '<tr>';
-echo '<td class="l" style="width:6em;">Contact:</td><td>' . $this->formText('contact',$this->Contact->contact,array('style'=>'width: 100%')) . '</td>';
-echo '<td class="l">' . ( strlen($this->Contact->email) ? "<a href=\"mailto:" . $this->Contact->email ."\">Email:</a>" : 'Email:' ) . '</td><td>' . $this->formText('email',$this->Contact->email,array('style'=>'width: 100%')) . '</td>';
+echo '<td class="l" style="width:6em;">Contact:</td><td>' . radix_html_form::text('contact',$this->Contact->contact) . '</td>';
+echo '<td class="l">' . ( strlen($this->Contact->email) ? "<a href=\"mailto:" . $this->Contact->email ."\">Email:</a>" : 'Email:' ) . '</td>';
+echo '<td>' . radix_html_form::text('email', $this->Contact->email) . '</td>';
 echo '</tr>';
 
 // First & Last Name
@@ -60,7 +61,7 @@ $url = sprintf('%s://%s%s',$url['scheme'],$url['host'],$url['path']);
 
 $x = strlen($this->Contact->url) ? '<a href="' . $url . '" target="_blank">Web-Site</a>:' : 'Web-Site:';
 echo '<tr>';
-echo '<td class="l">' . $x . '</td><td>' . $this->formText('url',$this->Contact->url,array('style'=>'width: 100%')) . '</td>';
+echo '<td class="l">' . $x . '</td><td>' . radix_html_form::text('url',$this->Contact->url,array('style'=>'width: 100%')) . '</td>';
 echo '</tr>';
 
 //switch ($this->Contact->kind) {
@@ -105,8 +106,8 @@ echo '</tr>';
 
 // Kind & Status
 echo '<tr>';
-echo '<td class="l">Kind:</td><td>' . $this->formSelect('kind',$this->Contact->kind,null,$this->KindList) . '</td>';
-echo '<td class="l">Status:</td><td>' . $this->formSelect('status',$this->Contact->status,null,$this->StatusList) . '</td>';
+echo '<td class="l">Kind:</td><td>' . radix_html_form::select('kind',$this->Contact->kind,null,$this->KindList) . '</td>';
+echo '<td class="l">Status:</td><td>' . radix_html_form::select('status',$this->Contact->status,null,$this->StatusList) . '</td>';
 echo '</tr>';
 
 // Channels
@@ -123,7 +124,7 @@ if (!empty($this->ContactChannelList)) {
         //switch ($cc->kind) {
         //case ContactChannel::PHONE:
         //case ContactChannel::FAX:
-            $buf = $this->partial('../elements/stub-channel.phtml',array('data'=>$cc));
+            $buf = radix::block('stub-channel',array('data'=>$cc));
             //$buf.= $this->link('/contact.channel/view?id='.$cc->id,$phone_img);
         //    break;
         //case ContactChannel::EMAIL:
@@ -142,7 +143,7 @@ if (!empty($this->ContactChannelList)) {
 // Tags
 echo '<tr>';
 echo '<td class="l">Tags:</td>';
-echo '<td colspan="3">' . $this->formText('tags',$this->Contact->tags,array('style'=>'width: 100%')) . '</td>';
+echo '<td colspan="3">' . radix_html_form::text('tags',$this->Contact->tags,array('style'=>'width: 100%')) . '</td>';
 echo '</tr>';
 
 // Flags
@@ -188,12 +189,12 @@ echo '<tr><td class="l">Google:</td><td colspan="3"><div id="contact-google-area
 echo '</table>';
 
 echo '<div class="bf">';
-echo $this->formSubmit('c','Save');
+echo '<input name="a" type="submit" value="Save">';
 //if ($this->Contact->kind == 'Person') {
 //    echo '<input name="c" title="Mark as Billing Contact" type="submit" value="Bill">';
 //    echo '<input name="c" title="Mark as Shipping Contact" type="submit" value="Ship">';
 //}
-echo $this->formSubmit('c','Delete');
+echo '<input name="a" type="submit" value="Delete">';
 echo '</div>';
 echo '</form>';
 
@@ -225,7 +226,7 @@ $(document).ready(function() {
     //     source: "<?php echo $this->link('/contact/ajax?field=status'); ?>"
     // });
     $("#contact-google-view").click(function() {
-        var u = "<?php echo $this->link('/contact/ajax?field=google'); ?>";
+        var u = "<?php echo radix::link('/contact/ajax?field=google'); ?>";
         $("#contact-google-area").load(u);
     });
 });
@@ -239,11 +240,11 @@ if ($this->Contact->id == 0) {
 // Sub Addresses
 $i = img('/silk/1.3/report_add.png','Add Address');
 echo '<h2 id="ContactAddressHead">Addresses';
-echo '<span class="s">[ <a class="fb" href="' . $this->link('/contact/address?a=make') . '">' . $i . '</a> ]</span>';
+echo '<span class="s">[ <a class="fb" href="' . radix::link('/contact/address?a=make') . '">' . $i . '</a> ]</span>';
 echo '</h2>';
 if ($this->ContactAddressList) {
     echo "<div id='ContactAddressList'>";
-    echo $this->partial('../elements/contact-address-list.phtml',array('list'=>$this->ContactAddressList));
+    echo radix::block('contact-address-list', array('list'=>$this->ContactAddressList));
     echo "</div>";
 }
 
@@ -255,7 +256,7 @@ if (empty($this->Contact->parent_id)) {
         'action' => 'create',
         'parent' => $this->Contact->id,
     );
-    $url = $this->link('/contact/create?parent=' . $this->Contact->id); // ($x,'default',true);
+    $url = radix::link('/contact/create?parent=' . $this->Contact->id); // ($x,'default',true);
 
     echo '<h2 id="sub-contacts">Sub-Contacts';
     echo '<span class="s">[ <a href="' . $url . '">';
@@ -267,9 +268,9 @@ if (empty($this->Contact->parent_id)) {
         echo '<table>';
         foreach ($this->ContactList as $item) {
             echo '<tr class="rero">';
-            echo '<td>' . $this->link('/contact/view?c='.$item->id,$item->name) . '</td>';
-            echo '<td>' . $this->partial('../elements/stub-channel.phtml',array('data'=>$item->phone)) . '</td>';
-            echo '<td>' . $this->partial('../elements/stub-channel.phtml',array('data'=>$item->email)) . '</td>';
+            echo '<td>' . radix::link('/contact/view?c='.$item->id,$item->name) . '</td>';
+            echo '<td>' . radix::block('stub-channel', array('data'=>$item->phone)) . '</td>';
+            echo '<td>' . radix::block('stub-channel', array('data'=>$item->email)) . '</td>';
             echo '</tr>';
         }
         echo '</table>';
@@ -277,41 +278,41 @@ if (empty($this->Contact->parent_id)) {
 }
 
 // Notes
-$url = $this->link('/note/create?c=' . $this->Contact->id);
+$url = radix::link('/note/create?c=' . $this->Contact->id);
 $arg = array(
     'list' => $this->ContactNoteList,
     'page' => $url,
 );
-echo $this->partial('../elements/note-list.phtml',$arg);
+echo radix::block('note-list',$arg);
 
 // Files
-$url = $this->link('/file/create?c=' . $this->Contact->id);
+$url = radix::link('/file/create?c=' . $this->Contact->id);
 $arg = array(
     'list' => $this->ContactFileList,
     'page' => $url,
 );
-echo $this->partial('../elements/file-list.phtml',$arg);
+echo radix::block('file-list',$arg);
 
 // Work Orders
 echo '<h2>';
 echo 'Work Orders';
-echo '<span class="s">[ <a href="' . $this->link('/workorder/create?c=' . $this->Contact->id) . '">';
+echo '<span class="s">[ <a href="' . radix::link('/workorder/create?c=' . $this->Contact->id) . '">';
 echo img('/silk/1.3/table_add.png','Create Work Order');
 echo '</a> ]</span>';
 echo '</h2>';
 if ($this->WorkOrderList) {
-    echo $this->partial('../elements/workorder-list.phtml',array('list'=>$this->WorkOrderList));
+    echo radix::block('workorder-list',array('list'=>$this->WorkOrderList));
 }
 
 // Invoices
 echo '<h2>';
 echo 'Invoices';
-echo '<span class="s">[ <a href="' . $this->link('/invoice/create?c=' . $this->Contact->id) . '">';
+echo '<span class="s">[ <a href="' . radix::link('/invoice/create?c=' . $this->Contact->id) . '">';
 echo img('/silk/1.3/layout_add.png','Create Invoice');
 echo '</a> ]</span>';
 echo '</h2>';
 if ($this->InvoiceList) {
-    echo $this->partial('../elements/invoice-list.phtml',array('list'=>$this->InvoiceList));
+    echo radix::block('invoice-list', array('list'=>$this->InvoiceList));
 }
 
 // History
@@ -319,13 +320,13 @@ $x = array(
     'ajax' => true,
     'list' => $this->Contact->getHistory(),
 );
-echo $this->partial('../elements/diff-list.phtml',$x);
+echo radix::block('diff-list',$x);
 
 ?>
 
 <script type='text/javascript'>
 $('#account').autocomplete({
-    source: "<?php echo $this->link('/account/ajax?a=account'); ?>",
+    source: "<?php echo radix::link('/account/ajax?a=account'); ?>",
     change: function(event, ui) { 
         if (ui.item) {
             $('#account').val(ui.item.label);

@@ -135,8 +135,10 @@ class Invoice extends ImperiumBase
     */
     function getInvoiceItems()
     {
-        $db = Zend_Registry::get('db');
-        return $db->fetchAll('SELECT * FROM invoice_item WHERE invoice_id = ? ORDER BY line, rate DESC, quantity DESC',array($this->id));
+        $sql = 'SELECT * FROM invoice_item WHERE invoice_id = ? ORDER BY line, rate DESC, quantity DESC';
+        $arg = array($this->id);
+        $ret = radix_db_sql::fetchAll($sql, $arg);
+        return $ret;
     }
 
     /**
@@ -164,7 +166,6 @@ class Invoice extends ImperiumBase
             return null;
         }
 
-        $db = Zend_Registry::get('db');
         $sql = 'SELECT al.id,al.account_id,al.amount,aj.id as account_journal_id,aj.date,aj.note,a.name as account_name ';
         $sql.= ' from account_ledger al ';
         $sql.= ' join account_journal aj on al.account_journal_id = aj.id ';
@@ -175,7 +176,7 @@ class Invoice extends ImperiumBase
         $sql.= sprintf(' al.link_to = %d AND al.link_id = %d',self::getObjectType($this),$this->id);
         $sql.= ' ORDER BY aj.date ASC, al.amount DESC';
 
-        $rs = $db->fetchAll($sql);
+        $rs = radix_db_sql::fetchAll($sql);
         return $rs;
     }
 

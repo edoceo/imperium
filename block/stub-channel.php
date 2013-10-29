@@ -9,7 +9,6 @@ if (empty($data)) {
     return;
 }
 
-
 // Just a String? Promot to Object
 // if (is_string($data)) {
 //     $x = $data;
@@ -109,7 +108,7 @@ case ContactChannel::EMAIL:
     break;
 default:
     // $i = img('/silk/1.3/email_edit.png','Edit Email');
-    $html.= $data['data'];
+    $html.= $data->data;
     $html.= '[D]';
     $html.= '<a href="' . $edit_link . '">';
     $html.= '[Edit]';

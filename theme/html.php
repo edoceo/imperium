@@ -67,6 +67,8 @@ echo radix_session::flash();
 
 echo $this->body;
 
+echo radix::info();
+
 echo '</div>'; // #core
 
 ?>

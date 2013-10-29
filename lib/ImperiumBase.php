@@ -204,13 +204,17 @@ class ImperiumBase
             return null;
         }
 
-        $d = Zend_Registry::get('db');
-        $s = $d->select();
-        $s->from('base_file');
-        $s->where('link = ?', $this->link() );
-        $s->order('name');
-        $r = $d->fetchAll($s);
-        return $r;
+        // $d = Zend_Registry::get('db');
+        // $s = $d->select();
+        // $s->from('base_file');
+        // $s->where('link = ?', $this->link() );
+        // $s->order('name');
+        // $r = $d->fetchAll($s);
+        // return $r;
+        $sql = 'SELECT * FROM base_file WHERE link = ? ORDER BY name';
+        $arg = array($this->link());
+        $ret = radix_db_sql::fetchAll($sql, $arg);
+        return $ret;
     }
 
     /**
@@ -251,76 +255,74 @@ class ImperiumBase
         if (intval($this->id)==0) {
             return null;
         }
-        $d = Zend_Registry::get('db');
-        $s = $d->select();
-        $s->from('base_note');
-        $s->where('link = ?', $this->link() );
-        $s->order('name');
-        $r = $d->fetchAll($s);
-        return $r;
 
-    }
-  /**
-    ImperiumBase getObject
+        $sql = 'SELECT * FROM base_note WHERE link = ? ORDER BY name';
+        $arg = array($this->link());
+        $ret = radix_db_sql::fetchAll($sql, $arg);
+		return $ret;
+	}
 
+	/**
+		ImperiumBase getObject
         @todo Kill This
-  */
-  static function getObject($type,$id)
-  {
-    $x = new $type($id);
-    return $x;
-  }
-  /**
-    getObjectType
-    @param $o is the Object, ObjectName or ObjectInteger
-  */
-  static function getObjectType($o,$r=null)
-  {
-    $db = Zend_Registry::get('db');
-    $sql = $db->select();
-    $sql->from('base_object');
-    // Convert Object to String to use String Comp below
+	*/
+	// static function getObject($type,$id)
+	// {
+	// $x = new $type($id);
+	// return $x;
+	// }
+	/**
+		getObjectType
+		@param $o is the Object, ObjectName or ObjectInteger
+	*/
+	static function getObjectType($o,$r=null)
+	{
+		$arg = array();
+		$sql = 'SELECT * FROM base_object ';
+		// Convert Object to String to use String Comp below
         if (is_object($o)) {
-      $o = strtolower(get_class($o));
-        }
+			$o = strtolower(get_class($o));
+		}
 
-    if (intval($o) > 0) {
-      $sql->where('id = ?',intval($o));
-      if (empty($r)) {
-        $r = 'name';
-      }
-    } elseif (is_string($o)) {
-      $o = strtolower($o);
-      $sql->where(' stub = ?',$o);
-      $sql->orWhere(' path = ?',$o);
-      $sql->orWhere(' link = ?',$o);
-      if (empty($r)) {
-        $r = 'id';
-      }
-    }
-    // Find and Return Value
-    $ot = $db->fetchRow($sql);
-    if ($ot) {
-      switch ($r) {
-      case 'id':
-        return $ot->id;
-      case 'link':
-        return $ot->link;
-      case 'name':
-        return $ot->name;
-      case 'path':
-        return $ot->path;
-      case 'stub':
-        return $ot->stub;
-      default:
-        return $ot;
-      }
-    }
-    //throw new Exception('Cannot Handle Object Type ' . get_class($o) . '/' . $r . '[' . $sql->assemble() . ']');
+		if (intval($o) > 0) {
+			$sql.= ' WHERE id = ?';
+			$arg[] = intval($o);
+			if (empty($r)) {
+				$r = 'name';
+			}
+		} elseif (is_string($o)) {
+			$o = strtolower($o);
+			$sql.= ' WHERE stub = ? OR path = ? OR link = ? ';
+			$arg[] = $o;
+			$arg[] = $o;
+			$arg[] = $o;
+			if (empty($r)) {
+				$r = 'id';
+			}
+		}
 
-    return null;
+		// Find and Return Value
+		$ot = radix_db_sql::fetchRow($sql);
+		if ($ot) {
+			switch ($r) {
+			case 'id':
+				return $ot->id;
+			case 'link':
+				return $ot->link;
+			case 'name':
+				return $ot->name;
+			case 'path':
+				return $ot->path;
+			case 'stub':
+				return $ot->stub;
+			default:
+				return $ot;
+			}
+		}
+		//throw new Exception('Cannot Handle Object Type ' . get_class($o) . '/' . $r . '[' . $sql->assemble() . ']');
+		return null;
     }
-    
+
     /**
         Flag Handling
     */

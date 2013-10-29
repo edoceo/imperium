@@ -3,7 +3,6 @@
 	WorkorderController indexAction
 */
 
-
 // $sql = $this->_d->select();
 // $sql->from('workorder');
 // $sql->join('contact','workorder.contact_id=contact.id',array('contact.name as contact_name'));
