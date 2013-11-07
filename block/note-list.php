@@ -20,6 +20,11 @@ echo '<h2>Notes';
 // echo img('/silk/1.3/note_add.png','Add Note');
 // echo '</a> ';
 // echo ']</span>';
+
+echo '<span class="s">[ <a href="' . $data['page'] . '">';
+echo img('/tango/24x24/apps/accessories-text-editor.png','New Note');
+echo '</a> ]</span>';
+
 echo '</h2>';
 echo '<div id="note-edit"></div>';
 echo '<div id="note-list">';

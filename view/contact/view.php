@@ -278,10 +278,9 @@ if (empty($this->Contact->parent_id)) {
 }
 
 // Notes
-$url = radix::link('/note/create?c=' . $this->Contact->id);
 $arg = array(
     'list' => $this->ContactNoteList,
-    'page' => $url,
+    'page' => radix::link('/note/create?c=' . $this->Contact->id),
 );
 echo radix::block('note-list',$arg);
 
