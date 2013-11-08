@@ -131,77 +131,78 @@ class Account extends ImperiumBase
     /**
         @deprecated
     */
-    function __get($key)
-    {
-        $db = Zend_Registry::get('db');
-        switch ($key) {
-        /*
-        case 'code_full':
-                $code[] = $this->code;
-                $parent_id = $this->parent_id;
-                while ($parent_id)
-                {
-                    $acct = $idc->fetchRow("select parent_id,code from account where id=$parent_id");
-                    if ($acct)
-                    {
-                        $parent_id = $acct->parent_id;
-                        $code[] = $acct->code;
-                    }
-                    if (count($code) > 5) break;
-                }
-                return implode('/', array_reverse($code) );
-        */
-    case 'is_parent':
-      $rs = $db->fetchOne("select count(id) from account where parent_id=$this->id");
-      return $rs->c > 0;
-    case 'life':
-      return $this->flag & (Account::PERMANENT | Account::TEMPORARY);
-    case 'type':
-      // todo: this is broken
-      return $this->flag & (Account::ASSET | Account::LIABILITY | Account::EQUITY | Account::REVENUE | Account::EXPENSE);
-    case 'type_code':
-      if ($this->flag & Account::ASSET) return 'A';
-      elseif ($this->flag & Account::LIABILITY) return 'L';
-      elseif ($this->flag & Account::EQUITY) return 'E';
-      elseif ($this->flag & Account::REVENUE) return 'R';
-      elseif ($this->flag & Account::EXPENSE) return 'X';
-      else return 'Unknown';
-    case 'type_name':
-      if ($this->flag & Account::ASSET) return 'Asset';
-      elseif ($this->flag & Account::LIABILITY) return 'Liability';
-      elseif ($this->flag & Account::EQUITY) return 'Equity';
-      elseif ($this->flag & Account::REVENUE) return 'Revenue';
-      elseif ($this->flag & Account::EXPENSE) return 'Expense';
-      else return 'Unknown';
-    case 'childAccountList':
-            $db = Zend_Registry::get('db');
-      $rs = $db->fetchAll("select * from account where parent_id=$this->id order by flag,code,name");
-      return $rs;
-    case 'flag_as_string':
-      $ret = '';
-      // Life
-      if ($this->flag & Account::TEMPORARY) $ret.= 'Temporary,';
-      if ($this->flag & Account::PERMANENT) $ret.= 'Permanent,';
-      // Type
-      if ($this->flag & Account::ASSET) $ret.= 'Asset,';
-      if ($this->flag & Account::LIABILITY) $ret.= 'Liability,';
-      if ($this->flag & Account::EQUITY) $ret.= 'Equity,';
-      if ($this->flag & Account::REVENUE) $ret.= 'Revenue,';
-      if ($this->flag & Account::EXPENSE) $ret.= 'Expense,';
-      /// Sub Type
-      if ($this->flag & Account::CASH) $ret.= 'Cash,';
-      if ($this->flag & Account::AP) $ret.= 'Accounts Payable,';
-      if ($this->flag & Account::AR) $ret.= 'Accounts Receiveable,';
-      // Class
-      if ($this->flag & Account::CHECKING) $ret.= 'Checking,';
-      if ($this->flag & Account::SAVINGS) $ret.= 'Savings,';
-      if ($this->flag & Account::MARKET) $ret.= 'Market,';
-      return strlen($ret) ? substr($ret,0,-1) : null;
-    case 'flag_hex':
-            return dechex($this->flag);
-        }
-    return null;
-  }
+//    function __get($key)
+//    {
+//    	return false;
+//    	die("@deprecated __get($key)");
+//        switch ($key) {
+//        /*
+//        case 'code_full':
+//                $code[] = $this->code;
+//                $parent_id = $this->parent_id;
+//                while ($parent_id)
+//                {
+//                    $acct = $idc->fetchRow("select parent_id,code from account where id=$parent_id");
+//                    if ($acct)
+//                    {
+//                        $parent_id = $acct->parent_id;
+//                        $code[] = $acct->code;
+//                    }
+//                    if (count($code) > 5) break;
+//                }
+//                return implode('/', array_reverse($code) );
+//        */
+//    case 'is_parent':
+//      $rs = $db->fetchOne("select count(id) from account where parent_id=$this->id");
+//      return $rs->c > 0;
+//    case 'life':
+//      return $this->flag & (Account::PERMANENT | Account::TEMPORARY);
+//    case 'type':
+//      // todo: this is broken
+//      return $this->flag & (Account::ASSET | Account::LIABILITY | Account::EQUITY | Account::REVENUE | Account::EXPENSE);
+//    case 'type_code':
+//      if ($this->flag & Account::ASSET) return 'A';
+//      elseif ($this->flag & Account::LIABILITY) return 'L';
+//      elseif ($this->flag & Account::EQUITY) return 'E';
+//      elseif ($this->flag & Account::REVENUE) return 'R';
+//      elseif ($this->flag & Account::EXPENSE) return 'X';
+//      else return 'Unknown';
+//    case 'type_name':
+//      if ($this->flag & Account::ASSET) return 'Asset';
+//      elseif ($this->flag & Account::LIABILITY) return 'Liability';
+//      elseif ($this->flag & Account::EQUITY) return 'Equity';
+//      elseif ($this->flag & Account::REVENUE) return 'Revenue';
+//      elseif ($this->flag & Account::EXPENSE) return 'Expense';
+//      else return 'Unknown';
+//    case 'childAccountList':
+//            $db = Zend_Registry::get('db');
+//      $rs = $db->fetchAll("select * from account where parent_id=$this->id order by flag,code,name");
+//      return $rs;
+//    case 'flag_as_string':
+//      $ret = '';
+//      // Life
+//      if ($this->flag & Account::TEMPORARY) $ret.= 'Temporary,';
+//      if ($this->flag & Account::PERMANENT) $ret.= 'Permanent,';
+//      // Type
+//      if ($this->flag & Account::ASSET) $ret.= 'Asset,';
+//      if ($this->flag & Account::LIABILITY) $ret.= 'Liability,';
+//      if ($this->flag & Account::EQUITY) $ret.= 'Equity,';
+//      if ($this->flag & Account::REVENUE) $ret.= 'Revenue,';
+//      if ($this->flag & Account::EXPENSE) $ret.= 'Expense,';
+//      /// Sub Type
+//      if ($this->flag & Account::CASH) $ret.= 'Cash,';
+//      if ($this->flag & Account::AP) $ret.= 'Accounts Payable,';
+//      if ($this->flag & Account::AR) $ret.= 'Accounts Receiveable,';
+//      // Class
+//      if ($this->flag & Account::CHECKING) $ret.= 'Checking,';
+//      if ($this->flag & Account::SAVINGS) $ret.= 'Savings,';
+//      if ($this->flag & Account::MARKET) $ret.= 'Market,';
+//      return strlen($ret) ? substr($ret,0,-1) : null;
+//    case 'flag_hex':
+//            return dechex($this->flag);
+//        }
+//    return null;
+//	}
     /**
         Update the Balance of the Account to the Current Value
     */
@@ -282,21 +283,29 @@ class Account extends ImperiumBase
     {
         // @todo Detect the Period
         // @todo Detect Account Type - Permanant Accounts since life of Biz, Temp since previous period
-        $d = Zend_Registry::get('db');
         //$sql = "select sum(amount) as balance from general_ledger ";
         //$sql.= " where account_id=$this->id and date < '$date' and date>='2006-01-01'";
     
-        $sql = $d->select();
-        $sql->from('general_ledger',array('sum(amount) as balance'));
-        $sql->where('account_id = ?',intval($this->id));
-        //$sql->where('date >= ?',$date_alpha);
-        $sql->where('date < ?',$date);
-        if ($ex_close) {
-            $sql->where('kind != ?','C');
-            //$sql.= " and kind != 'C' ";
-        }
-        // echo $sql->assemble() . '<br />';
-        $x = $d->fetchOne($sql);
+        // $sql = $d->select();
+        // $sql->from('general_ledger',array('sum(amount) as balance'));
+        // $sql->where('account_id = ?',intval($this->id));
+        // //$sql->where('date >= ?',$date_alpha);
+        // $sql->where('date < ?',$date);
+        // if ($ex_close) {
+        //     $sql->where('kind != ?','C');
+        //     //$sql.= " and kind != 'C' ";
+        // }
+        // // echo $sql->assemble() . '<br />';
+        // $x = $d->fetchOne($sql);
+        
+        $sql = 'SELECT sum(amount) AS balance FROM general_ledger WHERE account_id = ? AND date < ?';
+        $arg = array(
+        	$this->id,
+        	$date,
+		);
+        if ($ex_close) $sql.= ' AND kind != \'C\'';
+		$x = radix_db_sql::fetch_one($sql,$arg);
+        
         // Correct Balance to Positive Number
         if ( (substr($this->kind,0,5)=='Asset') || (substr($this->kind,0,7)=='Expense') || (strpos($this->kind,'Drawing') > 0) ) {
             $x = $x * -1;
@@ -340,24 +349,22 @@ class Account extends ImperiumBase
   */
     function creditTotal($a_ts,$z_ts,$with_closing=true)
     {
-        $db = Zend_Registry::get('db');
         $sql = "select sum(amount) from general_ledger ";
         $sql.= " where account_id=$this->id ";
         $sql.= " and (date >= '$a_ts' and date <= '$z_ts' ) ";
         $sql.= " and amount > 0 ";
-        $x = $db->fetchOne($sql);
+        $x = radix_db_sql::fetch_one($sql);
         return abs($x);
     }
   /**
   */
     function debitTotal($a_ts,$z_ts,$with_closing=true)
     {
-        $db = Zend_Registry::get('db');
         $sql = "select sum(amount) from general_ledger ";
         $sql.= " where account_id=$this->id and ";
         $sql.= "  (date >= '$a_ts' and date <= '$z_ts' ) ";
         $sql.= " and amount < 0 ";
-        $x = $db->fetchOne($sql);
+        $x = radix_db_sql::fetch_one($sql);
         return abs($x);
     }
 
@@ -393,14 +400,12 @@ class Account extends ImperiumBase
     */
     static function listAccounts()
     {
-        $db = Zend_Registry::get('db');
-
         $sql = "select account.*,account_tax_line.name as account_tax_line_name ";
         $sql.= " from account ";
             $sql.= " left join account_tax_line on account.account_tax_line_id = account_tax_line.id";
         $sql.= " order by full_code asc, code asc";
 
-        $rs = $db->fetchAll($sql);
+        $rs = radix_db_sql::fetchAll($sql);
         $list = array();
         foreach ($rs as $x) {
             $list[] = new Account($x);
@@ -413,13 +418,12 @@ class Account extends ImperiumBase
     */
     static function listAccountPairs()
     {
-        $db = Zend_Registry::get('db');
-
         $sql = "select id,full_name ";
         $sql.= " from account ";
         $sql.= " order by full_code asc, code asc";
 
-        $rs = $db->fetchPairs($sql);
+        // $rs = $db->fetchPairs($sql);
+        $rs = radix_db_sql::fetchMix($sql);
         return $rs;
     }
 }
