@@ -36,6 +36,7 @@ require_once('Contact/Address.php');
 require_once('Contact/Channel.php');
 require_once('Invoice.php');
 require_once('WorkOrder.php');
+require_once('WorkOrderItem.php');
 
 // Load Application Config
 App::load_config();

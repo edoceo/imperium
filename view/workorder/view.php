@@ -38,27 +38,27 @@ if (empty($this->Contact->id)) {
     echo '<td><input id="contact_name" name="contact_name" type="text" />';
     echo '</td>';
 } else {
-    echo "<td class='l'>Contact:</td><td>" . radix::link("/contact/view?c={$this->Contact->id}","{$this->Contact->name}");
+    echo '<td class="l">Contact:</td><td><a href="' . radix::link("/contact/view?c={$this->Contact->id}") . '">' . html($this->Contact->name) . '</a>';
     echo "<br />Primary Phone: " . radix::block('stub-channel',array('data'=>$this->Contact->phone)) . "</td>";
 }
 // Date
-echo '<td class="l">Date:</td><td>' . radix_html_form::text('date',$this->WorkOrder->date,array('id'=>'wo_date','size'=>12)) . '</td>';
+echo '<td class="l">Date:</td><td>' . radix_html_form::text('date',$this->WorkOrder->date, array('id'=>'wo_date','size'=>12)) . '</td>';
 echo '</tr>';
 
 // Requester & Kind
 echo '<tr>';
 echo '<td class="l">Requester:</td>';
 echo '<td>';
-echo radix_html_form::text('requester',$this->WorkOrder->requester);
+echo radix_html_form::text('requester', $this->WorkOrder->requester);
 echo '</td>';
 // Kind
-echo '<td class="l">Kind:</td><td>' . radix_html_form::select('kind',$this->WorkOrder->kind,null,$this->KindList) . '</td>';
+echo '<td class="l">Kind:</td><td>' . radix_html_form::select('kind', $this->WorkOrder->kind, $this->KindList) . '</td>';
 echo '</tr>';
 
 // Rate & Units & Status
 echo '<tr>';
 $r = radix_html_form::text('base_rate',$this->WorkOrder->base_rate,array('class'=>'rate'));
-$u = radix_html_form::select('base_unit',$this->WorkOrder->base_unit,null,Base_Unit::getList());
+$u = radix_html_form::select('base_unit', $this->WorkOrder->base_unit, Base_Unit::getList());
 echo "<td class='l'>Base Rate:</td><td class='nw'>$r/$u</td>";
 // Status
 echo '<td class="l">Status:</td><td>' . $this->WorkOrder->status . '</td>';
@@ -113,7 +113,7 @@ if (!empty($this->WorkOrder->id)) {
         'list' => $this->WorkOrderNoteList,
         'page' => $url,
     );
-    echo $this->partial('../elements/note-list.phtml',$arg);
+    echo radix::block('note-list', $arg);
 }
 
 // Work Order Files
@@ -124,7 +124,7 @@ if (!empty($this->WorkOrder->id)) {
         'list' => $this->WorkOrderFileList,
         'page' => $url,
     );
-    echo $this->partial('../elements/file-list.phtml',$arg);
+    echo radix::block('file-list',$arg);
 }
 
 // Work Order Items

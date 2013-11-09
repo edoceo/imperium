@@ -109,27 +109,28 @@ class WorkOrder extends ImperiumBase
     */
     function getWorkOrderItems($where=null)
     {
-        $db = Zend_Registry::get('db');
+        // $sql = $db->select();
+        //
+        // $sql->from(array('woi'=>'workorder_item'));
+        // //$sql->join(array('woiii'=>'workorder_item_invoice_item'),'woi.id=woiii.id');
+        // $sql->where('woi.workorder_id = ?',$this->id);
+        //
+        // if (is_array($where)) {
+        //   foreach ($where as $k=>$v) {
+        //     $sql->where($k,$v);
+        //   }
+        // }
+        // $sql->order(array('woi.status','woi.date','woi.kind','woi.a_rate desc','woi.a_quantity desc'));
+        // $rs = $db->fetchAll($sql);
+        $sql = 'SELECT * FROM workorder_item WHERE workorder_id = ? ';
+        $sql.= ' ORDER BY status, date, kind, a_rate, a_quantity ';
+        $res = radix_db_sql::fetchAll($sql, array($this->id));
 
-        $sql = $db->select();
-
-        $sql->from(array('woi'=>'workorder_item'));
-        //$sql->join(array('woiii'=>'workorder_item_invoice_item'),'woi.id=woiii.id');
-        $sql->where('woi.workorder_id = ?',$this->id);
-
-        if (is_array($where)) {
-          foreach ($where as $k=>$v) {
-            $sql->where($k,$v);
-          }
+        $ret = array();
+        foreach ($res as $x) {
+            $ret[] = new WorkOrderItem($x);
         }
-        $sql->order(array('woi.status','woi.date','woi.kind','woi.a_rate desc','woi.a_quantity desc'));
-        $rs = $db->fetchAll($sql);
-
-        $list = array();
-        foreach ($rs as $x) {
-            $list[] = new WorkOrderItem($x);
-        }
-        return $list;
+        return $ret;
     }
 
     /**
