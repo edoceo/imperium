@@ -9,9 +9,11 @@
 
 */
 
-class ImperiumBase
+class ImperiumBase implements ArrayAccess
 {
+	protected $_data; // Object Data
     protected $_diff = true;  // Do Diff on Save
+    protected $_diff_list = array(); // Array of Changed Properties
     protected $_table;
     protected $_sequence;
 
@@ -53,7 +55,11 @@ class ImperiumBase
                 $p = get_object_vars($x);
                 foreach ($p as $k=>$v) {
                     $this->$k = stripslashes($x->$k);
+                    $this->_data[$k] = stripslashes($x->$k);
                 }
+            }
+            if (is_array($x)) {
+            	die("Database Array in " . __FILE__);
             }
         }
 
@@ -62,12 +68,14 @@ class ImperiumBase
             $p = get_object_vars($x);
             foreach ($p as $k=>$v) {
                 $this->$k = $x->$k;
+                $this->_data[$k] = $x->$k;
             }
             return;
         }
 
         // Copy Properties from Array Keys
         if (is_array($x)) {
+        	$this->_data = $x;
             foreach ($x as $k=>$v) {
                 $this->$k = $x[$k];
             }
@@ -81,10 +89,12 @@ class ImperiumBase
     */
     function delete()
     {
-        radix_db_sql::query("delete from $this->_table where id=$this->id");
+        radix_db_sql::query("delete from {$this->_table} where id = {$this->_data['id']}");
     }
+
     /**
         AppModel Save
+        @todo use the _data interface, check for dirty
     */
     function save()
     {
@@ -350,5 +360,33 @@ class ImperiumBase
         }
     }
     function setFlag($f) { $this->flag = (intval($this->flag) | $f); }
+    
+    /*
+		Array Accessors
+    */
+	/**
+		@return Boolean
+	*/
+	public function offsetExists($k) { return isset($this->_data[$k]); }
+
+	/**
+		@return Data
+	*/
+	public function offsetGet($k) { return $this->_data[$k]; }
+
+	/**
+		@return void
+	*/
+	public function offsetSet($k, $v) {
+		if ($v != $this->_data[$k]) {
+			$this->_diff_list[$k] = true;
+		}
+		$this->_data[$k] = $v;
+	}
+
+	/**
+		@return void
+	*/
+	public function offsetUnset($k) { unset($this->_data[$k]); }
 }
 

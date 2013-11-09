@@ -35,6 +35,7 @@ require_once('Contact.php');
 require_once('Contact/Address.php');
 require_once('Contact/Channel.php');
 require_once('Invoice.php');
+require_once('InvoiceItem.php');
 require_once('WorkOrder.php');
 require_once('WorkOrderItem.php');
 
