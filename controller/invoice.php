@@ -15,5 +15,4 @@
 $sql = 'SELECT name AS id,name FROM base_enum WHERE link = ? ORDER BY sort';
 $this->StatusList     = radix_db_sql::fetch_mix($sql, array('invoice-status'));
 $this->ItemStatusList = radix_db_sql::fetch_mix($sql, array('invoice-item-status'));
-
-
+$this->UnitList       = Base_Unit::getList();

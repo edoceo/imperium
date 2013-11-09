@@ -49,13 +49,13 @@ if (empty($this->Contact->id)) {
     echo '</script>';
     echo '</td>';
 } else {
-    echo '<td class="b r">Contact:</td>';
-    echo '<td>' . radix::link('/contact/view?c='.$this->Contact->id,$this->Contact->name);
+    echo '<td class="l">Contact:</td>';
+    echo '<td><a href="' . radix::link('/contact/view?c='.$this->Contact->id) . '">' . $this->Contact->name . '</a>';
     echo '</td>';
 }
 
 // Date & Due Information
-echo '<td class="b r">Date:</td><td>';
+echo '<td class="l">Date:</td><td>';
 echo radix_html_form::text('date',$this->Invoice->date,array('id'=>'iv_date','size'=>'12'));
 if ($this->Invoice->due_diff < 0) {
     echo '&nbsp;<span class="s">Due in ' . abs($this->Invoice->due_diff) . ' days</span>';
@@ -73,11 +73,11 @@ if (is_array($this->ContactAddressList)) {
     $list+= $this->ContactAddressList;
 }
 
-$input = radix_html_form::select('bill_address_id',$this->Invoice->bill_address_id,null,$list,null);
+$input = radix_html_form::select('bill_address_id', $this->Invoice->bill_address_id, $list,null);
 echo '<tr>';
 echo '<td class="b r">Bill To:</td><td>' . $input . '</td>';
 
-$input = radix_html_form::select('ship_address_id',$this->Invoice->ship_address_id,null,$list,null);
+$input = radix_html_form::select('ship_address_id', $this->Invoice->ship_address_id, $list,null);
 echo '<td class="b r">Ship To:</td><td>' . $input . '</td>';
 echo '</tr>';
 
@@ -95,7 +95,7 @@ echo '<tr>';
 // echo '<script type="text/javascript">$("#kind").autocomplete({ minLength:0, source:["Single","Project","Subscription/Monthly","Subscription/Quarterly","Subscription/Yearly"] });</script>';
 // echo '</td>';
 // echo '<td class="l">Status:</td><td><input name="status" size="16" type="text" value="' . $this->Invoice->status . '" /></td>';
-echo '<td class="l">Status:</td><td>' . radix_html_form::select('status',$this->Invoice->status,null,$this->StatusList) . '</td>';
+echo '<td class="l">Status:</td><td>' . radix_html_form::select('status', $this->Invoice->status, $this->StatusList) . '</td>';
 echo '</tr>';
 
 echo '</table>';

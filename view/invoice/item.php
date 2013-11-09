@@ -10,10 +10,10 @@
     @since      File available since Release 1013
 */
 
-$n = $this->formText('name',$this->InvoiceItem->name,array('style'=>'width:90%;'));
-$q = $this->formText('quantity',$this->InvoiceItem->quantity,array('onblur'=>'toNumeric(this);','size'=>8));
-$r = $this->formText('rate',$this->InvoiceItem->rate,array('onblur'=>'toNumeric(this);','size'=>8));
-$u = $this->formSelect('unit',$this->InvoiceItem->unit,null,$this->UnitList);
+$n = radix_html_form::text('name', $this->InvoiceItem['name'], array('style'=>'width:90%;'));
+$q = radix_html_form::text('quantity', $this->InvoiceItem['quantity'], array('onblur'=>'toNumeric(this);','size'=>8));
+$r = radix_html_form::text('rate', $this->InvoiceItem->rate, array('onblur'=>'toNumeric(this);','size'=>8));
+$u = radix_html_form::select('unit', $this->InvoiceItem->unit, $this->UnitList);
 
 echo '<div>';
 
@@ -21,8 +21,8 @@ echo '<form action="' . $_SERVER['REQUEST_URI'] . '" method="post">';
 echo '<table>';
 
 // Kind & Date
-$k = $this->formSelect('kind',$this->InvoiceItem->kind,null,InvoiceItem::$kind_list);
-$d = $this->formText('date',$this->InvoiceItem->date,array('id'=>'woi_date','size'=>12));
+$k = radix_html_form::select('kind', $this->InvoiceItem->kind, InvoiceItem::$kind_list);
+$d = radix_html_form::text('date', $this->InvoiceItem->date, array('id'=>'woi_date','size'=>12));
 echo "<tr><td class='b r'>Kind:</td><td>$k</td><td class='b r'>Date:</td><td>$d</td></tr>";
 
 echo "<tr><td class='l'>Cost:</td><td>$q&nbsp;<strong>@</strong>&nbsp;$r&nbsp;<strong>per</strong>&nbsp;$u</td>";
@@ -36,7 +36,12 @@ echo '<tr><td class="l">Name:</td><td colspan="3">' . $n . '</td></tr>';
 echo '<tr><td class="l">Note:</td><td colspan="3"><textarea name="note" style="width:90%;">'. html($this->InvoiceItem->note) . '</textarea></td></tr>';
 
 // Notify
-echo "<tr><td class='b r'><span title='Input and email address here and a notification email will be sent'>Notify:</span></td><td colspan='3'>".$this->formText('notify',$this->WorkOrderItem->notify,array('size'=>'64'))."</td></tr>";
+echo '<tr>';
+echo '<td class="l">';
+echo '<span title="Input and email address here and a notification email will be sent">Notify:</span>';
+echo '</td>';
+echo '<td colspan="3">' . radix_html_form::text('notify', $this->WorkOrderItem->notify, array('size'=>'64')) . '</td>';
+echo '</tr>';
 
 // @todo Link to Work System (Redmine, Trac, &c)
 // if (!empty($this->InvoiceItem->workorder_item_id)) {
@@ -58,9 +63,9 @@ echo '</table>';
 
 echo '<div class="cmd">';
 // echo $this->formHidden('id',$this->Invoice->id);
-echo $this->formHidden('invoice_id',$this->Invoice->id);
-echo $this->formSubmit('cmd','Save');
-echo $this->formSubmit('cmd','Delete');
+echo radix_html_form::Hidden('invoice_id',$this->Invoice->id);
+echo radix_html_form::submit('cmd','Save');
+echo radix_html_form::submit('cmd','Delete');
 echo '</div>';
 
 echo '</form>';

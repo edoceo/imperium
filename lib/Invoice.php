@@ -137,7 +137,12 @@ class Invoice extends ImperiumBase
     {
         $sql = 'SELECT * FROM invoice_item WHERE invoice_id = ? ORDER BY line, rate DESC, quantity DESC';
         $arg = array($this->id);
-        $ret = radix_db_sql::fetchAll($sql, $arg);
+        $res = radix_db_sql::fetchAll($sql, $arg);
+
+        $ret = array();
+        foreach ($res as $x) {
+            $ret[] = new InvoiceItem($x);
+        }
         return $ret;
     }
 
