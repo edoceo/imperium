@@ -25,6 +25,7 @@ require_once('Radix/Session.php');
 require_once('Radix/html/form.php');
 
 require_once('App.php');
+require_once('ACL.php');
 require_once('ImperiumBase.php');
 require_once('ImperiumView.php');
 require_once('Base/Note.php');

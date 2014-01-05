@@ -14,6 +14,10 @@
     @todo Make this much smarter, link to something with
 */
 
+if (!acl::may('/block/menu')) {
+	return(0);
+}
+
 // $here = $this->controller . '/' . $this->action;
 // $c = $this->controller == 'index' ? '/' : ('/' . $this->controller);
 

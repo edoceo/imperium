@@ -5,11 +5,19 @@
 */
 
 // Uncomment to get timing outputs
-// $s0 = microtime(true);
+define('APP_INIT', microtime(true));
+
+header('Cache-Control: no-cache, must-revalidate');
 
 require_once(dirname(dirname(__FILE__)) . '/boot.php');
 
-header('Cache-Control: no-cache, must-revalidate');
+// User Specified Theme
+if (!empty($_GET['_t'])) {
+    $opt['theme'] = $_GET['_t'];
+}
+
+radix::init($opt);
+radix_session::init(array('name' => 'imperium'));
 
 // Zend_Controller_Front
 // $front = Zend_Controller_Front::getInstance();
@@ -64,6 +72,16 @@ if (!empty($x)) {
 	$_SESSION['uid'] = radix_db_sql::fetch_one($sql,$arg);
 }
 
+// radix_acl::permit('null','/auth/*');
+// if (empty($_SESSION['uid'])) {
+acl::permit('/auth/sign-in');
+acl::permit('/auth/sign-in', 'POST');
+if (!acl::may(radix::$path)) {
+	radix::dump($_SESSION['_acl']);
+	die("denied: " . radix::$path);
+	radix::redirect('/auth/sign-in');
+}
+
 // If Someone is logged in then they inherit from the 'User' role
 // if ($auth->hasIdentity()) {
 //     $cu = $auth->getIdentity();
@@ -78,27 +96,20 @@ if (!empty($x)) {
 //     }
 // }
 
-// Root Gets all Access
-// $acl->allow('root');
-radix_acl::permit('root','*');
-
-// Zend_Layout::startMvc();
-// User Specified Theme
-if (!empty($_GET['_t'])) {
-    $opt['theme'] = $_GET['_t'];
-}
-radix::init($opt);
 $stat = radix::stat();
+
 radix::exec();
 radix::view();
 radix::send();
 
+radix::dump($_SESSION);
+
 // Output Statistics
-if (!empty($s0)) {
+if (defined('APP_INIT')) {
 
     $res = getrusage();
-    $mem = sprintf('%0.1f',memory_get_peak_usage(true) / 1024);
-    $sec = sprintf('%0.4f',microtime(true) - $s0);
+    $mem = sprintf('%0.1f', memory_get_peak_usage(true) / 1024);
+    $sec = sprintf('%0.4f', microtime(true) - APP_INIT);
 
     echo "\n<!--\n";
 
@@ -108,7 +119,7 @@ if (!empty($s0)) {
     // echo 'Page Faults:  ' . $res['ru_minflt'] . "\n";
     //echo 'V-Context Switches: ' . $res['ru_nvcsw'] . "\n";
     //echo 'I-Context Switches: ' . $res['ru_nivcsw']  . "\n";
-    
+    print_r($stat);
     /*
     $u0 = sprintf('%d.%06d',$_res_0['ru_utime.tv_sec'],$_res_0['ru_utime.tv_usec']);
     $s0 = sprintf('%d.%06d',$_res_0['ru_stime.tv_sec'],$_res_0['ru_stime.tv_usec']);
