@@ -20,7 +20,7 @@ echo '<script src="//gcdn.org/jquery-ui/1.10.2/jquery-ui.js" type="text/javascri
 echo '<script src="' . radix::link('/js/imperium.js') . '" type="text/javascript"></script>';
 
 echo '<link href="//gcdn.org/radix/radix.css" rel="stylesheet" type="text/css">';
-echo '<link href="//gcdn.org/jquery-ui/1.10.2/smoothness.css" rel="stylesheet" type="text/css">';
+// echo '<link href="//gcdn.org/jquery-ui/1.10.2/smoothness.css" rel="stylesheet" type="text/css">';
 echo '<link href="' . radix::link('/css/base.css') . '" rel="stylesheet" type="text/css">';
 echo '<link href="' . radix::link('/img/imperium-icon.ico') . '" rel="shortcut icon">';
 echo '<link href="' . radix::link('/img/imperium-icon.png') . '" rel="apple-touch-icon">';
@@ -29,25 +29,26 @@ echo '<meta name="viewport" content="min-width=960, initial-scale=1, user-scalab
 
 echo "</head>\n<body>\n";
 
-$_ENV['title'] = 'Imperium';
-
 // Content Header
 echo '<header>';
-//if (!empty($_SESSION['uid'])) {
+$menu = radix::block('menu.php');
+if (!empty($menu)) {
     echo '<div id="menu">';
-    echo radix::block('menu.php');
-    echo '<hr /></div>';
-//}
-// echo ImperiumView::mruDraw();
-echo '</header>';
+    echo $menu;
+    echo '</div>';
+	// echo ImperiumView::mruDraw();
+}
 
-// echo '<h1>' . $_ENV['title'] . '</h1>';
+if (!empty($_ENV['h1'])) {
+	echo '<h1>' . $_ENV['h1'] . '</h1>';
+}
 // if (!empty($this->title_one)) {
 //     echo '<h2>' . $this->title_one . '</h2>';
 // }
 // if (!empty($this->title_two)) {
 //     echo $this->title_two;
 // }
+echo '</header>';
 
 // Menu for Authenticated Users Only
 // $auth = Zend_Auth::getInstance();
@@ -67,9 +68,10 @@ echo radix_session::flash();
 
 echo $this->body;
 
-echo radix::info();
-
 echo '</div>'; // #core
+
+radix::dump(str_replace('<br>', "\n", radix::info()));
+radix::dump($_SESSION);
 
 ?>
 

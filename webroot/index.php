@@ -17,13 +17,16 @@ if (!empty($_GET['_t'])) {
 }
 
 radix::init($opt);
-radix_session::init(array('name' => 'imperium'));
+radix_session::init(array(
+	'name' => 'imperium',
+	'cookie_secure' => false,
+));
 
 // Zend_Controller_Front
 // $front = Zend_Controller_Front::getInstance();
 // $front->setControllerDirectory('../approot/controllers');
-//$front->throwExceptions(true);
-//$front->setParam('noErrorHandler', true);
+// $front->throwExceptions(true);
+// $front->setParam('noErrorHandler', true);
 
 // Add Routes
 // $router = $front->getRouter();
@@ -31,9 +34,9 @@ radix_session::init(array('name' => 'imperium'));
 // $router->addRoute('c-a-id',new Zend_Controller_Router_Route('/:controller/:action/:id'));
 
 // Email Actions
-//$router->addRoute('email-folder-view',
+// $router->addRoute('email-folder-view',
 //    new Zend_Controller_Router_Route_Regex('email/([\w\.\-]+@[\w\.\-]+)',array('controller'=>'Email','action'=>'viewFolder')));
-//$router->addRoute('email-message-view',
+// $router->addRoute('email-message-view',
 //    new Zend_Controller_Router_Route_Regex('email/([\w\.\-]+@[\w\.\-]+)/(\d+)',array('controller'=>'Email','action'=>'viewMessage')));
 
 // Login / Logout
@@ -76,9 +79,10 @@ if (!empty($x)) {
 // if (empty($_SESSION['uid'])) {
 acl::permit('/auth/sign-in');
 acl::permit('/auth/sign-in', 'POST');
+acl::permit('/auth/sign-out');
+
 if (!acl::may(radix::$path)) {
 	radix::dump($_SESSION['_acl']);
-	die("denied: " . radix::$path);
 	radix::redirect('/auth/sign-in');
 }
 
@@ -101,8 +105,6 @@ $stat = radix::stat();
 radix::exec();
 radix::view();
 radix::send();
-
-radix::dump($_SESSION);
 
 // Output Statistics
 if (defined('APP_INIT')) {

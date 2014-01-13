@@ -10,14 +10,6 @@ class ACL
 	{
 		if (null == $verb) $verb = 'GET';
 
-		if (empty($_SESSION['uid'])) {
-			switch ($path) {
-			case '/auth/sign-in':
-				return true;
-			}
-			return false;
-		}
-
 		// Exact Match?
 		if (!empty($_SESSION['_acl'][$path][$verb])) {
 			return true;
