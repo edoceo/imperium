@@ -59,7 +59,7 @@ class ImperiumBase implements ArrayAccess
                 }
             }
             if (is_array($x)) {
-            	die("Database Array in " . __FILE__);
+            	$this->_data = $x;
             }
         }
 
