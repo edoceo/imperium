@@ -21,7 +21,7 @@ if (!acl::may('/block/menu')) {
 // $here = $this->controller . '/' . $this->action;
 // $c = $this->controller == 'index' ? '/' : ('/' . $this->controller);
 
-echo '<ul class="cssMenu menu">';
+echo '<ul class="menu">';
 echo '<li><a href="' . radix::link('/') . '" title="Dashboard"><span>' . img('/tango/24x24/places/user-desktop.png') . ' Dashboard' . '</span></a>';
     echo '<ul>';
     echo '<li><a class="fancybox fancybox.ajax" href="' . radix::link('/note/edit?l=r') . '">' . img('/tango/24x24/apps/accessories-text-editor.png','New Note') . '&nbsp;New Note</a></li>';
@@ -173,7 +173,7 @@ if (count($list)) {
 }
 
 // Search Form
-echo '<li>';
+echo '<li style="float:right;">';
 echo '<form action="' . radix::link('/search') . '" method="get">';
 echo '<input id="q" name="q" placeholder="Search" value="" />';
 echo '</form></li>';
