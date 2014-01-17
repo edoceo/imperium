@@ -30,6 +30,7 @@ case 'sign in':
 	acl::permit('/contact*');
 	acl::permit('/invoice*');
 	acl::permit('/workorder*');
+	acl::permit('/settings*');
 
 	radix::redirect('/');
 
