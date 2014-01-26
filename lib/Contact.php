@@ -142,9 +142,7 @@ class Contact extends ImperiumBase
     */
     function getAccount()
     {
-        // $db = Zend_Registry::get('db');
-        // $this->_d->fetchRow('SELECT * FROM account WHERE contact_id = ?',array($c->id));
-        $a = new Account($this->account_id);
+        $a = new Account($this->_data['account_id']);
         return $a;
     }
 
@@ -159,7 +157,6 @@ class Contact extends ImperiumBase
         if (intval($this->id)==0) {
           return null;
         }
-        $db = Zend_Registry::get('db');
         $sql = 'SELECT * ';
         $sql.= 'FROM contact ';
         $sql.= sprintf('WHERE ( id=%d OR parent_id=%d )',$this->id,$this->id);
@@ -167,9 +164,9 @@ class Contact extends ImperiumBase
             $sql.= sprintf(' AND flag & %d = %d ',$flag,$flag);
         }
         $sql.= ' ORDER BY id ';
-        $rs = $db->fetchAll($sql);
-        if ( (is_array($rs)) && (count($rs)>0) ) {
-            return $rs;
+        $res = radix_db_sql::fetchAll($sql);
+        if ( (is_array($res)) && (count($res)>0) ) {
+            return $res;
         }
         return null;
     }

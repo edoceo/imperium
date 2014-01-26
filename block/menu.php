@@ -49,7 +49,7 @@ echo '</li>';
 echo '<li><a href="' . radix::link('/contact') . '"><span>' . img('/tango/24x24/apps/system-users.png') . ' Contacts</span></a>';
     echo '<ul>';
     if (!empty($_ENV['contact']['id'])) {
-        echo '<li><a href="' . radix::link('/contact/view?c=' . $_ENV['contact']['id']) . '">' . img('/silk/1.3/user.png','Back to Contact') . '&nbsp;&laquo;' . $this->Contact->name . '</a></li>';
+        echo '<li><a href="' . radix::link('/contact/view?c=' . $_ENV['contact']['id']) . '">' . img('/silk/1.3/user.png','Back to Contact') . '&nbsp;&laquo;' . $_ENV['contact']['name'] . '</a></li>';
         echo '<li><hr /></li>';
         echo '<li><a href="' . radix::link('/contact.channel/edit?c=' . $_ENV['contact']['id']) . '">' . img('/silk/1.3/add.png','Add Contact Channel') . '&nbsp;Add Channel</a></li>';
         // echo '<li><a href="' . radix::link('/task/edit/link/' . $this->Contact->link() . '">' . img('/silk/1.3/note_add.png','Add Task') . '&nbsp;Add Task</a></li>';
@@ -91,9 +91,9 @@ echo '<li><a href="' . radix::link('/workorder') . '"><span>' . img('/tango/24x2
     }
 
     if ($_ENV['contact']['id']) {
-        echo '<li><a href="' . radix::link('/workorder/edit?c=' . $_ENV['contact']['id']) . '">' . img('/tango/24x24/actions/list-add.png','New Service Order') . ' Create</a></li>';
+        echo '<li><a href="' . radix::link('/workorder/new?c=' . $_ENV['contact']['id']) . '">' . img('/tango/24x24/actions/list-add.png','New Service Order') . ' Create</a></li>';
     } else {
-        echo '<li><a href="' . radix::link('/workorder/edit') . '">' . img('/tango/24x24/actions/list-add.png','New Service Order') . ' Create</a></li>';
+        echo '<li><a href="' . radix::link('/workorder/new') . '">' . img('/tango/24x24/actions/list-add.png','New Service Order') . ' Create</a></li>';
     }
 
     echo '<li><a href="' . radix::link('/workorder/report') . '">' . img('/silk/1.3/chart_bar_edit.png','Reports') . ' Reports</a></li>';
