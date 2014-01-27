@@ -1,5 +1,7 @@
 <?php
 
+require_once('Account/Reconcile.php');
+
 // @todo this is duplicated in the AccountStatement Controller - how to reslove?
 // Initialise Inputs
 if ( (isset($_GET['d0'])) && (isset($_GET['d1'])) ) {

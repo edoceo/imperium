@@ -155,14 +155,23 @@ class Account_Reconcile
 
         // Now Spin Each List Item and Discover Existing Journal Entry?
         $c = count($ret);
-        $d = Zend_Registry::get('db');
         for ($i=0;$i<$c;$i++) {
 
-            $s = $d->select();
-            $s->from('general_ledger',array('account_journal_id','date','amount'));
-            $s->where(" (date <= ?::timestamp + '5 days'::interval) AND (date >= ? ::timestamp - '5 days'::interval) ",$ret[$i]->date);
-            $s->where(' account_id = ?',$opt['account_id']);
-            $s->where(' abs(amount) = ?',abs($ret[$i]->abs));
+        	// Old
+            // $s = $d->select();
+            // $s->from('general_ledger',array('account_journal_id','date','amount'));
+            // $s->where(" (date <= ?::timestamp + '5 days'::interval) AND (date >= ? ::timestamp - '5 days'::interval) ",$ret[$i]->date);
+            // $s->where(' account_id = ?',$opt['account_id']);
+            // $s->where(' abs(amount) = ?',abs($ret[$i]->abs));
+            // $ret[$i]->id = $d->fetchOne($s);
+
+            // New
+            $sql = 'SELECT account_journal_id, date, amount FROM general_ledger';
+            $sql.= " WHERE (date <= ?::timestamp + '5 days'::interval) AND (date >= ? ::timestamp - '5 days'::interval)";
+            $sql.= ' AND account_id = ?';
+            $sql.= ' AND abs(amount) = ?';
+            $ret[$i]->id = radix_db_sql::fetch_one($sql, array($ret[$i]->date, $ret[$i]->date, $opt['account_id'], abs($ret[$i]->abs)));
+
             // $sql = 'select a.id,a.date,b.amount';
             // $sql.= ' from account_journal a join account_ledger b on a.id=b.account_journal_id ';
             // $sql.= ' where ';
@@ -171,13 +180,14 @@ class Account_Reconcile
             // $sql.= ' b.account_id=' . $acct_id and abs(b.amount)='".abs($entry->amount)."' ";
             // echo "$sql\n";
             // echo $s->assemble();
-            // $ret[$i]->id = $d->fetchOne($s);
+
         }
 
         uasort($ret,array(self,'_sortCallback'));
 
         return $ret;
     }
+
     /**
         Parse WellsFargo CSV to Journal Entry Array
     */

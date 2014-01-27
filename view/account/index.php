@@ -7,7 +7,7 @@
 */
 
 $x_kind = null;
-$img_edit = img('/silk/1.3/chart_bar_edit.png','Edit');
+$img_ed = img('/silk/1.3/chart_bar_edit.png','Edit');
 // $img_aj = img('/silk/1.3/chart_bar_edit.png','Journal');
 // $img_al = img('/silk/1.3/chart_bar_edit.png','Ledger');
 
@@ -29,16 +29,16 @@ foreach ($this->AccountList as $item) {
     echo '<tr class="rero">';
 
     $indent = str_repeat('&nbsp;',substr_count($item->full_code,'/'));
-    echo "<td>". $indent . $this->link('/account/ledger?id='.$item->id, $item->full_code) ."</td>";
+    echo '<td>' . $indent . '<a href="' . radix::link('/account/ledger?id='.$item->id) . '">' . html($item->full_code) . '</td>';
     echo "<td>{$item->name}";
 	if (strlen($item->account_tax_line_name)) {
 		echo " <span class='s'>({$item->account_tax_line_name})</span>";
 	}
 	echo '</td>';
     echo '<td class="r">' . number_format(abs($item->balance),2) . '</td>';
-    echo '<td class="r"><a href="' . radix::link('/account/ledger?id='.$item->id) . '">Ledger</td>';
-    echo '<td class="r"><a href="' . radix::link('/account/journal?id='.$item->id) . '">Journal</td>';
-    echo '<td class="r"><a href="' . radix::link('/account/view?id='.$item->id) . '">' . $img_edit . '</td>';
+    echo '<td class="r"><a href="' . radix::link('/account/ledger?id='.$item->id) . '">' . $img_al . '</td>';
+    echo '<td class="r"><a href="' . radix::link('/account/journal?id='.$item->id) . '">' . $img_aj . '</td>';
+    echo '<td class="r"><a href="' . radix::link('/account/view?id='.$item->id) . '">' . $img_ed . '</td>';
     echo '</tr>';
 
     $x_kind = $item->kind;
