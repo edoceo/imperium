@@ -99,25 +99,40 @@ class ImperiumBase implements ArrayAccess
     function save()
     {
         // Set Sane Defaults
-        if (empty($this->auth_user_id)) {
-            $cu = Zend_Auth::getInstance()->getIdentity();
-            $this->auth_user_id = $cu->id;
+        if (empty($this->_data['auth_user_id'])) {
+            // $cu = Zend_Auth::getInstance()->getIdentity();
+            $this->_data['auth_user_id'] = $_SESSION['uid']; // $cu->id;
         }
-        if (empty($this->hash)) $this->hash = $this->hash();
+        // if (empty($this->_data['hash'])) $this->_data['hash'] = $this->hash();
+
         // Set some Fields to Null
-        if (empty($this->link_to)) $this->link_to = new Zend_Db_Expr('null');
-        if (empty($this->link_id)) $this->link_id = new Zend_Db_Expr('null');
+        // if (empty($this->_data['link_to'])) $this->_data['link_to'] = null;
+        // if (empty($this->_data['link_id'])) $this->_data['link_id'] = null;
+        if (isset($this->_data['link_to'])) {
+        	if (empty($this->_data['link_to'])) {
+        		$this->_data['link_to'] = null;
+			}
+		}
+        if (isset($this->_data['link_id'])) {
+        	if (empty($this->_data['link_id'])) {
+        		$this->_data['link_id'] = null;
+			}
+		}
 
         // Convert to Array
+        // $rec = array();
+        // foreach ($this->_properties as $k) {
+        //     if (empty($this->$k)) {
+        //         $rec[$k] = new Zend_Db_Expr('null');
+        //     } else {
+        //         $rec[$k] = $this->$k;
+        //     }
+        // }
+        // unset($rec['id']);
         $rec = array();
-        foreach ($this->_properties as $k) {
-            if (empty($this->$k)) {
-                $rec[$k] = new Zend_Db_Expr('null');
-            } else {
-                $rec[$k] = $this->$k;
-            }
+        foreach ($this->_data as $k=>$v) {
+        	$rec[$k] = $v;
         }
-        unset($rec['id']);
 
         // @todo implement ts_vector
         // update vendors set fulltext = to_tsvector('english',name || ' ' || coalesce(description,''))
@@ -128,20 +143,20 @@ class ImperiumBase implements ArrayAccess
             // }
         }
 
-        if ($this->id) {
-            if ($this->_diff) Base_Diff::diff($this);
-            radix_db_sql::update($this->_table,$rec,"id={$this->id}");
+        if ($this->_data['id']) {
+            // if ($this->_diff) Base_Diff::diff($this);
+            radix_db_sql::update($this->_table,$rec,"id={$this->_data['id']}");
         } else {
-            radix_db_sql::insert($this->_table,$rec);
-            $this->id = $this->_db->lastSequenceId($this->_sequence);
-            if (intval($this->id)==0) {
+            $this->_data['id'] = radix_db_sql::insert($this->_table,$rec);
+            if (intval($this->_data['id'])==0) {
                 radix::dump($this);
-                die('Unexpected error saving: ' . get_class($this));
+                radix::dump(radix_db_sql::lastError());
+                radix::trace('Unexpected error saving: ' . get_class($this));
             }
-            if ($this->_diff) Base_Diff::diff($this);
-
+            // if ($this->_diff) Base_Diff::diff($this);
         }
     }
+
     /**
         Generates a Hash for this object
     */

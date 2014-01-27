@@ -9,10 +9,6 @@ class AccountJournalEntry extends ImperiumBase
 {
 	protected $_table = 'account_journal';
 
-	public $note;
-	public $date;
-	public $kind = 'N';
-
 	/**
 	*/
 	function delete()

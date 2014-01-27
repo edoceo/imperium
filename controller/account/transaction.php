@@ -1,13 +1,118 @@
 <?php
-
-// $req = $this->getRequest();
-// if ($req->isPost()) {
-// 	$this->transactionActionPost();
-// }
+/**
+	@file
+	@brief Show and Save Transactions
+*/
 
 // View!
 $id = intval($_GET['id']);
-$_ENV['title'] = array('Accounts','Transaction', $id ? "#$id" : 'Create' );
+$_ENV['title'] = array('Accounts','Transaction', $id ? "#$id" : 'New' );
+
+radix::dump($_POST);
+
+switch (strtolower($_POST['a'])) {
+case 'save':
+
+	$id = intval($_GET['id']);
+
+	// Delete
+	// if ($req->getPost('c') == 'Delete') {
+	// 	$aje = new AccountJournalEntry($id);
+	// 	$aje->delete();
+	// 	$this->_s->info = 'Journal Entry #' . $id . ' deleted';
+	// 	$this->redirect('/account/ledger');
+	// }
+
+	// $this->_d->beginTransaction();
+
+	$aje = new AccountJournalEntry($id);
+	$aje['auth_user_id'] = $_SESSION['uid'];
+	$aje['date'] = $_POST['date'];
+	$aje['note'] = $_POST['note'];
+	$aje['kind'] = $_POST['kind'];
+	$aje->save();
+
+	// $this->_s->AccountJournalEntry->date = $this->_request->getPost('date');
+	$_SESSION['account']['date'] = $_POST['date'];
+
+	// And Make the Wizard
+	// $awj = AccountWizardJournal::makeFromAccountJournal($aje);
+
+	if ($id) {
+		radix_session::flash('info', 'Account Journal Entry #' . $id . ' updated');
+	} else {
+		radix_session::flash('info', 'Account Journal Entry #' . $aje->id . ' created');
+	}
+
+	// Save Ledger Entries
+	foreach ($_POST as $k=>$v) {
+		// Trigger process only when matchin this
+		if (!preg_match('/^(\d+)_id$/',$k,$m)) {
+			continue; // ignore others
+		}
+
+		$i = $m[1];
+
+		// Debit or Credit
+		$dr = floatval( preg_replace('/[^\d\.]+/',null,$_POST["{$i}_dr"]));
+		$cr = floatval( preg_replace('/[^\d\.]+/',null,$_POST["{$i}_cr"]));
+		// Skip Empty
+		if ( ($cr == 0) && ($dr == 0) ) {
+			continue;
+		}
+
+		$id = intval($_POST["{$i}_id"]);
+		$ale = new AccountLedgerEntry($id);
+		$ale['auth_user_id'] = $_SESSION['uid'];
+		$ale['account_id'] = $_POST["{$i}_account_id"];
+		$ale['account_journal_id'] = $aje['id'];
+		// $ale->note = $req->getPost($i . '_note');
+		$ale['amount'] = ($dr > $cr) ? abs($dr) * -1 : abs($cr);
+		// Bind to an object
+		$ale['link_id'] = $_POST["{$i}_link_id"];
+		$ale['link_to'] = $_POST["{$i}_link_to"];
+		// Save Ledger Entry
+		$ale->save();
+		// Save Ledger Entry to Wizard
+		// $awj->addLedgerEntry($ale);
+
+		if ($id) {
+			radix_session::flash('info', 'Account Ledger Entry #' . $id . ' updated');
+		} else {
+			radix_session::flash('info', 'Account Ledger Entry #' . $ale->id . ' created');
+		}
+	}
+
+	// Memorise the Transaction
+	if (1 == $_POST['memorise']) {
+		// $awj->save();
+		radix_session::flash('info', 'Account Wizard Memorised');
+	}
+
+	// File!
+	if ( (!empty($_FILES['file'])) && (Base_File::goodPost($_FILES['file'])) ) {
+		 $bf = Base_File::copyPost($_FILES['file']);
+		 $bf->link = $bf->link($aje);
+		 $bf->save();
+		 radix_session::flash('info', 'Attachment Created');
+	}
+
+	// Commit and Redirect
+	// $this->_d->commit();
+
+	// if ('Apply' == $_POST['c']) {
+	// 	$this->_redirect('/account/transaction?id=' . $aje->id);
+	// }
+
+	// @todo Determine some redirect logic?  If Session Account go there, else go to the Debit account Journal?
+	// Need a Work FLow Processor - that knows an event name where work_flow should happen
+	// @todo session['return-path'];
+	if (!empty($this->_s->ReturnTo)) {
+		radix::redirect($this->_s->ReturnTo);
+	}
+	radix::redirect('/account/ledger'); // /' . $this->Session->read('Account.id'));
+	break;
+}
 
 if ($id) {
 	$this->AccountJournalEntry = new AccountJournalEntry($id); //
@@ -72,8 +177,8 @@ if (!empty($this->AccountJournalEntry->id)) {
 }
 
 $this->LinkToList = array(
-	null=>null,
-	ImperiumBase::getObjectType('contact')   =>'Contact',
-	ImperiumBase::getObjectType('invoice')   =>'Invoice',
-	ImperiumBase::getObjectType('workorder') =>'Work Order',
+	'' => null,
+	'contact' => 'Contact',
+	'invoice' => 'Invoice',
+	'workorder' => 'Work Order',
 );

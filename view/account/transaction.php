@@ -31,23 +31,16 @@ if (count($this->jump_list)) {
     echo '</div>';
 }
 
-?>
-<p>
-Input Standard Accounting Journal Entries here using the proper accounts
-Check the <i>Memorise</i> box to remember this transaction as a template for later.
-</p>
-<?php
-
 echo '<form enctype="multipart/form-data" method="post">';
 
 echo '<table>';
 echo '<tr>';
 // Date & Kind
-echo '<td class="l" style="width:120px;">Date:</td><td>' . radix_html_form::text('date', $this->AccountJournalEntry->date, array('size'=>12)) . '</td>';
+echo '<td class="l" style="width:120px;">Date:</td><td><input id="account-transaction-date" name="date" style="width:160px;" type="date" value="' . html($this->AccountJournalEntry->date) . '"></td>';
 echo '<td class="l" style="width:120px;">Kind:</td><td>' . radix_html_form::select('kind', $this->AccountJournalEntry->kind, array('N'=>'Normal','A'=>'Adjusting','C'=>'Closing')) . '</td>';
 echo '</tr>';
 // Note
-echo '<tr><td class="l">Note:</td><td colspan="3">' . radix_html_form::text('note',$this->AccountJournalEntry->note,array('style'=>'width: 30em')) . "</td></tr>";
+echo '<tr><td class="l">Note:</td><td colspan="3">' . radix_html_form::text('note',$this->AccountJournalEntry->note,array('autocomplete'=>'off', 'style'=>'width: 40em')) . "</td></tr>";
 echo '</table>';
 
 // Transaction Entry Lines
@@ -84,14 +77,17 @@ foreach ($this->AccountLedgerEntryList as $i=>$item) {
 	echo '<td>';
 	// Ledger Entry ID, Account ID and Account Name
 	echo radix_html_form::hidden($i.'_id',$item['id']);
-	echo radix_html_form::text($i.'_account_id',$item['account_id'],array('style'=>'width:4em;'));
-	echo radix_html_form::text($i.'_account_name',$item['account_name'],array('style'=>'width:25em'));
+	echo radix_html_form::text($i.'_account_id',$item['account_id'],array('style'=>'display:inline-block; width:4em;'));
+	echo radix_html_form::text($i.'_account_name',$item['account_name'],array('style'=>'display:inline-block; width:30em'));
 
 	echo '</td>';
 	// Link to Object
 	echo '<td>';
     echo radix_html_form::select($i.'_link_to', $item['link_to'], $this->LinkToList);
-    echo radix_html_form::text($i.'_link_id', $item['link_id'], array('size'=>6));
+    echo radix_html_form::text($i.'_link_id', $item['link_id'], array(
+    	'size'  => 6,
+    	'style' => 'display:inline-block; width:4em;',
+	));
 	echo '</td>';
 
 	// @deprecated SIDE is unused
@@ -127,17 +123,17 @@ if (count($this->FileList)) {
 // Buttons & Hiddden
 echo '<div class="bf">';
 echo radix_html_form::hidden('id',$this->AccountJournalEntry->id);
-echo '<input accesskey="s" name="c" type="submit" value="Save">';
-echo radix_html_form::submit('a','Save');
-echo radix_html_form::submit('c','Apply');
-echo radix_html_form::button('a', 'Save');
-echo '<input onclick="addJournalEntryLine();" type="button" value="Add Line" />'; // img('/silk/1.3/add.png','Add Line').'&nbsp;Add Line');
+echo '<input class="good" accesskey="s" name="a" type="submit" value="Save">';
+// echo '<input class="good" accesskey="s" name="a" type="submit" value="Save">';
+// echo radix_html_form::submit('c','Apply');
+// echo radix_html_form::button('a', 'Save');
+echo '<input class="info" onclick="addJournalEntryLine();" type="button" value="Add Line" />'; // img('/silk/1.3/add.png','Add Line').'&nbsp;Add Line');
 // Can Memorize New
 if (empty($this->AccountJournalEntry->id)) {
-    echo radix_html_form::submit('c','Memorize');
+    echo radix_html_form::submit('a','Memorize');
 }
 if ($this->AccountJournalEntry->id) {
-	echo radix_html_form::submit('c','Delete');
+	echo '<input class="fail" name="a" type="submit" value="Delete">';
 }
 echo '</div>';
 
@@ -159,7 +155,12 @@ echo radix::block('diff-list',$args);
 
 ?>
 
-<script type='text/javascript'>
+<p>
+Input Standard Accounting Journal Entries here using the proper accounts
+Check the <i>Memorise</i> box to remember this transaction as a template for later.
+</p>
+
+<script>
 var updateMagic = true;
 
 function acChangeSelect(event,ui)
@@ -246,10 +247,10 @@ function updateJournalEntryBalance()
     
     $(':submit').attr('disabled','disabled');
     if (cr != 0) {
-      $('#crt').css('color','#ff0000');
+		$('#crt').css('color','#ff0000');
     }
     if (dr != 0) {
-      $('#drt').css('color','#ff0000');
+		$('#drt').css('color','#ff0000');
     }
 
     // On First Update Clone Value from One Box To the Other
@@ -269,10 +270,9 @@ function updateJournalEntryBalance()
 	}
 }
 
-$(document).ready(function() {
+$(function() {
 
-    $('#date').select();
-    $('#date').datepicker();
+    $('#account-transaction-date').focus();
 
     $("input[name$='_cr']").on('blur change', updateJournalEntryBalance );
     $("input[name$='_dr']").on('blur change', updateJournalEntryBalance );
