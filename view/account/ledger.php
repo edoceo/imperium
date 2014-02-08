@@ -7,19 +7,18 @@
 
 $AccountList = array();
 $AccountList[-1] = 'All - General Ledger';
-$this->AccountList = array();
 foreach ($this->AccountList as $item) {
     $AccountList[$item->id] = $item->full_name;
 }
 
 echo '<form method="get">';
 echo '<table>';
-echo '<tr><td class="b r">Account:</td><td colspan="4">' . radix_html_form::select('id',$this->Account->id,null,$AccountList) . "</td></tr>";
+echo '<tr><td class="b r">Account:</td><td colspan="4">' . radix_html_form::select('id', $this->Account->id, $AccountList) . "</td></tr>";
 echo '<tr>';
 echo '<td class="l">From:</td>';
-echo "<td>" . radix_html_form::text('d0',$this->date_alpha,array('size'=>12)) . "</td>";
+echo "<td>" . radix_html_form::date('d0',$this->date_alpha,array('size'=>12)) . "</td>";
 echo '<td class="b c">&nbsp;to&nbsp;</td>';
-echo "<td>" . radix_html_form::text('d1',$this->date_omega,array('size'=>12)) . "</td>";
+echo "<td>" . radix_html_form::date('d1',$this->date_omega,array('size'=>12)) . "</td>";
 echo "<td><input class='cb' name='c' type='submit' value='View' /></td>";
 echo '<td><input name="c" type="submit" value="Post" /></td>';
 echo '</tr>';
@@ -91,9 +90,3 @@ echo '<td class="b r">&curren;' . number_format($this->cr_total,2) . '</td>';
 //}
 echo '</tr>';
 echo '</table>';
-
-//Zend_Debug::dump($le);
-echo '<script type="text/javascript">';
-echo '$("#d0").datepicker(); ';
-echo '$("#d1").datepicker(); ';
-echo '</script>';
