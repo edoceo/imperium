@@ -25,7 +25,7 @@ echo '<form method="post">';
 //if (isset($_GET['r'])) echo "<input name='r' type='hidden' value='".$_GET['r']."' />\n";
 echo '<table id="signin">';
 echo '<tr><td class="l">Username:</td><td>' . radix_html_form::text('username', null) . '</td></tr>';
-echo '<tr><td class="l">Password:</td><td>' . radix_html_form::text('password', null) .'</td></tr>';
+echo '<tr><td class="l">Password:</td><td>' . radix_html_form::password('password', null) .'</td></tr>';
 echo '<tr><td class="l">Save 24h:</td><td><input name="s24" type="checkbox" value="1"></td></tr>'; 
 echo '</table>';
 
