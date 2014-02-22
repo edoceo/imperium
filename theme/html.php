@@ -15,9 +15,9 @@ echo "<!doctype html>\n<html>\n";
 echo '<head>';
 echo '<title>Imperium: ' . $_ENV['title'] . '</title>';
 // $this->headLink()->appendAlternate('/feed/', 'application/rss+xml', 'RSS Feed');
-echo '<script src="//gcdn.org/jquery/1.10.2/jquery.js" type="text/javascript"></script>';
-echo '<script src="//gcdn.org/jquery-ui/1.10.2/jquery-ui.js" type="text/javascript"></script>';
-echo '<script src="' . radix::link('/js/imperium.js') . '" type="text/javascript"></script>';
+echo '<script src="//gcdn.org/jquery/1.10.2/jquery.js"></script>';
+echo '<script src="//gcdn.org/jquery-ui/1.10.2/jquery-ui.js"></script>';
+echo '<script src="' . radix::link('/js/imperium.js') . '"></script>';
 
 echo '<link href="//gcdn.org/radix/radix.css" rel="stylesheet" type="text/css">';
 // echo '<link href="//gcdn.org/jquery-ui/1.10.2/smoothness.css" rel="stylesheet" type="text/css">';
@@ -25,7 +25,7 @@ echo '<link href="' . radix::link('/css/base.css') . '" rel="stylesheet" type="t
 echo '<link href="' . radix::link('/img/imperium-icon.ico') . '" rel="shortcut icon">';
 echo '<link href="' . radix::link('/img/imperium-icon.png') . '" rel="apple-touch-icon">';
 
-echo '<meta name="viewport" content="min-width=960, initial-scale=1, user-scalable=yes" />';
+echo '<meta name="viewport" content="initial-scale=1, user-scalable=yes">';
 
 echo "</head>\n<body>\n";
 

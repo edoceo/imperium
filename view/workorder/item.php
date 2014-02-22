@@ -16,7 +16,7 @@ if (empty($this->WorkOrderItem)) {
 }
 
 // echo '<form action="'. $this->link('/workorder/item?' . http_build_query(array('id'=>$this->WorkOrderItem->id))) . '" method="post">';
-echo '<form method="post">';
+echo '<form id="wo-item" method="post">';
 echo '<table>';
 
 // Name
@@ -31,7 +31,7 @@ for ($m=0; $m<=86400; $m+=900) {
     $time_list[$k] = $v;
 }
 
-$d = radix_html_form::text('date',$this->WorkOrderItem->date,array('id'=>'woi_date','size'=>12));
+$d = radix_html_form::date('date',$this->WorkOrderItem->date,array('id'=>'woi_date','size'=>12));
 echo '<tr>';
 echo '<td class="l">Kind:</td><td>' . radix_html_form::select('kind', $this->WorkOrderItem->kind, WorkOrderItem::$kind_list) . '</td>';
 echo '<td class="l">Date:</td><td>' . $d . '</td>';
@@ -40,17 +40,17 @@ echo '<td>' . radix_html_form::select('time_omega',$this->WorkOrderItem->time_om
 echo '</tr>';
 
 // Estimate: Quantity, Rate, Unit, Tax
-$q = radix_html_form::text('e_quantity',$this->WorkOrderItem->e_quantity,array('maxlength'=>8,'onblur'=>'toNumeric(this);','size'=>6));
-$r = radix_html_form::text('e_rate',$this->WorkOrderItem->e_rate,array('maxlength'=>12,'onblur'=>'toNumeric(this);','size'=>8));
-$u = radix_html_form::select('e_unit',$this->WorkOrderItem->e_unit,null,Base_Unit::getList());
-$t = radix_html_form::text('e_tax_rate',tax_rate_format($this->WorkOrderItem->e_tax_rate),array('maxlength'=>8,'onblur'=>'toNumeric(this);','size'=>4));
+$q = radix_html_form::number('e_quantity',$this->WorkOrderItem->e_quantity,array('maxlength'=>8,'onblur'=>'toNumeric(this);'));
+$r = radix_html_form::number('e_rate',$this->WorkOrderItem->e_rate,array('maxlength'=>12,'onblur'=>'toNumeric(this);'));
+$u = radix_html_form::select('e_unit', $this->WorkOrderItem->e_unit, Base_Unit::getList());
+$t = radix_html_form::number('e_tax_rate',tax_rate_format($this->WorkOrderItem->e_tax_rate),array('maxlength'=>8,'onblur'=>'toNumeric(this);'));
 echo "<tr><td class='l'>Estimate:</td><td>$q</td><td><strong>@</strong>$r</td><td><strong>per</strong>&nbsp;$u<td class='b r'>Tax Rate:</td><td>$t&nbsp;%</td></tr>";
 
 // Cost: Quantity, Rate, Unit, Tax
-$q = radix_html_form::text('a_quantity',$this->WorkOrderItem->a_quantity,array('maxlength'=>8,'onblur'=>'toNumeric(this);','size'=>6));
-$r = radix_html_form::text('a_rate',$this->WorkOrderItem->a_rate,array('maxlength'=>12,'onblur'=>'toNumeric(this);','size'=>8));
-$u = radix_html_form::select('a_unit',$this->WorkOrderItem->a_unit,null,Base_Unit::getList());
-$t = radix_html_form::text('a_tax_rate',tax_rate_format($this->WorkOrderItem->a_tax_rate),array('maxlength'=>8,'onblur'=>'toNumeric(this);','size'=>4));
+$q = radix_html_form::number('a_quantity',$this->WorkOrderItem->a_quantity,array('maxlength'=>8,'onblur'=>'toNumeric(this);'));
+$r = radix_html_form::number('a_rate',$this->WorkOrderItem->a_rate,array('maxlength'=>12,'onblur'=>'toNumeric(this);'));
+$u = radix_html_form::select('a_unit', $this->WorkOrderItem->a_unit, Base_Unit::getList());
+$t = radix_html_form::number('a_tax_rate',tax_rate_format($this->WorkOrderItem->a_tax_rate),array('maxlength'=>8,'onblur'=>'toNumeric(this);'));
 echo "<tr><td class='l'>Actual:</td><td>$q</td><td><strong>@</strong>$r</td><td><strong>per</strong>&nbsp;$u<td class='b r'>Tax Rate:</td><td>$t&nbsp;%</td></tr>";
 
 //echo "<tr><td class='b r'>Request:</td><td colspan='3'>".$this->formTextarea('request',$this->WorkOrderItem->request,array('cols'=>64,'rows'=>'4'))."</td></tr>";
@@ -91,7 +91,6 @@ echo radix::block('diff-list', $args);
 ?>
 
 <script>
-$('#woi_date').datepicker();
 $('#name').focus();
 $('#notify').autocomplete({
     source:'/imperium/contact/ajax',
