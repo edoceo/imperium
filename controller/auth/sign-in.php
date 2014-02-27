@@ -5,9 +5,9 @@
 
 switch (strtolower($_POST['a'])) {
 case 'sign in':
+
 	if (!acl::may('/auth/sign-in', 'POST')) {
 		radix_session::flash('fail', 'Access Denied');
-		die("fda");
 		radix::redirect('/auth/sign-in');
 	}
 
@@ -15,8 +15,8 @@ case 'sign in':
 	$arg = array(strtolower($_POST['username']));
 	$res = radix_db_sql::fetchRow($sql, $arg);
 	if (empty($res)) {
+		// @todo Random Sleep
 		radix_session::flash('fail', 'Invalid username or password');
-		return(0);
 	}
 
 	// radix::dump($res);
@@ -32,6 +32,7 @@ case 'sign in':
 	acl::permit('/workorder*');
 	acl::permit('/settings*');
 
+	radix_session::flash('info', 'Sign In Successful');
 	radix::redirect('/');
 
 	break;

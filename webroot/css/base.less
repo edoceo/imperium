@@ -26,7 +26,10 @@ body {
 	font-size:18px;
 }
 header {
-	position:relative;
+	position:fixed;
+	height:24px;
+	top:0;
+	width:100%;
 }
 header div#logo {
 	width:256px;
@@ -62,17 +65,16 @@ dl {
 dt {
 	font-weight: bold;
 }
-footer { 
+footer {
     background:@menu_bg;
-    border-top:2px solid #000;
+    border-top:1px solid #000;
     bottom:0px;
     color:@menu_fg;
     font-size:14px;
     font-weight:700;
     line-height:22px;
-    margin-top:4px;
     position:fixed;
-    text-indent:2em;
+    text-align:center;
     width:100%;
 }
 footer a {
@@ -202,7 +204,7 @@ div#menu {
 	color:@menu_fg;
 	font-size:18px;
 	font-weight:700;
-	height: 32px;
+	height: 24px;
 	line-height:24px;
 	vertical-align:middle;
 	z-index:20;
@@ -278,7 +280,7 @@ div#menu form input:focus {
 }
 
 div#core {
-	margin:4px 0px 64px 0px;
+	margin:24px 0px;
 	padding:4px;
 }
 

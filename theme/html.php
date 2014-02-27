@@ -70,13 +70,13 @@ echo $this->body;
 
 echo '</div>'; // #core
 
-radix::dump(str_replace('<br>', "\n", radix::info()));
-radix::dump($_SESSION);
+// radix::dump(str_replace('<br>', "\n", radix::info()));
+// radix::dump($_SESSION);
 
 ?>
 
 <footer>
-<a href="http://imperium.edoceo.com">Imperium</a> &#169; 2001-2013 <a href="http://edoceo.com/">Edoceo, Inc</a> | Valid <a href="http://validator.w3.org/check/referer" rel="nofollow">html</a> &amp; <a href="http://jigsaw.w3.org/css-validator/check/referer" rel="nofollow">css</a>
+<a href="http://imperium.edoceo.com">Imperium</a> &#169; 2001-2014 <a href="http://edoceo.com/">Edoceo, Inc</a>
 </footer>
 
 <script type="text/javascript">

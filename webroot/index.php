@@ -17,10 +17,7 @@ if (!empty($_GET['_t'])) {
 }
 
 radix::init($opt);
-radix_session::init(array(
-	'name' => 'imperium',
-	'cookie_secure' => false,
-));
+radix_session::init();
 
 // Zend_Controller_Front
 // $front = Zend_Controller_Front::getInstance();
@@ -121,7 +118,7 @@ if (defined('APP_INIT')) {
     // echo 'Page Faults:  ' . $res['ru_minflt'] . "\n";
     //echo 'V-Context Switches: ' . $res['ru_nvcsw'] . "\n";
     //echo 'I-Context Switches: ' . $res['ru_nivcsw']  . "\n";
-    print_r($stat);
+    // print_r($stat);
     /*
     $u0 = sprintf('%d.%06d',$_res_0['ru_utime.tv_sec'],$_res_0['ru_utime.tv_usec']);
     $s0 = sprintf('%d.%06d',$_res_0['ru_stime.tv_sec'],$_res_0['ru_stime.tv_usec']);
@@ -141,6 +138,6 @@ if (defined('APP_INIT')) {
     //   echo "$b\n";
     // }
     // */
-    print_r($res);
+    // print_r($res);
     echo "\n-->";
 }
