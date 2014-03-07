@@ -14,6 +14,16 @@ $css = null;
 $cr_total = 0;
 $dr_total = 0;
 
+$account_list_json = array();
+foreach ($this->AccountList as $i=>$a) {
+	$account_list_json[] = array(
+		'id' => $a['id'],
+		'label' => $a['full_name'],
+		'value' => $a['id'],
+	);
+};
+$account_list_json = json_encode($account_list_json);
+
 // @note duplicated on invoice/view.phtml
 if (count($this->jump_list)) {
     echo '<div class="jump_list">';
@@ -94,18 +104,18 @@ foreach ($this->AccountLedgerEntryList as $i=>$item) {
 	if (!empty($item['side'])) {
 		if ($item['side'] == 'D') {
 		  // Debit
-		  echo '<td class="r">' . radix_html_form::text($i.'_dr',number_format($item['debit_amount'],2),$crdr_opts) . '</td><td>&nbsp;</td>';
+		  echo '<td class="r">' . radix_html_form::number($i.'_dr',number_format($item['debit_amount'],2),$crdr_opts) . '</td><td>&nbsp;</td>';
 		} else {
 		  // Credit
-		  echo '<td>&nbsp;</td><td class="r">' . radix_html_form::text($i.'_cr',number_format($item['credit_amount'],2),$crdr_opts) . '</td>';
+		  echo '<td>&nbsp;</td><td class="r">' . radix_html_form::number($i.'_cr',number_format($item['credit_amount'],2),$crdr_opts) . '</td>';
 		}
 		
 	} else {
 		// Display Both
 		// Debit
-		echo "<td class='r'>" . radix_html_form::text($i.'_dr',number_format($item['debit_amount'],2),$crdr_opts) . "</td>";
+		echo "<td class='r'>" . radix_html_form::number($i.'_dr',number_format($item['debit_amount'],2),$crdr_opts) . "</td>";
 		// Credit
-		echo "<td class='r'>" . radix_html_form::text($i.'_cr',number_format($item['credit_amount'],2),$crdr_opts) . "</td>";
+		echo "<td class='r'>" . radix_html_form::number($i.'_cr',number_format($item['credit_amount'],2),$crdr_opts) . "</td>";
 	}
 	echo '</tr>';
 }
@@ -124,10 +134,11 @@ if (count($this->FileList)) {
 echo '<div class="bf">';
 echo radix_html_form::hidden('id',$this->AccountJournalEntry->id);
 echo '<input class="good" accesskey="s" name="a" type="submit" value="Save">';
+echo '<button class="good" name="a" type="submit" value="save-copy">Save & Copy</button>';
 // echo '<input class="good" accesskey="s" name="a" type="submit" value="Save">';
 // echo radix_html_form::submit('c','Apply');
 // echo radix_html_form::button('a', 'Save');
-echo '<input class="info" onclick="addJournalEntryLine();" type="button" value="Add Line" />'; // img('/silk/1.3/add.png','Add Line').'&nbsp;Add Line');
+echo '<button accesskey="n" class="info" onclick="addJournalEntryLine();" type="button">Add Line</button>'; // img('/silk/1.3/add.png','Add Line').'&nbsp;Add Line');
 // Can Memorize New
 if (empty($this->AccountJournalEntry->id)) {
     echo radix_html_form::submit('a','Memorize');
@@ -177,7 +188,7 @@ function acInit()
 {
     // $("input[name*='account_name']").autocomplete('destroy');
     $("input[name*='account_name']").autocomplete({
-        source:'<?php echo $this->link('/account/ajax?a=account'); ?>',
+        source:<?php echo $account_list_json; ?>,
         select:acChangeSelect,
         change:acChangeSelect,
     });
@@ -274,6 +285,9 @@ $(function() {
 
     $('#account-transaction-date').focus();
 
+    $('input[type=text]').on('click', function() { this.select(); });
+    $('input[type=number]').on('click', function() { this.select(); });
+
     $("input[name$='_cr']").on('blur change', updateJournalEntryBalance );
     $("input[name$='_dr']").on('blur change', updateJournalEntryBalance );
 
@@ -282,3 +296,5 @@ $(function() {
 
 });
 </script>
+
+<?php

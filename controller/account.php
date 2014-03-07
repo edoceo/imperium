@@ -72,6 +72,14 @@ $this->PeriodList = array(
 // Account List
 $this->AccountPeriod = $this->_s->AccountPeriod;
 $this->AccountList = Account::listAccounts();
+
+// 	$sql = 'SELECT DISTINCT id, full_name AS label, full_name AS result';
+// 	$sql.= ' FROM account';
+// 	$sql.= ' WHERE name ~* ? OR full_name ~* ?';
+// 	$sql.= ' ORDER BY full_name';
+// 	$res = radix_db_sql::fetchAll($sql, array($q, "^$q"));
+// 	die(json_encode($res));
+
 $this->AccountPairList = Account::listAccountPairs();
 // Account Kind List
 $this->AccountKindList = Account::$kind_list;

@@ -8,12 +8,17 @@
 $id = intval($_GET['id']);
 $_ENV['title'] = array('Accounts','Transaction', $id ? "#$id" : 'New' );
 
-radix::dump($_POST);
+// radix::dump($_POST);
+if (!empty($_POST['a'])) $_POST['a'] = strtolower($_POST['a']);
 
-switch (strtolower($_POST['a'])) {
+switch ($_POST['a']) {
 case 'save':
+case 'save-copy':
 
 	$id = intval($_GET['id']);
+
+	$_SESSION['account-transaction'] = null;
+	$_SESSION['account-transaction-list'] = array();
 
 	// Delete
 	// if ($req->getPost('c') == 'Delete') {
@@ -31,6 +36,7 @@ case 'save':
 	$aje['note'] = $_POST['note'];
 	$aje['kind'] = $_POST['kind'];
 	$aje->save();
+	$_SESSION['account-transaction'] = $aje;
 
 	// $this->_s->AccountJournalEntry->date = $this->_request->getPost('date');
 	$_SESSION['account']['date'] = $_POST['date'];
@@ -73,6 +79,7 @@ case 'save':
 		$ale['link_to'] = $_POST["{$i}_link_to"];
 		// Save Ledger Entry
 		$ale->save();
+		$_SESSION['account-transaction-list'][] = $ale;
 		// Save Ledger Entry to Wizard
 		// $awj->addLedgerEntry($ale);
 
@@ -103,6 +110,15 @@ case 'save':
 	// if ('Apply' == $_POST['c']) {
 	// 	$this->_redirect('/account/transaction?id=' . $aje->id);
 	// }
+
+	if ('save-copy' == $_POST['a']) {
+		//
+		// $_SESSION['account-transaction'] = $aje;
+		// $_SESSION['account-transaction-list' = array();
+		// ] = $ale;
+		// // $_SESSION['new-transaction'] = $aje;
+		radix::redirect('/account/transaction');
+	}
 
 	// @todo Determine some redirect logic?  If Session Account go there, else go to the Debit account Journal?
 	// Need a Work FLow Processor - that knows an event name where work_flow should happen
@@ -138,8 +154,9 @@ if ($id) {
 
 	$this->AccountLedgerEntryList = radix_db_sql::fetch_all($sql, array($id)); // $this->_d->fetchAll($sql);
 	$this->FileList = $this->AccountJournalEntry->getFiles();
-} elseif (isset($this->_s->AccountTransaction)) {
-	$this->AccountJournalEntry = $this->_s->AccountTransaction->AccountJournalEntry;
+// } elseif (isset($this->_s->AccountTransaction)) {
+} elseif (!empty($_SESSION['account-transaction'])) {
+	$this->AccountJournalEntry = $_SESSION['account-transaction']['aje']; // $this->_s->AccountTransaction->AccountJournalEntry;
 	$this->AccountLedgerEntryList = $this->_s->AccountTransaction->AccountLedgerEntryList;
 	// @todo Here on on Save (above)?
 	unset($this->_s->AccountTransaction);

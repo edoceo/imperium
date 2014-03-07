@@ -20,8 +20,9 @@ echo '<script src="//gcdn.org/jquery-ui/1.10.2/jquery-ui.js"></script>';
 echo '<script src="' . radix::link('/js/imperium.js') . '"></script>';
 
 echo '<link href="//gcdn.org/radix/radix.css" rel="stylesheet" type="text/css">';
-// echo '<link href="//gcdn.org/jquery-ui/1.10.2/smoothness.css" rel="stylesheet" type="text/css">';
+echo '<link href="//gcdn.org/jquery-ui/1.10.2/smoothness.css" rel="stylesheet" type="text/css">';
 echo '<link href="' . radix::link('/css/base.css') . '" rel="stylesheet" type="text/css">';
+
 echo '<link href="' . radix::link('/img/imperium-icon.ico') . '" rel="shortcut icon">';
 echo '<link href="' . radix::link('/img/imperium-icon.png') . '" rel="apple-touch-icon">';
 
@@ -55,14 +56,6 @@ echo '</header>';
 
 // Core of Page
 echo '<div id="core">';
-
-// Title for Printing Only (po)
-// echo '<div class="po">';
-// echo '<h1>' . $_ENV['title'] . '</h1>';
-// if (!empty($this->title_one)) {
-//   echo '<h2>' . $this->title_one . '</h2>';
-// }
-// echo '</div>';
 
 echo radix_session::flash();
 

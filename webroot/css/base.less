@@ -119,12 +119,20 @@ img {
 }
 input[type="text"], input[type="password"], input[type="date"], input[type="datetime"], input[type="email"], input[type="number"], input[type="search"], input[type="tel"], input[type="time"], input[type="url"], textarea {
 	display:inline-block;
+	margin:4px;
+}
+input[type="date"] {
+	padding:2px;
+	width:12em;
+}
+input[type="number"] {
+	padding:2px;
+	width:6em;
+}
+select {
+	margin:4px;
 }
 
-legend {
-	background-color: #ccc;
-	padding: 2px 8px;
-}
 li {
 	margin: 1px 1px 1px 20px;
 }
@@ -132,18 +140,6 @@ ol {
 	margin: 0px 5px;
 	padding: 0px 0px 0px 30px;
 	list-style-type: decimal;
-}
-ol.ll {
-	list-style-type: lower-latin;
-}
-ol.lr {
-	list-style-type: lower-roman;
-}
-ol.ul {
-	list-style-type: upper-latin;
-}
-ol.ur {
-	list-style-type: upper-roman;
 }
 p {
 	margin: 4px 8px;
@@ -155,7 +151,7 @@ pre {
 	font-family: monospace;
 	margin: 4px;
 	padding: 1px;
-	 }
+}
 
 table td {
 	padding:2px;
@@ -269,9 +265,9 @@ div#menu ul hr {
 div#menu form input {
     background: #e0e0e0 url('//gcdn.org/silk/1.3/zoom.png') no-repeat right;
     border: 1px solid #333;
+    height:24px;
     margin: 0px;
     padding: 1px;
-    vertical-align: bottom;
     width:128px;
 }
 div#menu form input:focus {
@@ -331,41 +327,13 @@ div.edit-show {
 	text-decoration: underline;
 }
 
-.dn {
-	display: none;
-}
 .du {
 	text-decoration: underline;
 	border-bottom: 1px solid #000;
 }
-.fc {
-	background: none;
-	border: none;
-	clear: both;
-	display: block;
-	float: none;
-	margin: 0;
-	padding: 0;
-	overflow: hidden;
-	visibility: hidden;
-}
 .hi {
 	background-color: #369;
 	color: #fff;
-}
-.pb {
-	cursor: nw-resize;
-}
-.pc {
-	background-color: #fff;
-	border: 2px solid #369;
-	font-size: 52pt;
-	font-weight: 700;
-	position: absolute;
-}
-.po {
-	display: none;
-	visibility: hidden;
 }
 .rc {
 	background: #fff;
@@ -377,26 +345,12 @@ div.edit-show {
 	text-indent: 2em;
 }
 
-.fb10 {
-	display: inline;
-	float: left;
-	width: 10%;
-}
 .fb20 {
 	display: inline;
 	float: left;
 	width: 20%;
 }
-.fb25 {
-	display: inline;
-	float: left;
-	width: 25%;
-}
-.fb30 {
-	display: inline;
-	float: left;
-	width: 30%;
-}
+
 .fb40 {
 	display: inline;
 	float: left;
@@ -412,51 +366,19 @@ div.edit-show {
 	float: left;
 	width: 60%;
 }
-.fb70 {
-	display: inline;
-	float: left;
-	width: 70%;
-}
-.fb75 {
-	display: inline;
-	float: left;
-	width: 75%;
-}
-.fb80 {
-	display: inline;
-	float: left;
-	width: 80%;
-}
-.fb90 {
-	display: inline;
-	float: left;
-	width: 90%;
-}
+
 .fb100 {
 	display: inline;
 	float: left;
 	width: 100%;
 }
 
-.m4 {
-	margin: 4px 4px 0px 4px;
-}
-.m8 {
-	margin: 8px 8px 0px 8px;
-}
-.m16 { margin: 16px 16px 0px 16px;
-}
-.m24 { margin: 24px 24px 0px 24px;
-}
-.m32 { margin: 32px 32px 0px 32px;
-}
-.m32a { margin: 32px auto 0px auto;
+.m16 {
+	margin: 16px 16px 0px 16px;
 }
 
-.w50 { width: 50%;
-}
-
-.fail { background-color: #f00;
+.fail {
+	background-color: #f00;
 	border-radius: 4px;
 	color: #000;
 	font-weight: 700;
@@ -464,28 +386,11 @@ div.edit-show {
 	padding: 5px;
 	text-align: center;
 }
-.err { background-color: #f00;
-	border-radius: 4px;
-	color: #000;
-	font-weight: 700;
-	margin: 5px;
-	padding: 5px;
-	text-align: center;
-}
-.info { background-color: #369;
+.info {
+	background-color: #369;
 	border-radius: 4px;
 	color: #fff;
 	font-weight: 700;
-	margin: 5px;
-	padding: 5px;
-	text-align: center;
-}
-.msg { background-color: #369;
-	border-radius: 4px;
-	color: #fff;
-	font-weight: 700;
-	margin: 5px;
-	padding: 5px;
 	text-align: center;
 }
 .warn { background-color: #909;
@@ -497,24 +402,31 @@ div.edit-show {
 	text-align: center;
 }
 
-.jump_list { background: #ccc;
+.jump_list {
+	background: #ccc;
 	margin: 4px auto;
 	text-align:center;
 }
-.jump_list a { text-decoration: none;
+.jump_list a {
+	text-decoration: none;
 }
-.jump_list a:hover { color: #f00;
+.jump_list a:hover {
+	color: #f00;
 }
 
-.page_list { background: #ccc;
+.page_list {
+	background: #ccc;
 	margin: 4px auto;
 	text-align:center;
 }
-.page_list a { text-decoration: none;
+.page_list a {
+	text-decoration: none;
 }
-.page_list a:hover { color: #f00;
+.page_list a:hover {
+	color: #f00;
 }
-.page_list .no { color: #999;
+.page_list .no {
+	color: #999;
 }
 
 tr.hawk td
@@ -565,35 +477,33 @@ tr.yearly td
 }
 
 @media print {
-    * { font-size:10pt;
-	margin:0px;
-	padding:0px;
-}
-    body { background-color: #fff;
-	font-size:10pt;
-	width: 100%;
-}
-    #menu { border:none;
-	display: none;
-	visibility: hidden;
-}
-    #core { border:none;
-	left:0px;
-	top:0px;
-	width:100%;
-}
-    #foot { display: none;
-	visibility: hidden;
-}
-    .np { display: none;
-	visibility: hidden;
-}
-}
-
-
-form#wo-item input[type="date"] {
-	width:12em;
-}
-form#wo-item input[type="number"] {
-	width:6em;
+    * {
+    	font-size:10pt;
+		margin:0px;
+		padding:0px;
+	}
+    body {
+    	background-color: #fff;
+		font-size:10pt;
+		width: 100%;
+	}
+    #menu {
+    	border:none;
+		display: none;
+		visibility: hidden;
+	}
+    #core {
+    	border:none;
+		left:0px;
+		top:0px;
+		width:100%;
+	}
+    #foot {
+		display: none;
+		visibility: hidden;
+	}
+    .np {
+    	display: none;
+		visibility: hidden;
+	}
 }
