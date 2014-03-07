@@ -36,11 +36,6 @@ echo '<li><a href="' . radix::link('/settings/users') . '">Users</a></li>';
 echo '<li><a href="' . radix::link('/selenium') . '">Run Selenum Tests</a></li>';
 echo '</ul>';
 
-// echo '<h2>Imperium Config</h2>';
-// Zend_Debug::dump($_ENV);
-
-// echo '<h2>Imperium Server</h2>';
-// Zend_Debug::dump($_SERVER);
 ?>
 
 <h3>Payment Notifications</h3>
@@ -51,7 +46,25 @@ echo '</ul>';
 <dt>Paypal</dt>
 <dd><code>https://<?=radix::$host?><?=radix::$base?>/hook/paypal</code></dd>
 
+<dt>Square</dt>
+<dd>
+	<ol>
+	<li>Create a New Application in Square <a href="https://connect.squareup.com/apps/new">connect.squareup.com/apps/new</a>.</li>
+	<li>Enter <em>Imperium</em> as the App Name</li>
+	<li>Enter <em>https://<?php echo $_SERVER['SERVER_NAME'] ?>/imperium/auth/square</em> as the Redirect URL</li>
+	<li>Enter the Application ID, Application Secret and Personal Access Token into your Imperium configuration</li>
+	</ol>
+</dd>
+
 <dt>Stripe</dt>
 <dd><code>https://<?=radix::$host?><?=radix::$base?>/hook/stripe</code></dd>
 
 </dl>
+
+<?php
+
+echo '<h2>Imperium Config</h2>';
+radix::dump($_ENV);
+
+echo '<h2>Imperium Server</h2>';
+radix::dump($_SERVER);
