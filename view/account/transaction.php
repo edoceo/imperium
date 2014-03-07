@@ -18,8 +18,8 @@ $account_list_json = array();
 foreach ($this->AccountList as $i=>$a) {
 	$account_list_json[] = array(
 		'id' => $a['id'],
-		'label' => $a['full_name'],
-		'value' => $a['id'],
+		// 'label' => $a['full_name'],
+		'value' => $a['full_name'],
 	);
 };
 $account_list_json = json_encode($account_list_json);
@@ -177,11 +177,9 @@ var updateMagic = true;
 function acChangeSelect(event,ui)
 {
     var c = parseInt(this.name);
-    if (ui.item) {
-        // alert('#' + c.toString() + '_account_id = ' + ui.item.id);
-        $('#' + c.toString() + '_account_id').val(ui.item.id);
-        $('#' + c.toString() + '_account_name').val(ui.item.label);
-    }
+	console.log('#' + c.toString() + '_account_id = ' + ui.item.id);
+	$('#' + c.toString() + '_account_id').val(ui.item.id);
+	$('#' + c.toString() + '_account_name').val(ui.item.value);
 }
 
 function acInit()
@@ -189,8 +187,8 @@ function acInit()
     // $("input[name*='account_name']").autocomplete('destroy');
     $("input[name*='account_name']").autocomplete({
         source:<?php echo $account_list_json; ?>,
-        select:acChangeSelect,
         change:acChangeSelect,
+        select:acChangeSelect,
     });
 }
 
