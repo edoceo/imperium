@@ -63,6 +63,9 @@ echo '</ul>';
 
 <?php
 
+echo '<h2>Imperium Session</h2>';
+radix::dump($_SESSION);
+
 echo '<h2>Imperium Config</h2>';
 radix::dump($_ENV);
 
