@@ -1,6 +1,8 @@
 <?php
-
-// $rq = $this->getRequest();
+/**
+	@file
+	@brief View an Account Ledger
+*/
 
 // Load Specified Account or Session Account
 if ( ($id = intval($_GET['id'])) > 0) {
@@ -9,8 +11,8 @@ if ( ($id = intval($_GET['id'])) > 0) {
 	$this->Account = new Account($id);
 } elseif ( ($id = intval($_GET['id'])) == -1) {
 	$this->Account = new Account(-1);
-} elseif ($this->_s->Account) {
-	$this->Account = new Account($this->_s->Account->id);
+} elseif (!empty($_SESSION['account-id'])) {
+	$this->Account = new Account($_SESSION['account-id']);
 } else {
 	$this->Account = new Account();
 }
@@ -37,15 +39,14 @@ if ( (strtolower($_GET['c'])=='post') && (!empty($this->Account->id)) ) {
 	$ale = new AccountLedgerEntry();
 	$at->AccountLedgerEntryList[] = $ale;
 
-	$this->_s->AccountTransaction = $at;
-	$this->_s->ReturnTo = sprintf('/account/ledger?id=%d',$this->Account->id);
+	$_SESSION['account-transaction'] = $at;
+	$_SESSION['return-path'] = sprintf('/account/ledger?id=%d',$this->Account->id);
 	$this->redirect('/account/transaction');
 }
 
 if (empty($this->Account->id)) {
 
 	// Show General Ledger (All Accounts!)
-	unset($this->_s->Account);
 	$this->openBalance = 0;
 
 	$where = " (date>='{$this->date_alpha}' and date<='{$this->date_omega}') ";
@@ -55,9 +56,12 @@ if (empty($this->Account->id)) {
 	$this->cr_total = radix_db_sql::fetch_one("select sum(amount) from general_ledger where amount > 0 and $where");
 
 	$this->Account = new Account(array('name'=>'General Ledger'));
+
 } else {
+
 	// Show this specific Account
-	$_SESSION['account'] = $this->Account;
+	$_SESSION['account-id'] = $this->Account->id;
+
 	$this->openBalance = $this->Account->balanceBefore($this->date_alpha);
 
 	$where = " (account_id={$this->Account->id} OR parent_id = {$this->Account->id}) and (date>='{$this->date_alpha}' and date<='{$this->date_omega}') ";
@@ -85,6 +89,5 @@ $this->LedgerEntryList = radix_db_sql::fetchAll($sql);
 
 $_ENV['title'] = array('General Ledger',"{$this->date_alpha_f} to {$this->date_omega_f}");
 // ImperiumView::mruAdd($this->link(),'Ledger ' . $this->Account->name);
-// $this->_s->ReturnTo = '/account/ledger';
 $_SESSION['return-path'] = '/account/ledger';
 

@@ -8,9 +8,9 @@ if ( (isset($_GET['d0'])) && (isset($_GET['d1'])) ) {
 	$this->Period = 'x';
 	$this->date_alpha = date('Y-m-d',strtotime($_GET['d0']));
 	$this->date_omega = date('Y-m-d',strtotime($_GET['d1']));
-} elseif (isset($this->_s->AccountPeriod->date_alpha)) {
-	$this->date_alpha = $this->_s->AccountPeriod->date_alpha;
-	$this->date_omega = $this->_s->AccountPeriod->date_omega;
+} elseif (isset($_SESSION['AccountPeriod']['date_alpha'])) {
+	$this->date_alpha = $_SESSION['AccountPeriod']['date_alpha'];
+	$this->date_omega = $_SESSION['AccountPeriod']['date_omega'];
 } else {
 	$this->Period = isset($_GET['p']) ? $_GET['p'] : 'm';
 	$this->Month = isset($_GET['m']) ? $_GET['m'] : date('m');
@@ -45,9 +45,7 @@ $this->date_omega_f = strftime('%B %Y',strtotime($this->date_omega));
 // Save to Session
 // @todo This should be done differently
 // @todo Would also like to make AccountTransaction Controller that does Transaction and Wizard in one
-// if (empty($this->_s->AccountPeriod)) {
-// 	$this->_s->AccountPeriod = new stdClass();
-// }
+
 $_SESSION['AccountPeriod']['date_alpha'] = $this->date_alpha;
 $_SESSION['AccountPeriod']['date_omega'] = $this->date_omega;
 
@@ -70,7 +68,7 @@ $this->PeriodList = array(
 );
 
 // Account List
-$this->AccountPeriod = $this->_s->AccountPeriod;
+// $this->AccountPeriod = $this->_s->AccountPeriod;
 $this->AccountList = Account::listAccounts();
 
 // 	$sql = 'SELECT DISTINCT id, full_name AS label, full_name AS result';

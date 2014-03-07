@@ -39,7 +39,8 @@ case 'save-copy':
 	$_SESSION['account-transaction'] = $aje;
 
 	// $this->_s->AccountJournalEntry->date = $this->_request->getPost('date');
-	$_SESSION['account']['date'] = $_POST['date'];
+	// Was throwing and __PHP_INcomplete_Class error ?
+	// $_SESSION['account']['date'] = $_POST['date'];
 
 	// And Make the Wizard
 	// $awj = AccountWizardJournal::makeFromAccountJournal($aje);
@@ -79,7 +80,8 @@ case 'save-copy':
 		$ale['link_to'] = $_POST["{$i}_link_to"];
 		// Save Ledger Entry
 		$ale->save();
-		$_SESSION['account-transaction-list'][] = $ale;
+
+		// $_SESSION['account-transaction-list'][] = $ale;
 		// Save Ledger Entry to Wizard
 		// $awj->addLedgerEntry($ale);
 
@@ -120,13 +122,13 @@ case 'save-copy':
 		radix::redirect('/account/transaction');
 	}
 
-	// @todo Determine some redirect logic?  If Session Account go there, else go to the Debit account Journal?
-	// Need a Work FLow Processor - that knows an event name where work_flow should happen
-	// @todo session['return-path'];
-	if (!empty($this->_s->ReturnTo)) {
-		radix::redirect($this->_s->ReturnTo);
+	// Redirect Back
+	$ret = '/account/ledger';
+	if (!empty($_SESSION['return-path'])) {
+		$ret = $_SESSION['return-path'];
+		unset($_SESSION['return-path']);
 	}
-	radix::redirect('/account/ledger'); // /' . $this->Session->read('Account.id'));
+	radix::redirect($ret);
 	break;
 }
 

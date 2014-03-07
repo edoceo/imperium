@@ -11,12 +11,18 @@ case 'sign in':
 		radix::redirect('/auth/sign-in');
 	}
 
-	$sql = 'SELECT * FROM auth_user WHERE username = ?';
-	$arg = array(strtolower($_POST['username']));
+	$sql = 'SELECT * FROM auth_user WHERE username = ? ';
+	$sql.= ' AND (password = ? OR password = ? )';
+	$arg = array(
+		strtolower($_POST['username']),
+		$_POST['password'],
+		sha1($_POST['username'] . $_POST['username']),
+	);
 	$res = radix_db_sql::fetchRow($sql, $arg);
 	if (empty($res)) {
 		// @todo Random Sleep
 		radix_session::flash('fail', 'Invalid username or password');
+		radix::redirect();
 	}
 
 	// radix::dump($res);

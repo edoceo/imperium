@@ -17,7 +17,7 @@ if (!empty($_GET['_t'])) {
 }
 
 radix::init($opt);
-radix_session::init();
+radix_session::init(array('name' => 'imperium'));
 
 // Zend_Controller_Front
 // $front = Zend_Controller_Front::getInstance();
@@ -73,10 +73,12 @@ if (!empty($x)) {
 }
 
 // radix_acl::permit('null','/auth/*');
-// if (empty($_SESSION['uid'])) {
-acl::permit('/auth/sign-in');
-acl::permit('/auth/sign-in', 'POST');
-acl::permit('/auth/sign-out');
+if (empty($_SESSION['uid'])) {
+	unset($_SESSION['_acl']);
+	acl::permit('/auth/sign-in');
+	acl::permit('/auth/sign-in', 'POST');
+	acl::permit('/auth/sign-out');
+}
 
 if (!acl::may(radix::$path)) {
 	radix::dump($_SESSION['_acl']);
