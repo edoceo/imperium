@@ -42,6 +42,7 @@ echo '</ul>';
 <dl>
 <dt>Gumroad</dt>
 <dd><code>https://<?=radix::$host?><?=radix::$base?>/hook/gumroad</code></dd>
+<dd>See <a href="https://gumroad.com/settings/developer" target="_blank">gumroad.com/settings/developer</a> for more information.</dd>
 
 <dt>Paypal</dt>
 <dd><code>https://<?=radix::$host?><?=radix::$base?>/hook/paypal</code></dd>
