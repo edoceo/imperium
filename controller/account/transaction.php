@@ -6,9 +6,15 @@
 
 // View!
 $id = intval($_GET['id']);
+if ($id < 0) {
+	unset($_SESSION['account-transaction']);
+	unset($_SESSION['account-transaction-list']);
+	unset($_GET['id']);
+	$id = null;
+}
+
 $_ENV['title'] = array('Accounts','Transaction', $id ? "#$id" : 'New' );
 
-// radix::dump($_POST);
 if (!empty($_POST['a'])) $_POST['a'] = strtolower($_POST['a']);
 
 switch ($_POST['a']) {
@@ -114,7 +120,6 @@ case 'save-copy':
 	// }
 
 	if ('save-copy' == $_POST['a']) {
-		//
 		// $_SESSION['account-transaction'] = $aje;
 		// $_SESSION['account-transaction-list' = array();
 		// ] = $ale;
@@ -133,6 +138,7 @@ case 'save-copy':
 }
 
 if ($id) {
+
 	$this->AccountJournalEntry = new AccountJournalEntry($id); //
 	//$this->_d->fetchRow("select * from account_journal where id = $id");
 	//$sql = $this->_d->select();

@@ -87,17 +87,15 @@ foreach ($this->AccountLedgerEntryList as $i=>$item) {
 	echo '<td>';
 	// Ledger Entry ID, Account ID and Account Name
 	echo radix_html_form::hidden($i.'_id',$item['id']);
-	echo radix_html_form::text($i.'_account_id',$item['account_id'],array('style'=>'display:inline-block; width:4em;'));
-	echo radix_html_form::text($i.'_account_name',$item['account_name'],array('style'=>'display:inline-block; width:30em'));
+	echo radix_html_form::hidden($i.'_account_id',$item['account_id'],array('class'=>'account-id'));
+	echo radix_html_form::text($i.'_account_name',$item['account_name'],array('class'=>'account-name'));
+	echo '<small class="account-id-v" id="' . $i . '_account_id_v"></small>';
 
 	echo '</td>';
 	// Link to Object
 	echo '<td>';
     echo radix_html_form::select($i.'_link_to', $item['link_to'], $this->LinkToList);
-    echo radix_html_form::text($i.'_link_id', $item['link_id'], array(
-    	'size'  => 6,
-    	'style' => 'display:inline-block; width:4em;',
-	));
+    echo radix_html_form::text($i.'_link_id', $item['link_id'], array('class' => 'link-to'));
 	echo '</td>';
 
 	// @deprecated SIDE is unused
@@ -138,7 +136,7 @@ echo '<button class="good" name="a" type="submit" value="save-copy">Save & Copy<
 // echo '<input class="good" accesskey="s" name="a" type="submit" value="Save">';
 // echo radix_html_form::submit('c','Apply');
 // echo radix_html_form::button('a', 'Save');
-echo '<button accesskey="n" class="info" onclick="addJournalEntryLine();" type="button">Add Line</button>'; // img('/silk/1.3/add.png','Add Line').'&nbsp;Add Line');
+echo '<button accesskey="n" class="info" onclick="addLedgerEntryLine();" type="button">Add Line</button>';
 // Can Memorize New
 if (empty($this->AccountJournalEntry->id)) {
     echo radix_html_form::submit('a','Memorize');
@@ -177,44 +175,64 @@ var updateMagic = true;
 function acChangeSelect(event,ui)
 {
     var c = parseInt(this.name);
-	console.log('#' + c.toString() + '_account_id = ' + ui.item.id);
-	$('#' + c.toString() + '_account_id').val(ui.item.id);
-	$('#' + c.toString() + '_account_name').val(ui.item.value);
+	$('#' + c + '_account_id').val(ui.item.id);
+	$('#' + c + '_account_id_v').html(ui.item.id);
+	$('#' + c + '_account_name').val(ui.item.value);
 }
 
 function acInit()
 {
     // $("input[name*='account_name']").autocomplete('destroy');
     $("input[name*='account_name']").autocomplete({
+		delay:100,
         source:<?php echo $account_list_json; ?>,
-        change:acChangeSelect,
+        focus:acChangeSelect,
         select:acChangeSelect,
+        change:acChangeSelect,
     });
 }
 
-function addJournalEntryLine()
+function addLedgerEntryLine()
 {
     // @todo   If only Debit or Credit shows there then only that will be copedit
     var t = document.getElementById('JournalEntry');
 	var c = t.rows.length - 2; // number of existing accounting rows
 
     var html = '<tr>';
-    html += '<td>';
-    html += '<input id="' + c + '_id" name="' + c + '_id" type="hidden" value="" />';
-    html += '<input id="' + c + '_account_id" name="' + c + '_account_id" size="3" type="text" value="" />';
-    html += '<input id="' + c + '_account_name"  name="' + c + '_account_name" style="width:25em;" type="text" value="" />';
-    html += '</td>';
+
+    // Account Cell
+	var x = $(t.rows[c-1].cells[0]).clone(true);
+	x.find('input[type=hidden]').attr({
+		id: c + '_id',
+		name: c + '_id',
+	});
+	x.find('.account-id').attr({
+		id: c + '_account_id',
+		name: c + '_account_id',
+	});
+	x.find('.account-name').attr({
+		id: c + '_account_name',
+		name: c + '_account_name',
+	});
+	x.find('.account-id-v').attr({
+		id: c + '_account_id_v',
+	}).html('');
+
+	html += '<td>' + x.html() + '</td>';
+
     // Link Cell
-    var x = $(t.rows[1].cells[1]).clone(true);
+    var x = $(t.rows[c-1].cells[1]).clone(true);
     x.find('select').attr('id', c + '_link_to').attr('name', c + '_link_to');
     x.find('input').attr('id', c + '_link_id').attr('name', c + '_link_id');
     html += '<td>' + x.html() + '</td>';
+
     // Debit Cell
-    var x = $(t.rows[1].cells[2]).clone(true);
+    var x = $(t.rows[c-1].cells[2]).clone(true);
     x.find('input').attr('id', c + '_dr').attr('name', c + '_dr').val('0.00');
     html += '<td class="r">' + x.html() + '</td>';
+
     // Credit Cell
-    var x = $(t.rows[1].cells[3]).clone(true);
+    var x = $(t.rows[c-1].cells[3]).clone(true);
     x.find('input').attr('id', c + '_cr').attr('name', c + '_cr').val('0.00');
     html += '<td class="r">' + x.html() + '</td>';
     html += '</tr>';
@@ -253,7 +271,7 @@ function updateJournalEntryBalance()
         $(':submit').removeAttr('disabled');
         return;
     }
-    
+
     $(':submit').attr('disabled','disabled');
     if (cr != 0) {
 		$('#crt').css('color','#ff0000');

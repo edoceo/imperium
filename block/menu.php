@@ -128,7 +128,7 @@ echo '</li>';
 // Accounting
 echo '<li><a href="' . radix::link('/account') . '"><span>' . img('/tango/24x24/mimetypes/x-office-spreadsheet-template.png') . ' Accounts</span></a>';
     echo '<ul>';
-    echo '<li><a href="' . radix::link('/account/transaction') . '">' . img('/silk/1.3/money_add.png','Transaction').' Transaction</a></li>';
+    echo '<li><a href="' . radix::link('/account/transaction?id=-1') . '">' . img('/silk/1.3/money_add.png','Transaction').' Transaction</a></li>';
     echo '<li><hr /></li>';
     echo '<li><a href="' . radix::link('/account/edit') . '">' . img('/tango/24x24/actions/list-add.png','New Account') . ' New Account</a></li>';
     // $menu1[] = array('/account/transaction',img('/silk/1.3/money_add.png','Transaction').'&nbsp;Transaction</a></li>';
