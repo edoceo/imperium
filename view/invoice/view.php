@@ -20,13 +20,15 @@ if (count($this->jump_list)) {
         $text = null;
         if ($x['id'] < $this->Invoice->id ) {
             $text = '&laquo; #' . $x['id'];
+        } elseif ($x['id'] == $this->Invoice['id']) {
+        	$text = '#' . $x['id'];
         } else {
             $text = '#' . $x['id'] . ' &raquo;';
         }
         $list[] = '<a href="' . radix::link('/invoice/view?i=' . $x['id']) . '">' . $text . '</a>';
     }
     echo '<div class="jump_list">';
-    echo implode(' | ',$list);
+    echo implode(' | ', $list);
     echo '</div>';
 }
 
@@ -107,7 +109,7 @@ echo '</table>';
 echo '<div class="cmd">';
 echo radix_html_form::hidden('id',$this->Invoice->id);
 echo radix_html_form::hidden('contact_id',$this->Invoice->contact_id);
-echo '<input name="a" type="submit" value="Save">';
+echo '<input class="good" name="a" type="submit" value="Save">';
 
 // Hawk Monitoring?
 if ($this->Invoice->hasFlag(Invoice::FLAG_HAWK)) {
@@ -124,7 +126,14 @@ if (!empty($_ENV['invoice.workflow'])) {
         if ( $k == $this->Invoice->status ) {
             $list = explode(',',$v);
             foreach ($list as $x) {
-                echo sprintf('<input name="c" type="submit" value="%s" />',trim($x));
+            	switch ($x) {
+            	case 'Delete':
+            	case 'Void':
+            		echo '<input class="fail" name="a" type="submit" value="' . trim($x) . '" />';
+            		break;
+            	default:
+					echo '<input class="exec" name="a" type="submit" value="' . trim($x) . '" />';
+				}
             }
         }
     }

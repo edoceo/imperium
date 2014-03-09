@@ -42,27 +42,27 @@ class Invoice extends ImperiumBase
     function __construct($x=null)
     {
 
-        $this->status = $_ENV['invoice']['status'];
-        $this->net = $_ENV['invoice']['term_days'];
-        $this->date = date('Y-m-d');
-        $this->bill_amount = 0;
-        $this->paid_amount = 0;
-        $this->sub_total = 0;
-        $this->tax_total = 0;
-        $this->bill_address_id = null;
-        $this->ship_address_id = null;
+        $this->_data['status'] = $_ENV['invoice']['status'];
+        $this->_data['net'] = $_ENV['invoice']['term_days'];
+        $this->_data['date'] = date('Y-m-d');
+        $this->_data['bill_amount'] = 0;
+        $this->_data['paid_amount'] = 0;
+        $this->_data['sub_total'] = 0;
+        $this->_data['tax_total'] = 0;
+        $this->_data['bill_address_id'] = null;
+        $this->_data['ship_address_id'] = null;
 
         parent::__construct($x);
 
         // Now to Stuff with this new Data!
         // @todo Update Properties
         // @todo Update due_diff to the number of days until or after payment is due
-        $due_date = strtotime($this->date);
-        if (!empty($this->net)) {
-            $due_date += ($this->net * 86400); // add($this->net,Zend_Date::DAY);
+        $due_date = strtotime($this->_data['date']);
+        if (!empty($this->_data['net'])) {
+            $due_date += ($this->_data['net'] * 86400); // add($this->net,Zend_Date::DAY);
         }
         $now_date = time();
-        $this->due_diff = floor(($now_date - $due_date) / 86400);
+        $this->_date['due_diff'] = floor(($now_date - $due_date) / 86400);
     }
 
     /**
@@ -81,7 +81,7 @@ class Invoice extends ImperiumBase
     */
     function delete()
     {
-        $id = intval($this->id);
+        $id = intval($this->_data['id']);
         $db = Zend_Registry::get('db');
         $db->query(sprintf("delete from base_note where link = '%s'",$this->link()));
         $db->query("delete from invoice_item where invoice_id = $id");
@@ -95,7 +95,7 @@ class Invoice extends ImperiumBase
     */
     function canHawk()
     {
-        if ($this->status == 'Paid') {
+        if ($this->_data['status'] == 'Paid') {
             return false;
         }
 
@@ -112,8 +112,8 @@ class Invoice extends ImperiumBase
     function addInvoiceItem($r)
     {
         $t = new Zend_Db_Table(array('name'=>'invoice_item'));
-        $r['auth_user_id'] = $this->auth_user_id;
-        $r['invoice_id'] = $this->id;
+        $r['auth_user_id'] = $this->_data['auth_user_id'];
+        $r['invoice_id'] = $this->_data['id'];
         if ($t->insert($r)) {
             Base_Diff::note($this,'Invoice Item: ' . $r['name'] . ' created');
             $this->_updateBalance();
@@ -124,8 +124,8 @@ class Invoice extends ImperiumBase
     */
     function delInvoiceItem($id)
     {
-        Base_Dif::note($this,'Invoice Item #' . $id . ' removed');
-        $this->query("delete from invoice_item where id = $id");
+        Base_Diff::note($this,'Invoice Item #' . $id . ' removed');
+        radix_db_sql::query('DELETE FROM invoice_item WHERE id = ?', array($id));
         $this->updateBalance();
         return true;
     }
@@ -190,22 +190,21 @@ class Invoice extends ImperiumBase
     */
     function getTransactionSum()
     {
-        if (intval($this->id)==0) {
+    	$id = intval($this->_data['id']);
+        if ($id <= 0) {
             return null;
         }
 
-        $db = Zend_Registry::get('db');
-
-        $sql = "select abs(sum(al.amount)) from account_ledger al ";
-        $sql.= " join account_journal aj on al.account_journal_id = aj.id ";
-        $sql.= " join account a on al.account_id = a.id ";
+        $sql = "SELECT abs(sum(al.amount)) from account_ledger al ";
+        $sql.= " JOIN account_journal aj on al.account_journal_id = aj.id ";
+        $sql.= " JOIN account a on al.account_id = a.id ";
         // KIND needs to be A/R + Asset //
-        $sql.= " WHERE al.link_to=" . self::getObjectType($this) . " and al.link_id=$this->id";
+        $sql.= " WHERE al.link_to=" . self::getObjectType($this) . " and al.link_id=$id";
         // If Posting & Paying do this
         $sql.= ' AND amount < 0 ';
         // Elseif CASH basis don't use AND amount...
-        $rs = $db->fetchOne($sql);
-        return $rs;
+        $ret = radix_db_sql::fetch_one($sql);
+        return $ret;
     }
 
     /**
@@ -214,27 +213,41 @@ class Invoice extends ImperiumBase
     */
     private function _updateBalance()
     {
-        if (intval($this->id)!=0) {
-            $id = intval($this->id);
-        }
+    	$id = intval($this->_data['id']);
 
-        $d = Zend_Registry::get('db');
-        $r = array();
-        $r['sub_total'] = floatval($d->fetchOne("select sum( quantity * rate ) as sub_total from invoice_item where invoice_id={$id}"));
-        $r['tax_total'] = floatval($d->fetchOne("select sum( quantity * rate * tax_rate) as tax_total from invoice_item where invoice_id={$id}"));
-        $r['bill_amount'] = $r['sub_total'] + $r['tax_total'];
-        $r['paid_amount'] = $this->getTransactionSum();
-        if ($this->status == 'Paid') {
-            $r['paid_amount'] = $r['bill_amount'];
-        }
-        $w = array('id = ?'=>$this->id);
-        $t = new Zend_Db_Table(array('name'=>'invoice'));
-        $t->update($r,$w);
+        // $r = array();
+        $sql = 'UPDATE invoice SET ';
+        // $r['sub_total'] = floatval($d->fetchOne("select sum( quantity * rate ) as sub_total from invoice_item where invoice_id={$id}"));
+        $sql.= ' sub_total = ?, ';
+        $arg[] = floatval(radix_db_sql::fetch_one("select sum( quantity * rate ) as sub_total from invoice_item where invoice_id={$id}"));
+        // $r['tax_total'] = floatval($d->fetchOne("select sum( quantity * rate * tax_rate) as tax_total from invoice_item where invoice_id={$id}"));
+        $sql.= ' sub_total = ?, ';
+        $arg[] = floatval(radix_db_sql::fetch_one("select sum( quantity * rate * tax_rate) as tax_total from invoice_item where invoice_id={$id}"));
+        // $r['bill_amount'] = $r['sub_total'] + $r['tax_total'];
+        $sql.= ' bill_amount = ?, ';
+        $arg[] = $r['sub_total'] + $r['tax_total'];
+        // $r['paid_amount'] = $this->getTransactionSum();
+        $sql.= ' paid_amount = ? ';
+        $arg[] = $this->getTransactionSum();
 
-        $this->bill_amount = $r['bill_amount'];
-        $this->paid_amount = $r['paid_amount'];
-        $this->sub_total = $r['sub_total'];
-        $this->tax_total = $r['tax_total'];
+        // @todo Force Marking as Paid Amount Full?
+        // if ($this->status == 'Paid') {
+        //     $r['paid_amount'] = $r['bill_amount'];
+        // }
+        // $w = array('id = ?'=>$this->id);
+        // $t = new Zend_Db_Table(array('name'=>'invoice'));
+        // $t->update($r,$w);
+
+        $sql.= ' WHERE id = ?';
+        $arg[] = $id;
+
+        radix_db_sql::query($sql, $arg);
+
+        // @todo Save to Object Data?
+        // $this->bill_amount = $r['bill_amount'];
+        // $this->paid_amount = $r['paid_amount'];
+        // $this->sub_total = $r['sub_total'];
+        // $this->tax_total = $r['tax_total'];
 
     }
 }

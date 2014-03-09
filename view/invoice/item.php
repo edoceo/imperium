@@ -21,8 +21,8 @@ echo '<form action="' . $_SERVER['REQUEST_URI'] . '" method="post">';
 echo '<table>';
 
 // Kind & Date
-$k = radix_html_form::select('kind', $this->InvoiceItem->kind, InvoiceItem::$kind_list);
-$d = radix_html_form::text('date', $this->InvoiceItem->date, array('id'=>'woi_date','size'=>12));
+$k = radix_html_form::select('kind', $this->InvoiceItem['kind'], InvoiceItem::$kind_list);
+$d = radix_html_form::text('date', $this->InvoiceItem['date'], array('id'=>'woi_date','size'=>12));
 echo "<tr><td class='b r'>Kind:</td><td>$k</td><td class='b r'>Date:</td><td>$d</td></tr>";
 
 echo "<tr><td class='l'>Cost:</td><td>$q&nbsp;<strong>@</strong>&nbsp;$r&nbsp;<strong>per</strong>&nbsp;$u</td>";
@@ -33,14 +33,14 @@ echo '</tr>';
 echo '<tr><td class="l">Name:</td><td colspan="3">' . $n . '</td></tr>';
 
 // Note
-echo '<tr><td class="l">Note:</td><td colspan="3"><textarea name="note" style="width:90%;">'. html($this->InvoiceItem->note) . '</textarea></td></tr>';
+echo '<tr><td class="l">Note:</td><td colspan="3"><textarea name="note" style="width:90%;">'. html($this->InvoiceItem['note']) . '</textarea></td></tr>';
 
 // Notify
 echo '<tr>';
 echo '<td class="l">';
 echo '<span title="Input and email address here and a notification email will be sent">Notify:</span>';
 echo '</td>';
-echo '<td colspan="3">' . radix_html_form::text('notify', $this->WorkOrderItem->notify, array('size'=>'64')) . '</td>';
+echo '<td colspan="3">' . radix_html_form::text('notify', $this->WorkOrderItem['notify'], array('size'=>'64')) . '</td>';
 echo '</tr>';
 
 // @todo Link to Work System (Redmine, Trac, &c)
@@ -63,9 +63,9 @@ echo '</table>';
 
 echo '<div class="cmd">';
 // echo $this->formHidden('id',$this->Invoice->id);
-echo radix_html_form::Hidden('invoice_id',$this->Invoice->id);
-echo radix_html_form::submit('cmd','Save');
-echo radix_html_form::submit('cmd','Delete');
+echo radix_html_form::Hidden('invoice_id',$this->Invoice['id']);
+echo radix_html_form::submit('a','Save');
+echo radix_html_form::submit('a','Delete');
 echo '</div>';
 
 echo '</form>';
