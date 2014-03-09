@@ -2,18 +2,9 @@
 /**
     @file
     @brief Contact View Shows the Contact, Company or Vendors information
-
-    @copyright    2008 Edoceo, Inc
-    @package    edoceo-imperium
-    @link       http://imperium.edoceo.com
-    @since      File available since Release 1013
 */
 
-// Autocomplete for Company, Kind and Status
-$script_append = <<<EOF
-EOF;
-
-echo '<form action="' . $this->link('/contact/save') . '?c=' . $this->Contact->id . '" method="post">';
+echo '<form action="' . radix::link('/contact/save?c=' . $this->Contact->id) . '" method="post">';
 
 echo '<div>';
 echo radix_html_form::hidden('id',$this->Contact->id);
@@ -106,8 +97,8 @@ echo '</tr>';
 
 // Kind & Status
 echo '<tr>';
-echo '<td class="l">Kind:</td><td>' . radix_html_form::select('kind',$this->Contact->kind,null,$this->KindList) . '</td>';
-echo '<td class="l">Status:</td><td>' . radix_html_form::select('status',$this->Contact->status,null,$this->StatusList) . '</td>';
+echo '<td class="l">Kind:</td><td>' . radix_html_form::select('kind', $this->Contact->kind, $this->KindList) . '</td>';
+echo '<td class="l">Status:</td><td>' . radix_html_form::select('status', $this->Contact->status, $this->StatusList) . '</td>';
 echo '</tr>';
 
 // Channels
@@ -268,9 +259,11 @@ if (empty($this->Contact->parent_id)) {
         echo '<table>';
         foreach ($this->ContactList as $item) {
             echo '<tr class="rero">';
-            echo '<td>' . radix::link('/contact/view?c='.$item->id,$item->name) . '</td>';
-            echo '<td>' . radix::block('stub-channel', array('data'=>$item->phone)) . '</td>';
-            echo '<td>' . radix::block('stub-channel', array('data'=>$item->email)) . '</td>';
+            echo '<td><a href="' . radix::link('/contact/view?c=' . $item['id']) . '">' . html($item['name']) . '</a></td>';
+            // echo '<td>' . radix::block('stub-channel', array('data'=>$item['phone'])) . '</td>';
+            // echo '<td>' . radix::block('stub-channel', array('data'=>$item['email'])) . '</td>';
+            echo '<td>' . html($item['phone']) . '</td>';
+            echo '<td>' . html($item['email']) . '</td>';
             echo '</tr>';
         }
         echo '</table>';
@@ -295,8 +288,8 @@ echo radix::block('file-list',$arg);
 // Work Orders
 echo '<h2>';
 echo 'Work Orders';
-echo '<span class="s">[ <a href="' . radix::link('/workorder/create?c=' . $this->Contact->id) . '">';
-echo img('/silk/1.3/table_add.png','Create Work Order');
+echo '<span class="s">[ <a href="' . radix::link('/workorder/new?c=' . $this->Contact->id) . '">';
+echo img('/silk/1.3/table_add.png','New Work Order');
 echo '</a> ]</span>';
 echo '</h2>';
 if ($this->WorkOrderList) {
@@ -306,7 +299,7 @@ if ($this->WorkOrderList) {
 // Invoices
 echo '<h2>';
 echo 'Invoices';
-echo '<span class="s">[ <a href="' . radix::link('/invoice/create?c=' . $this->Contact->id) . '">';
+echo '<span class="s">[ <a href="' . radix::link('/invoice/new?c=' . $this->Contact->id) . '">';
 echo img('/silk/1.3/layout_add.png','Create Invoice');
 echo '</a> ]</span>';
 echo '</h2>';
