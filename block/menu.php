@@ -41,7 +41,7 @@ echo '<li><a href="' . radix::link('/') . '" title="Dashboard"><span>' . img('/t
     // echo '<li><a href="' . radix::link('/manual/'') . ' . $this->controller . '/' . $this->action . '"><img alt="Annotated Users Manual" src="' . radix::link('/img/silk/help.png" />&nbsp;Manual</a></li>';
     echo '<li><a href="' . radix::link('/settings') . '">' . img('/tango/24x24/categories/preferences-desktop.png','Settings') . ' Settings</a></li>';
     echo '<li><hr /></li>';
-    echo '<li><a href="' . radix::link('/logout') . '">' . img('/tango/24x24/actions/system-log-out.png','Logout') . ' Logout</a></li>';
+    echo '<li><a href="' . radix::link('/auth/sign-out') . '">' . img('/tango/24x24/actions/system-log-out.png','Sign Out') . ' Sign Out</a></li>';
     echo '</ul>';
 echo '</li>';
 

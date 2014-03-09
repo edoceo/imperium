@@ -31,7 +31,8 @@ case 'sign in':
 	acl::permit('/index');
 	acl::permit('/dashboard');
 	acl::permit('/block*');
-	// acl::permit('/base/*');
+	acl::permit('/file/*');
+	acl::permit('/note/*');
 	acl::permit('/account*');
 	acl::permit('/contact*');
 	acl::permit('/invoice*');
@@ -39,7 +40,14 @@ case 'sign in':
 	acl::permit('/settings*');
 
 	radix_session::flash('info', 'Sign In Successful');
-	radix::redirect('/');
+
+	// Redirect
+	$ret = '/';
+	if (!empty($_SESSION['return-path'])) {
+		$ret = $_SESSION['return-path'];
+		unset($_SESSION['return-path']);
+	}
+	radix::redirect($ret);
 
 	break;
 }

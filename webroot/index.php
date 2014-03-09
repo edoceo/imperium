@@ -81,25 +81,22 @@ if (empty($_SESSION['uid'])) {
 }
 
 if (!acl::may(radix::$path)) {
-	radix::dump($_SESSION['_acl']);
+
+	radix_session::flash('fail', 'Access Denied');
+	// radix::dump($_SERVER);
+	if (empty($_SESSION['return-path'])) {
+		if (!empty($_SERVER['REQUEST_URI'])) {
+			$real_base = radix::base();
+			$want = $_SERVER['REQUEST_URI'];
+			$want_base = substr($want, 0, strlen($real_base));
+			if ($real_base == $want_base) {
+				$_SESSION['return-path'] = substr($want, strlen($real_base));
+			}
+		}
+	}
+
 	radix::redirect('/auth/sign-in');
 }
-
-// If Someone is logged in then they inherit from the 'User' role
-// if ($auth->hasIdentity()) {
-//     $cu = $auth->getIdentity();
-//     if (!$acl->hasRole($cu->username)) {
-//         $acl->addRole( new Zend_Acl_Role($cu->username), 'user' );
-//     }
-//     $fn = APP_ROOT . '/approot/etc/' . $cu->username . '.ini';
-//     if (is_file($fn)) {
-//         $cfg = parse_ini_file($fn,true);
-//         $cfg = array_change_key_case($cfg);
-//         $_ENV = array_merge_recursive($_ENV,$cfg);
-//     }
-// }
-
-$stat = radix::stat();
 
 radix::exec();
 radix::view();
@@ -120,7 +117,6 @@ if (defined('APP_INIT')) {
     // echo 'Page Faults:  ' . $res['ru_minflt'] . "\n";
     //echo 'V-Context Switches: ' . $res['ru_nvcsw'] . "\n";
     //echo 'I-Context Switches: ' . $res['ru_nivcsw']  . "\n";
-    // print_r($stat);
     /*
     $u0 = sprintf('%d.%06d',$_res_0['ru_utime.tv_sec'],$_res_0['ru_utime.tv_usec']);
     $s0 = sprintf('%d.%06d',$_res_0['ru_stime.tv_sec'],$_res_0['ru_stime.tv_usec']);

@@ -114,22 +114,29 @@ class Contact extends ImperiumBase
     */
     function delete()
     {
-        $db = Zend_Registry::get('db');
-        $db->beginTransaction();
-
         $id = intval($this->id);
-        $db->query("delete from contact_address where contact_id = $id");
-        //$this->ContactAddress->deleteAll("ContactAddress.contact_id=$id",false,false);
-        $db->query("delete from contact_channel where contact_id = $id");
-        //$this->ContactChannel->deleteAll("ContactChannel.contact_id=$id",false,false);
+
+        // Check Workorder
+        $res = radix_db_sql::fetch_one('SELECT count(id) FROM workorder WHERE contact_id = ?', array($id));
+        if ($res > 0) {
+        	throw new Exception("Cannot delete Contact who owns Work Orders");
+        }
+
+        // Check Invoice
+        $res = radix_db_sql::fetch_one('SELECT count(id) FROM invoice WHERE contact_id = ?', array($id));
+        if ($res > 0) {
+        	throw new Exception("Cannot delete Contact who owns Invoices");
+        }
+
+        radix_db_sql::query('DELETE FROM contact_address WHERE contact_id = ?', array($id));
+        radix_db_sql::query('DELETE FROM contact_channel WHERE contact_id = ?', array($id));
+
         //$db->query("delete from workorder where contact_id = $id");
         //$this->WorkOrder->deleteAll("WorkOrder.contact_id=$id",false,false);
         //$db->query("delete from invoice where contact_id = $id");
         //$this->Invoice->deleteAll("Invoice.contact_id=$id",false,false);
 
         $x = parent::delete($id,true);
-
-        $db->commit();
 
         return $x;
     }
