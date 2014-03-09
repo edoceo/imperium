@@ -22,7 +22,7 @@ if (!acl::may('/block/menu')) {
 // $c = $this->controller == 'index' ? '/' : ('/' . $this->controller);
 
 echo '<ul class="menu">';
-echo '<li><a href="' . radix::link('/') . '" title="Dashboard"><span>' . img('/tango/24x24/places/user-desktop.png') . ' Dashboard' . '</span></a>';
+echo '<li><a href="' . radix::link('/') . '" title="Dashboard"><i class="fa fa-dashboard"></i> Dashboard</a>';
     echo '<ul>';
     echo '<li><a class="fancybox fancybox.ajax" href="' . radix::link('/note/edit?l=r') . '">' . img('/tango/24x24/apps/accessories-text-editor.png','New Note') . '&nbsp;New Note</a></li>';
     echo '<li><a class="fancybox fancybox.ajax" href="' . radix::link('/file/edit?l=r') . '">' . img('/tango/24x24/actions/document-new.png','New File') . '&nbsp;New File</a></li>';
@@ -41,12 +41,12 @@ echo '<li><a href="' . radix::link('/') . '" title="Dashboard"><span>' . img('/t
     // echo '<li><a href="' . radix::link('/manual/'') . ' . $this->controller . '/' . $this->action . '"><img alt="Annotated Users Manual" src="' . radix::link('/img/silk/help.png" />&nbsp;Manual</a></li>';
     echo '<li><a href="' . radix::link('/settings') . '">' . img('/tango/24x24/categories/preferences-desktop.png','Settings') . ' Settings</a></li>';
     echo '<li><hr /></li>';
-    echo '<li><a href="' . radix::link('/auth/sign-out') . '">' . img('/tango/24x24/actions/system-log-out.png','Sign Out') . ' Sign Out</a></li>';
+    echo '<li><a href="' . radix::link('/auth/sign-out') . '"><i class="fa fa-sign-out"></i> Sign Out</a></li>';
     echo '</ul>';
 echo '</li>';
 
 // Contacts
-echo '<li><a href="' . radix::link('/contact') . '"><span>' . img('/tango/24x24/apps/system-users.png') . ' Contacts</span></a>';
+echo '<li><a href="' . radix::link('/contact') . '"><i class="fa fa-users"></i> Contacts</a>';
     echo '<ul>';
     if (!empty($_ENV['contact']['id'])) {
         echo '<li><a href="' . radix::link('/contact/view?c=' . $_ENV['contact']['id']) . '">' . img('/silk/1.3/user.png','Back to Contact') . '&nbsp;&laquo;' . $_ENV['contact']['name'] . '</a></li>';
@@ -71,13 +71,13 @@ echo '<li><a href="' . radix::link('/contact') . '"><span>' . img('/tango/24x24/
 echo '</li>';
 
 // Workorders
-echo '<li><a href="' . radix::link('/workorder') . '"><span>' . img('/tango/24x24/actions/edit-paste.png') . ' Work Orders</span></a>';
+echo '<li><a href="' . radix::link('/workorder') . '"><i class="fa fa-clock-o"></i> Work Orders</a>';
     echo '<ul>';
     if (!empty($_ENV['workorder']['id'])) {
         echo '<li><a href="' . radix::link('/workorder/view?w=' . $_ENV['workorder']['id']) . '">&laquo; Work Order #' . $this->WorkOrder->id . '</a></li>';
 
         // Add Item
-        echo '<li><a class="ajax-edit" data-name="woi-edit" href="' . radix::link('/workorder/item?w=' . $this->WorkOrder->id) . '">' . img('/tango/24x24/actions/list-add.png','Add Item') . ' Add Item</a></li>';
+        echo '<li><a class="ajax-edit" data-name="woi-edit" href="' . radix::link('/workorder/item?w=' . $this->WorkOrder->id) . '"><i class="fa fa-plus-square"></i> Add Item</a></li>';
 
         //$menu1[] = array('/service_orders/post_payment',img('/silk/1.3/money_add.png').'&nbsp;Post Payment');
         //$menu1[] = array('/workorder/invoice',img('/silk/1.3/layout_link.png','Build Invoice').'&nbsp;Build Invoice');
@@ -91,9 +91,9 @@ echo '<li><a href="' . radix::link('/workorder') . '"><span>' . img('/tango/24x2
     }
 
     if ($_ENV['contact']['id']) {
-        echo '<li><a href="' . radix::link('/workorder/new?c=' . $_ENV['contact']['id']) . '">' . img('/tango/24x24/actions/list-add.png','New Service Order') . ' Create</a></li>';
+        echo '<li><a href="' . radix::link('/workorder/new?c=' . $_ENV['contact']['id']) . '"><i class="fa fa-plus-square"></i> Create</a></li>';
     } else {
-        echo '<li><a href="' . radix::link('/workorder/new') . '">' . img('/tango/24x24/actions/list-add.png','New Service Order') . ' Create</a></li>';
+        echo '<li><a href="' . radix::link('/workorder/new') . '"><i class="fa fa-plus-square"></i> Create</a></li>';
     }
 
     echo '<li><a href="' . radix::link('/workorder/report') . '">' . img('/silk/1.3/chart_bar_edit.png','Reports') . ' Reports</a></li>';
@@ -103,7 +103,7 @@ echo '<li><a href="' . radix::link('/workorder') . '"><span>' . img('/tango/24x2
 echo '</li>';
 
 // Invoices
-echo '<li><a href="' . radix::link('/invoice') . '"><span>' . img('/tango/24x24/apps/accessories-calculator.png') . ' Invoices</span></a>';
+echo '<li><a href="' . radix::link('/invoice') . '"><i class="fa fa-usd"></i> Invoices</a>';
     echo '<ul>';
 
     if (!empty($_ENV['invoice']['id'])) {
@@ -114,9 +114,9 @@ echo '<li><a href="' . radix::link('/invoice') . '"><span>' . img('/tango/24x24/
 
     // Create Invoice
     if ($_ENV['contact']['id']) {
-        echo '<li><a href="' . radix::link('/invoice/edit?c=' . $_ENV['contact']['id']) . '">' . img('/tango/24x24/actions/list-add.png','New Invoice') . ' Create</a></li>';
+        echo '<li><a href="' . radix::link('/invoice/edit?c=' . $_ENV['contact']['id']) . '"><i class="fa fa-plus-square"></i> Create</a></li>';
     } else {
-        echo '<li><a href="' . radix::link('/invoice/edit') . '">' . img('/tango/24x24/actions/list-add.png','New Invoice') . ' Create</a></li>';
+        echo '<li><a href="' . radix::link('/invoice/edit') . '"><i class="fa fa-plus-square"></i> Create</a></li>';
     }
     // echo '<li><a href="' . radix::link('/invoice/filter/active') . '">' , img('/silk/1.3/money_add.png','Active').'&nbsp;Active</a></li>';
     // echo '<li><a href="' . radix::link('/invoice/filter/past_due') . '">' , img('/silk/1.3/money_add.png','Past Due').'&nbsp;Past Due</a></li>';
@@ -126,11 +126,11 @@ echo '<li><a href="' . radix::link('/invoice') . '"><span>' . img('/tango/24x24/
 echo '</li>';
 
 // Accounting
-echo '<li><a href="' . radix::link('/account') . '"><span>' . img('/tango/24x24/mimetypes/x-office-spreadsheet-template.png') . ' Accounts</span></a>';
+echo '<li><a href="' . radix::link('/account') . '"><i class="fa fa-money"></i> Accounts</a>';
     echo '<ul>';
-    echo '<li><a href="' . radix::link('/account/transaction?id=-1') . '">' . img('/silk/1.3/money_add.png','Transaction').' Transaction</a></li>';
+    echo '<li><a href="' . radix::link('/account/transaction?id=-1') . '"><i class="fa fa-plus-square"></i> Transaction</a></li>';
     echo '<li><hr /></li>';
-    echo '<li><a href="' . radix::link('/account/edit') . '">' . img('/tango/24x24/actions/list-add.png','New Account') . ' New Account</a></li>';
+    echo '<li><a href="' . radix::link('/account/edit') . '"><i class="fa fa-plus-square"></i> New Account</a></li>';
     // $menu1[] = array('/account/transaction',img('/silk/1.3/money_add.png','Transaction').'&nbsp;Transaction</a></li>';
     echo '<li><a href="' . radix::link('/account/cheque') . '">',img('/silk/1.3/money_add.png','Cheque').'&nbsp;Cheque</a></li>';
     echo '<li><a href="' . radix::link('/account.wizard') . '">',img('/silk/1.3/money_add.png','Wizard').'&nbsp;Wizard</a></li>';
@@ -178,131 +178,3 @@ echo '<form action="' . radix::link('/search') . '" method="get">';
 echo '<input id="q" name="q" placeholder="Search" value="" />';
 echo '</form></li>';
 echo '</ul>';
-
-return(0);
-
-// Primary Menu
-// $menu0[] = array('/timesheet',"<img alt='Timesheets' src='$appurl/img/silk/clock.png' />&nbsp;TimeSheets",'timesheet');
-// $menu0[] = array('/email',"<img alt='Email' src='$appurl/img/silk/mail.png' />&nbsp;Old Email",'email');
-
-// Secondary Menu
-$menu1 = array();
-
-$s = Zend_Registry::get('session');
-if (isset($s->SearchTerm)) {
-    $menu1[] = array('/search?q=' . $s->SearchTerm,img('/silk/1.3/star.png','Search Results') . '&nbsp;&laquo;Results');
-}
-
-switch ($here) {
-case 'search/':
-case 'search/index':
-case 'search/rebuild':
-    $menu1[] = array('/search/rebuild',img('/silk/1.3/arrow_refresh.png','Rebuild Index') . '&nbsp;Rebuild Index');
-    break;
-// Account Menu Set
-case 'account/ledger':
-    $menu1[] = array('/account/view/' . $this->Account->id,img('/silk/1.3/chart_bar_edit.png','Edit this Account').'&nbsp;Edit');
-    $menu1[] = array('/account/journal/' . $this->Account->id,img('/silk/1.3/chart_bar_edit.png','View Journal').'&nbsp;Journal');
-    $menu1[] = array('/account/transaction',img('/silk/1.3/money_add.png','Transaction').'&nbsp;Transaction');
-    $menu1[] = array('/account.wizard',img('/silk/1.3/money_add.png','Wizard').'&nbsp;Wizard');
-    $menu1[] = array('/account/reconcile/id/' . $this->Account->id,img('/silk/1.3/table_lightning.png','Reconcile').'&nbsp;Reconcile');
-    break;
-case 'account/journal':
-    $menu1[] = array('/account/view/' . $this->Account->id,img('/silk/1.3/chart_bar_edit.png','Edit this Account').'&nbsp;Edit');
-    $menu1[] = array('/account/ledger/' . $this->Account->id,img('/silk/1.3/chart_bar_edit.png','View Ledger').'&nbsp;Ledger');
-    $menu1[] = array('/account/transaction',img('/silk/1.3/money_add.png','Transaction').'&nbsp;Transaction');
-    $menu1[] = array('/account.wizard',img('/silk/1.3/money_add.png','Wizard').'&nbsp;Wizard');
-    $menu1[] = array('/account/reconcile/id/' . $this->Account->id,img('/silk/1.3/table_lightning.png','Reconcile').'&nbsp;Reconcile');
-    break;
-case 'account/view':
-    $menu1[] = array('/account/ledger/' . $this->Account->id,img('/silk/1.3/chart_bar_edit.png','View Ledger').'&nbsp;Ledger');
-    $menu1[] = array('/account/journal/' . $this->Account->id,img('/silk/1.3/chart_bar_edit.png','View Journal').'&nbsp;Journal');
-    //$menu[] = array('/accounting/make_payment',$html->image('silk/building.png').'&nbsp;Make Payment');
-    //$menu[] = array('/accounting/post_income',$html->image('silk/user_green.png').'&nbsp;Post Income');
-    break;
-case 'account.statement/balance-sheet':
-case 'account.statement/cash-flow':
-case 'account.statement/income':
-case 'account.statement/owner-equity':
-case 'account.statement/trial-balance':
-    $menu1[] = array('/account.statement/trial-balance',img('/silk/1.3/application_view_detail.png','Trial Balance').'&nbsp;Trial Balance');
-    $menu1[] = array('/account.statement/income',img('/silk/1.3/application_view_detail.png','Income Statement').'&nbsp;Income (P&amp;L)');
-    $menu1[] = array('/account.statement/owner-equity',img('/silk/1.3/application_view_detail.png','Owners Equity Statement').'&nbsp;Owner Equity');
-    $menu1[] = array('/account.statement/balance-sheet',img('/silk/1.3/application_view_detail.png','Balance Sheet').'&nbsp;Balance Sheet');
-    $menu1[] = array('/account.statement/cash-flow',img('/silk/1.3/application_view_detail.png','Cash Flow Statement').'&nbsp;Cash Flow');
-    break;
-// Email Menu Set
-case 'email/compose':
-case 'email/inbox':
-case 'email/index':
-case 'email/message':
-    $menu1[] = array('/email/compose',img('/silk/1.3/email_edit.png','Compose Email').'&nbsp;Compose');
-    //if (isset($this->EmailMenu)) {
-    //  $menu1 += $this->EmailMenu;
-    //}
-    if (isset($this->EmailMenu)) {
-        foreach ($this->EmailMenu as $x) {
-            $menu1[] = $x;
-        }
-    }
-    break;
-    break;
-    /*
-    case 'index':
-    case 'item':
-        $menu1[] = array('/invoice/view?i='.$this->Invoice->id,img('/silk/1.3/layout.png','Back to Invoice').'&nbsp;&laquo;Invoice #'.$this->Invoice->id);
-        break;
-        case 'payment':
-        $menu1[] = array('/invoice/view?i='.$this->Invoice->id,img('/silk/1.3/layout.png','Invoice').'&nbsp;&laquo;Invoice #'.$session->read('Invoice.id'));
-        break;
-    */
-// Settings
-//case 'settings/users':
-//    $menu1[] = array('/settings/users/new',img('/silk/1.3/user_add.png','Add User').'&nbsp;Add User');
-//  break;
-// ToDo Menu Set
-// Work Order Menu Set
-case 'workorder.item/index':
-case 'workorder.item/edit':
-case 'workorder.item/view':
-    $menu1[] = array('/workorder/view?w='.$this->WorkOrder->id,img('/silk/1.3/table.png','Back to Work Order').'&nbsp;&laquo;Work Order #'.$this->WorkOrder->id);
-    break;
-// Timesheet Menu Set
-case 'timesheet/index':
-    $menu1[] = array('/timesheet/edit',' Create');
-    break;
-}
-
-// Here other Items are merged from other controllers to this menu
-// @todo Now holding off until 1.8 with Zend_Navigation
-/*
-echo '<ul class="menu">';
-foreach ($menu as $page=>$data) {
-  if ($data === null) {
-    echo '<hr />';
-    continue;
-  }
-
-  if (is_array($data)) {
-    switch (count($data)) {
-    case 0:
-      echo '<li>' . $this->link($page,$page) . '</li>';
-      break;
-    case 1:
-      $x = array_shift($data);
-      echo '<li>' . $this->link($x['link'],$x['name']) . '</li>';
-      break;
-    default:
-      $x = array_shift($data);
-      echo '<li>' . $this->link($x['link'],$x['name']) . '<ul>';
-      foreach ($data as $k=>$x) {
-        echo '<li>' . $this->link($x['link'],$x['name']) . '</li>';
-      }
-      echo '</ul></li>';
-      break;
-    }
-  }
-}
-echo '</ul>';
-
-*/

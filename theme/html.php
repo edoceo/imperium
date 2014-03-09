@@ -18,6 +18,7 @@ echo '<title>Imperium: ' . $_ENV['title'] . '</title>';
 echo '<script src="//gcdn.org/jquery/1.10.2/jquery.js"></script>';
 echo '<script src="//gcdn.org/jquery-ui/1.10.2/jquery-ui.js"></script>';
 echo '<script src="' . radix::link('/js/imperium.js') . '"></script>';
+echo '<script>Imperium.base = "' . radix::base(true) . '";</script>';
 
 echo '<link href="//gcdn.org/font-awesome/4.0.3/font-awesome.css" rel="stylesheet">';
 echo '<link href="//gcdn.org/jquery-ui/1.10.2/smoothness.css" rel="stylesheet" type="text/css">';
