@@ -25,8 +25,8 @@ case 'create':
 	$this->WorkOrderItem = $this->WorkOrder->newWorkOrderItem();
 	// Notify?
 	if ($_ENV['aorkorder']['notify_send']) {
-		$c = new Contact($this->WorkOrder->contact_id);
-		$this->WorkOrderItem->notify = $c->email;
+		$c = new Contact($this->WorkOrder['contact_id']);
+		$this->WorkOrderItem['notify'] = $c->email;
 	}
 	break;
 
@@ -49,9 +49,9 @@ case 'save':
 	  'kind','date','time_alpha','time_omega',
 	  'e_rate','e_quantity','e_unit','e_tax_rate',
 	  'a_rate','a_quantity','a_unit','a_tax_rate',
-	  'name','note','status','notify');
+	  'name','note','status'); // ,'notify' ? Gone?
 	foreach ($set as $x) {
-		$woi->$x = trim($_POST[$x]);
+		$woi[$x] = trim($_POST[$x]);
 	}
 	$woi = $wo->addWorkOrderItem($woi);
 
@@ -59,7 +59,7 @@ case 'save':
 	if ($id) {
 		radix_session::flash('info', "Work Order Item #$id saved");
 	} else {
-		$id = $woi->id;
+		$id = $woi['id'];
 		radix_session::flash('info', "Work Order Item #$id created");
 	}
 	$wo->save();
@@ -67,9 +67,9 @@ case 'save':
 	// If Notify!
 	if (!empty($_POST['notify'])) {
 
-		$this->_s->EmailComposeMessage = new stdClass();
-		$this->_s->EmailComposeMessage->to = $_POST['notify'];
-		$this->_s->EmailComposeMessage->subject = 'Work Order #' . $wo->id . ' Update Notification';
+		$mail = array();
+		$mail['rcpt'] = radix_filter::email($_POST['notify']);
+		$mail['subj'] = 'Work Order #' . $wo->id . ' Update Notification';
 
 		// Template
 		$file = APP_ROOT . '/approot/etc/workorder-item-mail.txt';
@@ -90,15 +90,17 @@ case 'save':
 		$body = str_replace('$wi_unit',$woi->a_unit,$body);
 		$body = str_replace('$wi_status',$woi->status,$body);
 
-		$this->_s->EmailComposeMessage->body = $body;
+		$mail['body'] = $body;
+
+		$_SESSION['mail-compose'] = $mail;
 
 		// Want to Add This History
-		$this->_s->ReturnTo = '/workorder/view?w=' . $wo->id;
-		$this->redirect('/email/compose');
+		$_SESSION['return-path'] = '/workorder/view?w=' . $wo['id'];
+		radix::redirect('/email/compose');
 
 	}
 
-	$this->redirect('/workorder/view?w=' . $wo->id);
+	radix::redirect('/workorder/view?w=' . $wo['id']);
 
 	break;
 

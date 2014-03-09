@@ -34,9 +34,9 @@ class WorkOrderItem extends ImperiumBase
 		$this->date = date('Y-m-d');
         $this->quantity = 1;
 		parent::__construct($x);
-        if (empty($this->time_alpha)) {
-            $this->time_alpha = strftime('%H:%M',mktime(date('H')-1,0,0));
-            $this->time_omega = strftime('%H:%M',mktime(date('H')+1,0,0));
+        if (empty($this->_data['time_alpha'])) {
+            $this->_data['time_alpha'] = strftime('%H:%M',mktime(date('H')-1,0,0));
+            $this->_data['time_omega'] = strftime('%H:%M',mktime(date('H')+1,0,0));
         }
 	}
 
@@ -44,8 +44,12 @@ class WorkOrderItem extends ImperiumBase
 		Work Order Item Save
 	*/
 	function save() {
-		if (strtotime($this->date) == false) {
-			$this->date = new Zend_Db_Expr('null');
+
+		if (strtotime($this->_data['date']) == false) {
+			$this->_data['date'] = null;
+		}
+		foreach (array('e_quantity','e_rate','e_tax_rate', 'a_quantity', 'a_rate', 'a_tax_rate') as $x) {
+			if (empty($this->_data[$x])) $this->_data[$x] = 0;
 		}
 
         $this->a_tax_rate = tax_rate_fix($this->a_tax_rate);

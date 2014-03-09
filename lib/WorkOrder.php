@@ -87,7 +87,7 @@ class WorkOrder extends ImperiumBase
     */
     function addWorkOrderItem($woi)
     {
-        $woi->workorder_id = $this->id;
+        $woi['workorder_id'] = $this->_data['id'];
         $woi->save();
         $this->_updateBalance();
         return $woi;
@@ -99,7 +99,7 @@ class WorkOrder extends ImperiumBase
     function delWorkOrderItem($id)
     {
         Base_Diff::note($this,'Work Order Item #' . $id . ' removed');
-        $this->query("delete from workorder_item where id = $id");
+        radix_db_sql::query("DELETE from workorder_item where id = $id");
         $this->_updateBalance();
         return true;
     }
@@ -124,7 +124,7 @@ class WorkOrder extends ImperiumBase
         // $rs = $db->fetchAll($sql);
         $sql = 'SELECT * FROM workorder_item WHERE workorder_id = ? ';
         $sql.= ' ORDER BY status, date, kind, a_rate, a_quantity ';
-        $res = radix_db_sql::fetchAll($sql, array($this->id));
+        $res = radix_db_sql::fetchAll($sql, array($this->_data['id']));
 
         $ret = array();
         foreach ($res as $x) {
@@ -245,19 +245,20 @@ class WorkOrder extends ImperiumBase
     */
     private function _updateBalance()
     {
-        $db = Zend_Registry::get('db');
+    	$id = $this->_data['id'];
+
         $sql = 'update workorder set ';
         $sql.= 'bill_amount = (';
             $sql.= "select sum(a_quantity * a_rate) from workorder_item ";
-            $sql.= " where workorder_id={$this->id} and status = 'Billed' ) ";
+            $sql.= " where workorder_id=$id and status = 'Billed' ) ";
         $sql.= ',';
         $sql.= 'open_amount = (';
             $sql.= 'select sum(a_quantity * a_rate) from workorder_item ';
-            $sql.= " where workorder_id={$this->id} and status in ('Active','Complete') ";
-        $sql.= ") where id={$this->id}";
-        $db->query($sql);
+            $sql.= " where workorder_id = $id and status in ('Active','Complete') ";
+        $sql.= ") where id=$id";
+        radix_db_sql::query($sql);
 
-        $this->bill_amount = $db->fetchOne("SELECT bill_amount FROM workorder WHERE id = {$this->id}");
-        $this->open_amount = $db->fetchOne("SELECT open_amount FROM workorder WHERE id = {$this->id}");
+        $this->bill_amount = radix_db_sql::fetch_one("SELECT bill_amount FROM workorder WHERE id = $id");
+        $this->open_amount = radix_db_sql::fetch_one("SELECT open_amount FROM workorder WHERE id = $id");
     }
 }

@@ -77,7 +77,7 @@ echo '</table>';
 echo '<div class="cmd">';
 echo radix_html_form::hidden('id',$this->WorkOrder->id);
 echo radix_html_form::hidden('contact_id',$this->WorkOrder->contact_id);
-echo radix_html_form::button('c','Save');
+echo '<button class="good" name="a" type="submit" value="save">Save</button>';
 
 if (!empty($_ENV['workorder.workflow'])) {
     $list = array();
@@ -85,7 +85,14 @@ if (!empty($_ENV['workorder.workflow'])) {
         if ( ($k == '*') || ($k == $this->WorkOrder->status) ) {
             $list = explode(',',$v);
             foreach ($list as $x) {
-                echo '<input name="c" type="submit" value="' . trim($x) . '" />';
+            	switch ($x) {
+            	case 'Delete':
+            	case 'Void':
+            		echo '<input class="fail" name="a" type="submit" value="' . trim($x) . '" />';
+            		break;
+            	default:
+					echo '<input class="exec" name="a" type="submit" value="' . trim($x) . '" />';
+				}
             }
         }
     }
@@ -256,6 +263,16 @@ if (count($this->WorkOrderItemList) > 0) {
 // );
 // echo $this->partial('../elements/diff-list.phtml',$args);
 
+?>
+
+<script>
+$(function() {
+	WorkOrder.initForm();
+});
+</script>
+
+<?php
+
 function drawSummaryRow($e_size,$e_cost,$a_size,$a_cost,$name='Sub Total')
 {
     echo '<tr>';
@@ -278,27 +295,3 @@ function drawSummaryRow($e_size,$e_cost,$a_size,$a_cost,$name='Sub Total')
     }
     echo '</tr>';
 }
-
-?>
-
-<script type="text/javascript">
-$('#contact_name').autocomplete({
-    source: '<?php echo $this->link('/contact/ajax') ?>',
-    change: function(event, ui) { if (ui.item) { $('#contact_id').val(ui.item.id); } }
-});
-$('#wo_date').datepicker();
-$('#requester').autocomplete({
-    source: '<?php echo $this->link('/contact/ajax'); ?>',
-    change: function(event, ui) {
-        if (ui.item) {
-            $('#account').val(ui.item.label);
-            $('#account_id').val(ui.item.id);
-        }
-    }
-});
-$('#kind').autocomplete({ minLength:0, source:['Single','Project','Monthly','Quarterly','Yearly'] });
-// $('#add_contact_name').autocomplete({
-//     source:'<?php echo $this->link('/contact/ajax'); ?>',
-//     change:function(event, ui) { if (ui.item) {  $("#add_contact_id").val(ui.item.id); $("#add_contact_name").val(ui.item.contact); } }
-// });
-</script>
