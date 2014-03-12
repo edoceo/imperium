@@ -57,12 +57,6 @@ echo '</table>';
 echo '<table id="JournalEntry">';
 echo '<tr><th>Account</th><th>Link</th><th>Debit</th><th>Credit</th></tr>';
 
-$crdr_opts = array(
-    'autocomplete' => 'off',
-    'class' => 'r',
-    'size' => 9
-);
-
 $AccountList = array();
 foreach ($this->AccountList as $item) {
 	$AccountList[$item->id] = $item->full_name;
@@ -98,23 +92,13 @@ foreach ($this->AccountLedgerEntryList as $i=>$item) {
     echo radix_html_form::text($i.'_link_id', $item['link_id'], array('class' => 'link-to'));
 	echo '</td>';
 
-	// @deprecated SIDE is unused
-	if (!empty($item['side'])) {
-		if ($item['side'] == 'D') {
-		  // Debit
-		  echo '<td class="r">' . radix_html_form::number($i.'_dr',number_format($item['debit_amount'],2),$crdr_opts) . '</td><td>&nbsp;</td>';
-		} else {
-		  // Credit
-		  echo '<td>&nbsp;</td><td class="r">' . radix_html_form::number($i.'_cr',number_format($item['credit_amount'],2),$crdr_opts) . '</td>';
-		}
-		
-	} else {
-		// Display Both
-		// Debit
-		echo "<td class='r'>" . radix_html_form::number($i.'_dr',number_format($item['debit_amount'],2),$crdr_opts) . "</td>";
-		// Credit
-		echo "<td class='r'>" . radix_html_form::number($i.'_cr',number_format($item['credit_amount'],2),$crdr_opts) . "</td>";
-	}
+	// Display Both
+	// Debit
+	echo "<td class='r'>" . radix_html_form::number($i.'_dr', $item['debit_amount']) . "</td>";
+
+	// Credit
+	echo "<td class='r'>" . radix_html_form::number($i.'_cr', $item['credit_amount']) . "</td>";
+
 	echo '</tr>';
 }
 
@@ -131,7 +115,7 @@ if (count($this->FileList)) {
 // Buttons & Hiddden
 echo '<div class="bf">';
 echo radix_html_form::hidden('id',$this->AccountJournalEntry->id);
-echo '<input class="good" accesskey="s" name="a" type="submit" value="Save">';
+echo '<button accesskey="s" class="good" name="a" type="submit" value="save">Save</button>';
 echo '<button class="good" name="a" type="submit" value="save-copy">Save & Copy</button>';
 // echo '<input class="good" accesskey="s" name="a" type="submit" value="Save">';
 // echo radix_html_form::submit('c','Apply');
