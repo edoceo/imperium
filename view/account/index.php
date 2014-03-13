@@ -1,10 +1,10 @@
 <?php
 /**
 	Account Index View
-	
 	Displays a General Ledger
-
 */
+
+$_ENV['title'] = 'General Ledger';
 
 $x_kind = null;
 $img_ed = img('/silk/1.3/chart_bar_edit.png','Edit');

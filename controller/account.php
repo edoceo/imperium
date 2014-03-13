@@ -1,6 +1,12 @@
 <?php
+/**
+	@file
+	@brief Master Controller for Account 
+*/
 
 require_once('Account/Reconcile.php');
+
+$_ENV['title'] = 'Accounts';
 
 $this->Period = isset($_GET['p']) ? $_GET['p'] : 'm';
 $this->Month = isset($_GET['m']) ? $_GET['m'] : date('m');
@@ -42,6 +48,7 @@ if (empty($this->date_omega)) {
 // Format Date
 $this->date_alpha_f = strftime('%B %Y',strtotime($this->date_alpha));
 $this->date_omega_f = strftime('%B %Y',strtotime($this->date_omega));
+
 // Save to Session
 // @todo This should be done differently
 // @todo Would also like to make AccountTransaction Controller that does Transaction and Wizard in one

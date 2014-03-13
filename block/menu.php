@@ -144,7 +144,7 @@ echo '<li><a href="' . radix::link('/account') . '"><i class="fa fa-money"></i> 
     echo '<li><a href="' . radix::link('/account/report/balance-sheet') . '">',img('/silk/1.3/application_view_detail.png','Balance Sheet').'&nbsp;Balance Sheet</a></li>';
     echo '<li><a href="' . radix::link('/account/report/cash-flow') . '">',img('/silk/1.3/application_view_detail.png','Cash Flow Statement').'&nbsp;Cash Flow</a></li>';
     echo '<li><hr /></li>';
-    echo '<li><a href="' . radix::link('/account/tax-form') . '">' . img('/silk/1.3/application_view_detail.png','Tax Forms') . '&nbsp;Tax Schedules</a></li>';
+    echo '<li><a href="' . radix::link('/account/tax-form') . '">Tax Schedules</a></li>';
     echo '</ul>';
 echo '</li>';
 
