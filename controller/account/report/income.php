@@ -25,7 +25,7 @@ default:
 $sql = " select a.id as account_id,a.code as account_code, a.full_code, a.name as full_name,sum(b.amount) as balance from ";
 $sql.= " account a join account_ledger b on a.id=b.account_id join account_journal c on b.account_journal_id=c.id ";
 $sql.= " where a.kind like 'Revenue%' and c.date >= '{$this->date_alpha}' and c.date<='{$this->date_omega}' ";
-if (intval($_GET['ex_close']) == 1) {
+if ('true' == $_GET['xc']) {
 	$sql.= " and c.kind != 'C' ";
 }
 $sql.= " group by a.id,a.full_code,a.code,a.name ";
@@ -38,7 +38,7 @@ radix_session::flash('fail', radix_db_sql::lastError());
 $sql = " select a.id as account_id,a.code as account_code, a.full_code, a.name as full_name,sum(b.amount) as balance from ";
 $sql.= " account a join account_ledger b on a.id=b.account_id join account_journal c on b.account_journal_id=c.id ";
 $sql.= " where a.kind like 'Expense%' and c.date >= '{$this->date_alpha}' and c.date<='{$this->date_omega}' ";
-if (intval($_GET['ex_close']) == 1) {
+if ('true' == $_GET['xc']) {
 	$sql.= " and c.kind != 'C' ";
 }
 $sql.= " group by a.id,a.full_code,a.code,a.name ";

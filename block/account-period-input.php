@@ -16,9 +16,9 @@ echo radix_html_form::select('p', $_GET['p'], radix::$view->PeriodList); //null,
 echo radix_html_form::submit('c', 'View');
 
 echo '<div class="bf c">';
-echo '<label for="ex_close">&nbsp;' . radix_html_form::checkbox('ex_close', radix::$view->ExcludeClose, null, array('Checked'=>1,'unChecked'=>0)) . '&nbsp;Exclude Closing Transactions</label>';
+echo '<label for="xc">&nbsp;' . radix_html_form::checkbox('xc', 'true', ('true'==$_GET['xc'] ? array('checked'=>'checked') : null) ) . '&nbsp;Exclude Closing Transactions</label>';
 echo '&nbsp;';
-echo '<label for="ex_zeros">&nbsp;' . radix_html_form::checkbox('ex_zeros', radix::$view->ExcludeZeros, null, array('Checked'=>1,'unChecked'=>0)) . '&nbsp;Exclude Zero Balance Accounts</label>';
+echo '<label for="xz">&nbsp;' . radix_html_form::checkbox('xz', 'true', ('true'==$_GET['xz'] ? array('checked'=>'checked') : null)) . '&nbsp;Exclude Zero Balance Accounts</label>';
 echo '</div>';
 
 echo '</div>';
