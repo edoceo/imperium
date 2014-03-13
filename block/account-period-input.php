@@ -10,9 +10,9 @@
 
 echo '<div class="bf c">';
 
-echo radix_html_form::select('m', radix::$view->Month, radix::$view->MonthList); //null,$this->data['month'],null,false); // Month
-echo radix_html_form::select('y', radix::$view->Year, radix::$view->YearList ); //null,$this->data['year'],null,false); // Year
-echo radix_html_form::select('p', radix::$view->Period, radix::$view->PeriodList); //null,$this->data['period'],null,false); // Period
+echo radix_html_form::select('m', $_GET['m'], radix::$view->MonthList); //null,$this->data['month'],null,false); // Month
+echo radix_html_form::select('y', $_GET['y'], radix::$view->YearList ); //null,$this->data['year'],null,false); // Year
+echo radix_html_form::select('p', $_GET['p'], radix::$view->PeriodList); //null,$this->data['period'],null,false); // Period
 echo radix_html_form::submit('c', 'View');
 
 echo '<div class="bf c">';

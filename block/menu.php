@@ -138,13 +138,13 @@ echo '<li><a href="' . radix::link('/account') . '"><i class="fa fa-money"></i> 
     //$menu1[] = array('/account/trial-balance',img('/silk/1.3/table_lightning.png','View Trial Balance').'&nbsp;Trial Balance');
     echo '<li><a href="' . radix::link('/account/close') . '">' , img('/silk/1.3/table_gear.png','Close Period') . '&nbsp;Close Period</a></li>';
     echo '<li><hr /></li>';
-    echo '<li><a href="' . radix::link('/account.statement/trial-balance') . '">',img('/silk/1.3/application_view_detail.png','Trial Balance').'&nbsp;Trial Balance</a></li>';
-    echo '<li><a href="' . radix::link('/account.statement/income') . '">',img('/silk/1.3/application_view_detail.png','Income Statement').'&nbsp;Income (P&amp;L)</a></li>';
-    echo '<li><a href="' . radix::link('/account.statement/owner-equity') . '">',img('/silk/1.3/application_view_detail.png','Owners Equity Statement').'&nbsp;Owner Equity</a></li>';
-    echo '<li><a href="' . radix::link('/account.statement/balance-sheet') . '">',img('/silk/1.3/application_view_detail.png','Balance Sheet').'&nbsp;Balance Sheet</a></li>';
-    echo '<li><a href="' . radix::link('/account.statement/cash-flow') . '">',img('/silk/1.3/application_view_detail.png','Cash Flow Statement').'&nbsp;Cash Flow</a></li>';
+    echo '<li><a href="' . radix::link('/account/report/trial-balance') . '">',img('/silk/1.3/application_view_detail.png','Trial Balance').'&nbsp;Trial Balance</a></li>';
+    echo '<li><a href="' . radix::link('/account/report/income') . '">',img('/silk/1.3/application_view_detail.png','Income Statement').'&nbsp;Income (P&amp;L)</a></li>';
+    echo '<li><a href="' . radix::link('/account/report/owner-equity') . '">',img('/silk/1.3/application_view_detail.png','Owners Equity Statement').'&nbsp;Owner Equity</a></li>';
+    echo '<li><a href="' . radix::link('/account/report/balance-sheet') . '">',img('/silk/1.3/application_view_detail.png','Balance Sheet').'&nbsp;Balance Sheet</a></li>';
+    echo '<li><a href="' . radix::link('/account/report/cash-flow') . '">',img('/silk/1.3/application_view_detail.png','Cash Flow Statement').'&nbsp;Cash Flow</a></li>';
     echo '<li><hr /></li>';
-    echo '<li><a href="' . radix::link('/account.form') . '">' . img('/silk/1.3/application_view_detail.png','Tax Forms') . '&nbsp;Tax Schedules</a></li>';
+    echo '<li><a href="' . radix::link('/account/tax-form') . '">' . img('/silk/1.3/application_view_detail.png','Tax Forms') . '&nbsp;Tax Schedules</a></li>';
     echo '</ul>';
 echo '</li>';
 
