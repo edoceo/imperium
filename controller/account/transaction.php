@@ -54,7 +54,7 @@ case 'save-copy':
 	if ($id) {
 		radix_session::flash('info', 'Account Journal Entry #' . $id . ' updated');
 	} else {
-		radix_session::flash('info', 'Account Journal Entry #' . $aje->id . ' created');
+		radix_session::flash('info', 'Account Journal Entry #' . $aje['id'] . ' created');
 	}
 
 	// Save Ledger Entries
@@ -94,7 +94,7 @@ case 'save-copy':
 		if ($id) {
 			radix_session::flash('info', 'Account Ledger Entry #' . $id . ' updated');
 		} else {
-			radix_session::flash('info', 'Account Ledger Entry #' . $ale->id . ' created');
+			radix_session::flash('info', 'Account Ledger Entry #' . $ale['id'] . ' created');
 		}
 	}
 
@@ -107,7 +107,7 @@ case 'save-copy':
 	// File!
 	if ( (!empty($_FILES['file'])) && (Base_File::goodPost($_FILES['file'])) ) {
 		 $bf = Base_File::copyPost($_FILES['file']);
-		 $bf->link = $bf->link($aje);
+		 $bf['link'] = $bf->link($aje);
 		 $bf->save();
 		 radix_session::flash('info', 'Attachment Created');
 	}
@@ -164,6 +164,7 @@ if ($id) {
 	$this->FileList = $this->AccountJournalEntry->getFiles();
 // } elseif (isset($this->_s->AccountTransaction)) {
 } elseif (!empty($_SESSION['account-transaction'])) {
+	die('no-account-sessoin');
 	$this->AccountJournalEntry = $_SESSION['account-transaction']['aje']; // $this->_s->AccountTransaction->AccountJournalEntry;
 	$this->AccountLedgerEntryList = $this->_s->AccountTransaction->AccountLedgerEntryList;
 	// @todo Here on on Save (above)?
@@ -176,25 +177,25 @@ if ($id) {
 }
 
 // Correct Missing Date
-if (empty($this->AccountJournalEntry->date)) {
-	$this->AccountJournalEntry->date = isset($this->_s->AccountJournalEntry->date) ? $this->_s->AccountJournalEntry->date : date('Y-m-d');
+if (empty($this->AccountJournalEntry['date'])) {
+	$this->AccountJournalEntry['date'] = isset($_SESSION['account']['date']) ? $_SESSION['account']['date'] : date('Y-m-d');
 }
 
 // Add Prev / Next Links
 $this->jump_list = array();
-if (!empty($this->AccountJournalEntry->id)) {
+if (!empty($this->AccountJournalEntry['id'])) {
 
 	// Prev Five
-	$s = sprintf('SELECT id FROM account_journal where id < %d order by id desc limit 5',$this->AccountJournalEntry->id);
+	$s = sprintf('SELECT id FROM account_journal where id < %d order by id desc limit 5',$this->AccountJournalEntry['id']);
 	$r = radix_db_sql::fetch_all($s);
 	$r = array_reverse($r);
 	foreach ($r as $x) {
 		$this->jump_list[] = array('controller'=>'account','action'=>'transaction','id'=>$x['id']);
 	}
 	// This
-	$this->jump_list[] = array('controller'=>'account','action'=>'transaction','id'=>$this->AccountJournalEntry->id);
+	$this->jump_list[] = array('controller'=>'account','action'=>'transaction','id'=>$this->AccountJournalEntry['id']);
 	// Next Five
-	$s = sprintf('SELECT id FROM account_journal where id > %d order by id asc limit 5',$this->AccountJournalEntry->id);
+	$s = sprintf('SELECT id FROM account_journal where id > %d order by id asc limit 5',$this->AccountJournalEntry['id']);
 	$r = radix_db_sql::fetch_all($s);
 	foreach ($r as $x) {
 		$this->jump_list[] = array('controller'=>'account','action'=>'transaction','id'=>$x['id']);

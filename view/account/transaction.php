@@ -166,6 +166,12 @@ function acChangeSelect(event,ui)
 
 function acInit()
 {
+    $('input[type=text]').on('click', function() { this.select(); });
+    $('input[type=number]').on('click', function() { this.select(); });
+
+    $("input[name$='_cr']").on('blur change', updateJournalEntryBalance );
+    $("input[name$='_dr']").on('blur change', updateJournalEntryBalance );
+
     // $("input[name*='account_name']").autocomplete('destroy');
     $("input[name*='account_name']").autocomplete({
 		delay:100,
@@ -284,12 +290,6 @@ function updateJournalEntryBalance()
 $(function() {
 
     $('#account-transaction-date').focus();
-
-    $('input[type=text]').on('click', function() { this.select(); });
-    $('input[type=number]').on('click', function() { this.select(); });
-
-    $("input[name$='_cr']").on('blur change', updateJournalEntryBalance );
-    $("input[name$='_dr']").on('blur change', updateJournalEntryBalance );
 
     updateJournalEntryBalance();
     acInit();
