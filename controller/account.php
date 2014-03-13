@@ -2,6 +2,10 @@
 
 require_once('Account/Reconcile.php');
 
+$this->Period = isset($_GET['p']) ? $_GET['p'] : 'm';
+$this->Month = isset($_GET['m']) ? $_GET['m'] : date('m');
+$this->Year = isset($_GET['y']) ? $_GET['y'] : date('Y');
+
 // @todo this is duplicated in the AccountStatement Controller - how to reslove?
 // Initialise Inputs
 if ( (isset($_GET['d0'])) && (isset($_GET['d1'])) ) {
@@ -11,10 +15,6 @@ if ( (isset($_GET['d0'])) && (isset($_GET['d1'])) ) {
 } elseif (isset($_SESSION['AccountPeriod']['date_alpha'])) {
 	$this->date_alpha = $_SESSION['AccountPeriod']['date_alpha'];
 	$this->date_omega = $_SESSION['AccountPeriod']['date_omega'];
-} else {
-	$this->Period = isset($_GET['p']) ? $_GET['p'] : 'm';
-	$this->Month = isset($_GET['m']) ? $_GET['m'] : date('m');
-	$this->Year = isset($_GET['y']) ? $_GET['y'] : date('Y');
 }
 
 // Period Processing?
