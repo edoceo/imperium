@@ -255,21 +255,19 @@ class Account extends ImperiumBase
     {
         // @todo Detect the Period
         // @todo Detect Account Type - Permanant Accounts since life of Biz, Temp since previous period
-        $d = Zend_Registry::get('db');
+
         //$sql = "select sum(amount) as balance from general_ledger ";
         //$sql.= " where account_id=$this->id and date < '$date' and date>='2006-01-01'";
-    
-        $sql = $d->select();
-        $sql->from('general_ledger',array('sum(amount) as balance'));
-        $sql->where('account_id = ?',intval($this->id));
-        //$sql->where('date >= ?',$date_alpha);
-        $sql->where('date <= ?',$date);
+
+        $sql = 'SELECT sum(amount) FROM general_ledger WHERE account_id = ? AND date <= ? ';
+        $arg = array($this->_data['id'],$date);
+
         if ($ex_close) {
-            $sql->where('kind != ?','C');
-            //$sql.= " and kind != 'C' ";
+        	$sql.= ' AND kind != ? ';
+        	$arg[] = 'C';
         }
-        // echo $sql->assemble() . '<br />';
-        $x = $d->fetchOne($sql);
+
+        $ret = radix_db_sql::fetch_one($sql, $arg);
         // Correct Balance to Positive Number
         if ( (substr($this->kind,0,5)=='Asset') || (substr($this->kind,0,7)=='Expense') || (strpos($this->kind,'Drawing') > 0) ) {
             $x = $x * -1;
