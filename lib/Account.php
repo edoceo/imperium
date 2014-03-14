@@ -320,7 +320,7 @@ class Account extends ImperiumBase
 			$arg[] = 'C';
 		}
 
-		$ret = radix_db_sql::fetch_one($sql);
+		$ret = radix_db_sql::fetch_one($sql, $arg);
 		$k = $this->_data['kind'];
 		if ( (substr($k,0,5)=='Asset') || (substr($k,0,7)=='Expense') || (strpos($k,'Drawing') > 0) ) {
 		  $ret = $ret * -1;

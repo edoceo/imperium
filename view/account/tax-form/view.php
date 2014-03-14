@@ -11,7 +11,10 @@
 $_ENV['title'] = array('Account', 'Tax Forms', $this->Form['name'], $this->date_alpha_f);
 
 echo '<form action="" class="np" method="get">';
+echo '<div>';
+echo radix_html_form::hidden('id', $_GET['id']);
 echo radix::block('account-period-input');
+echo '</div>';
 echo '</form>';
 
 // radix::dump($this->LineList);
@@ -23,7 +26,6 @@ foreach ($this->LineList as $item) {
 	if ($item['balance'] == 0) {
 		//continue;
 	}
-	// radix::dump($item);
 
 	// Tax Line
 	echo "<tr><th class='l' colspan='2'>" . $item['name'] . "</th><th class='r'>" . number_format($item['balance'],2) . "</th></tr>";
