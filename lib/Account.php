@@ -300,41 +300,37 @@ class Account extends ImperiumBase
         }
         return floatval($x);
     }
+
     /**
-    Account balanceSpan() displays the balance change between two dates
-    @todo Detect the Period
+		Account balanceSpan() displays the balance change between two dates
+		@todo Detect the Period
     */
     function balanceSpan($date_alpha,$date_omega,$ex_close=false)
     {
-        $db = Zend_Registry::get('db');
+    	$arg = array();
+		$sql = 'SELECT sum(amount) FROM general_ledger ';
+		$sql.= ' WHERE account_id = ?';
+		$arg[] = intval($this->_data['id']);
+		$sql.= ' AND (date >= ? AND date <= ? )';
+		$arg[] = $date_alpha;
+		$arg[] = $date_omega;
 
-    //$sql = 'select sum(amount) as balance ';
-    //$sql.= ' from general_ledger ';
-    //$sql.= ' where account_id=' . intval($this->id);
-    //$sql.= " and date >= '$date_alpha' and date<='$date_omega' ";
+		if ($ex_close) {
+			$sql.= ' AND kind != ?';
+			$arg[] = 'C';
+		}
 
-    $sql = $db->select();
-    $sql->from('general_ledger',array('sum(amount) as balance'));
-    $sql->where('account_id = ?',intval($this->id));
-    $sql->where('date >= ?',$date_alpha);
-    $sql->where('date <= ?',$date_omega);
-    //Zend_Debug::dump($sql->assemble());
-    if ($ex_close) {
-      $sql->where('kind != ?','C');
-    }
-    
-    $x = $db->fetchOne($sql);
-    if ( (substr($this->kind,0,5)=='Asset') || (substr($this->kind,0,7)=='Expense') || (strpos($this->kind,'Drawing') > 0) ) {
-      $x = $x * -1;
-    }
-    // Do I need this?
-    //if ( (substr($this->kind,0,5)=='Asset') || (substr($this->kind,0,7)=='Expense') || (strpos($this->kind,'Drawing') > 0) ) {
-    //  $x = $x * -1;
-    //}
-    return floatval($x);
-    }
-  /**
-  */
+		$ret = radix_db_sql::fetch_one($sql);
+		$k = $this->_data['kind'];
+		if ( (substr($k,0,5)=='Asset') || (substr($k,0,7)=='Expense') || (strpos($k,'Drawing') > 0) ) {
+		  $ret = $ret * -1;
+		}
+
+		return floatval($ret);
+	}
+
+	/**
+	*/
     function creditTotal($a_ts,$z_ts,$with_closing=true)
     {
         $sql = "select sum(amount) from general_ledger ";
