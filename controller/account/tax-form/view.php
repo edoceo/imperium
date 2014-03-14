@@ -20,7 +20,7 @@ foreach ($list as $line) {
 	foreach ($res as $x) {
 		$a = new Account($x);
 		// $a['balance'] = $a->balanceAt($this->date_omega);
-		$a['balance'] = $a->balanceSpan($this->data_alpha, $this->date_omega);
+		$a['balance'] = $a->balanceSpan($this->date_alpha, $this->date_omega);
 		$line['balance'] += $a['balance'];
 		$line['accounts'][] = array(
 	 		'name' => $a['name'],
