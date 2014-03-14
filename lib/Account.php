@@ -248,6 +248,7 @@ class Account extends ImperiumBase
   //  }
     //    return floatval($x);
     //}
+
     /**
         Account balanceAt balance at close of a day
     */
@@ -269,11 +270,12 @@ class Account extends ImperiumBase
 
         $ret = radix_db_sql::fetch_one($sql, $arg);
         // Correct Balance to Positive Number
-        if ( (substr($this->kind,0,5)=='Asset') || (substr($this->kind,0,7)=='Expense') || (strpos($this->kind,'Drawing') > 0) ) {
-            $x = $x * -1;
+        if ( (substr($this->_data['kind'],0,5)=='Asset') || (substr($this->_data['kind'],0,7)=='Expense') || (strpos($this->_data['kind'],'Drawing') > 0) ) {
+            $ret = $ret * -1;
         }
-        return floatval($x);
+        return floatval($ret);
     }
+
     /**
         Account balanceBefre displays the balance before given date
     */

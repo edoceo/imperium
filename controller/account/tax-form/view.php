@@ -19,9 +19,10 @@ foreach ($list as $line) {
 	$res = radix_db_sql::fetchAll("select id,name from account where account_tax_line_id = {$line['id']}");
 	foreach ($res as $x) {
 		$a = new Account($x);
-	 	$a['balance'] = $a->balanceAt($this->date_alpha);
+		$a['balance'] = $a->balanceAt($this->date_omega);
+		// $a['balance'] = $a->balanceSpan($this->data_alpha, $this->date_omega);
 		$line['balance'] += $a['balance'];
-	 	$line['accounts'][] = array(
+		$line['accounts'][] = array(
 	 		'name' => $a['name'],
 	 		'balance' => $a['balance'],
 		);
