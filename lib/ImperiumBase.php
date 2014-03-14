@@ -99,10 +99,9 @@ class ImperiumBase implements ArrayAccess
     function save()
     {
         // Set Sane Defaults
-        if (empty($this->_data['auth_user_id'])) {
-            // $cu = Zend_Auth::getInstance()->getIdentity();
-            $this->_data['auth_user_id'] = $_SESSION['uid']; // $cu->id;
-        }
+        // if (empty($this->_data['auth_user_id'])) {
+        //     $this->_data['auth_user_id'] = $_SESSION['uid']; // $cu->id;
+        // }
         // if (empty($this->_data['hash'])) $this->_data['hash'] = $this->hash();
 
         // Set some Fields to Null

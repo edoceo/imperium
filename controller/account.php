@@ -5,6 +5,7 @@
 */
 
 require_once('Account/Reconcile.php');
+require_once('Account/TaxFormLine.php');
 
 $_ENV['title'] = 'Accounts';
 

@@ -12,21 +12,6 @@ class Account extends ImperiumBase
 {
     protected $_table = 'account';
 
-    public $id;
-    public $parent_id;
-    public $code;
-    public $name;
-    // public $number;
-    public $balance;
-    public $link_to;
-    public $link_id;
-    public $flag;
-    public $account_tax_line_id;
-    public $active = 't';
-    // Bank Information
-    public $bank_routing;
-    public $bank_account;
-
     //const OBJECT_TYPE = 100;
 
     // These seem to be unused
@@ -95,39 +80,42 @@ class Account extends ImperiumBase
 
         return true;
     }
-    /**
-    */
+
+	/**
+	*/
     function save()
     {
-    if (intval($this->parent_id)==0) $this->parent_id = null;
-    if (intval($this->account_tax_line_id)==0) $this->account_tax_line_id = null;
-    if (floatval($this->balance)==0) $this->balance = null;
-    if (intval($this->link_to)==0) $this->link_to = null;
-    if (intval($this->link_id)==0) $this->link_id = null;
-        // Build the Parent Path and Full Name
-        $path = array();
-        $path[] = $this->code;
-        $db = Zend_Registry::get('db');
-        $parent_id = $this->parent_id;
-        $i = 0;
-        while ($parent_id) {
-            $i++;
-            $rs = $db->fetchRow("select parent_id,code from account where id=$parent_id");
-            if ($rs) {
-                $parent_id = $rs->parent_id;
-                $path[] = $rs->code;
-            }
-            $parent_id = null;
-            if ($i > 5) {
-                break;
-            }
-        }
-        $this->full_code = implode('/',array_reverse($path));
-        $this->full_name = $this->full_code . ' - ' . $this->kind . ':' . $this->name;
-        $ret = parent::save();
-        $this->balanceUpdate();
-        //$this->balanceAtEnd(date('Y-m-d 23:59'));
-    }
+		if (intval($this->_data['parent_id'])==0) $this->_data['parent_id'] = null;
+		if (intval($this->_data['account_tax_line_id'])==0) $this->_data['account_tax_line_id'] = null;
+		if (floatval($this->_data['balance'])==0) $this->_data['balance'] = null;
+		if (intval($this->_data['link_to'])==0) $this->_data['link_to'] = null;
+		if (intval($this->_data['link_id'])==0) $this->_data['link_id'] = null;
+
+		// Build the Parent Path and Full Name
+		$path = array();
+		$path[] = $this->_data['code'];
+		$parent_id = $this->_data['parent_id'];
+		$i = 0;
+		while ($parent_id) {
+			$i++;
+			$rs = radix_db_sql::fetchRow('SELECT parent_id,code FROM account where id = ?', array($parent_id));
+			if ($rs) {
+				$parent_id = $rs['parent_id'];
+				$path[] = $rs['code'];
+			}
+			$parent_id = null;
+			if ($i > 5) {
+				break;
+			}
+		}
+		$this->_data['active'] = 't';
+		$this->_data['full_code'] = implode('/',array_reverse($path));
+		$this->_data['full_name'] = $this->_data['full_code'] . ' - ' . $this->_data['kind'] . ':' . $this->_data['name'];
+		$ret = parent::save();
+		$this->balanceUpdate();
+		//$this->balanceAtEnd(date('Y-m-d 23:59'));
+	}
+
     /**
         @deprecated
     */
@@ -208,18 +196,18 @@ class Account extends ImperiumBase
     */
     function balanceUpdate()
     {
-        $db = Zend_Registry::get('db');
         // Get Current Balance
-        $x = $db->fetchOne("select sum(amount) from account_ledger where account_id=$this->id");
+        $x = radix_db_sql::fetch_one('SELECT sum(amount) FROM account_ledger WHERE account_id = ?', array($this->_data['id']));
         $balance = floatval($x);
         // Sum the Child Accounts
-        $rs = $this->child_accounts;
-        foreach ($rs as $a) {
-            $x = $db->fetchOne("select sum(amount) from account_ledger where account_id=$a->id");
-            $balance += floatval($x);
-        }
+        // $rs = $this->child_accounts;
+        // foreach ($rs as $a) {
+        //     $x = $db->fetchOne("select sum(amount) from account_ledger where account_id=$a->id");
+        //     $balance += floatval($x);
+        // }
+
         // Update Account
-        $db->query("update account set balance=$balance where id=$this->id");
+        radix_db_sql::query("UPDATE account SET balance = ? WHERE id = ?", array($balance, $this->_data['id']));
         return $balance;
     }
 
@@ -400,10 +388,10 @@ class Account extends ImperiumBase
     */
     static function listAccounts()
     {
-        $sql = "select account.*,account_tax_line.name as account_tax_line_name ";
-        $sql.= " from account ";
-            $sql.= " left join account_tax_line on account.account_tax_line_id = account_tax_line.id";
-        $sql.= " order by full_code asc, code asc";
+        $sql = "SELECT account.*, account_tax_line.line || ': ' || account_tax_line.name AS account_tax_line_name ";
+        $sql.= ' FROM account ';
+            $sql.= ' LEFT JOIN account_tax_line ON account.account_tax_line_id = account_tax_line.id';
+        $sql.= ' ORDER BY full_code ASC, code ASC';
 
         $rs = radix_db_sql::fetchAll($sql);
         $list = array();

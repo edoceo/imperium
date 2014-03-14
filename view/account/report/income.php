@@ -20,7 +20,7 @@ echo '<table class="w">';
 echo '<tr class="ro"><th class="l" colspan="3" >Revenues</td></tr>';
 foreach ($this->RevenueAccountList as $a) {
 
-    $uri = radix::link('/account/journal?' . http_build_query(array('id'=>$a['account_id'], 'd0'=>$this->date_alpha, 'd1'=>$this->date_omega)));
+    $uri = radix::link('/account/ledger?' . http_build_query(array('id'=>$a['account_id'], 'd0'=>$this->date_alpha, 'd1'=>$this->date_omega)));
 
     echo '<tr class="rero">';
     //echo "<td style='padding-left: 2em;'>{$item->full_code}  {$item->account_name}</td>";

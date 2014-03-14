@@ -38,14 +38,15 @@ class AccountTaxFormLine extends ImperiumBase
 		return $list;
 	}
 
-	static function listTaxLines() {
-		$db = Zend_Registry::get('db');
-		$sql = "select account_tax_line.id,account_tax_form.name || ': ' || account_tax_line.name ";
-		$sql.= " from account_tax_line";
-			$sql.= " join account_tax_form on account_tax_line.account_tax_form_id = account_tax_form.id";
-		$sql.= " order by account_tax_form.name,account_tax_line.sort";
-		$rs = $db->fetchPairs($sql);
-		return $rs;
+	static function listTaxLines()
+	{
+		$sql = "SELECT account_tax_line.id, account_tax_form.name || ': ' || account_tax_line.line || ' - ' || account_tax_line.name AS name ";
+		$sql.= ' FROM account_tax_line';
+			$sql.= ' JOIN account_tax_form ON account_tax_line.account_tax_form_id = account_tax_form.id';
+		$sql.= ' ORDER BY account_tax_form.name,account_tax_line.sort';
+		$res = radix_db_sql::fetchAll($sql);
+		return $res;
+
 		// Specific Form?
 		/*
 		$list = array();
