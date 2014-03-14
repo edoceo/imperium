@@ -9,33 +9,49 @@ require_once('Account/TaxFormLine.php');
 
 $_ENV['title'] = 'Accounts';
 
-$this->Period = isset($_GET['p']) ? $_GET['p'] : 'm';
-$this->Month = isset($_GET['m']) ? $_GET['m'] : date('m');
-$this->Year = isset($_GET['y']) ? $_GET['y'] : date('Y');
+$this->Period = $_SESSION['account-view']['period'];
+$this->Month = $_SESSION['account-view']['month'];
+$this->Year = $_SESSION['account-view']['year'];
+
+if (!empty($_GET['p'])) {
+	$this->Period = $_GET['p'];
+	$this->Month = isset($_GET['m']) ? $_GET['m'] : $_SESSION['account-view']['month'];
+	$this->Year = isset($_GET['y']) ? $_GET['y'] : $_SESSION['account-view']['year'];
+}
 
 // @todo this is duplicated in the AccountStatement Controller - how to reslove?
 // Initialise Inputs
-if ( (isset($_GET['d0'])) && (isset($_GET['d1'])) ) {
-	$this->Period = 'x';
-	$this->date_alpha = date('Y-m-d',strtotime($_GET['d0']));
-	$this->date_omega = date('Y-m-d',strtotime($_GET['d1']));
+if ( (isset($_GET['d0'])) || (isset($_GET['d1'])) ) {
+	$this->Period = 'r';
 } elseif (isset($_SESSION['AccountPeriod']['date_alpha'])) {
 	$this->date_alpha = $_SESSION['AccountPeriod']['date_alpha'];
 	$this->date_omega = $_SESSION['AccountPeriod']['date_omega'];
 }
 
-// Period Processing?
-if ($this->Period == 'm') {
+if (empty($this->Period)) {
+	$this->Period = 'm';
+}
+
+switch ($this->Period) {
+case 'm':
 	$this->date_alpha = date('Y-m-d',mktime(0,0,0,$this->Month,1,$this->Year));
 	$this->date_omega = date('Y-m-t',mktime(0,0,0,$this->Month));
-} elseif ($this->Period == 'q') {
+	break;
+case 'q':
 	// @note this may or may not be an accurate way to find the Quarter
 	$this->date_alpha = date('Y-m-d',mktime(0,0,0,$this->Month,1,$this->Year));
 	$this->date_omega = date('Y-m-t',mktime(0,0,0,$this->Month+2,1,$this->Year));
-} elseif ($this->Period == 'y') {
-	// @note this may or may not be an accurate way to find the full 12 months
+	break;
+case 'y':
 	$this->date_alpha = date('Y-m-d',mktime(0,0,0,$this->Month,1,$this->Year));
 	$this->date_omega = date('Y-m-t',mktime(0,0,0,$this->Month+11,1,$this->Year));
+	break;
+case 'r': // Range
+	$this->date_alpha = date('Y-m-d',strtotime($_GET['d0']));
+	$this->date_omega = date('Y-m-d',strtotime($_GET['d1']));
+	$this->Month = date('m', strtotime($_GET['d0']));
+	$this->Year = date('Y', strtotime($_GET['d0']));
+	break;
 }
 
 // Handle Empties
@@ -54,8 +70,12 @@ $this->date_omega_f = strftime('%B %Y',strtotime($this->date_omega));
 // @todo This should be done differently
 // @todo Would also like to make AccountTransaction Controller that does Transaction and Wizard in one
 
-$_SESSION['AccountPeriod']['date_alpha'] = $this->date_alpha;
-$_SESSION['AccountPeriod']['date_omega'] = $this->date_omega;
+// @deprecated
+// $_SESSION['AccountPeriod']['date_alpha'] = $this->date_alpha;
+// $_SESSION['AccountPeriod']['date_omega'] = $this->date_omega;
+
+$_SESSION['account-view']['period'] = $this->Period;
+$_SESSION['account-view']['month'] = $this->Month;
 
 // Build other View Data (Month, Year, Period)
 $this->MonthList = array();
@@ -78,14 +98,5 @@ $this->PeriodList = array(
 // Account List
 // $this->AccountPeriod = $this->_s->AccountPeriod;
 $this->AccountList = Account::listAccounts();
-
-// 	$sql = 'SELECT DISTINCT id, full_name AS label, full_name AS result';
-// 	$sql.= ' FROM account';
-// 	$sql.= ' WHERE name ~* ? OR full_name ~* ?';
-// 	$sql.= ' ORDER BY full_name';
-// 	$res = radix_db_sql::fetchAll($sql, array($q, "^$q"));
-// 	die(json_encode($res));
-
-$this->AccountPairList = Account::listAccountPairs();
-// Account Kind List
 $this->AccountKindList = Account::$kind_list;
+$this->AccountPairList = Account::listAccountPairs();
