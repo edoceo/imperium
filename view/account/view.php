@@ -3,6 +3,8 @@
     @todo Link this Account to A Customer
 */
 
+$this->Account = new Account($_GET['id']);
+
 // $this->form('Account',array('action'=>$this->appurl.'/account/save','method'=>'post'));
 echo '<form action="' . radix::link('/account/save') . '" method="post">';
 echo '<table>';
@@ -23,8 +25,6 @@ foreach ($this->AccountList as $item) {
 	$list[$item['id']] = $item['full_name'];
 }
 echo "<tr><td class='b r'>Parent:</td><td colspan='2'>" . radix_html_form::select('parent_id', $this->Account['parent_id'], $list) . '</td></tr>';
-
-
 
 /*
 echo "<tr><td class='b r'>Type:</td><td><select name='flag_life'>";
@@ -78,3 +78,7 @@ echo '<input name="a" type="submit" value="Delete">';
 echo '</div>';
 
 echo '</form>';
+
+// Show Transaction Count
+$res = radix_db_sql::fetch_one('SELECT count(id) FROM account_ledger WHERE account_id = ?', array($this->Account['id']));
+echo '<p>' . $res . ' total transactions in this account</p>';

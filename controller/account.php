@@ -9,9 +9,17 @@ require_once('Account/TaxFormLine.php');
 
 $_ENV['title'] = 'Accounts';
 
+if (empty($_SESSION['account-view']['period'])) $_SESSION['account-view']['period'] = 'm';
+if (empty($_SESSION['account-view']['month'])) $_SESSION['account-view']['month'] = date('m');
+if (empty($_SESSION['account-view']['year'])) $_SESSION['account-view']['year'] = date('Y');
+if (empty($_SESSION['account-view']['date_alpha'])) $_SESSION['account-view']['date_alpha'] = date('Y-m-01');
+if (empty($_SESSION['account-view']['date_omega'])) $_SESSION['account-view']['date_omega'] = date('Y-m-t');
+
 $this->Period = $_SESSION['account-view']['period'];
 $this->Month = $_SESSION['account-view']['month'];
 $this->Year = $_SESSION['account-view']['year'];
+$this->date_alpha = $_SESSION['account-view']['date_alpha'];
+$this->date_omega = $_SESSION['account-view']['date_omega'];
 
 if (!empty($_GET['p'])) {
 	$this->Period = $_GET['p'];
@@ -21,16 +29,12 @@ if (!empty($_GET['p'])) {
 
 // @todo this is duplicated in the AccountStatement Controller - how to reslove?
 // Initialise Inputs
-if ( (isset($_GET['d0'])) || (isset($_GET['d1'])) ) {
-	$this->Period = 'r';
-} elseif (isset($_SESSION['AccountPeriod']['date_alpha'])) {
-	$this->date_alpha = $_SESSION['AccountPeriod']['date_alpha'];
-	$this->date_omega = $_SESSION['AccountPeriod']['date_omega'];
-}
-
-if (empty($this->Period)) {
-	$this->Period = 'm';
-}
+// if ( (isset($_GET['d0'])) || (isset($_GET['d1'])) ) {
+// 	$this->Period = 'r';
+// //} elseif (isset($_SESSION['AccountPeriod']['date_alpha'])) {
+// //	$this->date_alpha = $_SESSION['AccountPeriod']['date_alpha'];
+// //	$this->date_omega = $_SESSION['AccountPeriod']['date_omega'];
+// }
 
 switch ($this->Period) {
 case 'm':
@@ -47,28 +51,21 @@ case 'y':
 	$this->date_omega = date('Y-m-t',mktime(0,0,0,$this->Month+11,1,$this->Year));
 	break;
 case 'r': // Range
-	$this->date_alpha = date('Y-m-d',strtotime($_GET['d0']));
-	$this->date_omega = date('Y-m-d',strtotime($_GET['d1']));
-	$this->Month = date('m', strtotime($_GET['d0']));
-	$this->Year = date('Y', strtotime($_GET['d0']));
+	if (!empty($_GET['d0'])) {
+		$this->date_alpha = date('Y-m-d',strtotime($_GET['d0']));
+	}
+	if (!empty($_GET['d1'])) {
+		$this->date_omega = date('Y-m-d',strtotime($_GET['d1']));
+	}
+	// @todo decide to pick from Alpha or Omega date
+	// $this->Month = date('m', strtotime($_GET['d0']));
+	// $this->Year = date('Y', strtotime($_GET['d0']));
 	break;
-}
-
-// Handle Empties
-if (empty($this->date_alpha)) {
-	$this->date_alpha = date('Y-m-01');
-}
-if (empty($this->date_omega)) {
-	$this->date_omega = date('Y-m-t');
 }
 
 // Format Date
 $this->date_alpha_f = strftime('%B %Y',strtotime($this->date_alpha));
 $this->date_omega_f = strftime('%B %Y',strtotime($this->date_omega));
-
-// Save to Session
-// @todo This should be done differently
-// @todo Would also like to make AccountTransaction Controller that does Transaction and Wizard in one
 
 // @deprecated
 // $_SESSION['AccountPeriod']['date_alpha'] = $this->date_alpha;
@@ -76,6 +73,9 @@ $this->date_omega_f = strftime('%B %Y',strtotime($this->date_omega));
 
 $_SESSION['account-view']['period'] = $this->Period;
 $_SESSION['account-view']['month'] = $this->Month;
+$_SESSION['account-view']['year'] = $this->Year;
+$_SESSION['account-view']['date_alpha'] = $this->date_alpha;
+$_SESSION['account-view']['date_omega'] = $this->date_omega;
 
 // Build other View Data (Month, Year, Period)
 $this->MonthList = array();

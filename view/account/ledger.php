@@ -10,6 +10,7 @@ $AccountList[-1] = 'All - General Ledger';
 foreach ($this->AccountList as $item) {
     $AccountList[$item->id] = $item->full_name;
 }
+$_ENV['title'][] = count($this->LedgerEntryList) . ' entries';
 
 echo '<form method="get">';
 echo '<table>';
@@ -26,16 +27,15 @@ echo '</table>';
 echo '</form>';
 
 // View Results
-$this->data = $this->AccountLedger;
 
 $balance_x = $this->openBalance;
 
-echo '<table class="w">';
+echo '<table>';
 echo '<tr><th>Date</th><th>Account/Note</th><th>Entry #</th><th>Link</th><th>Debit</th><th>Credit</th><th>Balance</th></tr>';
 
 echo '<tr class="rero">';
 echo '<td class="c">-Open-</td><td colspan="5">Opening Balance</td>';
-echo '<td class="b r">' . number_format($balance_x,2) . '</td>';
+echo '<td class="b r">' . number_format($this->openBalance, 2) . '</td>';
 echo '</tr>';
 
 foreach ($this->LedgerEntryList as $le)
