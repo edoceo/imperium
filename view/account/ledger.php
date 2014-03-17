@@ -64,14 +64,14 @@ foreach ($this->LedgerEntryList as $le)
 	}
 
     // Amount
-    if (substr($this->Account->kind,0,5)=='Asset') {
-        if ($le->amount < 0) {
-            $balance_x += abs($le->amount);
+    if (substr($this->Account['kind'],0,5)=='Asset') {
+        if ($le['amount'] < 0) {
+            $balance_x += abs($le['amount']);
         } else {
-            $balance_x -= abs($le->amount);
+            $balance_x -= abs($le['amount']);
         }
     } else {
-        $balance_x += $le->amount;
+        $balance_x += $le['amount'];
     }
 
     echo '<td class="r">' . number_format($balance_x,2) . '</td>';
