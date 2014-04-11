@@ -48,12 +48,12 @@ class WorkOrder extends ImperiumBase
     */
     function delete()
     {
-        $id = intval($this->id);
-        $db = Zend_Registry::get('db');
-        $db->query(sprintf("delete from base_file where link = '%s'",$this->link()));
-        $db->query(sprintf("delete from base_note where link = '%s'",$this->link()));
-        $db->query("delete from workorder_item where workorder_id = $id");
-        $db->query("delete from workorder where id = $id");
+        $id = intval($this['id']);
+        // $db = Zend_Registry::get('db');
+        radix_db_sql::query('DELETE FROM base_file WHERE link = ?', array($this->link()) );
+        radix_db_sql::query('DELETE FROM base_note WHERE link = ?', array($this->link()) );
+        radix_db_sql::query('DELETE FROM workorder_item WHERE workorder_id = ?', array($id) );
+        radix_db_sql::query('DELETE FROM workorder WHERE id = ?', array($id) );
         return true;
     }
 
