@@ -7,6 +7,11 @@
 // $layout = $this->layout();
 
 // Convert Controller Specified Array to String
+if (empty($_ENV['h1'])) $_ENV['h1'] = $_ENV['title'];
+
+if (is_array($_ENV['h1'])) {
+	$_ENV['h1'] = implode(' &raquo; ',$_ENV['h1']);
+}
 if (is_array($_ENV['title'])) {
 	$_ENV['title'] = implode(' &raquo; ',$_ENV['title']);
 }
@@ -41,10 +46,6 @@ if (!empty($menu)) {
     echo '</div>';
 	// echo ImperiumView::mruDraw();
 }
-
-if (!empty($_ENV['h1'])) {
-	echo '<h1>' . $_ENV['h1'] . '</h1>';
-}
 // if (!empty($this->title_one)) {
 //     echo '<h2>' . $this->title_one . '</h2>';
 // }
@@ -58,6 +59,10 @@ echo '</header>';
 
 // Core of Page
 echo '<div id="core">';
+
+if (!empty($_ENV['h1'])) {
+	echo '<h1>' . $_ENV['h1'] . '</h1>';
+}
 
 echo radix_session::flash();
 
