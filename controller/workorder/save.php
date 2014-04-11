@@ -78,10 +78,12 @@ case 'save':
 	radix::redirect('/workorder/view?w=' . $id);
 	break;
 case 'void':
-	$wo->status = 'Void';
+	$sql = 'UPDATE workorder_item SET status = ? WHERE workorder_id = ? AND status = ?';
+	radix_db_sql::query($sql, array('Void', $wo->id, 'Pending'));
+	$wo['status'] = 'Void';
 	$wo->save();
-	$this->_s->info[] = 'Work Order #' . $wo->id . ' voided';
-	$this->_redirect('/');
+	radix_session::flash('info', "Work Order #{$wo->id} voided");
+	radix::redirect('/');
 	break;
 
 }

@@ -97,8 +97,8 @@ echo '</tr>';
 
 // Kind & Status
 echo '<tr>';
-echo '<td class="l">Kind:</td><td>' . radix_html_form::select('kind', $this->Contact->kind, $this->KindList) . '</td>';
-echo '<td class="l">Status:</td><td>' . radix_html_form::select('status', $this->Contact->status, $this->StatusList) . '</td>';
+echo '<td class="l">Kind:</td><td>' . radix_html_form::select('kind', $this->Contact['kind'], $this->KindList) . '</td>';
+echo '<td class="l">Status:</td><td>' . radix_html_form::select('status', $this->Contact['status'], $this->StatusList) . '</td>';
 echo '</tr>';
 
 // Channels
@@ -158,18 +158,18 @@ echo '</tr>';
 
 echo '<tr>';
 echo '<td class="l">';
-if (empty($this->Account->id)) {
+if (empty($this->Account['id'])) {
     echo 'Account';
 } else {
     echo '<a href="' . $this->link('/account/ledger?' . http_build_query(array('id'=>$this->Account->id))) . '">Account</a>:';
 }
 echo '</td><td colspan="3">';
-if (empty($this->Account->id)) {
+if (empty($this->Account['id'])) {
     echo '<button class="s" name="c" title="Create new Account for this Contact" type="submit" value="create-account">Create</button>';
 } else {
-    echo '<input id="account" style="width:20em;" type="text" value="' . $this->Account->full_name . '">';
-    echo '<input id="account_id" name="account_id" type="hidden" value="' . $this->Account->id . '">';
-    echo ' $' . number_format($this->Account->balance,2);
+    echo '<input id="account" style="width:20em;" type="text" value="' . $this->Account['full_name'] . '">';
+    echo '<input id="account_id" name="account_id" type="hidden" value="' . $this->Account['id'] . '">';
+    echo ' $' . number_format($this->Account['balance'],2);
 }
 echo '</td></tr>';
 
@@ -191,13 +191,13 @@ echo '</form>';
 
 ?>
 <script>
-$(document).ready(function() {
+$(function() {
     $("#company").autocomplete({
-        source: "<?php echo $this->link('/contact/ajax?field=company'); ?>",
+        source: "<?php echo radix::link('/contact/ajax?field=company'); ?>",
         change: function(event, ui) { if (ui.item) { $("#parent_id").val(ui.item.id); } }
     });
     $("#contact").autocomplete({
-        source: "<?php echo $this->link('/contact/ajax?field=contact'); ?>",
+        source: "<?php echo radix::link('/contact/ajax?field=contact'); ?>",
         focus: function(event, ui) {
             if (ui.item) {
                 $("#contact").val(ui.item.contact);
@@ -224,7 +224,7 @@ $(document).ready(function() {
 </script>
 <?php
 
-if ($this->Contact->id == 0) {
+if ($this->Contact['id'] == 0) {
     return(0);
 }
 

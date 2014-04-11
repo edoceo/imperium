@@ -36,7 +36,7 @@ echo '<li><a href="' . radix::link('/') . '" title="Dashboard"><i class="fa fa-d
     // Somehow get the list of possible Status and use that to build a list here, colours as well.
     echo '<li><a href="' . radix::link('/note') . '">' . img('/tango/24x24/apps/accessories-text-editor.png','Note List') .' Notes</a></li>';
     echo '<li><a href="' . radix::link('/file') . '">' . img('/tango/24x24/apps/system-file-manager.png','Files and Attachments') . ' Files</a></li>';
-    echo '<li><a href="' . radix::link('/calendar') . '">' . img('/tango/24x24/apps/system-file-manager.png','Calendar') . ' Calendar</a></li>';
+    // echo '<li><a href="' . radix::link('/calendar') . '">' . img('/tango/24x24/apps/system-file-manager.png','Calendar') . ' Calendar</a></li>';
     echo '<li><hr /></li>';
     // echo '<li><a href="' . radix::link('/manual/'') . ' . $this->controller . '/' . $this->action . '"><img alt="Annotated Users Manual" src="' . radix::link('/img/silk/help.png" />&nbsp;Manual</a></li>';
     echo '<li><a href="' . radix::link('/settings') . '">' . img('/tango/24x24/categories/preferences-desktop.png','Settings') . ' Settings</a></li>';

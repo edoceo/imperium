@@ -15,9 +15,9 @@ if (count($this->jump_list)) {
     echo '<div class="jump_list">';
     $list = array();
     foreach ($this->jump_list as $x) {
-        if ($x == $this->WorkOrder->id) {
+        if ($x == $this->WorkOrder['id']) {
             $list[] = '<span class="hi">#' . $x . '</span>';
-        } elseif ($x < $this->WorkOrder->id ) {
+        } elseif ($x < $this->WorkOrder['id'] ) {
             $list[] = '<a href="' . radix::link('/workorder/view?w=' . $x) . '">&laquo; #' . $x . '</a>';
         } else {
             $list[] = '<a href="' . radix::link('/workorder/view?w=' . $x) . '">#' . $x . ' &raquo;</a>';

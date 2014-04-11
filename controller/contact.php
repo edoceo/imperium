@@ -3,9 +3,8 @@
 
 */
 
-$sql = 'SELECT name AS id,name FROM base_enum WHERE link = ? ORDER BY sort';
-// $this->KindList = $this->_d->fetchPairs($sql,array('contact-kind'));
-// $this->StatusList = $this->_d->fetchPairs($sql,array('contact-status'));
+$this->KindList       = radix_db_sql::fetch_mix($sql, array('contact-kind'));
+$this->StatusList     = radix_db_sql::fetch_mix($sql, array('contact-status'));
 
 function createAction()
 {

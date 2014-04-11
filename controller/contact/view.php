@@ -22,7 +22,7 @@ $this->ContactChannelList = $c->getChannelList();
 $this->ContactNoteList = $c->getNotes();
 $this->ContactFileList = $c->getFiles();
 // @note what does order by star, status do? Join base_enum?
-$this->WorkOrderList = radix_db_sql::fetchAll("select * from workorder where contact_id={$c->id} order by date desc, id desc");
+$this->WorkOrderList = radix_db_sql::fetchAll("SELECT workorder.*, contact.name as contact_name FROM workorder JOIN contact ON workorder.contact_id = contact.id WHERE workorder.contact_id={$c['id']} ORDER BY workorder.date DESC, workorder.id DESC");
 $this->InvoiceList = radix_db_sql::fetchAll("select * from invoice where contact_id={$c->id} order by date desc, id desc");
 
 // Why Pointing this way?
@@ -30,5 +30,5 @@ $this->Account = $c->getAccount();
 
 $_ENV['title'] = array(
 	$this->Contact['kind'],
-	$this->Contact['name']
+	sprintf('#%d:%s', $this->Contact['id'], $this->Contact['name'])
 );

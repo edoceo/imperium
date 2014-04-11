@@ -25,8 +25,10 @@ if ( (!empty($this->_s->ReturnFrom)) && ($this->_s->ReturnFrom == 'mail') ) {
 //	break;
 //}
 
-if ($this->WorkOrder->id > 0) {
-	$this->title = array('WorkOrder','View',"#$id");
+if ($this->WorkOrder['id'] > 0) {
+
+	$_ENV['title'] = array('WorkOrder','View',"#$id");
+
 	$this->Contact = new Contact($this->WorkOrder->contact_id);
 
 	// Show Notes
@@ -54,20 +56,20 @@ if ($this->WorkOrder->id > 0) {
 // Work Order Jump List
 // Add Prev / Next Links
 $this->jump_list = array();
-if ($this->WorkOrder->id > 0) {
+if ($this->WorkOrder['id'] > 0) {
 	// Prev Five
-	$s = sprintf('SELECT id FROM workorder where id < %d order by id desc limit 5',$this->WorkOrder->id);
+	$s = sprintf('SELECT id FROM workorder where id < %d order by id desc limit 5',$this->WorkOrder['id']);
 	$r = radix_db_sql::fetchAll($s);
 	$r = array_reverse($r);
 	foreach ($r as $x) {
-		$this->jump_list[] = $x->id;
+		$this->jump_list[] = $x['id'];
 	}
 	// This
-	$this->jump_list[] = $this->WorkOrder->id;
+	$this->jump_list[] = $this->WorkOrder['id'];
 	// Next Five
-	$s = sprintf('SELECT id FROM workorder where id > %d order by id asc limit 5',$this->WorkOrder->id);
+	$s = sprintf('SELECT id FROM workorder where id > %d order by id asc limit 5',$this->WorkOrder['id']);
 	$r = radix_db_sql::fetchAll($s);
 	foreach ($r as $x) {
-		$this->jump_list[] = $x->id;
+		$this->jump_list[] = $x['id'];
 	}
 }
