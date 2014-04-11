@@ -98,7 +98,7 @@ class WorkOrder extends ImperiumBase
     */
     function delWorkOrderItem($id)
     {
-        Base_Diff::note($this,'Work Order Item #' . $id . ' removed');
+        // Base_Diff::note($this,'Work Order Item #' . $id . ' removed');
         radix_db_sql::query("DELETE from workorder_item where id = $id");
         $this->_updateBalance();
         return true;
@@ -154,11 +154,9 @@ class WorkOrder extends ImperiumBase
     */
     function toInvoice($iv=null)
     {
-        $db = Zend_Registry::get('db');
-
         // Add Invoice Items
         $w = null;
-        switch ($this->kind) {
+        switch ($this['kind']) {
         case 'Monthly':
         case 'Quarterly':
         case 'Yearly':
@@ -188,26 +186,25 @@ class WorkOrder extends ImperiumBase
             }
         } else {
             $iv = new Invoice();
-            $iv->auth_user_id = $this->auth_user_id;
-            $iv->contact_id = $this->contact_id;
-            $iv->note = $this->note;
+            $iv['auth_user_id'] = $this['auth_user_id'];
+            $iv['contact_id'] = $this['contact_id'];
+            $iv['note'] = $this['note'];
             $iv->save();
         }
 
         // Add Items
         $ivi_c = 0;
-        foreach ($woi_list as $x) {
-            $woi = new WorkOrderItem($x);
+        foreach ($woi_list as $woi) {
 
-            $ivi = array();
-            $ivi['workorder_item_id'] = $woi->id;
-            $ivi['kind'] = $woi->kind;
-            $ivi['quantity'] = $woi->a_quantity;
-            $ivi['rate'] = $woi->a_rate;
-            $ivi['unit'] = $woi->a_unit;
-            $ivi['tax_rate'] = $woi->a_tax_rate;
-            $ivi['name'] = $woi->name;
-            $ivi['note'] = $woi->note;
+            $ivi = new InvoiceItem(); // array();
+            $ivi['workorder_item_id'] = $woi['id'];
+            $ivi['kind'] = $woi['kind'];
+            $ivi['quantity'] = $woi['a_quantity'];
+            $ivi['rate'] = $woi['a_rate'];
+            $ivi['unit'] = $woi['a_unit'];
+            $ivi['tax_rate'] = $woi['a_tax_rate'];
+            $ivi['name'] = $woi['name'];
+            $ivi['note'] = $woi['note'];
 
             $iv->addInvoiceItem($ivi);
             $ivi_c++;
@@ -215,25 +212,25 @@ class WorkOrder extends ImperiumBase
             // If Complete then Mark as Billed
             // @todo needs to come from a workflow type list
             // @todo Handle WorkOrder Kind/Status too
-            if ($woi->status == 'Complete') {
-                $woi->status = 'Billed';
+            if ($woi['status'] == 'Complete') {
+                $woi['status'] = 'Billed';
                 $woi->save();
             }
         }
         $iv->save();
 
         // Close Single Job Work Orders
-        if ($this->kind == 'Single') {
-            $this->status = 'Closed';
+        if ($this['kind'] == 'Single') {
+            $this['status'] = 'Closed';
             // Base_Diff::note($this,'Closed & converted to Invoice');
         }
 
         $this->save();
 
         // Add History
-        $msg = sprintf('Invoice #%d created from Work Order #%d with %d items', $iv->id, $this->id, $ivi_c);
-        Base_Diff::note($this,$msg);
-        Base_Diff::note($iv,$msg);
+        $msg = sprintf('Invoice #%d created from Work Order #%d with %d items', $iv['id'], $this['id'], $ivi_c);
+        // Base_Diff::note($this,$msg);
+        // Base_Diff::note($iv,$msg);
         // $this->_d->commit();
 
         return $iv;

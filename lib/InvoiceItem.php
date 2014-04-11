@@ -26,9 +26,10 @@ class InvoiceItem extends ImperiumBase
 		if (strtotime($this->_data['date']) == false) {
 			$this->_data['date'] = null;
 		}
-        $this->_data['quantity'] = floatval($this->quantity);
-        $this->_data['rate'] = floatval($this->rate);
-        $this->_data['tax_rate'] = tax_rate_fix($this->tax_rate);
-        parent::save();
+        $this->_data['quantity'] = floatval($this['quantity']);
+        $this->_data['rate'] = floatval($this['rate']);
+        $this->_data['tax_rate'] = tax_rate_fix($this['tax_rate']);
+
+        return parent::save();
     }
 }

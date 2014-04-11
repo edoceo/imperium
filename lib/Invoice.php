@@ -109,22 +109,20 @@ class Invoice extends ImperiumBase
     /**
         Imperium Specific Functions
     */
-    function addInvoiceItem($r)
+    function addInvoiceItem($ivi)
     {
-        $t = new Zend_Db_Table(array('name'=>'invoice_item'));
-        $r['auth_user_id'] = $this->_data['auth_user_id'];
-        $r['invoice_id'] = $this->_data['id'];
-        if ($t->insert($r)) {
-            Base_Diff::note($this,'Invoice Item: ' . $r['name'] . ' created');
-            $this->_updateBalance();
-        }
+        $ivi['auth_user_id'] = $this->_data['auth_user_id'];
+        $ivi['invoice_id'] = $this->_data['id'];
+        $ivi->save();
+		// Base_Diff::note($this,'Invoice Item: ' . $r['name'] . ' created');
+		$this->_updateBalance();
     }
 
     /**
     */
     function delInvoiceItem($id)
     {
-        Base_Diff::note($this,'Invoice Item #' . $id . ' removed');
+        // Base_Diff::note($this,'Invoice Item #' . $id . ' removed');
         radix_db_sql::query('DELETE FROM invoice_item WHERE id = ?', array($id));
         $this->updateBalance();
         return true;

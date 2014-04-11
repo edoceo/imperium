@@ -17,9 +17,6 @@ class ImperiumBase implements ArrayAccess
     protected $_table;
     protected $_sequence;
 
-    public $id;
-    public $auth_user_id;
-
     /**
         ImperiumBase Model Constructor
     */
@@ -146,7 +143,7 @@ class ImperiumBase implements ArrayAccess
             // if ($this->_diff) Base_Diff::diff($this);
             radix_db_sql::update($this->_table,$rec,"id={$this->_data['id']}");
         } else {
-            $this->_data['id'] = radix_db_sql::insert($this->_table,$rec);
+            $this->_data['id'] = radix_db_sql::insert($this->_table, $rec);
             if (intval($this->_data['id'])==0) {
                 radix::dump($this);
                 radix::dump(radix_db_sql::lastError());
