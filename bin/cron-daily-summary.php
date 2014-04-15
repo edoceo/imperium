@@ -16,7 +16,7 @@ $date = strftime('%Y-%m-%d',$time);
 // Pending Work
 $html = '<html><head><title>[Imperium] Daily Summary Processor: ' . $date . '</title></head>';
 $html.= '<body>';
-$html.= "<h2>Pending Work</h2>\n";
+$html.= "<h2>Pending WorkOrder Items</h2>\n";
 
 $sql = 'SELECT workorder_item.*,contact.name as contact_name ';
 $sql.= '  FROM workorder_item';
@@ -30,7 +30,7 @@ $res = radix_db_sql::fetchAll($sql,array('Pending','Active'));
 if (count($res)) {
     $html.= _draw_details($res);
 } else {
-    echo "<p>No Pending Work</p>\n";
+    $html.= "<p>No Pending Work</p>\n";
 }
 
 // echo "Active Work:\n";
