@@ -10,152 +10,135 @@
 // CLI
 require_once(dirname(dirname(__FILE__)) . '/lib/cli.php');
 
-// if (empty($cli_opt['diff'])) $cli_opt['diff'] = 10;
-if (empty($cli_opt['span'])) $cli_opt['span'] = 10;
+if (empty($cli_opt['span'])) $cli_opt['span'] = $_ENV['invoice']['hawk_days_min'];
+if (!empty($cli_opt['diff'])) $cli_opt['span'] = $cli_opt['diff'];
 
-echo 'Imperium Invoice Hawk Processor: ' . strftime('%Y-%m-%d',$time) . " for {$cli_opt['span']} days\n";
+$file = APP_ROOT . '/etc/mail/invoice-hawk.txt';
+if (!is_file($file)) {
+	die("Cannot Hawk Invoices need invoice-hawk.txt\n");
+}
+
+ob_start();
+echo '<h1>Invoice Processor: ' . strftime('%Y-%m-%d',$time) . " for {$cli_opt['span']} days</h1>\n";
 
 // Find Hawkable Invoices
-$sql = 'SELECT *,extract(days from current_timestamp - date) as days FROM invoice ';
-$sql.= ' WHERE ';
-if ( (!empty($argv[1])) && (intval($argv[1]) > 0) ) {
-    $sql.= sprintf(' id = %d',intval($argv[1]));
-} else {
-    // If Date Supplied Then Find Invoices That Are %d Days old on That Day
-    $sql.= ' ((date::date - current_timestamp::date) %% ? = 0) ';
-    // $sql.= ' ( ( (date::date - current_timestamp::date) > ? ) AND ( (date::date - current_timestamp::date) %% ? = 0) ) ';
-    // $sql.= " ( date < current_timestamp - '%d days'::interval) ";
-    // $sql.= ' AND (flag & %d = %d) ';
-    // $sql.= " AND ( status NOT IN ('Void','Active') ) ";
-    // $sql.= " AND status in ('Hawk','Sent') ";
-    // $sql.= ' AND (bill_amount > 0 AND (paid_amount is null OR paid_amount < bill_amount)) ';
-}
-// $sql.= ' GROUP BY contact_id ';
-$order = ' ORDER BY contact_id, id ASC ';
+$sql = 'SELECT *, extract(days from current_timestamp - date) as days FROM invoice ';
+$sql.= ' WHERE status IN (\'Hawk\', \'Sent\') ';
+$sql.= ' AND ((extract(days from current_timestamp - date)::integer % ?) = 0) ';
+$sql.= ' ORDER BY date, contact_id, id ASC ';
+$res = radix_db_sql::fetchAll($sql, array($cli_opt['span']));
 
-$sql = sprintf($sql,$_ENV['invoice']['hawk_days_min']); // ,Invoice::FLAG_HAWK,Invoice::FLAG_HAWK);
-// echo "$sql\n";
+echo "<p>Past Due Invoices: " . count($res) . "</p>\n";
 
-// $res = $db->fetchAll($sql,array(strftime('%Y-%m-%d',$time),array('Active')));
-$res = $db->fetchAll("$sql AND status in ('Active')",array($cli_opt['span']));
-echo "You have " . count($res) . " Active Invoices to POST\n";
-echo "\n";
-
-// ,'Sent'
-// $res = $db->fetchAll("$sql AND status in ('Sent')",array($cli_opt['diff']));
-// echo "You have " . count($res) . " Sent Invoices\n";
-// echo "\n";
-
-$res = $db->fetchAll("$sql AND status IN ('Hawk','Sent') $order",array($cli_opt['diff']));
-echo "You have " . count($res) . " Active Invoices Past Due\n";
-
+$sum = 0;
 foreach ($res as $rec) {
 
-    $iv = new Invoice($rec->id);
-    $co = new Contact($iv->contact_id);
-    echo trim("Invoice #{$iv->id} {$iv->date} ({$iv->status} - {$rec->days}) to {$co->name}#{$iv->contact_id} {$co->email} ");
-    if (empty($co->email)) {
-        echo " * Fail No Email!\n";
-        continue;
+	$iv = new Invoice($rec);
+	$co = new Contact($rec['contact_id']);
+
+	$bal = floatval($rec['bill_amount']) - floatval($rec['paid_amount']);
+
+	echo "<p>Invoice #{$iv['id']}/{$iv['status']} \$$bal from {$iv['date']} ({$rec['days']} due)</p>\n";
+	echo "<p>Customer: {$co['name']} {$co['email']}</p>\n";
+
+	if (empty($co['email'])) {
+		echo "<p style='color:#f00;font-weight:bold;'>FAIL: No Email for this Contact!</p>\n";
+		continue;
+	}
+
+	// List of Invoices
+	// $sql = 'SELECT * FROM invoice ';
+	// $sql.= ' WHERE contact_id = ? AND status IN (\'Sent\') AND (extract(days from current_timestamp - date) >= ?) ';
+	// $sql.= ' ORDER BY date';
+	// $arg = array($co['id'], $cli_opt['span']);
+	// $iv_res = radix_db_sql::fetcHAll($sql, $arg);
+
+	$mail = null;
+	$mail = trim(file_get_contents($file));
+
+	$mail = str_replace('%head_from%', sprintf('"%s" <%s>', $_ENV['company']['name'], $_ENV['mail']['from']), $mail);
+	$mail = str_replace('%head_hash%', md5(openssl_random_pseudo_bytes(256)) . '@' . parse_url($_ENV['application']['base'], PHP_URL_HOST), $mail);
+	// $mail = str_replace('%head_subj%', 'Reminder: Invoice Past Due Invoices', $mail);
+	$mail = str_replace('%head_subj%', "Reminder: Invoice #{$iv['id']} from {$iv['date']} ({$rec['days']} days ago)", $mail);
+
+	$mail = str_replace('%base_link%', $_ENV['application']['base'], $mail);
+
+    $mail = str_replace('%mail_rcpt%', $co['email'], $mail);
+
+    $mail = str_replace('%mail_sign%', $_ENV['company']['name'],$mail);
+
+	// Substitutions
+    $mail = str_replace('%contact_name%', $co['contact'], $mail);
+    $mail = str_replace('%invoice_id%', $iv['id'], $mail);
+    $mail = str_replace('%invoice_date%', strftime($_ENV['format']['nice_date'], strtotime($iv['date'])), $mail);
+    $mail = str_replace('%invoice_age%', $rec['days'], $mail);
+    // $mail = str_replace('%invoice_link%', "{$_ENV['application']['base']}/share?a={$iv['hash']}", $mail);
+    $mail = str_replace('%invoice_link%', "{$_ENV['application']['base']}/checkout/invoice/hash/{$iv['hash']}", $mail);
+    $mail = str_replace('%checkout_link%', "{$_ENV['application']['base']}/checkout?a={$iv['hash']}",$mail);
+
+    // $mail = str_replace('$days', $rec->days, $mail);
+    // $mail = str_replace('$name', $co->contact, $mail);
+
+	// $mail.= '<p>Invoice <a href="' . $_ENV['application']['base'] . '/invoice/view?id=' . $rec['id'] . '">#' . $rec['id'] . '</a>';
+	// $mail.= ' to <a href="' . $_ENV['application']['base'] . '/contact/view?id=' . $rec['contact_id'] . '">' . $co->name . '</a>';
+	// $mail.= ' for ' . number_format($rec['bill_amount'], 2);
+	// $mail.= ' is ' . $rec['days'] . ' days old</p>';
+
+	if (preg_match('/\W?%\w+%\W?/', $mail, $m)) {
+		print_r($m);
+		die("<p style='color:#f00;font-weight:bold;'>WARN: Unprocessed Macros?</p>\n");
+	}
+
+    if ($cli_opt['mail']) {
+		send_mail($co['email'], $mail);
     }
 
-    // Mark Invoice to Hawk Status
-    switch ($iv->status) {
-    case 'Active':
-    	break;
-    case 'Sent':
-    	echo " Aged, Sent\n";
-    	echo "  {$_ENV['application']['base']}/invoice/view?i={$iv->id}\n";
-    	continue;
-    }
+    $sum += $bal;
 
-    // $ah = Auth_Hash::make($iv);
+}
+echo "<p style='font-weight:700;'>Total Balance: $sum</p>\n";
 
-    // Make New Message
-    $mail = _new_mail();
-    if (!empty($_ENV['cron']['mailtest'])) {
-        $mail->addTo($_ENV['cron']['mailtest']);
-    } else {
-        $mail->addTo($co->email);
-    }
+// Summary Data
+$sql = 'SELECT count(id) FROM invoice ';
+$sql.= ' WHERE status IN (\'Active\') ';
+$sql.= ' AND (extract(days from current_timestamp - date) > ?) ';
+$res = radix_db_sql::fetch_one($sql, array($cli_opt['span']));
 
-    // $EmailComposeMessage = new stdClass();
-    // $EmailComposeMessage->to = $co->email;
-    // $EmailComposeMessage->RecipientList = array();
-    // $EmailComposeMessage->RecipientList[''] = '- none -';
-    // $EmailComposeMessage->RecipientList+= $co->getEmailList();
+// $res = $db->fetchAll($sql,array(strftime('%Y-%m-%d',$time),array('Active')));
+// $res = radix_db_sql::fetch_all("$sql AND status in ('Active')",array($cli_opt['span']));
+echo "<p>" . $res . " Active Invoices to POST</p>\n";
 
-    $mail->setSubject('Reminder: Invoice #' . $iv->id . ' from ' . $_ENV['company']['name']);
+$sql = 'SELECT count(id) FROM invoice ';
+$sql.= ' WHERE status IN (\'Sent\') ';
+$sql.= ' AND (extract(days from current_timestamp - date) > ?) ';
+$res = radix_db_sql::fetch_one($sql, array($cli_opt['span']));
+echo "<p>" . $res . " Sent Invoices over {$cli_opt['span']} days old</p>\n";
 
-    $body = null;
-    $file = APP_ROOT . '/approot/etc/invoice-hawk.txt';
-    if (!is_file($file)) {
-        die("Cannot Hawk Invoices need invoice-hawk.txt\n");
-    }
-    $body = file_get_contents($file);
+// Send me the Summary
 
-    // Substitutions
-    $body = str_replace('$id',$iv->id,$body);
-    $body = str_replace('$date',strftime($_ENV['format']['nice_date'],strtotime($iv->date)),$body);
-    $body = str_replace('$days',$rec->days,$body);
-    $body = str_replace('$name',$co->contact,$body);
-    $body = str_replace('$contact_name',$co->contact,$body);
-    $body = str_replace('$invoice_link',"{$_ENV['application']['base']}/checkout/invoice/hash/{$iv->hash}",$body);
-    $body = str_replace('$app_company',$_ENV['company']['name'],$body);
+$body = ob_get_clean();
 
-    // Include Work Orders
-    // $list = $Invoice->getWorkOrders();
-    // foreach ($list as $wo) {
-    //     $wo = new WorkOrder($wo);
-    //     $ah = Auth_Hash::make($wo);
-    //     $ss->EmailComposeMessage->body.= 'Work Order #' . $wo->id . "\n";
-    //     $ss->EmailComposeMessage->body.= '  ' . AppTool::baseUri() . '/hash/' . $ah['hash'] . "\n";
-    // }
 
-    // From Text Input
-    // $list = trim($_POST['to_list']);
-    // foreach (explode(',',$list) as $x) {
-    //     $mail->addTo($x);
-    // }
+$mail = <<<EOF
+Content-Transfer-Encoding: 8bit
+Content-Type: text/html; charset="utf-8"
+From: %head_from%
+MIME-Version: 1.0
+Message-Id: <%head_hash%>
+Subject: %head_subj%
+X-Mailer: Edoceo Imperium v2013.43
 
-    // Add Text
-    $mail->setBodyText($body,null,Zend_Mime::ENCODING_7BIT);
+$body
+EOF;
 
-    /*
-    // Add a Part?
-    $part = new Zend_Mime_Part($req->getPost('text'));
-    $part->type = 'text/plain';
-    $part->encoding = Zend_Mime::ENCODING_7BIT;
-    $part->disposition = Zend_Mime::DISPOSITION_INLINE;
-    $mail->addAttachment($part);
-    */
-    // Add PDF
-    /*
-    $pdf = new InvoicePDF($iv->id);
-    $part = new Zend_Mime_Part($pdf->render());
-    $part->filename = 'Invoice-' . $iv->id . '.pdf';
-    $part->type = 'application/pdf; name="' . $part->filename . '"';
-    $part->encoding = Zend_Mime::ENCODING_BASE64;
-    $part->disposition = Zend_Mime::DISPOSITION_ATTACHMENT;
-    $mail->addAttachment($part);
-    */
-    //$mail->createAttachment($pdf->render(),'application/pdf',Zend_Mime::DISPOSITION_ATTACHMENT,Zend_Mime::ENCODING_BASE64,$part->filename);
+// Clean
+$mail = str_replace('%head_from%', sprintf('"%s" <%s>', $_ENV['company']['name'], $_ENV['mail']['from']), $mail);
+$mail = str_replace('%head_hash%', md5(openssl_random_pseudo_bytes(256)) . '@' . parse_url($_ENV['application']['base'], PHP_URL_HOST), $mail);
+$mail = str_replace('%head_subj%', '[Imperium] Past Due Invoices Summary', $mail);
+$mail = str_replace('%mail_rcpt%', $_ENV['cron']['alert_to'], $mail);
 
-    // $hawk_summary.= "$note\n";
-
-    // Send the Message
-    if ($cli_opt['send']) {
-        echo " - Sending";
-		$uri = parse_url($_ENV['mail']['smtp']);
-		$smtp = new Zend_Mail_Transport_Smtp($uri['host'],array(
-			'auth' => 'login',
-			'username' => $uri['user'],
-			'password' => $uri['pass'],
-			'ssl'  => 'tls',
-			'port' => $uri['port'],
-		));
-        $mail->send($smtp);
-        sleep(2); // Crappy Throttle
-    }
-    echo "\n";
+if ( !empty($cli_opt['mail']) && !empty($_ENV['cron']['alert_to']) ) {
+	send_mail($_ENV['cron']['alert_to'], $mail);
+} else {
+	echo strip_tags($body);
 }
