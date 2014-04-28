@@ -3,7 +3,7 @@
 	@see http://www.w3.org/TR/CSS2/cascade.html#specificity
 */
 
-@body_bg: #f0f0f0;
+@body_bg: #f6f6f6;
 
 @high_bg: #377D9F;
 
@@ -17,8 +17,7 @@
 
 /* Reset Everything */
 a:hover {
-	background:@high_bg;
-	color: inherit;
+	color: @high_bg;
 	cursor: pointer;
 }
 body {
@@ -117,20 +116,31 @@ hr {
 img {
 	vertical-align: bottom;
 }
-input[type="text"], input[type="password"], input[type="date"], input[type="datetime"], input[type="email"], input[type="number"], input[type="search"], input[type="tel"], input[type="time"], input[type="url"], textarea {
+input[type="text"],
+input[type="date"],
+input[type="datetime"],
+input[type="email"],
+input[type="number"],
+input[type="password"],
+input[type="search"],
+input[type="tel"],
+input[type="time"],
+input[type="url"],
+textarea {
 	display:inline-block;
+	font-size:100%;
 	margin:4px;
+	width:99%;
 }
 input[type="date"] {
-	padding:2px;
 	width:12em;
 }
 input[type="number"] {
-	padding:2px;
 	width:6em;
 }
 select {
 	margin:4px;
+	padding:6px;
 }
 
 li {
@@ -154,7 +164,7 @@ pre {
 }
 
 table td {
-	padding:2px;
+	padding:4px;
 	vertical-align: top;
 }
 td.l {
@@ -212,12 +222,6 @@ div#menu ul {
 	margin:0px;
 	padding:0px;
 }
-div#menu ul a:hover {
-    vertical-align:bottom;
-    text-align:left;
-    text-decoration:none;
-    cursor:default;
-}
 div#menu ul li:hover {
     position:relative;
 }
@@ -230,8 +234,10 @@ div#menu > ul > li {
 }
 
 div#menu ul ul {
+	border: 1px outset #000;
     display:none;
     left:-1px;
+    min-width:180px;
     position:absolute;
     top:98%;
 	z-index:21;
@@ -251,12 +257,11 @@ div#menu ul li {
 div#menu ul li a {
 	display:block;
 	padding:0px 8px;
+	text-decoration:none;
 }
 div#menu ul li a:hover {
 	background:@high_bg;
-}
-div#menu ul ul {
-	border: 1px outset #000;
+	color:@body_bg;
 }
 div#menu ul hr {
 	border:1px outset #ccc;
@@ -268,7 +273,7 @@ div#menu form input {
     height:24px;
     margin: 0px;
     padding: 1px;
-    width:128px;
+    min-width:128px;
 }
 div#menu form input:focus {
 	background:@menu_fg;
@@ -489,7 +494,67 @@ tr.yearly td
 	width:4em
 }
 
+/* Smartphones (Portrait & Landscape) */
+@media only screen and (min-device-width : 320px) and (max-device-width : 480px)
+{
+	div#menu ul li a span {
+		display:none;
+	}
+}
 
+/* Smartphones (landscape) ----------- */
+@media only screen 
+and (min-width : 321px) {
+/* Styles */
+}
+
+/* Smartphones (portrait) ----------- */
+@media only screen 
+and (max-width : 320px) {
+/* Styles */
+}
+
+/* iPads (portrait and landscape) ----------- */
+@media only screen 
+and (min-device-width : 768px) 
+and (max-device-width : 1024px) {
+/* Styles */
+}
+
+/* iPads (landscape) ----------- */
+@media only screen 
+and (min-device-width : 768px) 
+and (max-device-width : 1024px) 
+and (orientation : landscape) {
+/* Styles */
+}
+
+/* iPads (portrait) ----------- */
+@media only screen 
+and (min-device-width : 768px) 
+and (max-device-width : 1024px) 
+and (orientation : portrait) {
+/* Styles */
+}
+
+/* Desktops and laptops ----------- */
+@media only screen 
+and (min-width : 1224px) {
+/* Styles */
+}
+
+/* Large screens ----------- */
+@media only screen 
+and (min-width : 1824px) {
+/* Styles */
+}
+
+/* iPhone 4 ----------- */
+@media
+only screen and (-webkit-min-device-pixel-ratio : 1.5),
+only screen and (min-device-pixel-ratio : 1.5) {
+/* Styles */
+}
 
 @media print {
     * {
