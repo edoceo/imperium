@@ -100,9 +100,10 @@ $(function() {
 
 	$('#time_alpha, #time_omega').on('change',function() {
 
+		var m = null;
+
 		var alpha = $('#time_alpha').val();
 		var omega = $('#time_omega').val();
-		var m = null;
 
 		if (m = alpha.match(/^(\d+):(\d+)$/)) {
 			h_alpha = parseInt(m[1]);
@@ -113,6 +114,11 @@ $(function() {
 			h_omega = parseInt(m[1]);
 			m_omega = parseInt(m[2]) / 60 * 100;
 		}
+
+		if (omega < alpha) {
+			h_omega += 24;
+		}
+
 
 		var h_delta = h_omega - h_alpha;
 		var m_delta = Math.abs(m_omega - m_alpha);
