@@ -63,6 +63,9 @@ class WorkOrder extends ImperiumBase
     function save()
     {
         $this->note = utf8_decode($this->note);
+        if (empty($this->_data['auth_user_id'])) {
+        	$this->_data['auth_user_id'] = $_SESSION['uid'];
+        }
         $x = parent::save();
         $this->_updateBalance();
         return $x;

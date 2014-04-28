@@ -57,7 +57,7 @@ echo '<tr><td class="l">Note:</td><td colspan="5">' . radix_html_form::textarea(
 echo "<tr>";
 echo "<td class='l'><span title='The Status of this Item, Completed Items will be Billed when creating an Invoice'>Status:</span></td>";
 echo '<td colspan="3">';
-echo '<input name="status" type="text" value="' . $this->WorkOrderItem['status'] . '">';
+// echo '<input name="status" type="text" value="' . $this->WorkOrderItem['status'] . '">';
 echo radix_html_form::select('status',$this->WorkOrderItem['status'], $this->ItemStatusList);
 echo '</td>';
 echo '</tr>';

@@ -11,7 +11,7 @@ $bill_total = $open_total = 0;
 
 // @todo This is fucking ugly!
 // @todo Remove this shitty hack!
-$cols = array('star','id','print','date','status','kind','contact','note','bill_amount','open_amount');
+$cols = array('star','id','date','status','kind','contact','note','bill_amount','open_amount');
 
 echo '<table>';
 // List each Invoice Item
@@ -24,7 +24,9 @@ foreach ($data['list'] as $item) {
     // ID
     echo '<td><a href="' . radix::link('/workorder/view?w=' . $item['id']) . '">#' . $item['id'] . '</td>';
     // Printable Link
-    echo '<td><a href="' . radix::link('/workorder/pdf?w=' . $item['id']) . '">' . img('/tango/22x22/devices/printer.png','Get PDF') . '</a></td>';
+    if (in_array('print', $cols)) {
+		echo '<td><a href="' . radix::link('/workorder/pdf?w=' . $item['id']) . '">' . img('/tango/22x22/devices/printer.png','Get PDF') . '</a></td>';
+	}
 
     if ( (in_array('date',$cols)) && (isset($item['date'])) ) {
         echo '<td class="c">' . ImperiumView::niceDate($item['date']) . '</td>';

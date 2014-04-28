@@ -23,9 +23,14 @@ class InvoiceItem extends ImperiumBase
 
     public function save()
     {
+        if (empty($this->_data['auth_user_id'])) {
+        	$this->_data['auth_user_id'] = $_SESSION['uid'];
+        }
+
 		if (strtotime($this->_data['date']) == false) {
 			$this->_data['date'] = null;
 		}
+
         $this->_data['quantity'] = floatval($this['quantity']);
         $this->_data['rate'] = floatval($this['rate']);
         $this->_data['tax_rate'] = tax_rate_fix($this['tax_rate']);

@@ -31,8 +31,10 @@ class WorkOrderItem extends ImperiumBase
 	*/
 	function __construct($x=null)
 	{
-		$this->date = date('Y-m-d');
-        $this->quantity = 1;
+		$this->_date['date'] = date('Y-m-d');
+        $this->_data['e_unit'] = 'hr';
+        $this->_data['a_quantity'] = 2;
+        $this->_data['a_unit'] = 'hr';
 		parent::__construct($x);
         if (empty($this->_data['time_alpha'])) {
             $this->_data['time_alpha'] = strftime('%H:%M',mktime(date('H')-1,0,0));
