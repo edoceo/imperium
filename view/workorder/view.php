@@ -27,50 +27,50 @@ if (count($this->jump_list)) {
     echo '</div>';
 }
 
-echo '<form action="' . radix::link('/workorder/save?w=' . $this->WorkOrder->id) . '" method="post">';
+echo '<form action="' . radix::link('/workorder/save?w=' . $this->WorkOrder['id']) . '" method="post">';
 echo star($this->WorkOrder->star ? $this->WorkOrder->star : 'star_' );
 echo '<table>';
 
 // Contact & Date Row
 echo '<tr>';
-if (empty($this->Contact->id)) {
+if (empty($this->Contact['id'])) {
     echo '<td class="l">Contact:</td>';
     echo '<td><input id="contact_name" name="contact_name" type="text" />';
     echo '</td>';
 } else {
-    echo '<td class="l">Contact:</td><td><a href="' . radix::link("/contact/view?c={$this->Contact->id}") . '">' . html($this->Contact->name) . '</a>';
-    echo "<br />Primary Phone: " . radix::block('stub-channel',array('data'=>$this->Contact->phone)) . "</td>";
+    echo '<td class="l">Contact:</td><td><a href="' . radix::link("/contact/view?c={$this->Contact['id']}") . '">' . html($this->Contact['name']) . '</a>';
+    echo "<br />Primary Phone: " . radix::block('stub-channel',array('data'=>$this->Contact['phone'])) . "</td>";
 }
 // Date
-echo '<td class="l">Date:</td><td>' . radix_html_form::text('date',$this->WorkOrder->date, array('id'=>'wo_date','size'=>12)) . '</td>';
+echo '<td class="l">Date:</td><td>' . radix_html_form::date('date',$this->WorkOrder['date']) . '</td>';
 echo '</tr>';
 
 // Requester & Kind
 echo '<tr>';
 echo '<td class="l">Requester:</td>';
 echo '<td>';
-echo radix_html_form::text('requester', $this->WorkOrder->requester);
+echo radix_html_form::text('requester', $this->WorkOrder['requester']);
 echo '</td>';
 // Kind
-echo '<td class="l">Kind:</td><td>' . radix_html_form::select('kind', $this->WorkOrder->kind, $this->KindList) . '</td>';
+echo '<td class="l">Kind:</td><td>' . radix_html_form::select('kind', $this->WorkOrder['kind'], $this->KindList) . '</td>';
 echo '</tr>';
 
 // Rate & Units & Status
 echo '<tr>';
-$r = radix_html_form::text('base_rate',$this->WorkOrder->base_rate,array('class'=>'rate'));
-$u = radix_html_form::select('base_unit', $this->WorkOrder->base_unit, Base_Unit::getList());
+$r = radix_html_form::number('base_rate',$this->WorkOrder['base_rate'],array('class'=>'rate'));
+$u = radix_html_form::select('base_unit', $this->WorkOrder['base_unit'], Base_Unit::getList());
 echo "<td class='l'>Base Rate:</td><td class='nw'>$r/$u</td>";
 // Status
-echo '<td class="l">Status:</td><td>' . $this->WorkOrder->status . '</td>';
+echo '<td class="l">Status:</td><td>' . $this->WorkOrder['status'] . '</td>';
 echo '</tr>';
 
 // Note
-echo '<tr><td class="l">Note:</td><td colspan="3"><textarea name="note">' . html($this->WorkOrder->note). '</textarea></td></tr>';
+echo '<tr><td class="l">Note:</td><td colspan="3"><textarea name="note">' . html($this->WorkOrder['note']). '</textarea></td></tr>';
 // echo "<tr><td class='b r'>Hours Total:</td><td colspan='3' style='color: #f00; font-weight: 700; text-align: right;'>".number_format($this->data['WorkOrder']['bill_amount'],2)."</td></tr>";
 // echo "<tr><td class='b r'>Parts Total:</td><td colspan='3' style='color: #f00; font-weight: 700; text-align: right;'>".number_format($this->data['WorkOrder']['bill_amount'],2)."</td></tr>";
 // Open Total
-echo "<tr><td class='l'>Bill Total:</td><td colspan='2' style='font-weight: 700; text-align: right;'>".number_format($this->WorkOrder->bill_amount,2)."</td></tr>";
-echo "<tr><td class='l'>Open Total:</td><td colspan='2' style='color: #f00; font-weight: 700; text-align: right;'>".number_format($this->WorkOrder->open_amount,2)."</td></tr>";
+echo "<tr><td class='l'>Bill Total:</td><td colspan='2' style='font-weight: 700;'>".number_format($this->WorkOrder->bill_amount,2)."</td></tr>";
+echo "<tr><td class='l'>Open Total:</td><td colspan='2' style='color: #f00; font-weight: 700;'>".number_format($this->WorkOrder->open_amount,2)."</td></tr>";
 echo '</table>';
 
 // Hidden Fields & Buttons

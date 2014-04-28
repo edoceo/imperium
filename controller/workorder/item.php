@@ -23,6 +23,7 @@ case 'create':
 	$_ENV['title'] = array('Work Order','Item','Create');
 	$this->WorkOrder = new WorkOrder(intval($_GET['w']));
 	$this->WorkOrderItem = $this->WorkOrder->newWorkOrderItem();
+	$this->WorkOrderItem['date'] = strftime('%Y-%m-%d');
 	// Notify?
 	if ($_ENV['aorkorder']['notify_send']) {
 		$c = new Contact($this->WorkOrder['contact_id']);
@@ -69,26 +70,34 @@ case 'save':
 
 		$mail = array();
 		$mail['rcpt'] = radix_filter::email($_POST['notify']);
-		$mail['subj'] = 'Work Order #' . $wo->id . ' Update Notification';
+		$mail['subj'] = 'Work Order #' . $wo['id'] . ' Update Notification';
 
 		// Template
 		$file = APP_ROOT . '/approot/etc/workorder-item-mail.txt';
 		if (is_file($file)) {
 			$body = file_get_contents($file);
+		} else {
+			radix_session::flash('warn', 'Work Order Item Notification Template is missing');
+			$body = "New Work Order Item\n";
+			$body.= "Work Order: \$wo_id\n";
+			$body.= "Item: \$wi_name\n";
+			$body.= "Cost: \$wi_quantity @ \$wi_rate/\$wi_unit \n";
+			$body.= "Status: \$wi_status\n";
 		}
 
-		$body = str_replace('$wo_id',$wo->id,$body);
-		$body = str_replace('$wo_note',$wo->note,$body);
-		$body = str_replace('$wo_open_amount',$wo->open_amount,$body);
+		$body = str_replace('$wo_id',$wo['id'],$body);
+		$body = str_replace('$wo_note',$wo['note'],$body);
+		$body = str_replace('$wo_open_amount',$wo['open_amount'],$body);
 
-		$body = str_replace('$wi_date',$woi->date,$body);
-		$body = str_replace('$wi_kind',$woi->kind,$body);
-		$body = str_replace('$wi_name',$woi->name,$body);
-		$body = str_replace('$wi_note',$woi->note,$body);
-		$body = str_replace('$wi_quantity',$woi->a_quantity,$body);
-		$body = str_replace('$wi_rate',$woi->a_rate,$body);
-		$body = str_replace('$wi_unit',$woi->a_unit,$body);
-		$body = str_replace('$wi_status',$woi->status,$body);
+		$body = str_replace('$wi_date', $woi['date'], $body);
+		$body = str_replace('$wi_kind', $woi['kind'], $body);
+		$body = str_replace('$wi_name', $woi['name'], $body);
+		$body = str_replace('$wi_note', $woi['note'], $body);
+		$body = str_replace('$wi_quantity', $woi['a_quantity'],$body);
+		$body = str_replace('$wi_rate', $woi['a_rate'], $body);
+		$body = str_replace('$wi_unit', $woi['a_unit'], $body);
+		$body = str_replace('$wi_cost', sprintf('%0.4f', $woi['a_quantity'] * $woi['a_rate']), $body);
+		$body = str_replace('$wi_status', $woi['status'], $body);
 
 		$mail['body'] = $body;
 
