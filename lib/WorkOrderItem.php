@@ -45,7 +45,12 @@ class WorkOrderItem extends ImperiumBase
 	/**
 		Work Order Item Save
 	*/
-	function save() {
+	function save()
+	{
+
+        if (empty($this->_data['auth_user_id'])) {
+        	$this->_data['auth_user_id'] = $_SESSION['uid'];
+        }
 
 		if (strtotime($this->_data['date']) == false) {
 			$this->_data['date'] = null;
