@@ -30,66 +30,70 @@ if (isset($paginator))
 // List Items
 foreach ($data['list'] as $x) {
 
-    $item = new Invoice($x);
+	//radix::dump($x);
+    // $item = new Invoice($x);
+    $item = $x;
 
-    echo '<tr class="rero ' . strtolower($item->status) . '">';
+    echo '<tr class="rero ' . strtolower($item['status']) . '">';
 
     // Star
-    echo '<td>' . star($item->star) . '</td>';
+    echo '<td>' . star($item['star']) . '</td>';
     // ID
-    echo '<td><a href="' . radix::link('/invoice/view?i='.$item->id) . '">#' . $item->id . '</a></td>';
+    echo '<td><a href="' . radix::link('/invoice/view?i=' . $item['id']) . '">#' . $item['id'] . '</a></td>';
     // Printable Link
-    echo '<td><a href="' . radix::link('/invoice/pdf?i=' . $item->id) . '">' . img('/tango/22x22/devices/printer.png','Get PDF') . '</a></td>';
+    // echo '<td><a href="' . radix::link('/invoice/pdf?i=' . $item['id']) . '">' . img('/tango/22x22/devices/printer.png','Get PDF') . '</a></td>';
 
-    echo '<td>' . $item->status . '</td>';
+    echo '<td>' . $item['status'] . '</td>';
 
     echo '<td class="c">';
-    echo ImperiumView::niceDate($item->date);
+    echo ImperiumView::niceDate($item['date']);
     // echo '<td class="r">';
     $h = $t = null;
-    if  (!in_array($item->status,$date_skip_list)) {
-        if ($item->due_diff <= 0) {
-            $t = sprintf('Invoice is Due in %d days',abs($item->due_diff));
-            $h = sprintf('%d Out',abs($item->due_diff));
+    if  (!in_array($item['status'], $date_skip_list)) {
+        if ($item['due_diff'] <= 0) {
+            $t = sprintf('Invoice is Due in %d days',abs($item['due_diff']));
+            $h = sprintf('%d Out',abs($item['due_diff']));
         } else {
-            $t = sprintf('Invoice is Past Due in %d days',abs($item->due_diff));
-            $h = sprintf('%d Due',abs($item->due_diff));
+            $t = sprintf('Invoice is Past Due in %d days',abs($item['due_diff']));
+            $h = sprintf('%d Due',abs($item['due_diff']));
         }
         echo sprintf(' <span class="s" title="%s">%s</span>',$t,$h);
     }
     echo '</td>';
 
-    echo '<td>' . $item->kind . '</td>';
+    echo '<td>' . $item['kind'] . '</td>';
     // echo '<td>' . substr($item->note,0,strrpos($item->note,' ',min(72,strlen($item->note)))) . '</td>';
-    $x = min(max(strpos($item->note,"\n"),32),64);
-    echo '<td>' . trim(substr($item->note,0,$x)) . '</td>';
+    $x = min(max(strpos($item['note'],"\n"),32),64);
+    echo '<td>' . trim(substr($item['note'],0,$x)) . '</td>';
     //echo "<td>". $html->link($item['Contact']['name'],'/contacts/view/'.$item['Contact']['id']) . "</td>";
-    if (isset($item->contact_name)) {
-        echo '<td><a href="' . radix::link('/contact/view?c='.$item->contact_id) . '">' . html($item->contact_name) . '</a></td>';
+    if (isset($item['contact_name'])) {
+        echo '<td><a href="' . radix::link('/contact/view?c='.$item['contact_id']) . '">' . html($item['contact_name']) . '</a></td>';
     } else {
         echo '<td>&nbsp;</td>';
     }
-    echo '<td class="bill">' . number_format($item->bill_amount,2) . '</td>';
-    echo '<td class="paid">' . number_format($item->paid_amount,2) . '</td>';
+    echo '<td class="bill">' . number_format($item['bill_amount'],2) . '</td>';
+    echo '<td class="paid">' . number_format($item['paid_amount'],2) . '</td>';
 
     echo '</tr>';
 
-    if ($item->status != 'Void') {
-        $bill_total+= $item->bill_amount;
-        $paid_total+= $item->paid_amount;
+    if ($item['status'] != 'Void') {
+        $bill_total+= $item['bill_amount'];
+        $paid_total+= $item['paid_amount'];
     }
 }
 
 // Total
+echo '<tfoot>';
 echo '<tr class="ro">';
-echo '<td class="b" colspan="8">Total:</td>';
+echo '<td class="b" colspan="7">Total:</td>';
 echo '<td class="b r">' . number_format($bill_total,2) . '</td>';
 echo '<td class="b r">' . number_format($paid_total,2) . '</td>';
 echo '</tr>';
+echo '</tfoot>';
 
 if ($bill_total != $paid_total) {
   echo '<tr class="ro">';
-  echo '<td class="b" colspan="8">Balance:</td>';
+  echo '<td class="b" colspan="7">Balance:</td>';
   if ($bill_total > $paid_total) {
     echo '<td>&nbsp;</td><td class="b r">' . number_format($bill_total - $paid_total,2) . '</td>';
   } else {

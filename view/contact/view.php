@@ -4,11 +4,11 @@
     @brief Contact View Shows the Contact, Company or Vendors information
 */
 
-echo '<form action="' . radix::link('/contact/save?c=' . $this->Contact->id) . '" method="post">';
+echo '<form action="' . radix::link('/contact/save?c=' . $this->Contact['id']) . '" method="post">';
 
 echo '<div>';
-echo radix_html_form::hidden('id',$this->Contact->id);
-echo radix_html_form::hidden('parent_id',$this->Contact->parent_id);
+echo radix_html_form::hidden('id',$this->Contact['id']);
+echo radix_html_form::hidden('parent_id',$this->Contact['parent_id']);
 echo '</div>';
 
 echo '<table>';
@@ -16,20 +16,20 @@ echo '<table>';
 // Company & Phone Number
 echo '<tr>';
 echo '<td class="l">';
-if (!empty($this->Contact->parent_id)) {
-    echo '<a href="' . radix::link('/contact/view?c=' . $this->Contact->parent_id) . '">Company:</a>';
+if (!empty($this->Contact['parent_id'])) {
+    echo '<a href="' . radix::link('/contact/view?c=' . $this->Contact['parent_id']) . '">Company:</a>';
 } else {
     echo 'Company:';
 }
-echo '</td><td>' . radix_html_form::text('company', $this->Contact->company) . '</td>';
-echo '<td class="l">Phone:</td><td>' . radix_html_form::text('phone', $this->Contact->phone) . '</td>';
+echo '</td><td>' . radix_html_form::text('company', $this->Contact['company']) . '</td>';
+echo '<td class="l">Phone:</td><td>' . radix_html_form::text('phone', $this->Contact['phone']) . '</td>';
 echo '</tr>';
 
 // Contact and Email
 echo '<tr>';
-echo '<td class="l" style="width:6em;">Contact:</td><td>' . radix_html_form::text('contact',$this->Contact->contact) . '</td>';
-echo '<td class="l">' . ( strlen($this->Contact->email) ? "<a href=\"mailto:" . $this->Contact->email ."\">Email:</a>" : 'Email:' ) . '</td>';
-echo '<td>' . radix_html_form::text('email', $this->Contact->email) . '</td>';
+echo '<td class="l" style="width:6em;">Contact:</td><td>' . radix_html_form::text('contact',$this->Contact['contact']) . '</td>';
+echo '<td class="l">' . ( strlen($this->Contact['email']) ? "<a href=\"mailto:" . $this->Contact['email'] ."\">Email:</a>" : 'Email:' ) . '</td>';
+echo '<td>' . radix_html_form::text('email', $this->Contact['email']) . '</td>';
 echo '</tr>';
 
 // First & Last Name
@@ -41,7 +41,7 @@ echo '</tr>';
 // }
 
 // Web Site & Email
-$url = parse_url($this->Contact->url);
+$url = parse_url($this->Contact['url']);
 if (empty($url['scheme'])) $url['scheme'] = 'http';
 if (empty($url['host'])) {
     $url['host'] = $url['path'];
@@ -50,9 +50,9 @@ if (empty($url['host'])) {
 //print_r($url);
 $url = sprintf('%s://%s%s',$url['scheme'],$url['host'],$url['path']);
 
-$x = strlen($this->Contact->url) ? '<a href="' . $url . '" target="_blank">Web-Site</a>:' : 'Web-Site:';
+$x = strlen($this->Contact['url']) ? '<a href="' . $url . '" target="_blank">Web-Site</a>:' : 'Web-Site:';
 echo '<tr>';
-echo '<td class="l">' . $x . '</td><td>' . radix_html_form::text('url',$this->Contact->url,array('style'=>'width: 100%')) . '</td>';
+echo '<td class="l">' . $x . '</td><td>' . radix_html_form::text('url',$this->Contact['url']) . '</td>';
 echo '</tr>';
 
 //switch ($this->Contact->kind) {

@@ -272,21 +272,22 @@ class Contact extends ImperiumBase
 	function getAddressList($name=null)
 	{
 		if ($name == null) {
-			$rs = radix_db_sql::fetchAll("select * from contact_address where contact_id=$this->id");
+			$rs = radix_db_sql::fetchAll('SELECT * FROM contact_address WHERE contact_id = ?', array($this->_data['id']));
 			$list = array();
 			foreach ($rs as $x) {
 				$list[] = new ContactAddress($x);
 			}
 			return $list;
 		} else {
+			die(print_r(debug_backtrace()));
 			if (is_string($name)) {
 				$name = array($name);
 			}
 
-			foreach ($name as $x) {
-				$ca = $this->ContactAddress->find("client_id=$this->id and ContactAddress.name=$x");
-				//pr($ca);
-			}
+			// foreach ($name as $x) {
+			// 	$ca = $this->ContactAddress->find("client_id=$this->id and ContactAddress.name=$x");
+			// 	//pr($ca);
+			// }
 		}
 	}
 
@@ -297,11 +298,10 @@ class Contact extends ImperiumBase
     {
         // Now Get Child Emails if Company?
         $sql = 'SELECT * FROM contact_channel '; // WHERE kind = 200 ';
-        $sql.= ' WHERE 1 = 1 ';
-        $sql.= " AND contact_id IN (SELECT id FROM contact WHERE ( id={$this->id} OR parent_id={$this->id} ) ) ";
+        $sql.= ' WHERE AND contact_id IN (SELECT id FROM contact WHERE ( id = ? OR parent_id = ? ) ) ';
         $sql.= ' ORDER BY contact_id ';
         // $res = $db->fetchAll($sql);
-        $res = radix_db_sql::fetchAll($sql);
+        $res = radix_db_sql::fetchAll($sql, array($this->_data['id'], $this->_data['id']));
         $list = array();
         foreach ($res as $x) {
             $list[] = new ContactChannel($x);

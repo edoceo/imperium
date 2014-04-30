@@ -10,7 +10,9 @@
     @since      File available since Release 1013
 */
 
-$this->title = array('Invoice','#' .$this->Invoice->id);
+$_ENV['title'] = array('Invoice','#' .$this->Invoice['id']);
+
+App::addMRU(radix::link('/invoice/view?id=' . $this->Invoice['id']));
 
 $contact_address_list = array();
 
