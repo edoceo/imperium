@@ -90,7 +90,7 @@ foreach ($res as $rec) {
 	}
 
     if ($cli_opt['mail']) {
-		send_mail($co['email'], $mail);
+		App::sendMail($co['email'], $mail);
     }
 
     $sum += $bal;
@@ -138,7 +138,7 @@ $mail = str_replace('%head_subj%', '[Imperium] Past Due Invoices Summary', $mail
 $mail = str_replace('%mail_rcpt%', $_ENV['cron']['alert_to'], $mail);
 
 if ( !empty($cli_opt['mail']) && !empty($_ENV['cron']['alert_to']) ) {
-	send_mail($_ENV['cron']['alert_to'], $mail);
+	App::sendMail($_ENV['cron']['alert_to'], $mail);
 } else {
 	echo strip_tags($body);
 }

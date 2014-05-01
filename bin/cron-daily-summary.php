@@ -77,7 +77,7 @@ foreach ($head as $k=>$v) {
 $mail.= "\r\n";
 $mail.= $html;
 // print_r($mail);
-send_mail($_ENV['cron']['alert_to'], $mail);
+App::sendMail($_ENV['cron']['alert_to'], $mail);
 
 function _draw_details($res)
 {
