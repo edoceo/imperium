@@ -82,7 +82,7 @@ if (empty($_SESSION['uid'])) {
 
 if (!acl::may(radix::$path)) {
 
-	radix_session::flash('fail', 'Access Denied');
+	radix_session::flash('fail', 'Access Denied to ' . radix::$path);
 	// radix::dump($_SERVER);
 	if (empty($_SESSION['return-path'])) {
 		if (!empty($_SERVER['REQUEST_URI'])) {

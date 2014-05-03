@@ -18,22 +18,21 @@ if (is_array($_ENV['title'])) {
 
 echo "<!doctype html>\n<html>\n";
 echo '<head>';
+echo '<meta name="viewport" content="initial-scale=1, user-scalable=yes">';
 echo '<title>Imperium: ' . $_ENV['title'] . '</title>';
+
+echo '<link href="//gcdn.org/font-awesome/4.0.3/font-awesome.css" rel="stylesheet">';
+echo '<link href="//gcdn.org/jquery-ui/1.10.2/smoothness.css" rel="stylesheet">';
+echo '<link href="//gcdn.org/radix/radix.css" rel="stylesheet">';
+echo '<link href="' . radix::link('/css/base.css') . '" rel="stylesheet">';
+echo '<link href="' . radix::link('/img/imperium-icon.ico') . '" rel="shortcut icon">';
+echo '<link href="' . radix::link('/img/imperium-icon.png') . '" rel="apple-touch-icon">';
 // $this->headLink()->appendAlternate('/feed/', 'application/rss+xml', 'RSS Feed');
+
 echo '<script src="//gcdn.org/jquery/1.10.2/jquery.js"></script>';
 echo '<script src="//gcdn.org/jquery-ui/1.10.2/jquery-ui.js"></script>';
 echo '<script src="' . radix::link('/js/imperium.js') . '"></script>';
 echo '<script>Imperium.base = "' . radix::base(true) . '";</script>';
-
-echo '<link href="//gcdn.org/font-awesome/4.0.3/font-awesome.css" rel="stylesheet">';
-echo '<link href="//gcdn.org/jquery-ui/1.10.2/smoothness.css" rel="stylesheet" type="text/css">';
-echo '<link href="//gcdn.org/radix/radix.css" rel="stylesheet" type="text/css">';
-echo '<link href="' . radix::link('/css/base.css') . '" rel="stylesheet" type="text/css">';
-
-echo '<link href="' . radix::link('/img/imperium-icon.ico') . '" rel="shortcut icon">';
-echo '<link href="' . radix::link('/img/imperium-icon.png') . '" rel="apple-touch-icon">';
-
-echo '<meta name="viewport" content="initial-scale=1, user-scalable=yes">';
 
 echo "</head>\n<body>\n";
 
