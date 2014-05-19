@@ -20,6 +20,7 @@ if (count($_POST)) {
 
 switch ($mode) {
 case 'create':
+
 	$_ENV['title'] = array('Work Order','Item','Create');
 	$this->WorkOrder = new WorkOrder(intval($_GET['w']));
 	$this->WorkOrderItem = $this->WorkOrder->newWorkOrderItem();

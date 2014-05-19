@@ -69,20 +69,20 @@ echo '<tr><td class="l">Note:</td><td colspan="3"><textarea name="note">' . html
 // echo "<tr><td class='b r'>Hours Total:</td><td colspan='3' style='color: #f00; font-weight: 700; text-align: right;'>".number_format($this->data['WorkOrder']['bill_amount'],2)."</td></tr>";
 // echo "<tr><td class='b r'>Parts Total:</td><td colspan='3' style='color: #f00; font-weight: 700; text-align: right;'>".number_format($this->data['WorkOrder']['bill_amount'],2)."</td></tr>";
 // Open Total
-echo "<tr><td class='l'>Bill Total:</td><td colspan='2' style='font-weight: 700;'>".number_format($this->WorkOrder->bill_amount,2)."</td></tr>";
-echo "<tr><td class='l'>Open Total:</td><td colspan='2' style='color: #f00; font-weight: 700;'>".number_format($this->WorkOrder->open_amount,2)."</td></tr>";
+echo "<tr><td class='l'>Bill Total:</td><td colspan='2' style='font-weight: 700;'>".number_format($this->WorkOrder['bill_amount'],2)."</td></tr>";
+echo "<tr><td class='l'>Open Total:</td><td colspan='2' style='color: #f00; font-weight: 700;'>".number_format($this->WorkOrder['open_amount'],2)."</td></tr>";
 echo '</table>';
 
 // Hidden Fields & Buttons
 echo '<div class="cmd">';
-echo radix_html_form::hidden('id',$this->WorkOrder->id);
-echo radix_html_form::hidden('contact_id',$this->WorkOrder->contact_id);
+echo radix_html_form::hidden('id',$this->WorkOrder['id']);
+echo radix_html_form::hidden('contact_id',$this->WorkOrder['contact_id']);
 echo '<button class="good" name="a" type="submit" value="save">Save</button>';
 
 if (!empty($_ENV['workorder.workflow'])) {
     $list = array();
     foreach ($_ENV['workorder.workflow'] as $k=>$v) {
-        if ( ($k == '*') || ($k == $this->WorkOrder->status) ) {
+        if ( ($k == '*') || ($k == $this->WorkOrder['status']) ) {
             $list = explode(',',$v);
             foreach ($list as $x) {
             	switch ($x) {
@@ -113,9 +113,9 @@ echo '</form>';
 // echo '</form>';
 
 // Work Order Notes
-if (!empty($this->WorkOrder->id)) {
+if (!empty($this->WorkOrder['id'])) {
 
-    $url = $this->link('/note/create?w=' . $this->WorkOrder->id);
+    $url = $this->link('/note/create?w=' . $this->WorkOrder['id']);
     $arg = array(
         'list' => $this->WorkOrderNoteList,
         'page' => $url,
@@ -124,9 +124,9 @@ if (!empty($this->WorkOrder->id)) {
 }
 
 // Work Order Files
-if (!empty($this->WorkOrder->id)) {
+if (!empty($this->WorkOrder['id'])) {
 
-    $url = $this->link('/file/create?w=' . $this->WorkOrder->id);
+    $url = $this->link('/file/create?w=' . $this->WorkOrder['id']);
     $arg = array(
         'list' => $this->WorkOrderFileList,
         'page' => $url,
@@ -135,9 +135,9 @@ if (!empty($this->WorkOrder->id)) {
 }
 
 // Work Order Items
-if (!empty($this->WorkOrder->id)) {
+if (!empty($this->WorkOrder['id'])) {
 
-    $url = $this->link('/workorder/item?w=' . $this->WorkOrder->id);
+    $url = $this->link('/workorder/item?w=' . $this->WorkOrder['id']);
 
     echo '<h2 id="woi-list">Work Order Items ';
     echo '<a accesskey="n" class="ajax-edit" data-name="woi-edit" href="' . $url . '">';
@@ -155,7 +155,6 @@ if (count($this->WorkOrderItemList) > 0) {
 
     $x_kind = null;
     $x_status = null;
-    $x_invoice_id = -1;
 
     echo '<table>';
     // echo '<tr><th>Quantity</th><th>Name</th><th>Rate</th><th>Status</th><th>Subtotal</th></tr>';
@@ -164,16 +163,16 @@ if (count($this->WorkOrderItemList) > 0) {
 
         // Split by Invoice, Kind or Status
         // Summary Row
-        if ( ($x_invoice_id != $woi->invoice_id) || ($x_kind != $woi->kind) || ($x_status != $woi->status) ) {
+        if ( ($x_kind != $woi['kind']) || ($x_status != $woi['status']) ) {
 
             drawSummaryRow($e_size,$e_cost,$a_size,$a_cost);
             // The method of tying WOI => IVI is incorrect
             //  We should tie IVI => WOI, so that here we'd look for IVI where workorder_item_id = ?
-            if ($woi->invoice_id) {
-                $text = $this->link("/invoice/view?i={$woi->invoice_id}","Invoice #{$woi->invoice_id}");
-            } else {
-                $text =  $woi->status . ' ' . $woi->kind . ' Items';
-            }
+            //if ($woi->invoice_id) {
+            //    $text = $this->link("/invoice/view?i={$woi->invoice_id}","Invoice #{$woi->invoice_id}");
+            //} else {
+                $text =  $woi['status'] . ' ' . $woi['kind'] . ' Items';
+            //}
             echo '<tr><th colspan="6">' . $text . '</th></tr>';
 
             // Reset Counters
@@ -183,13 +182,13 @@ if (count($this->WorkOrderItemList) > 0) {
         }
 
         // $name = (isset($woi->date) ? date('m/d/y ',strtotime($woi->date)) : null) . $woi->name;
-        $link = '<a class="ajax-edit" data-name="woi-edit" href="' . $this->link('/workorder/item?id=' . $woi->id) . '">%s</a>';
+        $link = '<a class="ajax-edit" data-name="woi-edit" href="' . radix::link('/workorder/item?id=' . $woi['id']) . '">%s</a>';
 
         echo '<tr class="rero">';
 
         // Date
         echo '<td>';
-        if (!empty($woi->date)) {
+        if (!empty($woi['date'])) {
             $html = null;
             $time = strtotime($woi->date);
             $span = $_SERVER['REQUEST_TIME'] - $time;
@@ -207,46 +206,45 @@ if (count($this->WorkOrderItemList) > 0) {
         echo '</td>';
 
         // Item
-        echo '<td class="b">' . sprintf($link,$woi->name) . '</td>';
+        echo '<td class="b">' . sprintf($link,$woi['name']) . '</td>';
 
         // Estimated Values?
         echo '<td class="r s">';
-        if ( (!empty($woi->e_quantity)) && (floatval($woi->e_quantity) > 0) ) {
+        if ( (!empty($woi['e_quantity'])) && (floatval($woi['e_quantity']) > 0) ) {
             echo '(';
-            echo number_format($woi->e_quantity,2);
+            echo number_format($woi['e_quantity'],2);
             echo '@';
-            echo number_format($woi->e_rate,2);
+            echo number_format($woi['e_rate'],2);
             echo '/';
-            echo $woi->e_unit;
+            echo $woi['e_unit'];
             echo ')';
 
-            $e_cost += ($woi->e_quantity * $woi->e_rate);
-            $e_size += $woi->e_quantity;
+            $e_cost += ($woi['e_quantity'] * $woi['e_rate']);
+            $e_size += $woi['e_quantity'];
 
-            $e_cost_full += ($woi->e_quantity * $woi->e_rate);
-            $e_size_full += $woi->e_quantity;
+            $e_cost_full += ($woi['e_quantity'] * $woi['e_rate']);
+            $e_size_full += $woi['e_quantity'];
 
         }
         echo '</td>';
 
         // Actual Quantity Rate
-        echo '<td class="c">' . $woi->a_quantity . '@' . $woi->a_rate . '/' . $woi->a_unit . '</td>';
+        echo '<td class="c">' . $woi['a_quantity'] . '@' . $woi['a_rate'] . '/' . $woi['a_unit'] . '</td>';
 
         // Actual Sub-Total
-        echo "<td class='r'>".number_format($woi->a_quantity * $woi->a_rate,2)."</td>";
+        echo "<td class='r'>".number_format($woi['a_quantity'] * $woi['a_rate'], 2)."</td>";
 
         echo '</tr>';
 
         // Build Sums
-        $a_size += $woi->a_quantity;
-        $a_cost += ($woi->a_quantity * $woi->a_rate);
+        $a_size += $woi['a_quantity'];
+        $a_cost += ($woi['a_quantity'] * $woi['a_rate']);
 
-        $a_cost_full += ($woi->a_quantity * $woi->a_rate);
-        $a_size_full += $woi->a_quantity;
+        $a_cost_full += ($woi['a_quantity'] * $woi['a_rate']);
+        $a_size_full += $woi['a_quantity'];
 
-        $x_kind = $woi->kind;
-        $x_status = $woi->status;
-        $x_invoice_id = $woi->invoice_id;
+        $x_kind = $woi['kind'];
+        $x_status = $woi['status'];
 
     }
     drawSummaryRow($e_size,$e_cost,$a_size,$a_cost);

@@ -34,11 +34,11 @@ class WorkOrder extends ImperiumBase
     */
     function __construct($id)
     {
-        $this->kind = $_ENV['workorder']['kind'];
-        $this->status = $_ENV['workorder']['status'];
-        $this->base_rate = $_ENV['workorder']['base_rate'];
-        $this->base_unit = $_ENV['workorder']['base_unit'];
-        $this->date = date('Y-m-d');
+        $this['kind'] = $_ENV['workorder']['kind'];
+        $this['status'] = $_ENV['workorder']['status'];
+        $this['base_rate'] = $_ENV['workorder']['base_rate'];
+        $this['base_unit'] = $_ENV['workorder']['base_unit'];
+        $this['date'] = date('Y-m-d');
 
         parent::__construct($id);
     }
@@ -142,11 +142,11 @@ class WorkOrder extends ImperiumBase
     function newWorkOrderItem()
     {
         $woi = new WorkOrderItem(null);
-        $woi->workorder_id = $this->id;
-        $woi->a_rate = $this->base_rate;
-        $woi->a_unit = $this->base_unit;
-        $woi->e_rate = $this->base_rate;
-        $woi->e_unit = $this->base_unit;
+        $woi['workorder_id'] = $this->_data['id'];
+        $woi['a_rate'] = $this->_data['base_rate'];
+        $woi['a_unit'] = $this->_data['base_unit'];
+        $woi['e_rate'] = $this->_data['base_rate'];
+        $woi['e_unit'] = $this->_data['base_unit'];
         return $woi;
     }
 
