@@ -53,12 +53,12 @@ echo "<tr><td class='l'>Actual:</td><td>$q</td><td><strong>@</strong>$r</td><td>
 echo '<tr><td class="l">Name:</td><td colspan="5">'  . radix_html_form::text('name',$this->WorkOrderItem['name']) . '</td></tr>';
 
 // Details
-echo '<tr><td class="l">Note:</td><td colspan="5">' . radix_html_form::textarea('note',$this->WorkOrderItem['note']) . '</td></tr>';
+echo '<tr><td class="l">Note:</td><td colspan="5">' . radix_html_form::textarea('note', $this->WorkOrderItem['note']) . '</td></tr>';
 
 // Notify
 echo '<tr><td class="l">';
 echo '<span title="Input an email address here and a notification email will be sent">Notify:</span></td>';
-echo '<td colspan="5">' . radix_html_form::text('notify',$this->WorkOrderItem['notify']) . '</td>';
+echo '<td colspan="5">' . radix_html_form::text('notify', $this->WorkOrderItem['notify']) . '</td>';
 echo '</tr>';
 
 echo "<tr>";

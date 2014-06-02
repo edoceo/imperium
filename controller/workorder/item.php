@@ -118,12 +118,12 @@ case 'view':
 
 	$id = intval($_GET['id']);
 	$woi = new WorkOrderItem($id);
-	if (empty($woi->id)) {
-		$this->_s->fail[] = sprintf('Cannot find Work Order Item #%d',$id);
+	if (empty($woi['id'])) {
+		radix_session::flash('fail', sprintf('Cannot find Work Order Item #%d', $id));
 		return;
 	}
 
-	$this->WorkOrder = new WorkOrder($woi->workorder_id);
+	$this->WorkOrder = new WorkOrder($woi['workorder_id']);
 	$this->WorkOrderItem = $woi;
 
 	break;
