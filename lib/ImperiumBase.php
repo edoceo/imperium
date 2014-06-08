@@ -51,7 +51,7 @@ class ImperiumBase implements ArrayAccess
             if (is_object($x)) {
                 $p = get_object_vars($x);
                 foreach ($p as $k=>$v) {
-                    $this->$k = stripslashes($x->$k);
+                    // $this->$k = stripslashes($x->$k);
                     $this->_data[$k] = stripslashes($x->$k);
                 }
             }
@@ -64,7 +64,6 @@ class ImperiumBase implements ArrayAccess
         if (is_object($x)) {
             $p = get_object_vars($x);
             foreach ($p as $k=>$v) {
-                $this->$k = $x->$k;
                 $this->_data[$k] = $x->$k;
             }
             return;
@@ -72,11 +71,9 @@ class ImperiumBase implements ArrayAccess
 
         // Copy Properties from Array Keys
         if (is_array($x)) {
-        	$this->_data = $x;
-            foreach ($x as $k=>$v) {
-                $this->$k = $x[$k];
-            }
-            return;
+			foreach ($x as $k=>$v) {
+				$this->_data[$k] = $v;
+			}
         }
     }
 

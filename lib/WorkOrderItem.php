@@ -11,12 +11,7 @@
 
 class WorkOrderItem extends ImperiumBase
 {
-  protected $_table = 'workorder_item';
-
-	//const OBJECT_TYPE = 401;
-
-	// const STATUS_PENDING = 1000;
-	// const STATUS_COMPLETE = 3000;
+	protected $_table = 'workorder_item';
 
     public static $kind_list = array(
 		'Labour'=>'Labour',
@@ -31,11 +26,13 @@ class WorkOrderItem extends ImperiumBase
 	*/
 	function __construct($x=null)
 	{
-		$this->_date['date'] = date('Y-m-d');
-        $this->_data['e_unit'] = 'hr';
+		$this->_data['date'] = date('Y-m-d');
         $this->_data['a_quantity'] = 2;
         $this->_data['a_unit'] = 'hr';
+        $this->_data['e_unit'] = 'hr';
+
 		parent::__construct($x);
+
         if (empty($this->_data['time_alpha'])) {
             $this->_data['time_alpha'] = strftime('%H:%M',mktime(date('H')-1,0,0));
             $this->_data['time_omega'] = strftime('%H:%M',mktime(date('H')+1,0,0));
@@ -67,10 +64,7 @@ class WorkOrderItem extends ImperiumBase
 
 	function delete()
 	{
-		$id = intval($this->id);
-		$db = Zend_Registry::get('db');
-		$db->query("delete from workorder_item where id = $id");
-		return true;
+		throw new Exception("Delete Items from their Parent WorkOrder Object");
 	}
 
 	/**

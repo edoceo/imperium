@@ -22,15 +22,14 @@ echo '<table>';
 $time_base = mktime(0,0,0);
 $time_list = array();
 for ($m=0; $m<=86400; $m+=900) {
-    $k = strftime('%H:%M',$time_base + $m);
+    $k = strftime('%H:%M:00',$time_base + $m);
     $v = strftime('%H:%M',$time_base + $m);
     $time_list[$k] = $v;
 }
 
-$d = radix_html_form::date('date',$this->WorkOrderItem['date'], array('id'=>'woi_date','size'=>12));
 echo '<tr>';
 echo '<td class="l">Kind:</td><td>' . radix_html_form::select('kind', $this->WorkOrderItem['kind'], WorkOrderItem::$kind_list) . '</td>';
-echo '<td class="l">Date:</td><td>' . $d . '</td>';
+echo '<td class="l">Date:</td><td>' . radix_html_form::date('date', $this->WorkOrderItem['date'], array('id'=>'woi_date')) . '</td>';
 echo '<td>' . radix_html_form::select('time_alpha',$this->WorkOrderItem['time_alpha'], $time_list) . '</td>';
 echo '<td>' . radix_html_form::select('time_omega',$this->WorkOrderItem['time_omega'], $time_list) . '</td>';
 echo '</tr>';
@@ -76,7 +75,7 @@ echo '<input name="workorder_id" type="hidden" value="' . $this->WorkOrder['id']
 // echo $this->formSubmit('c','Save');
 echo '<button class="good" name="a" type="submit" value="save">Save</button>';
 if (!empty($this->WorkOrderItem['id'])) {
-    echo '<button class="good" name="a" type="submit" value="delete">Delete</button>';
+    echo '<button class="fail" name="a" type="submit" value="delete">Delete</button>';
 }
 echo '</div>';
 

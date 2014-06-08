@@ -101,9 +101,11 @@ class WorkOrder extends ImperiumBase
     */
     function delWorkOrderItem($id)
     {
+		radix_db_sql::query('begin');
+        radix_db_sql::query('DELETE from workorder_item WHERE id = ? AND workorder_id = ?', array($id, $this->_data['id']));
         // Base_Diff::note($this,'Work Order Item #' . $id . ' removed');
-        radix_db_sql::query("DELETE from workorder_item where id = $id");
         $this->_updateBalance();
+        radix_db_sql::query('commit');
         return true;
     }
 
@@ -112,27 +114,15 @@ class WorkOrder extends ImperiumBase
     */
     function getWorkOrderItems($where=null)
     {
-        // $sql = $db->select();
-        //
-        // $sql->from(array('woi'=>'workorder_item'));
-        // //$sql->join(array('woiii'=>'workorder_item_invoice_item'),'woi.id=woiii.id');
-        // $sql->where('woi.workorder_id = ?',$this->id);
-        //
-        // if (is_array($where)) {
-        //   foreach ($where as $k=>$v) {
-        //     $sql->where($k,$v);
-        //   }
-        // }
-        // $sql->order(array('woi.status','woi.date','woi.kind','woi.a_rate desc','woi.a_quantity desc'));
-        // $rs = $db->fetchAll($sql);
         $sql = 'SELECT * FROM workorder_item WHERE workorder_id = ? ';
         $sql.= ' ORDER BY status, date, kind, a_rate, a_quantity ';
-        $res = radix_db_sql::fetchAll($sql, array($this->_data['id']));
+        $res = radix_db_sql::fetch_all($sql, array($this->_data['id']));
 
         $ret = array();
         foreach ($res as $x) {
             $ret[] = new WorkOrderItem($x);
         }
+
         return $ret;
     }
 
