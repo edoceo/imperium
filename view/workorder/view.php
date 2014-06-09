@@ -190,7 +190,7 @@ if (count($this->WorkOrderItemList) > 0) {
         echo '<td>';
         if (!empty($woi['date'])) {
             $html = null;
-            $time = strtotime($woi->date);
+            $time = strtotime($woi['date']);
             $span = $_SERVER['REQUEST_TIME'] - $time;
             $html.= '<span title="' . strftime('%a %Y-%m-%d',$time) . ' (' . floor($span/86400) . ' days ago)">';
             if ($span >= 31104000) { // 360 days
