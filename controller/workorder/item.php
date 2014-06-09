@@ -70,8 +70,6 @@ case 'save':
 		$woi[$x] = trim($_POST[$x]);
 	}
 	$woi = $wo->addWorkOrderItem($woi);
-	radix::dump($woi);
-	exit;
 
 	// Save to DB
 	if ($id) {
