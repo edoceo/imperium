@@ -42,3 +42,9 @@ Change to the `approot/sql` directory then run each of those files in order.
 Copy `approot/etc/imperium.ini` to `approot/etc/imperium-local.ini`.
 Edit imperium-local.ini to configure proper values for your environment.
 
+Install the Repos via Composer
+
+{{{
+	curl -sS https://getcomposer.org/installer | php
+	./composer.phar --no-dev install
+}}}

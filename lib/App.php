@@ -88,36 +88,5 @@ class App
 		// $_SESSION['mru-list'] = $key_list;
 
 	}
-	
-	static function sendMail($rcpt, $mail)
-	{
-		$uri = parse_url($_ENV['mail']['smtp']);
-
-		$mail = str_replace('%head_from%', sprintf('"%s" <%s>', $_ENV['company']['name'], $_ENV['mail']['from']), $mail);
-		$mail = str_replace('%head_hash%', md5(openssl_random_pseudo_bytes(256)) . '@' . parse_url($_ENV['application']['base'], PHP_URL_HOST), $mail);
-
-		require_once('Radix/mail/smtp.php');
-		$smtp = new radix_mail_smtp(sprintf('%s://%s:%d', $uri['scheme'], $uri['host'], $uri['port']));
-
-		$res = $smtp->ehlo($_ENV['application']['host']);
-		print_r($res);
-		$res = $smtp->auth($uri['user'], $uri['pass']);
-		print_r($res);
-		$res = $smtp->mailFrom($uri['user']);
-		print_r($res);
-		$res = $smtp->rcptTo($rcpt);
-		print_r($res);
-		$res = $smtp->data($mail);
-		if (250 != $res[0]['code']) {
-			throw new Exception("Could not send mail: {$res[0]['code']} {$res[0]['text']}");
-		}
-		// print_r($res);
-		// $res = $smtp->quit();
-		// print_r($res);
-		if ($res[0]['code'] != 221) {
-			print_r($res);
-		}
-	}
-
 
 }

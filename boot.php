@@ -21,10 +21,13 @@ define('APP_NAME','Edoceo Imperium');
 
 require_once('Radix.php');
 require_once('Radix/ACL.php');
+require_once('Radix/Filter.php');
+require_once('Radix/Format.php');
 require_once('Radix/Session.php');
 require_once('Radix/html/form.php');
 
 require_once('App.php');
+require_once('App_Mail.php');
 require_once('ACL.php');
 require_once('ImperiumBase.php');
 require_once('ImperiumView.php');
@@ -42,6 +45,8 @@ require_once('Invoice.php');
 require_once('InvoiceItem.php');
 require_once('WorkOrder.php');
 require_once('WorkOrderItem.php');
+
+require_once(APP_ROOT . '/vendor/autoload.php');
 
 // Load Application Config
 App::load_config();

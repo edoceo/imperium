@@ -11,6 +11,7 @@
 
 // CLI
 require_once(dirname(dirname(__FILE__)) . '/lib/cli.php');
+
 $date = strftime('%Y-%m-%d',$time);
 
 // Pending Work
@@ -76,8 +77,8 @@ foreach ($head as $k=>$v) {
 }
 $mail.= "\r\n";
 $mail.= $html;
-// print_r($mail);
-App::sendMail($_ENV['cron']['alert_to'], $mail);
+
+App_Mail::send($_ENV['cron']['alert_to'], $mail);
 
 function _draw_details($res)
 {
