@@ -105,12 +105,12 @@ $(function() {
 		var alpha = $('#time_alpha').val();
 		var omega = $('#time_omega').val();
 
-		if (m = alpha.match(/^(\d+):(\d+)$/)) {
+		if (m = alpha.match(/^(\d+):(\d+):00$/)) {
 			h_alpha = parseInt(m[1]);
 			m_alpha = parseInt(m[2]) / 60 * 100;
 		}
 
-		if (m = omega.match(/^(\d+):(\d+)$/)) {
+		if (m = omega.match(/^(\d+):(\d+):00$/)) {
 			h_omega = parseInt(m[1]);
 			m_omega = parseInt(m[2]) / 60 * 100;
 		}
@@ -118,7 +118,6 @@ $(function() {
 		if (omega < alpha) {
 			h_omega += 24;
 		}
-
 
 		var h_delta = h_omega - h_alpha;
 		var m_delta = Math.abs(m_omega - m_alpha);
