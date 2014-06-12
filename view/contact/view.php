@@ -288,7 +288,7 @@ echo radix::block('file-list',$arg);
 // Work Orders
 echo '<h2>';
 echo 'Work Orders';
-echo '<span class="s">[ <a href="' . radix::link('/workorder/new?c=' . $this->Contact->id) . '">';
+echo '<span class="s">[ <a href="' . radix::link('/workorder/new?c=' . $this->Contact['id']) . '">';
 echo img('/silk/1.3/table_add.png','New Work Order');
 echo '</a> ]</span>';
 echo '</h2>';
@@ -299,7 +299,7 @@ if ($this->WorkOrderList) {
 // Invoices
 echo '<h2>';
 echo 'Invoices';
-echo '<span class="s">[ <a href="' . radix::link('/invoice/new?c=' . $this->Contact->id) . '">';
+echo '<span class="s">[ <a href="' . radix::link('/invoice/new?c=' . $this->Contact['id']) . '">';
 echo img('/silk/1.3/layout_add.png','Create Invoice');
 echo '</a> ]</span>';
 echo '</h2>';
