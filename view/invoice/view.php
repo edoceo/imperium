@@ -20,7 +20,7 @@ if (count($this->jump_list)) {
     $list = array();
     foreach ($this->jump_list as $x) {
         $text = null;
-        if ($x['id'] < $this->Invoice->id ) {
+        if ($x['id'] < $this->Invoice['id'] ) {
             $text = '&laquo; #' . $x['id'];
         } elseif ($x['id'] == $this->Invoice['id']) {
         	$text = '#' . $x['id'];
@@ -34,9 +34,9 @@ if (count($this->jump_list)) {
     echo '</div>';
 }
 
-echo '<form action="' . radix::link('/invoice/save?i=' . $this->Invoice->id) . '" method="post">';
+echo '<form action="' . radix::link('/invoice/save?i=' . $this->Invoice['id']) . '" method="post">';
 echo '<div style="float:right;">';
-echo star($this->Invoice->star ? $this->Invoice->star : 'star_' );
+echo star($this->Invoice['star'] ? $this->Invoice['star'] : 'star_' );
 echo '</div>';
 
 echo '<table>';
@@ -54,18 +54,18 @@ if (empty($this->Contact->id)) {
     echo '</td>';
 } else {
     echo '<td class="l">Contact:</td>';
-    echo '<td><a href="' . radix::link('/contact/view?c='.$this->Contact->id) . '">' . $this->Contact->name . '</a>';
+    echo '<td><a href="' . radix::link('/contact/view?c='.$this->Contact['id']) . '">' . $this->Contact['name'] . '</a>';
     echo '</td>';
 }
 
 // Date & Due Information
 echo '<td class="l">Date:</td><td>';
-echo radix_html_form::text('date',$this->Invoice->date,array('id'=>'iv_date','size'=>'12'));
-if ($this->Invoice->due_diff < 0) {
-    echo '&nbsp;<span class="s">Due in ' . abs($this->Invoice->due_diff) . ' days</span>';
+echo radix_html_form::date('date',$this->Invoice['date'], array('id'=>'iv_date'));
+if ($this->Invoice['due_diff'] < 0) {
+    echo '&nbsp;<span class="s">Due in ' . abs($this->Invoice['due_diff']) . ' days</span>';
 } else {
-    if ($this->Invoice->status != 'Paid') {
-        echo '&nbsp;<span class="s">Past Due ' . abs($this->Invoice->due_diff) . ' days</span>';
+    if ($this->Invoice['status'] != 'Paid') {
+        echo '&nbsp;<span class="s">Past Due ' . abs($this->Invoice['due_diff']) . ' days</span>';
     }
 }
 echo '</td></tr>';
@@ -77,29 +77,29 @@ if (is_array($this->ContactAddressList)) {
     $list+= $this->ContactAddressList;
 }
 
-$input = radix_html_form::select('bill_address_id', $this->Invoice->bill_address_id, $list,null);
+$input = radix_html_form::select('bill_address_id', $this->Invoice['bill_address_id'], $list,null);
 echo '<tr>';
 echo '<td class="b r">Bill To:</td><td>' . $input . '</td>';
 
-$input = radix_html_form::select('ship_address_id', $this->Invoice->ship_address_id, $list,null);
+$input = radix_html_form::select('ship_address_id', $this->Invoice['ship_address_id'], $list,null);
 echo '<td class="b r">Ship To:</td><td>' . $input . '</td>';
 echo '</tr>';
 
-echo "<tr><td class='b r'>Note:</td><td colspan='3'>" . radix_html_form::textarea('note',$this->Invoice->note,array('style'=>'height:3em;width:90%;')) . '</td></tr>';
-echo '<tr><td class="l">Bill Total:</td><td class="l">' . number_format($this->Invoice->bill_amount,2)."</td></tr>";
+echo "<tr><td class='b r'>Note:</td><td colspan='3'>" . radix_html_form::textarea('note',$this->Invoice['note'],array('style'=>'height:3em;width:90%;')) . '</td></tr>';
+echo '<tr><td class="l">Bill Total:</td><td class="l">' . number_format($this->Invoice['bill_amount'],2)."</td></tr>";
 echo '<tr><td class="l">Paid Total:</td><td class="l"';
-if ($this->Invoice->paid_amount < $this->Invoice->bill_amount) {
+if ($this->Invoice['paid_amount'] < $this->Invoice['bill_amount']) {
     echo ' style="color:#f00;"';
 }
-echo '>' . number_format($this->Invoice->paid_amount, 2) . '</td></tr>';
+echo '>' . number_format($this->Invoice['paid_amount'], 2) . '</td></tr>';
 
 // Kind and Status
 echo '<tr>';
-// echo '<td class="l">Kind:</td><td><input id="kind" name="kind" type="text" value="' . $this->Invoice->kind . '">';
+// echo '<td class="l">Kind:</td><td><input id="kind" name="kind" type="text" value="' . $this->Invoice['kind'] . '">';
 // echo '<script type="text/javascript">$("#kind").autocomplete({ minLength:0, source:["Single","Project","Subscription/Monthly","Subscription/Quarterly","Subscription/Yearly"] });</script>';
 // echo '</td>';
-// echo '<td class="l">Status:</td><td><input name="status" size="16" type="text" value="' . $this->Invoice->status . '" /></td>';
-echo '<td class="l">Status:</td><td>' . radix_html_form::select('status', $this->Invoice->status, $this->StatusList) . '</td>';
+// echo '<td class="l">Status:</td><td><input name="status" size="16" type="text" value="' . $this->Invoice['status'] . '" /></td>';
+echo '<td class="l">Status:</td><td>' . radix_html_form::select('status', $this->Invoice['status'], $this->StatusList) . '</td>';
 echo '</tr>';
 
 echo '</table>';
@@ -109,8 +109,8 @@ echo '</table>';
 
 // Buttons
 echo '<div class="cmd">';
-echo radix_html_form::hidden('id',$this->Invoice->id);
-echo radix_html_form::hidden('contact_id',$this->Invoice->contact_id);
+echo radix_html_form::hidden('id',$this->Invoice['id']);
+echo radix_html_form::hidden('contact_id',$this->Invoice['contact_id']);
 echo '<input class="good" name="a" type="submit" value="Save">';
 
 // Hawk Monitoring?
@@ -125,7 +125,7 @@ if ($this->Invoice->hasFlag(Invoice::FLAG_HAWK)) {
 // Workflow Buttons?
 if (!empty($_ENV['invoice.workflow'])) {
     foreach ($_ENV['invoice.workflow'] as $k=>$v) {
-        if ( $k == $this->Invoice->status ) {
+        if ( $k == $this->Invoice['status'] ) {
             $list = explode(',',$v);
             foreach ($list as $x) {
             	switch ($x) {
@@ -144,9 +144,9 @@ echo '</div>';
 echo '</form>';
 
 // Invoice Notes
-if (!empty($this->Invoice->id)) {
+if (!empty($this->Invoice['id'])) {
 
-    $url = radix::link('/note/create?i=' . $this->Invoice->id);
+    $url = radix::link('/note/create?i=' . $this->Invoice['id']);
     $arg = array(
         'list' => $this->InvoiceNoteList,
         'page' => $url,
@@ -161,7 +161,7 @@ $item_tax_total = 0;
 //$link = radix::link('/invoice/item');
 
 echo '<h2>Invoice Items ';
-echo '<span class="s">[ <a class="fancybox fancybox.ajax" href="' . radix::link('/invoice/item?i=' . $this->Invoice->id) . '">';
+echo '<span class="s">[ <a class="fancybox fancybox.ajax" href="' . radix::link('/invoice/item?i=' . $this->Invoice['id']) . '">';
 echo img('/tango/24x24/actions/list-add.png','Add Item');
 echo '</a> ]</span>';
 echo '</h2>';
@@ -196,8 +196,8 @@ if ((isset($this->InvoiceItemList)) && (is_array($this->InvoiceItemList)) && (co
     echo '<tr><td class="b" colspan="3">Sub-Total:</td><td class="l">' . number_format($item_total,2) . '</td></tr>';
     echo '<tr><td class="b" colspan="3">Tax Total:</td><td class="l">' . number_format($item_tax_total,2) . '</td></tr>';
     echo '<tr><td class="b" colspan="3">Bill Total:</td><td class="l">&curren;' . number_format($item_total + $item_tax_total, 2) . '</td></tr>';
-    echo '<tr><td class="b" colspan="3">Paid Total:</td><td class="l">&curren;' . number_format($this->Invoice->paid_amount, 2) . '</td></tr>';
-    echo '<tr><td class="b" colspan="3">Balance:</td><td class="l" style="color: #f00;">&curren;' . number_format($item_total + $item_tax_total - $this->Invoice->paid_amount, 2) . '</td></tr>';
+    echo '<tr><td class="b" colspan="3">Paid Total:</td><td class="l">&curren;' . number_format($this->Invoice['paid_amount'], 2) . '</td></tr>';
+    echo '<tr><td class="b" colspan="3">Balance:</td><td class="l" style="color: #f00;">&curren;' . number_format($item_total + $item_tax_total - $this->Invoice['paid_amount'], 2) . '</td></tr>';
     echo '</table>';
     echo '</div>';
 }
