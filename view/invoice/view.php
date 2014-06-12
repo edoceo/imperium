@@ -175,19 +175,19 @@ if ((isset($this->InvoiceItemList)) && (is_array($this->InvoiceItemList)) && (co
     echo '<tr><th>Description</th><th>Quantity</th><th>Rate</th><th>Cost</th><th>Tax</th></tr>';
     // <th>Tax</th>
     foreach ($this->InvoiceItemList as $ivi) {
-        $item_subtotal = $ivi->rate * $ivi->quantity;
+        $item_subtotal = $ivi['rate'] * $ivi['quantity'];
         $item_total += $item_subtotal;
-        if ($ivi->tax_rate > 0) {
-            $item_tax_total+= round($item_subtotal * ($ivi->tax_rate),2);
+        if ($ivi['tax_rate'] > 0) {
+            $item_tax_total+= round($item_subtotal * $ivi['tax_rate'],2);
         }
 
         echo '<tr class="rero">';
-        echo '<td class="b"><a class="fancybox fancybox.ajax" href="' . radix::link('/invoice/item?id=' . $ivi->id) . '">' .$ivi->name . '</a></td>';
-        echo '<td class="c b">' .number_format($ivi->quantity,2) . '</td>';
-        echo '<td class="r">' . number_format($ivi->rate,2) . '/' . $ivi->unit . '</td>';
+        echo '<td class="b"><a class="fancybox fancybox.ajax" href="' . radix::link('/invoice/item?id=' . $ivi['id']) . '">' .$ivi['name'] . '</a></td>';
+        echo '<td class="c b">' .number_format($ivi['quantity'],2) . '</td>';
+        echo '<td class="r">' . number_format($ivi['rate'],2) . '/' . $ivi['unit'] . '</td>';
         echo '<td class="r">' . number_format($item_subtotal, 2) . '</td>';
-        if ($ivi->tax_rate > 0) {
-            echo '<td class="r"><sup>' . tax_rate_format($ivi->tax_rate) . '</sup></td>';
+        if ($ivi['tax_rate'] > 0) {
+            echo '<td class="r"><sup>' . tax_rate_format($ivi['tax_rate']) . '</sup></td>';
         } else {
             echo '<td class="r">&mdash;</td><td></td>';
         }
