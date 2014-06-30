@@ -1,7 +1,7 @@
 {
-	"name":"discussio/auto-test",
-	"description":"Testing the DIO System",
-	"license":"proprietary",
+	"name": "edoceo/imperium",
+	"description": "Imperium Business Manager Software",
+	"license": "proprietary",
 	"repositories": [
         {
             "type": "pear",

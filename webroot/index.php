@@ -82,20 +82,24 @@ if (empty($_SESSION['uid'])) {
 
 if (!acl::may(radix::$path)) {
 
-	radix_session::flash('fail', 'Access Denied to ' . radix::$path);
-	// radix::dump($_SERVER);
-	if (empty($_SESSION['return-path'])) {
-		if (!empty($_SERVER['REQUEST_URI'])) {
-			$real_base = radix::base();
-			$want = $_SERVER['REQUEST_URI'];
-			$want_base = substr($want, 0, strlen($real_base));
-			if ($real_base == $want_base) {
-				$_SESSION['return-path'] = substr($want, strlen($real_base));
+	if (empty($_SESSION['uid'])) {
+		if (empty($_SESSION['return-path'])) {
+			if (!empty($_SERVER['REQUEST_URI'])) {
+				$real_base = radix::base();
+				$want = $_SERVER['REQUEST_URI'];
+				$want_base = substr($want, 0, strlen($real_base));
+				if ($real_base == $want_base) {
+					$_SESSION['return-path'] = substr($want, strlen($real_base));
+				}
 			}
 		}
+		radix_session::flash('fail', 'Identity Required');
+		radix::redirect('/auth/sign-in');
 	}
 
-	radix::redirect('/auth/sign-in');
+	radix_session::flash('fail', 'Access Denied to ' . radix::$path);
+	radix::redirect('/');
+
 }
 
 radix::exec();
