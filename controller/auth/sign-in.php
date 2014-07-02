@@ -30,9 +30,11 @@ case 'sign in':
 
 	acl::permit('/index');
 	acl::permit('/dashboard');
+	acl::permit('/search');
 	acl::permit('/block*');
-	acl::permit('/file/*');
-	acl::permit('/note/*');
+	acl::permit('/email*');
+	acl::permit('/file*');
+	acl::permit('/note*');
 	acl::permit('/account*');
 	acl::permit('/contact*');
 	acl::permit('/invoice*');
