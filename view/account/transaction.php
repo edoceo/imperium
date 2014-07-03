@@ -46,11 +46,11 @@ echo '<form enctype="multipart/form-data" method="post">';
 echo '<table>';
 echo '<tr>';
 // Date & Kind
-echo '<td class="l" style="width:120px;">Date:</td><td><input id="account-transaction-date" name="date" style="width:160px;" type="date" value="' . html($this->AccountJournalEntry->date) . '"></td>';
-echo '<td class="l" style="width:120px;">Kind:</td><td>' . radix_html_form::select('kind', $this->AccountJournalEntry->kind, array('N'=>'Normal','A'=>'Adjusting','C'=>'Closing')) . '</td>';
+echo '<td class="l">Date:</td><td><input id="account-transaction-date" name="date" type="date" value="' . html($this->AccountJournalEntry['date']) . '"></td>';
+echo '<td class="l">Kind:</td><td>' . radix_html_form::select('kind', $this->AccountJournalEntry['kind'], array('N'=>'Normal','A'=>'Adjusting','C'=>'Closing')) . '</td>';
 echo '</tr>';
 // Note
-echo '<tr><td class="l">Note:</td><td colspan="3">' . radix_html_form::text('note',$this->AccountJournalEntry->note,array('autocomplete'=>'off', 'style'=>'width: 40em')) . "</td></tr>";
+echo '<tr><td class="l">Note:</td><td colspan="3">' . radix_html_form::text('note', $this->AccountJournalEntry['note'],array('autocomplete'=>'off', 'style'=>'width: 40em')) . "</td></tr>";
 echo '</table>';
 
 // Transaction Entry Lines
@@ -114,7 +114,7 @@ if (count($this->FileList)) {
 
 // Buttons & Hiddden
 echo '<div class="bf">';
-echo radix_html_form::hidden('id',$this->AccountJournalEntry->id);
+echo radix_html_form::hidden('id',$this->AccountJournalEntry['id']);
 echo '<button accesskey="s" class="good" name="a" type="submit" value="save">Save</button>';
 echo '<button class="good" name="a" type="submit" value="save-copy">Save & Copy</button>';
 // echo '<input class="good" accesskey="s" name="a" type="submit" value="Save">';
@@ -122,10 +122,10 @@ echo '<button class="good" name="a" type="submit" value="save-copy">Save & Copy<
 // echo radix_html_form::button('a', 'Save');
 echo '<button accesskey="n" class="info" onclick="addLedgerEntryLine();" type="button">Add Line</button>';
 // Can Memorize New
-if (empty($this->AccountJournalEntry->id)) {
+if (empty($this->AccountJournalEntry['id'])) {
     echo radix_html_form::submit('a','Memorize');
 }
-if ($this->AccountJournalEntry->id) {
+if ($this->AccountJournalEntry['id']) {
 	echo '<input class="fail" name="a" type="submit" value="Delete">';
 }
 echo '</div>';
@@ -150,7 +150,7 @@ echo radix::block('diff-list',$args);
 
 <p>
 Input Standard Accounting Journal Entries here using the proper accounts
-Check the <i>Memorise</i> box to remember this transaction as a template for later.
+Choose the <i>Memorise</i> to remember this transaction as a template for later.
 </p>
 
 <script>

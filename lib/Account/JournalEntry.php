@@ -2,23 +2,31 @@
 /**
 	@copyright	2008 Edoceo, Inc
 	@link       http://imperium.edoceo.com
-	@since      File available since Release 1013
+	@since      File available since Release 2008.06.20
 */
 
 class AccountJournalEntry extends ImperiumBase
 {
 	protected $_table = 'account_journal';
 
+	function __construct($x)
+	{
+		parent::__construct($x);
+		if (empty($this->_data['date'])) {
+			$this->_data['date'] = strftime('%Y-%m-%d');
+		}
+	}
+
 	/**
+		Delete Ledger & Journal Entries
 	*/
 	function delete()
 	{
 
-		$id = intval($this->id);
+		$arg = array(intval($this->_data['id']));
 
-		$db = Zend_Registry::get('db');
-		$db->query("delete from account_ledger where account_journal_id = $id");
-		$db->query("delete from account_journal where id = $id");
+		radix_db_sql::query('DELETE FROM account_ledger where account_journal_id = ?', $arg);
+		radix_db_sql::query('DELETE FROM account_journal where id = ?', $arg);
 
 		return true;
 	}
@@ -30,6 +38,7 @@ class AccountJournalEntry extends ImperiumBase
 		if (strlen(trim($this->_data['note']))==0) {
 			$this->_data['note'] = null;
 		}
+
 		return parent::save();
 	}
 }
