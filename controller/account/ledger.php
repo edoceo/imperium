@@ -17,20 +17,20 @@ if ( ($id = intval($_GET['id'])) > 0) {
 	$this->Account = new Account();
 }
 
-if ( (strtolower($_GET['c'])=='post') && (!empty($this->Account->id)) ) {
+if ( (strtolower($_GET['c'])=='post') && (!empty($this->Account['id'])) ) {
 
 	// Post to this Account
 	// New Transaction Holder
 	$at = new stdClass();
 	$at->AccountJournalEntry = new AccountJournalEntry();
-	$at->AccountJournalEntry->note = null;
+	$at->AccountJournalEntry['note'] = null;
 	$at->AccountLedgerEntryList = array();
 
 	// First Item is this Account
-	$a = new Account( $this->Account->id );
+	$a = new Account( $this->Account['id'] );
 	$ale = new AccountLedgerEntry();
-	$ale->account_id = $a->id;
-	$ale->account_name = $a->full_name;
+	$ale['account_id'] = $a['id'];
+	$ale['account_name'] = $a['full_name'];
 	// $ale->amount = abs($Invoice->bill_amount) * -1;
 	// $ale->link_to = ImperiumBase::getObjectType($Invoice);
 	// $ale->link_id = $Invoice->id;
@@ -40,11 +40,11 @@ if ( (strtolower($_GET['c'])=='post') && (!empty($this->Account->id)) ) {
 	$at->AccountLedgerEntryList[] = $ale;
 
 	$_SESSION['account-transaction'] = $at;
-	$_SESSION['return-path'] = sprintf('/account/ledger?id=%d',$this->Account->id);
+	$_SESSION['return-path'] = sprintf('/account/ledger?id=%d',$this->Account['id']);
 	$this->redirect('/account/transaction');
 }
 
-if (empty($this->Account->id)) {
+if (empty($this->Account['id'])) {
 
 	// Show General Ledger (All Accounts!)
 	$this->openBalance = 0;
@@ -60,7 +60,7 @@ if (empty($this->Account->id)) {
 } else {
 
 	// Show this specific Account
-	$_SESSION['account-id'] = $this->Account->id;
+	$_SESSION['account-id'] = $this->Account['id'];
 
 	$this->openBalance = $this->Account->balanceBefore($this->date_alpha);
 

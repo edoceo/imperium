@@ -8,13 +8,13 @@
 $AccountList = array();
 $AccountList[-1] = 'All - General Ledger';
 foreach ($this->AccountList as $item) {
-    $AccountList[$item->id] = $item->full_name;
+    $AccountList[$item['id']] = $item['full_name'];
 }
 $_ENV['title'][] = count($this->LedgerEntryList) . ' entries';
 
 echo '<form method="get">';
 echo '<table>';
-echo '<tr><td class="b r">Account:</td><td colspan="4">' . radix_html_form::select('id', $this->Account->id, $AccountList) . "</td></tr>";
+echo '<tr><td class="b r">Account:</td><td colspan="4">' . radix_html_form::select('id', $this->Account['id'], $AccountList) . "</td></tr>";
 echo '<tr>';
 echo '<td class="l">From:</td>';
 echo "<td>" . radix_html_form::date('d0',$this->date_alpha,array('size'=>12)) . "</td>";

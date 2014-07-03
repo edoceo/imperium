@@ -29,12 +29,12 @@ if (!empty($_GET['p'])) {
 
 // @todo this is duplicated in the AccountStatement Controller - how to reslove?
 // Initialise Inputs
-// if ( (isset($_GET['d0'])) || (isset($_GET['d1'])) ) {
-// 	$this->Period = 'r';
+if ( (isset($_GET['d0'])) || (isset($_GET['d1'])) ) {
+	$this->Period = 'r';
 // //} elseif (isset($_SESSION['AccountPeriod']['date_alpha'])) {
 // //	$this->date_alpha = $_SESSION['AccountPeriod']['date_alpha'];
 // //	$this->date_omega = $_SESSION['AccountPeriod']['date_omega'];
-// }
+}
 
 switch ($this->Period) {
 case 'm':
