@@ -17,6 +17,20 @@ $date = strftime('%Y-%m-%d',$time);
 // Pending Work
 $html = '<html><head><title>[Imperium] Daily Summary Processor: ' . $date . '</title></head>';
 $html.= '<body>';
+
+// Pending WorOrders
+$html.= '<h2>Pending WorkOrders</h2>';
+
+$sql = 'SELECT workorder.*, contact.name as contact_name ';
+$sql.= ' sum(workorder_item.a_rate) AS a_rate, sum(workorder_item.a_quantity) AS a_quantity';
+$sql.= '  FROM workorder';
+$sql.= '  JOIN contact ON workorder.contact_id = contact.id ';
+$sql.= '  WHERE workorder.status = ?';
+$sql.= '  ORDER BY workorder.date';
+$res = radix_db_sql::fetchAll($sql,array('Pending','Active'));
+
+
+// WorkOrder Items
 $html.= "<h2>Pending WorkOrder Items</h2>\n";
 
 $sql = 'SELECT workorder_item.*,contact.name as contact_name ';
@@ -24,7 +38,7 @@ $sql.= '  FROM workorder_item';
 $sql.= '  JOIN workorder ON workorder_item.workorder_id = workorder.id ';
 $sql.= '  JOIN contact ON workorder.contact_id = contact.id ';
 $sql.= '  WHERE workorder_item.status = ? ';
-$sql.= '   AND workorder.status = ? '; 
+$sql.= '   AND workorder.status = ? ';
 $sql.= '  ORDER BY workorder_item.workorder_id';
 $res = radix_db_sql::fetchAll($sql,array('Pending','Active'));
 
@@ -110,6 +124,6 @@ function _draw_details($res)
         $ret.= '<p><strong>Sum:  ' . number_format($sum, 2) . "</strong></p>\n";
         $sum = 0;
     }
-    
+
     return $ret;
 }

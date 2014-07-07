@@ -126,7 +126,7 @@ From: %head_from%
 MIME-Version: 1.0
 Message-Id: <%head_hash%>
 Subject: %head_subj%
-X-Mailer: Edoceo Imperium v2013.43
+X-MailGenerator: Edoceo Imperium v2013.43
 
 $body
 EOF;
