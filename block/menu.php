@@ -24,13 +24,22 @@ if (!acl::may('/block/menu')) {
 echo '<ul class="menu">';
 echo '<li><a href="' . radix::link('/') . '" title="Dashboard"><i class="fa fa-dashboard"></i> Dashboard</a>';
     echo '<ul>';
+
+    // Show MRU
+	if (!empty($_SESSION['mru']) && (count($_SESSION['mru']) > 0)) {
+		foreach ($_SESSION['mru'] as $i=>$key) {
+			echo '<li>' . $key . '</li>';
+		}
+		echo '<li><hr /></li>';
+	}
+
     echo '<li><a class="fancybox fancybox.ajax" href="' . radix::link('/note/edit?l=r') . '">' . img('/tango/24x24/apps/accessories-text-editor.png','New Note') . ' New Note</a></li>';
     echo '<li><a class="fancybox fancybox.ajax" href="' . radix::link('/file/edit?l=r') . '">' . img('/tango/24x24/actions/document-new.png','New File') . ' New File</a></li>';
 
     // echo '<li><a href="' . radix::link('/task/edit">' . img('/silk/1.3/note_add.png','Add Task') . ' Task</a></li>';
     // echo '<li><a href="' . radix::link('/alert/edit">' . img('/silk/1.3/bell_add.png','New Alert') . ' New Alert</a></li>';
     echo '<li><a href="' . radix::link('/timesheet') . '">' . img('/tango/24x24/actions/appointment-new.png','New Timer') . ' Time Sheet</a></li>';
-    echo '<li><a class="fancybox fancybox.ajax" href="' . radix::link('/timer/edit') . '">' . img('/tango/24x24/actions/appointment-new.png','New Timer') . ' New Timer</a></li>';
+    // echo '<li><a class="fancybox fancybox.ajax" href="' . radix::link('/timer/edit') . '">' . img('/tango/24x24/actions/appointment-new.png','New Timer') . ' New Timer</a></li>';
     echo '<li><hr /></li>';
 
     // Somehow get the list of possible Status and use that to build a list here, colours as well.
