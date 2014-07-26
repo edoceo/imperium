@@ -29,7 +29,7 @@ if ($this->WorkOrder['id'] > 0) {
 
 	$_ENV['title'] = array('WorkOrder','View',"#$id");
 
-	$this->Contact = new Contact($this->WorkOrder->contact_id);
+	$this->Contact = new Contact($this->WorkOrder['contact_id']);
 
 	// Show Notes
 	$this->WorkOrderNoteList = $this->WorkOrder->getNotes();
