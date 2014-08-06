@@ -13,20 +13,37 @@ require_once(dirname(dirname(__FILE__)) . '/lib/cli.php');
 if (empty($cli_opt['span'])) $cli_opt['span'] = $_ENV['invoice']['hawk_days_min'];
 if (!empty($cli_opt['diff'])) $cli_opt['span'] = $cli_opt['diff'];
 
-$file = APP_ROOT . '/etc/mail/invoice-hawk.txt';
+$file = APP_ROOT . '/etc/invoice-hawk.txt';
 if (!is_file($file)) {
-	die("Cannot Hawk Invoices need invoice-hawk.txt\n");
+	die("Cannot Hawk Invoices need etc/invoice-hawk.txt\n");
 }
 
 ob_start();
 echo '<h1>Invoice Processor: ' . strftime('%Y-%m-%d',$time) . " for {$cli_opt['span']} days</h1>\n";
 
+// Summary Data
+$sql = 'SELECT count(id) FROM invoice ';
+$sql.= ' WHERE status IN (\'Active\') ';
+$sql.= ' AND (extract(days from current_timestamp - date) > ?) ';
+$res = radix_db_sql::fetch_one($sql, array($cli_opt['span']));
+
+// $res = $db->fetchAll($sql,array(strftime('%Y-%m-%d',$time),array('Active')));
+// $res = radix_db_sql::fetch_all("$sql AND status in ('Active')",array($cli_opt['span']));
+echo "<p>" . $res . " Active Invoices to POST</p>\n";
+
+$sql = 'SELECT count(id) FROM invoice ';
+$sql.= ' WHERE status IN (\'Hawk\', \'Sent\') ';
+$sql.= ' AND (extract(days from current_timestamp - date) > ?) ';
+$res = radix_db_sql::fetch_one($sql, array($cli_opt['span']));
+echo "<p>" . $res . " Sent Invoices over {$cli_opt['span']} days old</p>\n";
+
+
 // Find Hawkable Invoices
 $sql = 'SELECT *, extract(days from current_timestamp - date) as days FROM invoice ';
 $sql.= ' WHERE status IN (\'Hawk\', \'Sent\') ';
-$sql.= ' AND ((extract(days from current_timestamp - date)::integer % ?) = 0) ';
+// $sql.= ' AND ((extract(days from current_timestamp - date)::integer % ?) = 0) ';
 $sql.= ' ORDER BY date, contact_id, id ASC ';
-$res = radix_db_sql::fetchAll($sql, array($cli_opt['span']));
+$res = radix_db_sql::fetchAll($sql); // , array($cli_opt['span']));
 
 echo "<p>Past Due Invoices: " . count($res) . "</p>\n";
 
@@ -38,8 +55,8 @@ foreach ($res as $rec) {
 
 	$bal = floatval($rec['bill_amount']) - floatval($rec['paid_amount']);
 
-	echo "<p>Invoice #{$iv['id']}/{$iv['status']} \$$bal from {$iv['date']} ({$rec['days']} due)</p>\n";
 	echo "<p>Customer: {$co['name']} {$co['email']}</p>\n";
+	echo "<p>Invoice #{$iv['id']}/{$iv['status']} \$$bal from {$iv['date']} ({$rec['days']} due)</p>\n";
 
 	if (empty($co['email'])) {
 		echo "<p style='color:#f00;font-weight:bold;'>FAIL: No Email for this Contact!</p>\n";
@@ -89,30 +106,16 @@ foreach ($res as $rec) {
 		die("<p style='color:#f00;font-weight:bold;'>WARN: Unprocessed Macros?</p>\n");
 	}
 
-    if ($cli_opt['mail']) {
-		App::sendMail($co['email'], $mail);
-    }
+    // if ($cli_opt['mail']) {
+	// 	App_Mail::send($co['email'], $mail);
+    // } else {
+    // 	echo "<p>Skipped Mailing: {$co['email']}</p>\n";
+    // }
 
     $sum += $bal;
 
 }
 echo "<p style='font-weight:700;'>Total Balance: $sum</p>\n";
-
-// Summary Data
-$sql = 'SELECT count(id) FROM invoice ';
-$sql.= ' WHERE status IN (\'Active\') ';
-$sql.= ' AND (extract(days from current_timestamp - date) > ?) ';
-$res = radix_db_sql::fetch_one($sql, array($cli_opt['span']));
-
-// $res = $db->fetchAll($sql,array(strftime('%Y-%m-%d',$time),array('Active')));
-// $res = radix_db_sql::fetch_all("$sql AND status in ('Active')",array($cli_opt['span']));
-echo "<p>" . $res . " Active Invoices to POST</p>\n";
-
-$sql = 'SELECT count(id) FROM invoice ';
-$sql.= ' WHERE status IN (\'Sent\') ';
-$sql.= ' AND (extract(days from current_timestamp - date) > ?) ';
-$res = radix_db_sql::fetch_one($sql, array($cli_opt['span']));
-echo "<p>" . $res . " Sent Invoices over {$cli_opt['span']} days old</p>\n";
 
 // Send me the Summary
 
@@ -137,8 +140,11 @@ $mail = str_replace('%head_hash%', md5(openssl_random_pseudo_bytes(256)) . '@' .
 $mail = str_replace('%head_subj%', '[Imperium] Past Due Invoices Summary', $mail);
 $mail = str_replace('%mail_rcpt%', $_ENV['cron']['alert_to'], $mail);
 
+$mail.= "Environment\n";
+$mail.= shell_exec('set');
+
 if ( !empty($cli_opt['mail']) && !empty($_ENV['cron']['alert_to']) ) {
-	App::sendMail($_ENV['cron']['alert_to'], $mail);
+	App_Mail::send($_ENV['cron']['alert_to'], $mail);
 } else {
 	echo strip_tags($body);
 }
