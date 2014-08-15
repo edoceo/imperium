@@ -273,12 +273,12 @@ if (empty($this->Contact->parent_id)) {
 // Notes
 $arg = array(
     'list' => $this->ContactNoteList,
-    'page' => radix::link('/note/create?c=' . $this->Contact->id),
+    'page' => radix::link('/note/edit?c=' . $this->Contact['id']),
 );
 echo radix::block('note-list',$arg);
 
 // Files
-$url = radix::link('/file/create?c=' . $this->Contact->id);
+$url = radix::link('/file/create?c=' . $this->Contact['id']);
 $arg = array(
     'list' => $this->ContactFileList,
     'page' => $url,

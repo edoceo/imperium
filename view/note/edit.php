@@ -13,10 +13,10 @@ echo '<tr>';
 // Kind
 // @note Conversations cannot be edited
 echo '<td class="l">Kind:</td><td>';
-if ($this->Note->kind != 'Conversation') {
+if ($this->Note['kind'] != 'Conversation') {
     echo '<select id="note-kind" name="kind">';
     foreach (array('Note','Conversation') as $x) {
-        echo '<option ' . ($x==$this->Note->kind?'selected ':null) . ' value="' , $x . '">' . $x . '</option>';
+        echo '<option ' . ($x==$this->Note['kind']?'selected ':null) . ' value="' , $x . '">' . $x . '</option>';
     }
     echo '</select>';
 } else {
@@ -27,21 +27,21 @@ echo '</td>';
 // Status
 echo "<td class='b r'>Status:</td><td><select name='status'>";
 foreach (array('','New','Not Started','In Progress','Completed','Waiting','Deferred') as $x) {
-    echo "<option ".($x==$this->Note->status?'selected ':null)." value='$x'>$x</option>";
+    echo "<option ".($x==$this->Note['status']?'selected ':null)." value='$x'>$x</option>";
 }
 echo '</select></td>';
 echo '</tr>';
 
-if (!empty($this->Note->link)) {
+if (!empty($this->Note['link'])) {
     echo '<tr>';
     echo '<td class="l">Link To:</td>';
     echo '<td>';
     // @todo this is not elegant /djb 20111013
-    if (preg_match('/(contact|invoice|workorder):(\d+)/',$this->Note->link,$m)) {
+    if (preg_match('/(contact|invoice|workorder):(\d+)/',$this->Note['link'],$m)) {
         $page = '/' . $m[1] . '/view?' . substr($m[1],0,1) . '=' . $m[2];
-        echo '<a href="' . $this->link($page) . '">' . ucfirst($m[1]) . ' #' . $m[2] . '</a>';
+        echo '<a href="' . radix::link($page) . '">' . ucfirst($m[1]) . ' #' . $m[2] . '</a>';
     } else {
-        echo $this->Note->link;
+        echo $this->Note['link'];
     }
     echo '</td>';
     echo '</tr>';
@@ -52,29 +52,29 @@ if (!empty($this->Note->link)) {
 //echo "<tr><td class='b r'>Tags:</td><td colspan='3'>" . $this->formText('tags',$this->Note->tags,$opts) . "</td></tr>";
 
 // Previous text of Conversation
-if ($this->Note->kind == 'Conversation') {
-    echo '<tr><td colspan="6"><pre>' . $this->Note->data . '</pre></td></tr>';
-    $this->Note->data = null;
+if ($this->Note['kind'] == 'Conversation') {
+    echo '<tr><td colspan="6"><pre>' . $this->Note['data'] . '</pre></td></tr>';
+    $this->Note['data'] = null;
 }
 
 echo '</td></tr>';
 echo '</table>';
 
-$c = ceil(substr_count($this->Note->data,"\n")) + 2;
+$c = ceil(substr_count($this->Note['data'],"\n")) + 2;
 $rows = max(intval($c),12);
 
 echo '<div>';
 echo '<textarea id="note-text" name="data" style="height:' . $rows . 'em;padding:0px;width:700px;">';
-echo htmlspecialchars($this->Note->data);
+echo html($this->Note['data']);
 echo '</textarea>';
 echo '</div>';
 
 echo '<div class="cmd">';
-echo radix_html_form::hidden('id',$this->Note->id);
-echo radix_html_form::hidden('link',$this->Note->link);
-echo '<input name="a" type="submit" value="Save">';
-if (!empty($this->Note->id)) {
-    echo '<input name="a" type="submit" value="Delete">';
+echo radix_html_form::hidden('id',$this->Note['id']);
+echo radix_html_form::hidden('link',$this->Note['link']);
+echo '<input class="good" name="a" type="submit" value="Save">';
+if (!empty($this->Note['id'])) {
+    echo '<input class="fail" name="a" type="submit" value="Delete">';
 }
 echo '</div>';
 

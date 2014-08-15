@@ -15,6 +15,9 @@ require_once(dirname(dirname(__FILE__)) . '/boot.php');
 if (!empty($_GET['_t'])) {
     $opt['theme'] = $_GET['_t'];
 }
+if ('xmlhttprequest' == strtolower($_SERVER['HTTP_X_REQUESTED_WITH'])) {
+	$opt['theme'] = 'ajax';
+}
 
 radix::init($opt);
 radix_session::init(array('name' => 'imperium'));
