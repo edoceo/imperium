@@ -166,7 +166,7 @@ class ImperiumBase implements ArrayAccess
         if ($o == null) {
             $o = $this;
         }
-        return sprintf('%s:%d',strtolower(get_class($o)),intval($o->id));
+        return sprintf('%s:%d',strtolower(get_class($o)),intval($o['id']));
     }
 
     /**
@@ -270,7 +270,7 @@ class ImperiumBase implements ArrayAccess
     */
     function getNotes()
     {
-        if (intval($this->id)==0) {
+        if (intval($this['id'])==0) {
             return null;
         }
 
