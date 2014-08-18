@@ -229,10 +229,7 @@ if ($this->Contact['id'] == 0) {
 }
 
 // Sub Addresses
-$i = img('/silk/1.3/report_add.png','Add Address');
-echo '<h2 id="ContactAddressHead">Addresses';
-echo '<span class="s">[ <a class="fb" href="' . radix::link('/contact/address?a=make') . '">' . $i . '</a> ]</span>';
-echo '</h2>';
+echo '<h2 id="ContactAddressHead"><a href="' . radix::link('/contact/address?a=make') . '"><i class="fa fa-home"></i> Addresses</a></h2>';
 if ($this->ContactAddressList) {
     echo "<div id='ContactAddressList'>";
     echo radix::block('contact-address-list', array('list'=>$this->ContactAddressList));
@@ -249,10 +246,10 @@ if (empty($this->Contact->parent_id)) {
     );
     $url = radix::link('/contact/create?parent=' . $this->Contact->id); // ($x,'default',true);
 
-    echo '<h2 id="sub-contacts">Sub-Contacts';
-    echo '<span class="s">[ <a href="' . $url . '">';
-    echo img('/silk/1.3/user_add.png','Add Contact');
-    echo '</a> ]</span>';
+    echo '<h2 id="sub-contacts"><a href="' . $url . '"><i class="fa fa-users"></i> Sub-Contacts</a>';
+    // echo '<span class="s">[ <a href="' . $url . '">';
+    // echo img('/silk/1.3/user_add.png','Add Contact');
+    // echo '</a> ]</span>';
     echo '</h2>';
 
     if (count($this->ContactList)) {
@@ -286,23 +283,13 @@ $arg = array(
 echo radix::block('file-list',$arg);
 
 // Work Orders
-echo '<h2>';
-echo 'Work Orders';
-echo '<span class="s">[ <a href="' . radix::link('/workorder/new?c=' . $this->Contact['id']) . '">';
-echo img('/silk/1.3/table_add.png','New Work Order');
-echo '</a> ]</span>';
-echo '</h2>';
+echo '<h2><a href="' . radix::link('/workorder/new?c=' . $this->Contact['id']) . '"><i class="fa fa-clock-o"></i> Work Orders</a></h2>';
 if ($this->WorkOrderList) {
     echo radix::block('workorder-list',array('list'=>$this->WorkOrderList));
 }
 
 // Invoices
-echo '<h2>';
-echo 'Invoices';
-echo '<span class="s">[ <a href="' . radix::link('/invoice/new?c=' . $this->Contact['id']) . '">';
-echo img('/silk/1.3/layout_add.png','Create Invoice');
-echo '</a> ]</span>';
-echo '</h2>';
+echo '<h2><a href="' . radix::link('/invoice/new?c=' . $this->Contact['id']) . '"><i class="fa fa-list"></i> Invoices</a></h2>';
 if ($this->InvoiceList) {
     echo radix::block('invoice-list', array('list'=>$this->InvoiceList));
 }

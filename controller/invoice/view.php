@@ -12,7 +12,7 @@ if ( (!empty($_GET['sent'])) && ($_GET['sent'] == 'good') ) {
 	$this->Invoice->save();
 	Base_Diff::note($this->Invoice,$this->_s->info);
 }
-$this->Contact = new Contact($this->Invoice->contact_id);
+$this->Contact = new Contact($this->Invoice['contact_id']);
 $this->ContactAddressList = radix_db_sql::fetchMix('select id,address from contact_address where contact_id = ?', array($this->Invoice['contact_id']));
 $this->InvoiceItemList = $this->Invoice->getInvoiceItems();
 $this->InvoiceNoteList = $this->Invoice->getNotes();

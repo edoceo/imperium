@@ -7,17 +7,13 @@
 */
 
 echo '<h2>';
-echo '<a href="' . $data['page'] . '" onclick="$(\'#note-edit\').load(\'' . $data['page'] . '\'); return false;"><i class="fa fa-file-text-o"></i></a>';
-echo ' Notes';
-// echo ' <span class="s">[';
+echo '<a href="' . $data['page'] . '" onclick="$(\'#note-edit\').load(\'' . $data['page'] . '\'); return false;">';
+echo '<i class="fa fa-file-text-o"></i>';
+echo ' Notes</a>';
 // echo ' <a onclick="$(\'#note-list\').toggle(); return false;">View</a> ';
 // echo ' <a onclick="$(\'#note-edit\').load(\'' . $this->page . '\').focus(); return false;" href="' . $this->page . '">';
-// echo img('/silk/1.3/note_add.png','Add Note');
-// echo '</a> ';
-// echo ']</span>';
 echo '</h2>';
 echo '<div id="note-edit"></div>';
-
 
 if (empty($data['list'])) {
     return(0);

@@ -42,7 +42,7 @@ echo '</div>';
 echo '<table>';
 echo '<tr>';
 // Contact
-if (empty($this->Contact->id)) {
+if (empty($this->Contact['id'])) {
     echo '<td class="l">Contact:</td>';
     echo '<td><input id="contact_name" name="contact_name" type="text" />';
     echo '<script type="text/javascript">';
@@ -93,19 +93,12 @@ if ($this->Invoice['paid_amount'] < $this->Invoice['bill_amount']) {
 }
 echo '>' . number_format($this->Invoice['paid_amount'], 2) . '</td></tr>';
 
-// Kind and Status
+// Status
 echo '<tr>';
-// echo '<td class="l">Kind:</td><td><input id="kind" name="kind" type="text" value="' . $this->Invoice['kind'] . '">';
-// echo '<script type="text/javascript">$("#kind").autocomplete({ minLength:0, source:["Single","Project","Subscription/Monthly","Subscription/Quarterly","Subscription/Yearly"] });</script>';
-// echo '</td>';
-// echo '<td class="l">Status:</td><td><input name="status" size="16" type="text" value="' . $this->Invoice['status'] . '" /></td>';
 echo '<td class="l">Status:</td><td>' . radix_html_form::select('status', $this->Invoice['status'], $this->StatusList) . '</td>';
 echo '</tr>';
 
 echo '</table>';
-
-// Buttons
-// echo '<div class="bf">' . $this->formSubmit('c','Save') . $this->formSubmit('c','Delete') . '</div>';
 
 // Buttons
 echo '<div class="cmd">';
@@ -140,6 +133,7 @@ if (!empty($_ENV['invoice.workflow'])) {
         }
     }
 }
+// echo $this->formSubmit('c','Delete');
 echo '</div>';
 echo '</form>';
 
@@ -160,7 +154,7 @@ $item_total = 0;
 $item_tax_total = 0;
 //$link = radix::link('/invoice/item');
 
-echo '<h2>Invoice Items ';
+echo '<h2><i class="fa fa-list"></i> Invoice Items ';
 echo '<span class="s">[ <a class="fancybox fancybox.ajax" href="' . radix::link('/invoice/item?i=' . $this->Invoice['id']) . '">';
 echo img('/tango/24x24/actions/list-add.png','Add Item');
 echo '</a> ]</span>';
@@ -207,7 +201,7 @@ if ( count($this->InvoiceTransactionList) > 0) {
 
     $sum = 0;
 
-    echo '<h2 style="clear:both;">Transactions</h2>';
+    echo '<h2 style="clear:both;"><i class="fa fa-money"></i> Transactions</h2>';
     echo '<table>';
     echo '<tr><th>Date</th><th>Account / Note</th><th>Debit</th><th>Credit</th></tr>';
 
@@ -244,7 +238,3 @@ if ( count($this->InvoiceTransactionList) > 0) {
 // History
 $args = array('list' => $this->Invoice->getHistory());
 echo radix::block('diff-list',$args);
-
-echo '<script type="text/javascript">';
-echo '$("#iv_date").datepicker(); ';
-echo '</script>';
