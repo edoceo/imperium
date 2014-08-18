@@ -4,6 +4,10 @@
 	@brief View an Account Ledger
 */
 
+$order = null;
+$param = array();
+$where = null;
+
 // Load Specified Account or Session Account
 if ( ($id = intval($_GET['id'])) > 0) {
 	$this->Account = new Account($id);
@@ -64,8 +68,13 @@ if (empty($this->Account['id'])) {
 
 	$this->openBalance = $this->Account->balanceBefore($this->date_alpha);
 
-	$where = " (account_id={$this->Account->id} OR parent_id = {$this->Account->id}) and (date>='{$this->date_alpha}' and date<='{$this->date_omega}') ";
-	// $where.= " and amount < 0 ";
+	$where = " (account_id = ? OR parent_id = ?) AND (date >= ? AND date <= ?) ";
+	$param = array(
+		$this->Account['id'],
+		$this->Account['id'],
+		$this->date_alpha,
+		$this->date_omega,
+	);
 	$order = " date,kind desc,amount asc ";
 
 	$this->title = array('Ledger',"{$this->Account->full_name} from {$this->date_alpha_f} to {$this->date_omega_f}");
@@ -85,7 +94,12 @@ if (strlen($_GET['link'])) {
 }
 
 $sql = "select * from general_ledger where $where order by $order";
-$this->LedgerEntryList = radix_db_sql::fetchAll($sql);
+$res = radix_db_sql::fetchAll($sql, $param);
+if (empty($res)) {
+	echo radix_db_sql::lastError();
+	die(print_r($res));
+}
+$this->LedgerEntryList = $res;
 
 $_ENV['title'] = array('General Ledger',"{$this->date_alpha_f} to {$this->date_omega_f}");
 // ImperiumView::mruAdd($this->link(),'Ledger ' . $this->Account->name);

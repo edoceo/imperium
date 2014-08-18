@@ -7,14 +7,12 @@
 $_ENV['title'] = 'General Ledger';
 
 $x_kind = null;
-$img_ed = img('/silk/1.3/chart_bar_edit.png','Edit');
-$img_aj = img('/silk/1.3/chart_bar_edit.png','Journal');
-$img_al = img('/silk/1.3/chart_bar_edit.png','Ledger');
 
 echo '<form action="" class="np" method="get">';
 echo radix::block('account-period-input');
 echo '</form>';
 
+// Search
 echo '<form action="' . radix::link('/account/search') . '">';
 echo '<div>';
 echo '<input type="text" name="q" value="">';
@@ -42,9 +40,9 @@ foreach ($this->AccountList as $item) {
 	}
 	echo '</td>';
     echo '<td class="r">' . number_format(abs($item['balance']),2) . '</td>';
-    echo '<td class="r"><a href="' . radix::link('/account/ledger?id=' . $item['id']) . '">' . $img_al . '</td>';
-    echo '<td class="r"><a href="' . radix::link('/account/journal?id=' . $item['id']) . '">' . $img_aj . '</td>';
-    echo '<td class="r"><a href="' . radix::link('/account/edit?id=' . $item['id']) . '">' . $img_ed . '</td>';
+    // echo '<td class="r"><a href="' . radix::link('/account/ledger?id=' . $item['id']) . '">' . $img_al . '</td>';
+    echo '<td class="r"><a href="' . radix::link('/account/journal?id=' . $item['id']) . '"><i class="fa fa-align-left"></i></td>';
+    echo '<td class="r"><a href="' . radix::link('/account/edit?id=' . $item['id']) . '"><i class="fa fa-check-square-o"></i></td>';
     echo '</tr>';
 
     $x_kind = $item['kind'];
