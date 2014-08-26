@@ -6,6 +6,13 @@
     @package Imperium
 */
 
+if (empty($data) || empty($data['list'])) {
+	return(0);
+}
+if (!is_array($data['list'])) {
+	return(0);
+}
+
 $bill_total = 0;
 $paid_total = 0;
 $date_skip_list = array('Paid','Void');

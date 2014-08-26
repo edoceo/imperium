@@ -7,6 +7,13 @@
     @package Edoceo Imperium
 */
 
+if (empty($data) || empty($data['list'])) {
+	return(0);
+}
+if (!is_array($data['list'])) {
+	return(0);
+}
+
 $bill_total = $open_total = 0;
 
 // @todo This is fucking ugly!
