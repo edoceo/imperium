@@ -21,14 +21,13 @@ echo '<head>';
 echo '<meta name="viewport" content="initial-scale=1, user-scalable=yes">';
 echo '<title>Imperium: ' . $_ENV['title'] . '</title>';
 
-echo '<link href="//gcdn.org/font-awesome/4.0.3/font-awesome.css" rel="stylesheet">';
-echo '<link href="//gcdn.org/jquery-ui/1.10.2/smoothness.css" rel="stylesheet">';
+echo '<link href="//gcdn.org/font-awesome/4.1.0/font-awesome.css" rel="stylesheet">';
+echo '<link href="//gcdn.org/pure/0.5.0/pure.css" rel="stylesheet">';
+// echo '<link href="//gcdn.org/jquery-ui/1.10.2/smoothness.css" rel="stylesheet">';
 echo '<link href="//gcdn.org/radix/radix.css" rel="stylesheet">';
 echo '<link href="' . radix::link('/css/base.css') . '" rel="stylesheet">';
 echo '<link href="' . radix::link('/img/imperium-icon.ico') . '" rel="shortcut icon">';
 echo '<link href="' . radix::link('/img/imperium-icon.png') . '" rel="apple-touch-icon">';
-// $this->headLink()->appendAlternate('/feed/', 'application/rss+xml', 'RSS Feed');
-
 echo '<script src="//gcdn.org/jquery/1.10.2/jquery.js"></script>';
 echo '<script src="//gcdn.org/jquery-ui/1.10.2/jquery-ui.js"></script>';
 echo '<script src="' . radix::link('/js/imperium.js') . '"></script>';

@@ -3,6 +3,10 @@
 
 */
 
+if (empty($_GET['c'])) {
+	return(0);
+}
+
 $c = new Contact(intval($_GET['c']));
 if (empty($c['id'])) {
 	radix_session::flash('fail', 'Contact not found');

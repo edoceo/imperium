@@ -23,11 +23,11 @@ if (empty($this->Sort)) {
 $opts = array('page'=>1,'sort'=>$this->Sort);
 
 $list = array();
-if (!empty($this->char)) {
+if (!empty($this->Char)) {
     $opts['char'] = null;
     $list[] = '<a href="?' . http_build_query($opts) . '">ALL</a>';
 }
-if ($this->char == '#') {
+if ($this->Char == '#') {
     $list[] = '<span class="hi">&nbsp;#&nbsp;</span>';
 } else {
     $opts['char'] = '#';
@@ -37,7 +37,7 @@ if ($this->char == '#') {
 // Alphabet Link
 for ($i=65;$i<=90;$i++) {
   $opts['char'] = chr($i);
-  if ($opts['char'] == $this->char) {
+  if ($opts['char'] == $this->Char) {
       $list[] = '<span class="hi">&nbsp;' . $opts['char'] . '&nbsp;</span>';
   } else {
       $list[] = '<a href="?' . http_build_query($opts) . '">&nbsp;' . chr($i) . '&nbsp;</a>';
@@ -47,7 +47,7 @@ for ($i=65;$i<=90;$i++) {
 
 echo '<div class="jump_list">' . implode(' ',$list) . '</div>';
 
-echo radix::block('contact-list',array('list'=>$this->list));
+echo radix::block('contact-list',array('list'=>$this->ContactList));
 
 echo $page_link;
 

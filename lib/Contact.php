@@ -99,6 +99,9 @@ class Contact extends ImperiumBase
         $this->email = strtolower($this->email);
         $this->ats = date('Y-m-d H:i:s');
         $this->cts = null;
+        if (empty($this->_data['account_id'])) {
+        	$this->_data['account_id'] = null;
+        }
 
         $ret = parent::save();
 

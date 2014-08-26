@@ -5,8 +5,8 @@
 */
 
 
-$char = $_GET['char'];
-$this->sort = $_GET['sort'];
+$this->Char = $_GET['char'];
+$this->Sort = $_GET['sort'];
 $page = intval($_GET['page']);
 
 // Kind Filter
@@ -32,12 +32,12 @@ $arg = array();
 $sql = 'SELECT * FROM contact ';
 
 // Where
-if (strlen($this->char)) {
+if (!empty($this->Char)) {
 	$pat = null;
-	if ($this->char == '#') {
+	if ($this->Char == '#') {
 		$pat = '^[0-9]';
-	} elseif (preg_match('/^\w$/',$this->char)) {
-		$pat = '^' . $this->char;
+	} elseif (preg_match('/^\w$/', $this->Char)) {
+		$pat = '^' . $this->Char;
 	}
 	$arg[] = '^' . $pat;
 	$arg[] = '^' . $pat;
@@ -46,13 +46,14 @@ if (strlen($this->char)) {
 }
 
 // Order
-switch ($this->sort) {
+switch ($this->Sort) {
 case 'name':
+	$sql.= ' ORDER BY contact';
 	break;
 default:
-	$sort = $_ENV['contact']['sort'];
+	$sql.= ' ORDER BY company, contact';
 }
-$sql.= ' ORDER BY ' . $sort;
+
 
 // Limit
 $sql.= ' LIMIT 250 ';
@@ -98,4 +99,5 @@ $sql->limitPage($this->view->Paginator->page,$this->view->Paginator->limit);
   );
 */
 
-$this->list = radix_db_sql::fetch_all($sql);
+$this->ContactList = radix_db_sql::fetch_all($sql, $arg);
+radix_session::flash('fail', radix_db_sql::lastError());

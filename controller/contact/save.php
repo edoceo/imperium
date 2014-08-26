@@ -53,29 +53,29 @@ case 'delete':
 	$c->delete();
 	radix_session::flash('info', 'Contact #' . $id . ' was deleted');
 	radix::redirect('/contact');
+
 case 'save':
 
 	$co = new Contact($id);
-	// @todo Get Current User, this is BAD!
-	$co->auth_user_id = 1;
-	$co->account_id  = intval($_POST['account_id']);
-	$co->parent_id  = null;
-	$co->kind    = $_POST['kind'];
-	$co->status  = $_POST['status'];
-	$co->contact = $_POST['contact'];
-	$co->company = $_POST['company'];
-	$co->title = $_POST['title'];
-	$co->email = $_POST['email'];
-	$co->phone = $_POST['phone'];
-	$co->url = $_POST['url'];
-	$co->tags = $_POST['tags'];
+	$co['auth_user_id'] = $_SESSION['uid'];
+	$co['account_id']  = intval($_POST['account_id']);
+	$co['parent_id']  = null;
+	$co['kind']    = $_POST['kind'];
+	$co['status']  = $_POST['status'];
+	$co['contact'] = $_POST['contact'];
+	$co['company'] = $_POST['company'];
+	$co['title'] = $_POST['title'];
+	$co['email'] = $_POST['email'];
+	$co['phone'] = $_POST['phone'];
+	$co['url'] = $_POST['url'];
+	$co['tags'] = $_POST['tags'];
 
 	$co->save();
 
 	if ($id) {
 		radix_session::flash('info', "Contact #$id saved");
 	} else {
-		$id = $co->id;
+		$id = $co['id'];
 		radix_session::flash('info', "Contact #$id created");
 	}
 
