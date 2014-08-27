@@ -1,12 +1,12 @@
 <?php
 /**
-    @file
-    @brief Contact Model; Contacts: Person, Company and Vendor DataObjects
+	@file
+	@brief Contact Model; Contacts: Person, Company and Vendor DataObjects
 
-    @copyright  2008 Edoceo, Inc
-    @package    edoceo-imperium
-    @link       http://imperium.edoceo.com
-    @since      File available since Release 2001
+	@copyright  2001 Edoceo, Inc
+	@package    edoceo-imperium
+	@link       http://imperium.edoceo.com
+	@since      File available since Release 2001
 */
 
 class Contact extends ImperiumBase
@@ -17,18 +17,6 @@ class Contact extends ImperiumBase
 
     protected $_table = 'contact';
 
-    public $company;
-    public $contact;
-    public $sound_code;
-    public $name;
-    public $phone;
-    public $email;
-    public $url;
-    public $cts;
-    public $ats;
-    public $kind = 'Person';
-    public $status = 'Active';
-
     /**
         Contact Model save()
 
@@ -36,10 +24,6 @@ class Contact extends ImperiumBase
     */
     function save()
     {
-
-        if (intval($this->parent_id)==0) {
-            $this->parent_id = null;
-        }
 
         // $this->name = null;
         // if (!empty($this->first_name)) {
@@ -67,7 +51,7 @@ class Contact extends ImperiumBase
         // }
 
         // Normalise Name
-        switch ($this->kind) {
+        switch ($this->_data['kind']) {
         case 'Company':
         case 'Vendor':
             // if ( (!empty($this->company)) && (!empty($this->contact)) ) {
@@ -77,30 +61,35 @@ class Contact extends ImperiumBase
             // } else {
             //     $this->name = $this->contact;
             // }
-            $this->name = trim($this->company);
-            if (empty($this->name)) {
-                $this->name = $this->contact;
+            $this->_data['name'] = trim($this->_data['company']);
+            if (empty($this->_data['name'])) {
+                $this->_data['name'] = $this->_data['contact'];
             }
             break;
         case 'Person':
         default:
-            if ( (!empty($this->company)) && (!empty($this->contact)) ) {
-                $this->name = sprintf('%s [%s]',$this->contact,$this->company);
+            if ( (!empty($this->_data['company'])) && (!empty($this->_data['contact'])) ) {
+                $this->_data['name'] = sprintf('%s [%s]',$this->_data['contact'], $this->_data['company']);
             } elseif (!empty($this->company)) {
-                $this->name = $this->company;
+                $this->_data['name'] = $this->_data['company'];
             } else {
-                $this->name = $this->contact;
+                $this->_data['name'] = $this->_data['contact'];
             }
             break;
         }
-        $this->name = trim($this->name);
-        $this->sound_code = metaphone($this->name);
-        $this->url = strtolower($this->url);
-        $this->email = strtolower($this->email);
-        $this->ats = date('Y-m-d H:i:s');
-        $this->cts = null;
+        $this->_data['name'] = trim($this->_data['name']);
+        $this->_data['email'] = strtolower($this->_data['email']);
+        $this->_data['sound_code'] = metaphone($this->_data['name']);
+        $this->_data['url'] = strtolower($this->_data['url']);
+        $this->_data['ats'] = date('Y-m-d H:i:s');
+        $this->_data['cts'] = null;
+
         if (empty($this->_data['account_id'])) {
         	$this->_data['account_id'] = null;
+        }
+
+        if (empty($this->_data['parent_id'])==0) {
+            $this->_data['parent_id'] = null;
         }
 
         $ret = parent::save();
