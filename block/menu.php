@@ -69,13 +69,13 @@ echo '<li><a href="' . radix::link('/contact') . '"><i class="fa fa-users"></i> 
         //$menu[] = array('/timer/edit',$html->image('clock_add.png').' Help');
         echo '<li><hr /></li>';
     }
-    echo '<li><a href="' . radix::link('/contact/edit') . '">' . img('/tango/24x24/actions/contact-new.png','Create') . ' Create</a></li>';
-    echo '<li><a href="' . radix::link('/contact?kind=contacts') . '">' . img('/silk/1.3/user_green.png','View Contacts').' Contacts</a></li>';
-    echo '<li><a href="' . radix::link('/contact?kind=companies') . '">' . img('/silk/1.3/building.png','View Companies').' Companies</a></li>';
-    echo '<li><a href="' . radix::link('/contact?kind=vendors') . '">' . img('/silk/1.3/lorry.png','View Vendors').' Vendors</a></li>';
-    echo '<li><a href="' . radix::link('/contact/labels') . '">' . img('/silk/1.3/lorry.png','Mailing Labels').' Mail Labels</a></li>';
+    echo '<li><a href="' . radix::link('/contact/view') . '"><i class="fa fa-plus"></i> Create</a></li>';
+    echo '<li><a href="' . radix::link('/contact?kind=contacts') . '"><i class="fa fa-users"></i> Contacts</a></li>';
+    echo '<li><a href="' . radix::link('/contact?kind=companies') . '"><i class="fa fa-building"></i> Companies</a></li>';
+    echo '<li><a href="' . radix::link('/contact?kind=vendors') . '"><i class="fa fa-truck"></i> Vendors</a></li>';
+    echo '<li><a href="' . radix::link('/contact/labels') . '"><i class="fa fa-file-text-o"></i> Mail Labels</a></li>';
     //echo '<li><a href="' . radix::link('/contact/export') . '">' . img('/silk/1.3/lorry.png','Export').' Export</a></li>';
-    echo '<li><a href="' . radix::link('/contact/sync') . '">' . img('/silk/1.3/lorry.png','Import').' Sync</a></li>';
+    echo '<li><a href="' . radix::link('/contact/sync') . '"><i class="fa fa-refresh"></i> Sync</a></li>';
     echo '</ul>';
 echo '</li>';
 
