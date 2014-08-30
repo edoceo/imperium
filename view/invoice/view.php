@@ -108,10 +108,10 @@ echo '<input class="good" name="a" type="submit" value="Save">';
 
 // Hawk Monitoring?
 if ($this->Invoice->hasFlag(Invoice::FLAG_HAWK)) {
-    echo '<input name="c" type="submit" value="No Hawk" />';
+    echo '<input name="c" type="submit" value="No Hawk">';
 } else {
     if ($this->Invoice->canHawk()) {
-        echo '<input name="c" type="submit" value="Hawk" />';
+        echo '<input name="c" type="submit" value="Hawk">';
     }
 }
 
@@ -121,19 +121,19 @@ if (!empty($_ENV['invoice.workflow'])) {
         if ( $k == $this->Invoice['status'] ) {
             $list = explode(',',$v);
             foreach ($list as $x) {
+            	$x = trim($x);
             	switch ($x) {
             	case 'Delete':
             	case 'Void':
-            		echo '<input class="fail" name="a" type="submit" value="' . trim($x) . '" />';
+            		echo '<input class="fail" name="a" type="submit" value="' . $x . '">';
             		break;
             	default:
-					echo '<input class="exec" name="a" type="submit" value="' . trim($x) . '" />';
+					echo '<input class="exec" name="a" type="submit" value="' . $x . '">';
 				}
             }
         }
     }
 }
-// echo $this->formSubmit('c','Delete');
 echo '</div>';
 echo '</form>';
 

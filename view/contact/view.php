@@ -11,26 +11,50 @@ echo radix_html_form::hidden('id',$this->Contact['id']);
 echo radix_html_form::hidden('parent_id',$this->Contact['parent_id']);
 echo '</div>';
 
-echo '<table>';
+?>
 
-// Company & Phone Number
-echo '<tr>';
-echo '<td class="l">';
+<style>
+.l {
+	font-size: 22px;
+	font-weight: bold;
+	line-height: 32px;
+	position: relative;
+	text-align:right;
+	top: 50%;
+	/*
+	transform: translateY(-50%);
+	-ms-transform: translateY(-50%);
+	-webkit-transform: translateY(-50%);
+	*/
+}
+</style>
+
+<div class="pure-g" style="position:relative;">
+<div class="pure-u-1-5"><div class="l">Contact:</div></div>
+<div class="pure-u-4-5"><?=radix_html_form::text('contact',$this->Contact['contact'])?></div>
+
+<div class="pure-u-1-5"><div class="l"><?php
 if (!empty($this->Contact['parent_id'])) {
     echo '<a href="' . radix::link('/contact/view?c=' . $this->Contact['parent_id']) . '">Company:</a>';
 } else {
     echo 'Company:';
 }
-echo '</td><td>' . radix_html_form::text('company', $this->Contact['company']) . '</td>';
-echo '<td class="l">Phone:</td><td>' . radix_html_form::text('phone', $this->Contact['phone']) . '</td>';
-echo '</tr>';
+?></div></div>
+<div class="pure-u-4-5"><?=radix_html_form::text('company',$this->Contact['company'])?></div>
 
-// Contact and Email
-echo '<tr>';
-echo '<td class="l" style="width:6em;">Contact:</td><td>' . radix_html_form::text('contact',$this->Contact['contact']) . '</td>';
-echo '<td class="l">' . ( strlen($this->Contact['email']) ? "<a href=\"mailto:" . $this->Contact['email'] ."\">Email:</a>" : 'Email:' ) . '</td>';
-echo '<td>' . radix_html_form::text('email', $this->Contact['email']) . '</td>';
-echo '</tr>';
+<div class="pure-u-1-5"><div class="l"><?=( strlen($this->Contact['email']) ? "<a href=\"mailto:" . $this->Contact['email'] ."\">Email:</a>" : 'Email:' )?></div></div>
+<div class="pure-u-4-5"><?=radix_html_form::text('email', $this->Contact['email'])?></div>
+
+
+<div class="pure-u-1-5"><div class="l">Phone:</div></div>
+<div class="pure-u-4-5"><?=radix_html_form::text('phone', $this->Contact['phone'])?></div>
+
+
+</div>
+
+<?php
+
+echo '<table>';
 
 // First & Last Name
 // if ($this->Contact->kind == 'Person') {
@@ -54,46 +78,6 @@ $x = strlen($this->Contact['url']) ? '<a href="' . $url . '" target="_blank">Web
 echo '<tr>';
 echo '<td class="l">' . $x . '</td><td>' . radix_html_form::text('url',$this->Contact['url']) . '</td>';
 echo '</tr>';
-
-//switch ($this->Contact->kind) {
-//case 'Company':
-
-    // Contact First & Last
-//     echo '<tr>';
-//     echo '<td class="l">Contact:</td><td>' . $this->formText('contact',$this->Contact->contact,array('style'=>'width: 100%')) . '</td>';
-//     echo '<td class="l">Email:</td><td>' . $this->formText('email',$this->Contact->email,array('style'=>'width: 100%')) . '</td>';
-//     echo '</tr>';
-
-//    break;
-//case 'Person':
-
-//     echo '<tr>';
-//     // Phone
-//     echo '<td class="l">Phone:</td><td>' . $this->formText('phone',$this->Contact->phone,array('style'=>'width: 80%')) . '</td>';
-//     echo '</tr>';
-
-//    break;
-//default:
-//    die("Unhandled Contact Kind: {$this->Contact->kind}");
-//}
-
-// Company
-// echo '<tr>';
-// echo '<td class="l">';
-// if (!empty($this->Contact->parent_id)) {
-//     echo '<a href="' . $this->link('/contact/view?c=' . $this->Contact->parent_id) . '">Company:</a>';
-// } else {
-//     echo 'Company:';
-// }
-// echo '</td><td>' . $this->formText('company',$this->Contact->company,array('style'=>'width: 100%')) . '</td>';
-
-// Title or Phone
-// if ( (empty($this->Contact->kind)) || ($this->Contact->kind == 'Person') ) {
-//     echo '<td class="l">Title:</td><td>' . $this->formText('title',$this->Contact->title,array('style'=>'width: 100%')) . '</td>';
-// } else {
-//     echo '<td class="l">Phone:</td><td>' . $this->formText('phone',$this->Contact->phone,array('style'=>'width: 80%')) . '</td>';
-// }
-// echo '</tr>';
 
 // Kind & Status
 echo '<tr>';
@@ -180,12 +164,12 @@ echo '<tr><td class="l">Google:</td><td colspan="3"><div id="contact-google-area
 echo '</table>';
 
 echo '<div class="bf">';
-echo '<input name="a" type="submit" value="Save">';
+echo '<input class="good" name="a" type="submit" value="Save">';
 //if ($this->Contact->kind == 'Person') {
 //    echo '<input name="c" title="Mark as Billing Contact" type="submit" value="Bill">';
 //    echo '<input name="c" title="Mark as Shipping Contact" type="submit" value="Ship">';
 //}
-echo '<input name="a" type="submit" value="Delete">';
+echo '<input class="fail" name="a" type="submit" value="Delete">';
 echo '</div>';
 echo '</form>';
 
@@ -194,7 +178,20 @@ echo '</form>';
 $(function() {
     $("#company").autocomplete({
         source: "<?php echo radix::link('/contact/ajax?field=company'); ?>",
-        change: function(event, ui) { if (ui.item) { $("#parent_id").val(ui.item.id); } }
+        change: function(event, ui) {
+			if (!ui.item) return;
+			$("#parent_id").val(ui.item.id);
+			$("#company").val(ui.item.company);
+		},
+		focus:function(event, ui) {
+			if (!ui.item) return;
+			$("#company").val(ui.item.company);
+		},
+		select:function(event, ui) {
+			if (!ui.item) return;
+			$("#parent_id").val(ui.item.id);
+			$("#company").val(ui.item.company);
+		}
     });
     $("#contact").autocomplete({
         source: "<?php echo radix::link('/contact/ajax?field=contact'); ?>",
@@ -219,6 +216,32 @@ $(function() {
     $("#contact-google-view").click(function() {
         var u = "<?php echo radix::link('/contact/ajax?field=google'); ?>";
         $("#contact-google-area").load(u);
+    });
+    $('#email').on('change', function(e) {
+		var t = $(this).val();
+		var m = t.match(/^(.+)@(.+)$/);
+    	if (m) {
+    		var h = m[2].toLowerCase();
+    		// @see http://en.wikipedia.org/wiki/Comparison_of_webmail_providers
+    		switch (h) {
+    		case 'aol.com':
+    		case 'facebook.com':
+    		case 'gmail.com':
+    		case 'inbox.com':
+    		case 'mac.com':
+    		case 'mail.com':
+    		case 'mail.ru':
+    		case 'outlook.com':
+    		case 'sharklasers.com':
+    		case 'yahoo.com':
+    		case 'yandex.com':
+    			break;
+    		}
+    		var x = $('#url').val();
+    		if (!x) {
+    			$('#url').val(m[2]);
+    		}
+    	}
     });
 });
 </script>
