@@ -4,10 +4,10 @@
     @brief File List Element: Draws a table-list of Notes
 */
 
-if (empty($this->list)) {
+if (empty($data)) {
     return(0);
 }
-if (count($this->list)==0) {
+if (count($data)==0) {
     return(0);
 }
 
@@ -23,19 +23,19 @@ echo '<div id="file-edit"></div>';
 echo '<div id="file-list">';
 
 echo '<table>';
-echo '<tr><th colspan="2">Name</th><th>Size</th><th>Kind</th></tr>';
+echo '<tr><th>Icon</th><th>Name</th><th>Type</th><th>Size</th><th>&nbsp;</th></tr>';
 
-foreach ($this->list as $f) {
+foreach ($data as $f) {
 
-    $mime = Base_File::mimeInfo($f->kind);
+    $mime = Base_File::mimeInfo($f['kind']);
 
     echo '<tr class="rero">';
     echo '<td>' . img($mime['icon'],$mime['note']) . '</td>';
-    echo '<td>' . $this->link('/file/view?id=' . $f->id,$this->escape($f->name)) . '</td>';
-    echo '<td class="r">' . $this->escape( ImperiumView::niceSize($f->size) ) . '</td>';
-    echo '<td class="r">' . $this->escape($mime['name']) . '</td>';
+    echo '<td><a href="' . radix::link('/file/view?id=' . $f['id']) . '">' . html($f['name']) . '</a></td>';
+    echo '<td class="r">' . html($mime['name']) . '</td>';
+    echo '<td class="r">' . html( ImperiumView::niceSize($f['size']) ) . '</td>';
     // echo '<td>' . $this->link('/file/render/' . $f->id,   img('/tango/24x24/actions/edit-find.png','Render') ) . '</td>';
-    echo '<td>' . $this->link('/file/download?id=' . $f->id, img('/tango/24x24/actions/document-save.png','Download') ) . '</td>';
+    echo '<td><a href="' . radix::link('/file/download?id=' . $f['id']) . '">' . img('/tango/24x24/actions/document-save.png','Download') . '</td>';
     echo '</tr>';
 
 }

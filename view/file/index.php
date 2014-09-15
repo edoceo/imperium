@@ -4,8 +4,11 @@
     @brief List of Files
 */
 
-echo $this->paginationControl($this->Page,'All','../elements/page-control.phtml');
+// echo $this->paginationControl($this->Page,'All','../elements/page-control.phtml');
 
-echo $this->partial('../elements/file-list.phtml',array('list'=>$this->Page));
+$FileList = radix_db_sql::fetch('SELECT * FROM base_file WHERE link IS NULL ORDER BY name');
 
-echo $this->paginationControl($this->Page,'All','../elements/page-control.phtml');
+
+echo radix::block('file-list', $FileList);
+
+// echo $this->paginationControl($this->Page,'All','../elements/page-control.phtml');

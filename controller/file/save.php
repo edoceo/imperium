@@ -34,17 +34,17 @@ case 'delete':
 	radix::redirect('/file');
 	break;
 case 'upload':
-	$file = $_FILES['file'];
-	$f = Base_File::copyPost($file);
-	if ($f) {
-		$bf->id = intval($_POST['id']);
-		$f['link'] = $_POST['link'];
-		$f->import($_FILES['file']);
+	$f->copyPost($_FILES['file']);
+	//if ($f) {
+	//	$f['id'] = intval($_POST['id']);
+	//	$f['link'] = $_POST['link'];
+	//	$f->import($_FILES['file']);
 		$f->save();
-		radix_session::flash('info', 'File #' . $f->id . ' Saved');
-	} else {
-		radix_session::flash('fail', 'Invalid Input');
-	}
+		radix_session::flash('info', 'File #' . $f['id'] . ' Saved');
+	// } else {
+	// 	radix_session::flash('fail', 'Invalid Input');
+	// }
+	break;
 }
 
 // Redirect Out
