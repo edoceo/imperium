@@ -14,7 +14,15 @@ echo '<li><a href="' . radix::link('/settings/password') . '">Change Password</l
 echo '<li><a href="' . radix::link('/settings/registry') . '">View Regsitry</li>';
 echo '<li><a href="' . radix::link('/settings/session') . '">View Session</li>';
 // note: to change the Business Profile edit the settings in APP /config/bootstrap.php
+
+if (!is_writable(APP_ROOT . '/var/')) {
+	echo '<li class="fail">Not Writable: ' . APP_ROOT . '/var/</li>';
+	echo '<li>chown -R ' . get_current_user() . ':' . APP_ROOT . '/var</li>';
+}
+
 echo '</ul>';
+
+
 echo '<hr>';
 echo '<ul>';
 echo '<li><a href="' . radix::link('/settings/dashboard') . '">Dashboard</a> - Configure layout and selection criteria</li>';
@@ -36,12 +44,16 @@ echo '<li><a href="' . radix::link('/settings/users') . '">Users</a></li>';
 echo '<li><a href="' . radix::link('/selenium') . '">Run Selenum Tests</a></li>';
 echo '</ul>';
 
+
+
+
+
 ?>
 
 <h3>Payment Notifications</h3>
 <dl>
 <dt>Gumroad</dt>
-<dd><code>https://<?=radix::$host?><?=radix::$base?>/hook/gumroad</code></dd>
+<dd><code>https://<?=radix::$host?><?=radix::$base?>/hook/gumroad?auth=SomeKey</code></dd>
 <dd>See <a href="https://gumroad.com/settings/developer" target="_blank">gumroad.com/settings/developer</a> for more information.</dd>
 
 <dt>Paypal</dt>
