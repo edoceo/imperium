@@ -29,8 +29,6 @@ echo '<tr><th>Icon</th><th>Name</th><th>Type</th><th>Size</th><th>&nbsp;</th></t
 
 foreach ($data as $f) {
 
-	radix::dump($f);
-
     $mime = Base_File::mimeInfo($f['kind']);
 
     echo '<tr class="rero">';
