@@ -191,7 +191,8 @@ class Account extends ImperiumBase
 //        }
 //    return null;
 //	}
-    /**
+
+/**
         Update the Balance of the Account to the Current Value
     */
     function balanceUpdate()
@@ -199,6 +200,7 @@ class Account extends ImperiumBase
         // Get Current Balance
         $x = radix_db_sql::fetch_one('SELECT sum(amount) FROM account_ledger WHERE account_id = ?', array($this->_data['id']));
         $balance = floatval($x);
+
         // Sum the Child Accounts
         // $rs = $this->child_accounts;
         // foreach ($rs as $a) {
@@ -216,26 +218,6 @@ class Account extends ImperiumBase
 
 
     }
-    /**
-                    Account balanceAtEnd balance at the end of specified day
-    */
-    //function balanceAtEnd($date_alpha,$with_closing=true)
-  //{
-    //    /*
-    //    // @todo Detect the Active period
-    //    */
-    //    $db = Zend_Registry::get('db');
-    //    $sql = "select sum(amount) as balance from general_ledger ";
-    //    $sql.= " where account_id={$this->id} and date <= '$date_alpha' and date>='2006-01-01' ";
-  //  //if ($with_closing !== true) {
-  //  //  $sql.= " and kind != 'C' ";
-  //  //}
-    //    $x = $db->fetchOne($sql);
-  //  if ( (substr($this->kind,0,5)=='Asset') || (substr($this->kind,0,7)=='Expense') || (strpos($this->kind,'Drawing') > 0) ) {
-  //    $x = $x * -1;
-  //  }
-    //    return floatval($x);
-    //}
 
     /**
         Account balanceAt balance at close of a day
@@ -387,6 +369,7 @@ class Account extends ImperiumBase
         $sql = "SELECT account.*, account_tax_line.line || ': ' || account_tax_line.name AS account_tax_line_name ";
         $sql.= ' FROM account ';
             $sql.= ' LEFT JOIN account_tax_line ON account.account_tax_line_id = account_tax_line.id';
+            // $sql.= ' JOIN account_tax_form ON account_tax_line.account_tax_form_id = account_tax_form.id ';
         $sql.= ' ORDER BY full_code ASC, code ASC';
 
         $rs = radix_db_sql::fetchAll($sql);
@@ -396,6 +379,7 @@ class Account extends ImperiumBase
         }
         return $list;
     }
+
     /**
         Account listAccounts() static functions
         Returns a list of the Accounts as an array of stdClass() objects

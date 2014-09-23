@@ -2,6 +2,8 @@
 /**
     @file
     @brief File List Element: Draws a table-list of Notes
+
+    @note used to take a Page parameter for a Create Link, not used now
 */
 
 if (empty($data)) {
@@ -26,6 +28,8 @@ echo '<table>';
 echo '<tr><th>Icon</th><th>Name</th><th>Type</th><th>Size</th><th>&nbsp;</th></tr>';
 
 foreach ($data as $f) {
+
+	radix::dump($f);
 
     $mime = Base_File::mimeInfo($f['kind']);
 

@@ -126,12 +126,12 @@ if (!empty($this->WorkOrder['id'])) {
 // Work Order Files
 if (!empty($this->WorkOrder['id'])) {
 
-    $url = $this->link('/file/create?w=' . $this->WorkOrder['id']);
-    $arg = array(
-        'list' => $this->WorkOrderFileList,
-        'page' => $url,
-    );
-    echo radix::block('file-list',$arg);
+    // $url = $this->link('/file/create?w=' . $this->WorkOrder['id']);
+    // $arg = array(
+    //     'list' => $this->WorkOrderFileList,
+    //     'page' => $url,
+    // );
+    echo radix::block('file-list', $this->WorkOrderFileList); // $arg);
 }
 
 // Work Order Items

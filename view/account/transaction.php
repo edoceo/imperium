@@ -108,9 +108,8 @@ echo '<td class="r" id="crt">' . number_format(abs($cr_total),2) . '</td>';
 echo '</tr>';
 echo '</table>';
 
-if (count($this->FileList)) {
-  echo radix::block('file-list', array('list'=>$this->FileList));
-}
+// Attached Files
+echo radix::block('file-list', $this->FileList);
 
 // Buttons & Hiddden
 echo '<div class="bf">';

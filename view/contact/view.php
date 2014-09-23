@@ -235,8 +235,10 @@ $(function() {
     		case 'sharklasers.com':
     		case 'yahoo.com':
     		case 'yandex.com':
+    			return(0);
     			break;
     		}
+
     		var x = $('#url').val();
     		if (!x) {
     			$('#url').val(m[2]);
@@ -298,12 +300,13 @@ $arg = array(
 echo radix::block('note-list',$arg);
 
 // Files
-$url = radix::link('/file/create?c=' . $this->Contact['id']);
-$arg = array(
-    'list' => $this->ContactFileList,
-    'page' => $url,
-);
-echo radix::block('file-list',$arg);
+// Old way of Parameters
+// $url = radix::link('/file/create?c=' . $this->Contact['id']);
+// $arg = array(
+//     'list' => $this->ContactFileList,
+//     'page' => $url,
+// );
+echo radix::block('file-list', $this->ContactFileList);
 
 // Work Orders
 echo '<h2><a href="' . radix::link('/workorder/new?c=' . $this->Contact['id']) . '"><i class="fa fa-clock-o"></i> Work Orders</a></h2>';
