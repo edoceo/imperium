@@ -227,11 +227,11 @@ class ImperiumBase implements ArrayAccess
         // $s->from('base_file');
         // $s->where('link = ?', $this->link() );
         // $s->order('name');
-        // $r = $d->fetchAll($s);
+        // $r = $d->fetch_all($s);
         // return $r;
         $sql = 'SELECT * FROM base_file WHERE link = ? ORDER BY name';
         $arg = array($this->link());
-        $ret = radix_db_sql::fetchAll($sql, $arg);
+        $ret = radix_db_sql::fetch_all($sql, $arg);
         return $ret;
     }
 
@@ -246,7 +246,7 @@ class ImperiumBase implements ArrayAccess
 
         // $db = Zend_Registry::get('db');
         // $sql = sprintf('select * from object_history where link_to=%d and link_id=%d order by cts desc',$ot,$id);
-        // $rs = $db->fetchAll($sql);
+        // $rs = $db->fetch_all($sql);
         // return $rs;
 
         $s = 'select id,auth_user_id,ctime,link,f,v0,v1 from base_diff ';
@@ -276,7 +276,7 @@ class ImperiumBase implements ArrayAccess
 
         $sql = 'SELECT * FROM base_note WHERE link = ? ORDER BY name';
         $arg = array($this->link());
-        $ret = radix_db_sql::fetchAll($sql, $arg);
+        $ret = radix_db_sql::fetch_all($sql, $arg);
 		return $ret;
 	}
 

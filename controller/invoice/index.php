@@ -17,7 +17,7 @@ $sql.= ' ORDER BY invoice.date DESC, invoice.id DESC ';
 $sql.= ' OFFSET ' . (($this->page_cur-1) * $_GET['size']);
 $sql.= ' LIMIT ' . $_GET['size'];
 
-$this->list = radix_db_sql::fetchAll($sql);
+$this->list = radix_db_sql::fetch_all($sql);
 
 $a_id = $this->list[0]['id'];
 $z_id = $this->list[ count($this->list) - 1]['id'];
