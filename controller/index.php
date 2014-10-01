@@ -29,15 +29,15 @@ $data = array(
 	// 	'view' => '../elements/timer-list.phtml'),
 	'Pending Work Order Items' => array(
 		'css' => 'index_pack',
-		'list' => App::$db->fetch_all($sql_woi),
+		'list' => radix_db_sql::fetch_all($sql_woi),
 		'view' => 'workorder-list'),
 	'Active Work Orders' => array(
 		'css' => 'index_list',
-		'list' => App::$db->fetch_all($sql_w),
+		'list' => radix_db_sql::fetch_all($sql_w),
 		'view' => 'workorder-list'),
 	'Active Invoices' => array(
 		'css' => 'index_list',
-		'list' => App::$db->fetch_all("select invoice.*,b.name as contact_name from invoice join contact b on invoice.contact_id=b.id where ((invoice.paid_amount is null or invoice.paid_amount < invoice.bill_amount) and invoice.status in ('Active','Sent','Hawk')) order by invoice.date desc, invoice.id desc"),
+		'list' => radix_db_sql::fetch_all("select invoice.*,b.name as contact_name from invoice join contact b on invoice.contact_id=b.id where ((invoice.paid_amount is null or invoice.paid_amount < invoice.bill_amount) and invoice.status in ('Active','Sent','Hawk')) order by invoice.date desc, invoice.id desc"),
 		'view' => 'invoice-list'),
 );
 /*

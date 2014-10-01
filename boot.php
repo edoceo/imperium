@@ -69,7 +69,7 @@ App::load_config();
 //Zend_Db_Table_Abstract::setDefaultAdapter($x);
 require_once('Radix/db/sql.php');
 radix_db_sql::init("pgsql:host={$_ENV['database']['hostname']};dbname={$_ENV['database']['database']}",$_ENV['database']['username'],$_ENV['database']['password']);
-App::$db = new radix_db_sql();
+// App::$db = new radix_db_sql();
 
 /**
     Internal Hax0r Functions
