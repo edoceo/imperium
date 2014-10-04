@@ -37,7 +37,7 @@ if (!empty($this->Invoice['id'])) {
 
 	// Next Ones
 	$s = sprintf('SELECT id FROM invoice where id > %d order by id asc limit 5',$this->Invoice['id']);
-	$r = radix_db_sql::fetchAll($s);
+	$r = radix_db_sql::fetch_all($s);
 	foreach ($r as $x) {
 		$this->jump_list[] = array('controller'=>'invoice','action'=>'view','id'=>$x['id']);
 	}

@@ -372,7 +372,7 @@ class Account extends ImperiumBase
             // $sql.= ' JOIN account_tax_form ON account_tax_line.account_tax_form_id = account_tax_form.id ';
         $sql.= ' ORDER BY full_code ASC, code ASC';
 
-        $rs = radix_db_sql::fetchAll($sql);
+        $rs = radix_db_sql::fetch_all($sql);
         $list = array();
         foreach ($rs as $x) {
             $list[] = new Account($x);
@@ -391,7 +391,7 @@ class Account extends ImperiumBase
         $sql.= " order by full_code asc, code asc";
 
         // $rs = $db->fetchPairs($sql);
-        $rs = radix_db_sql::fetchMix($sql);
+        $rs = radix_db_sql::fetch_mix($sql);
         return $rs;
     }
 }

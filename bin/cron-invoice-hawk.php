@@ -26,9 +26,6 @@ $sql = 'SELECT count(id) FROM invoice ';
 $sql.= ' WHERE status IN (\'Active\') ';
 $sql.= ' AND (extract(days from current_timestamp - date) > ?) ';
 $res = radix_db_sql::fetch_one($sql, array($cli_opt['span']));
-
-// $res = $db->fetchAll($sql,array(strftime('%Y-%m-%d',$time),array('Active')));
-// $res = radix_db_sql::fetch_all("$sql AND status in ('Active')",array($cli_opt['span']));
 echo "<p>" . $res . " Active Invoices to POST</p>\n";
 
 $sql = 'SELECT count(id) FROM invoice ';
@@ -43,7 +40,7 @@ $sql = 'SELECT *, extract(days from current_timestamp - date) as days FROM invoi
 $sql.= ' WHERE status IN (\'Hawk\', \'Sent\') ';
 // $sql.= ' AND ((extract(days from current_timestamp - date)::integer % ?) = 0) ';
 $sql.= ' ORDER BY date, contact_id, id ASC ';
-$res = radix_db_sql::fetchAll($sql); // , array($cli_opt['span']));
+$res = radix_db_sql::fetch_all($sql); // , array($cli_opt['span']));
 
 echo "<p>Past Due Invoices: " . count($res) . "</p>\n";
 
@@ -68,7 +65,7 @@ foreach ($res as $rec) {
 	// $sql.= ' WHERE contact_id = ? AND status IN (\'Sent\') AND (extract(days from current_timestamp - date) >= ?) ';
 	// $sql.= ' ORDER BY date';
 	// $arg = array($co['id'], $cli_opt['span']);
-	// $iv_res = radix_db_sql::fetcHAll($sql, $arg);
+	// $iv_res = radix_db_sql::fetch_all($sql, $arg);
 
 	$mail = null;
 	$mail = trim(file_get_contents($file));
@@ -140,11 +137,11 @@ $mail = str_replace('%head_hash%', md5(openssl_random_pseudo_bytes(256)) . '@' .
 $mail = str_replace('%head_subj%', '[Imperium] Past Due Invoices Summary', $mail);
 $mail = str_replace('%mail_rcpt%', $_ENV['cron']['alert_to'], $mail);
 
-$mail.= "Environment\n";
-$mail.= shell_exec('set');
-
-if ( !empty($cli_opt['mail']) && !empty($_ENV['cron']['alert_to']) ) {
+if (!empty($cli_opt['cron'])) {
 	App_Mail::send($_ENV['cron']['alert_to'], $mail);
-} else {
-	echo strip_tags($body);
 }
+// if ( !empty($cli_opt['mail']) && !empty($_ENV['cron']['alert_to']) ) {
+//
+// } else {
+// 	echo strip_tags($body);
+// }

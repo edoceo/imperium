@@ -94,7 +94,7 @@ if (strlen($_GET['link'])) {
 }
 
 $sql = "select * from general_ledger where $where order by $order";
-$res = radix_db_sql::fetchAll($sql, $param);
+$res = radix_db_sql::fetch_all($sql, $param);
 if (empty($res)) {
 	echo radix_db_sql::lastError();
 	die(print_r($res));

@@ -179,8 +179,8 @@ class Invoice extends ImperiumBase
         $sql.= sprintf(' al.link_to = %d AND al.link_id = %d',self::getObjectType($this),$this->id);
         $sql.= ' ORDER BY aj.date ASC, al.amount DESC';
 
-        $rs = radix_db_sql::fetchAll($sql);
-        return $rs;
+        $res = radix_db_sql::fetch_all($sql);
+        return $res;
     }
 
     /**

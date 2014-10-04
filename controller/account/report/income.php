@@ -31,7 +31,7 @@ if ('true' == $_GET['xc']) {
 $sql.= " group by a.id,a.full_code,a.code,a.name ";
 $sql.= " order by a.full_code,a.code ";
 //echo "<p>$sql</p>";
-$this->RevenueAccountList = radix_db_sql::fetchAll($sql);
+$this->RevenueAccountList = radix_db_sql::fetch_all($sql);
 radix_session::flash('fail', radix_db_sql::lastError());
 
 // Expenses
@@ -44,5 +44,5 @@ if ('true' == $_GET['xc']) {
 $sql.= " group by a.id,a.full_code,a.code,a.name ";
 $sql.= " order by a.full_code,a.code ";
 //echo "<p>$sql</p>";
-$this->ExpenseAccountList = radix_db_sql::fetchAll($sql);
+$this->ExpenseAccountList = radix_db_sql::fetch_all($sql);
 radix_session::flash('fail', radix_db_sql::lastError());

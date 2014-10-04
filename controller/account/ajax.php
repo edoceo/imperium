@@ -23,7 +23,7 @@ case 'account':
 	$sql.= ' FROM account';
 	$sql.= ' WHERE name ~* ? OR full_name ~* ?';
 	$sql.= ' ORDER BY full_name';
-	$res = radix_db_sql::fetchAll($sql, array($q, "^$q"));
+	$res = radix_db_sql::fetch_all($sql, array($q, "^$q"));
 	die(json_encode($res));
 	break;
 
@@ -35,7 +35,7 @@ case 'contact':
 	$s->orWhere('company ~* ?','^'.$q);
 	$s->orWhere('name ~* ?','^'.$q);
 	$s->order(array('contact'));
-	$r = $this->_d->fetchAll($s);
+	$r = radix_db_sql::fetch_all($s);
 
 	echo json_encode($r);
 }
