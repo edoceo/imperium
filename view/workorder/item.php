@@ -131,7 +131,7 @@ $(function() {
 
 	// Bind Ctrl+Enter
 	$('#workorder-item-form').on('keypress', function(e) {
-		if (e.keyCode == 10) && (e.ctrlKey)) {
+		if ((e.keyCode == 10) && (e.ctrlKey)) {
 			$('#status').val('Complete');
 			$('#workorder-item-exec-save').click();
 		}
