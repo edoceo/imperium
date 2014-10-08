@@ -15,8 +15,14 @@ if (empty($this->WorkOrderItem)) {
     return;
 }
 
-echo '<form action="'. radix::link('/workorder/item?' . http_build_query(array('id'=>$this->WorkOrderItem['id']))) . '" method="post">';
+echo '<form action="'. radix::link('/workorder/item?' . http_build_query(array('id'=>$this->WorkOrderItem['id']))) . '" id="workorder-item-form" method="post">';
 echo '<table>';
+
+// Name
+echo '<tr><td class="l">Name:</td><td colspan="5">'  . radix_html_form::text('name',$this->WorkOrderItem['name']) . '</td></tr>';
+
+// Details
+echo '<tr><td class="l">Note:</td><td colspan="5">' . radix_html_form::textarea('note', $this->WorkOrderItem['note']) . '</td></tr>';
 
 // Kind & Date
 $time_base = mktime(0,0,0);
@@ -48,12 +54,6 @@ $u = radix_html_form::select('a_unit', $this->WorkOrderItem['a_unit'], Base_Unit
 $t = radix_html_form::number('a_tax_rate',tax_rate_format($this->WorkOrderItem['a_tax_rate']));
 echo "<tr><td class='l'>Actual:</td><td>$q</td><td><strong>@</strong>$r</td><td><strong>per</strong>&nbsp;$u<td class='b r'>Tax Rate:</td><td>$t&nbsp;%</td></tr>";
 
-// Name
-echo '<tr><td class="l">Name:</td><td colspan="5">'  . radix_html_form::text('name',$this->WorkOrderItem['name']) . '</td></tr>';
-
-// Details
-echo '<tr><td class="l">Note:</td><td colspan="5">' . radix_html_form::textarea('note', $this->WorkOrderItem['note']) . '</td></tr>';
-
 // Notify
 echo '<tr><td class="l">';
 echo '<span title="Input an email address here and a notification email will be sent">Notify:</span></td>';
@@ -73,7 +73,7 @@ echo "</table>";
 echo '<div class="cmd">';
 echo '<input name="workorder_id" type="hidden" value="' . $this->WorkOrder['id'] . '">';
 // echo $this->formSubmit('c','Save');
-echo '<button class="good" name="a" type="submit" value="save">Save</button>';
+echo '<button class="good" id="workorder-item-exec-save" name="a" type="submit" value="save">Save</button>';
 if (!empty($this->WorkOrderItem['id'])) {
     echo '<button class="fail" name="a" type="submit" value="delete">Delete</button>';
 }
@@ -127,6 +127,14 @@ $(function() {
 
 	$('input[type=number]').on('blur', function() {
 		toNumeric(this);
+	});
+
+	// Bind Ctrl+Enter
+	$('#workorder-item-form').on('keypress', function(e) {
+		if (e.keyCode == 10) && (e.ctrlKey)) {
+			$('#status').val('Complete');
+			$('#workorder-item-exec-save').click();
+		}
 	});
 
 });
