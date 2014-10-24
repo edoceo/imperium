@@ -57,10 +57,10 @@ if (!empty($this->Contact['parent_id'])) {
 echo '<table>';
 
 // First & Last Name
-// if ($this->Contact->kind == 'Person') {
+// if ($this->Contact['kind'] == 'Person') {
 //     echo '<tr>';
-//     echo '<td class="l" style="width:6em;">First:</td><td>' . $this->formText('first_name',$this->Contact->first_name,array('style'=>'width: 100%')) . '</td>';
-//     echo '<td class="l" style="width:5em;">Last:</td><td>' . $this->formText('last_name',$this->Contact->last_name,array('style'=>'width: 100%')) . '</td>';
+//     echo '<td class="l" style="width:6em;">First:</td><td>' . $this->formText('first_name',$this->Contact['first_name'],array('style'=>'width: 100%')) . '</td>';
+//     echo '<td class="l" style="width:5em;">Last:</td><td>' . $this->formText('last_name',$this->Contact['last_name'],array('style'=>'width: 100%')) . '</td>';
 //     echo '</tr>';
 // }
 
@@ -118,12 +118,12 @@ if (!empty($this->ContactChannelList)) {
 // Tags
 echo '<tr>';
 echo '<td class="l">Tags:</td>';
-echo '<td colspan="3">' . radix_html_form::text('tags',$this->Contact->tags,array('style'=>'width: 100%')) . '</td>';
+echo '<td colspan="3">' . radix_html_form::text('tags',$this->Contact['tags'], array('style'=>'width: 100%')) . '</td>';
 echo '</tr>';
 
 // Flags
 // $flag_list = array();
-// if ($this->Contact->kind == 'Person') {
+// if ($this->Contact['kind'] == 'Person') {
 //     $flag_list[] = '<label style="margin-right:16px;"><input ' . ($this->Contact->hasFlag(Contact::FLAG_BILL) ? 'checked="checked" ' : null) . 'name="flag_bill" type="checkbox" value="1" /> Billing Contact</label>';
 //     $flag_list[] = '<label style="margin-right:16px;"><input ' . ($this->Contact->hasFlag(Contact::FLAG_SHIP) ? 'checked="checked" ' : null) . 'name="flag_ship" type="checkbox" value="1" /> Shipping Contact</label>';
 // }
@@ -165,7 +165,7 @@ echo '</table>';
 
 echo '<div class="bf">';
 echo '<input class="good" name="a" type="submit" value="Save">';
-//if ($this->Contact->kind == 'Person') {
+//if ($this->Contact['kind'] == 'Person') {
 //    echo '<input name="c" title="Mark as Billing Contact" type="submit" value="Bill">';
 //    echo '<input name="c" title="Mark as Shipping Contact" type="submit" value="Ship">';
 //}
@@ -227,6 +227,7 @@ $(function() {
     		case 'aol.com':
     		case 'facebook.com':
     		case 'gmail.com':
+    		case 'hotmail.com':
     		case 'inbox.com':
     		case 'mac.com':
     		case 'mail.com':
@@ -262,14 +263,14 @@ if ($this->ContactAddressList) {
 }
 
 // Sub Contacts
-if (empty($this->Contact->parent_id)) {
+if (empty($this->Contact['parent_id'])) {
 
     $x = array(
         'controller' => 'contact',
         'action' => 'create',
-        'parent' => $this->Contact->id,
+        'parent' => $this->Contact['id'],
     );
-    $url = radix::link('/contact/create?parent=' . $this->Contact->id); // ($x,'default',true);
+    $url = radix::link('/contact/create?parent=' . $this->Contact['id']); // ($x,'default',true);
 
     echo '<h2 id="sub-contacts"><a href="' . $url . '"><i class="fa fa-users"></i> Sub-Contacts</a>';
     // echo '<span class="s">[ <a href="' . $url . '">';

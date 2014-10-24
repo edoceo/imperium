@@ -264,7 +264,7 @@ class Contact extends ImperiumBase
 	function getAddressList($name=null)
 	{
 		if ($name == null) {
-			$rs = radix_db_sql::fetchAll('SELECT * FROM contact_address WHERE contact_id = ?', array($this->_data['id']));
+			$rs = radix_db_sql::fetch_all('SELECT * FROM contact_address WHERE contact_id = ?', array($this->_data['id']));
 			$list = array();
 			foreach ($rs as $x) {
 				$list[] = new ContactAddress($x);
@@ -293,7 +293,7 @@ class Contact extends ImperiumBase
         $sql.= ' WHERE AND contact_id IN (SELECT id FROM contact WHERE ( id = ? OR parent_id = ? ) ) ';
         $sql.= ' ORDER BY contact_id ';
         // $res = $db->fetchAll($sql);
-        $res = radix_db_sql::fetchAll($sql, array($this->_data['id'], $this->_data['id']));
+        $res = radix_db_sql::fetch_all($sql, array($this->_data['id'], $this->_data['id']));
         $list = array();
         foreach ($res as $x) {
             $list[] = new ContactChannel($x);
@@ -305,10 +305,10 @@ class Contact extends ImperiumBase
   // get_credit_cards ************************************************
   function get_credit_cards()
   {
-    if (!$this->id) return null;
+		if (!$this->id) return null;
         $idc = ImperiumConnection::singleton();
-    $rs = $idc->query("select * from contact_credit_card where contact_id=$this->id");
-    return pg_numrows($rs)?$rs:null;
+		$rs = $idc->query("select * from contact_credit_card where contact_id=$this->id");
+		return pg_numrows($rs)?$rs:null;
   }
 
   function get_past_due_invoices()
