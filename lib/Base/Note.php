@@ -7,6 +7,9 @@
     @link       http://imperium.edoceo.com
     @since      File available since Release 1013
 */
+
+namespace Edoceo\Imperium;
+
 class Base_Note extends ImperiumBase
 {
     protected $_table = 'base_note';

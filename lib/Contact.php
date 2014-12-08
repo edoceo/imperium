@@ -9,6 +9,8 @@
 	@since      File available since Release 2001
 */
 
+namespace Edoceo\Imperium;
+
 class Contact extends ImperiumBase
 {
     const FLAG_BILL = 0x00000020;

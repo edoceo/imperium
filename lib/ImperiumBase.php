@@ -9,7 +9,9 @@
 
 */
 
-class ImperiumBase implements ArrayAccess
+namespace Edoceo\Imperium;
+
+class ImperiumBase implements \ArrayAccess
 {
 	protected $_data; // Object Data
     protected $_diff = true;  // Do Diff on Save

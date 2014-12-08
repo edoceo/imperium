@@ -9,6 +9,8 @@
     @since      2003
 */
 
+namespace Edoceo\Imperium;
+
 class WorkOrderItem extends ImperiumBase
 {
 	protected $_table = 'workorder_item';

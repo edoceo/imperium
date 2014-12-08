@@ -8,6 +8,10 @@
 	@package Edoceo Imperium
 */
 
+namespace Edoceo\Imperium;
+
+use Radix;
+
 echo '<table>';
 echo '<tr>';
 echo '<th>Name</th>';
@@ -30,11 +34,11 @@ foreach ($data['list'] as $item) {
     default:
         echo '<i class="fa fa-user"></i> ';
     }
-    echo '<a href="' . radix::link('/contact/view?c=' . $item['id']) . '">' . html($item['name']) . '</a>';
+    echo '<a href="' . Radix::link('/contact/view?c=' . $item['id']) . '">' . html($item['name']) . '</a>';
     echo '</td>';
 
-    echo '<td>' . radix::block('stub-channel',array('kind' => ContactChannel::PHONE, 'data'=>$item['phone'])) . '</td>';
-    echo '<td>' . radix::block('stub-channel',array('kind' => ContactChannel::EMAIL, 'data'=>$item['email'])) . '</td>';
+    echo '<td>' . Radix::block('stub-channel',array('kind' => ContactChannel::PHONE, 'data'=>$item['phone'])) . '</td>';
+    echo '<td>' . Radix::block('stub-channel',array('kind' => ContactChannel::EMAIL, 'data'=>$item['email'])) . '</td>';
     echo '</tr>';
 }
 

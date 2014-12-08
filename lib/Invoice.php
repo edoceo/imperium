@@ -11,6 +11,8 @@
     @since      2003
 */
 
+namespace Edoceo\Imperium;
+
 class Invoice extends ImperiumBase
 {
     const FLAG_OPEN = 0x00000001;

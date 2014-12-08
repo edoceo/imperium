@@ -5,6 +5,8 @@
 	@since      File available since Release 2008.06.20
 */
 
+namespace Edoceo\Imperium;
+
 class AccountJournalEntry extends ImperiumBase
 {
 	protected $_table = 'account_journal';

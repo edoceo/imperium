@@ -7,6 +7,9 @@
 	@link       http://imperium.edoceo.com
 	@since      File available since Release 1013
 */
+
+namespace Edoceo\Imperium;
+
 class ContactChannel extends ImperiumBase
 {
   protected $_table = 'contact_channel';

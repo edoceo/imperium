@@ -9,6 +9,8 @@
     @since      2003
 */
 
+namespace Edoceo\Imperium;
+
 class InvoiceItem extends ImperiumBase
 {
     protected $_table = 'invoice_item';

@@ -7,6 +7,8 @@
     @since      File available since Release 1013
 */
 
+namespace Edoceo\Imperium;
+
 class AccountLedgerEntry extends ImperiumBase
 {
     protected $_table = 'account_ledger';

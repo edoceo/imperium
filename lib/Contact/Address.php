@@ -9,6 +9,8 @@
 	@since      File available since Release 1013
 */
 
+namespace Edoceo\Imperium;
+
 class ContactAddress extends ImperiumBase
 {
     protected $_table = 'contact_address';

@@ -5,6 +5,10 @@
 
 */
 
+namespace Edoceo\Imperium;
+
+use Radix;
+
 if (empty($data)) {
     return;
 }
@@ -31,7 +35,7 @@ if (strlen($data['name'])) {
     $html.= $data['name'] . ': ';
 }
 
-$edit_link = radix::link('/contact.channel/view?id=' . $data['id']);
+$edit_link = Radix::link('/contact.channel/view?id=' . $data['id']);
 
 switch ($data['kind']) {
 case ContactChannel::PHONE:
@@ -96,7 +100,7 @@ case ContactChannel::EMAIL:
 
     //$email_img = img('/silk/1.3/email_edit.png','Edit Email');
     //$image = img('/silk/1.3/email_go.png','Email');
-    $html = '<a href="' . radix::link('/email/compose?to=' . $data['data']) .'">';
+    $html = '<a href="' . Radix::link('/email/compose?to=' . $data['data']) .'">';
     $html.= htmlspecialchars($data['data']);
     $html.= '</a>';
     if (!empty($data['id'])) {

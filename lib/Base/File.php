@@ -6,6 +6,8 @@
 	@since	  File available since Release 1099
 */
 
+namespace Edoceo\Imperium;
+
 class Base_File extends ImperiumBase
 {
 	protected $_table = 'base_file';
@@ -98,7 +100,7 @@ class Base_File extends ImperiumBase
 //		 $r = isset($mt[$mime]) ? $mt[$mime] : 'page.png';
 //		 return $r;
 //	 }
-// 
+//
 //	 static function niceMimeType($mime)
 //	 {
 //		 $mime = strtolower($mime);
@@ -137,7 +139,7 @@ class Base_File extends ImperiumBase
 		if (is_uploaded_file($f['tmp_name'])==false) {
 			return false;
 		}
-		
+
 		return true;
 	}
 
