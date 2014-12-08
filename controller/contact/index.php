@@ -4,6 +4,10 @@
 	@todo Implement some sort of Reporting Feature Here?
 */
 
+namespace Edoceo\Imperium;
+
+use Radix;
+
 
 $this->Char = $_GET['char'];
 $this->Sort = $_GET['sort'];
@@ -99,5 +103,5 @@ $sql->limitPage($this->view->Paginator->page,$this->view->Paginator->limit);
   );
 */
 
-$this->ContactList = radix_db_sql::fetch_all($sql, $arg);
-radix_session::flash('fail', radix_db_sql::lastError());
+$this->ContactList = Radix\DB\SQL::fetch_all($sql, $arg);
+Radix\Session::flash('fail', Radix\DB\SQL::lastError());

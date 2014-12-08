@@ -3,12 +3,17 @@
 
 */
 
+namespace Edoceo\Imperium;
+
+use Radix;
+use Radix\DB;
+
 switch (strtolower($_POST['a'])) {
 case 'sign in':
 
 	if (!acl::may('/auth/sign-in', 'POST')) {
-		radix_session::flash('fail', 'Access Denied');
-		radix::redirect('/auth/sign-in');
+		Session::flash('fail', 'Access Denied');
+		Radix::redirect('/auth/sign-in');
 	}
 
 	$sql = 'SELECT * FROM auth_user WHERE username = ? ';
@@ -18,11 +23,11 @@ case 'sign in':
 		$_POST['password'],
 		sha1($_POST['username'] . $_POST['username']),
 	);
-	$res = radix_db_sql::fetchRow($sql, $arg);
+	$res = Radix\DB\SQL::fetch_row($sql, $arg);
 	if (empty($res)) {
 		// @todo Random Sleep
-		radix_session::flash('fail', 'Invalid username or password');
-		radix::redirect();
+		Radix\Session::flash('fail', 'Invalid username or password');
+		Radix::redirect();
 	}
 
 	// radix::dump($res);
@@ -41,7 +46,7 @@ case 'sign in':
 	acl::permit('/workorder*');
 	acl::permit('/settings*');
 
-	radix_session::flash('info', 'Sign In Successful');
+	Radix\Session::flash('info', 'Sign In Successful');
 
 	// Redirect
 	$ret = '/';

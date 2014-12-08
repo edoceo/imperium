@@ -4,6 +4,8 @@
     @brief Web Handler for Edoceo Imperium
 */
 
+use \Radix;
+
 // Uncomment to get timing outputs
 define('APP_INIT', microtime(true));
 
@@ -19,8 +21,8 @@ if ('xmlhttprequest' == strtolower($_SERVER['HTTP_X_REQUESTED_WITH'])) {
 	$opt['theme'] = 'ajax';
 }
 
-radix::init($opt);
-radix_session::init(array('name' => 'imperium'));
+Radix::init($opt);
+Radix\Session::init(array('name' => 'imperium'));
 
 // Zend_Controller_Front
 // $front = Zend_Controller_Front::getInstance();
@@ -81,14 +83,15 @@ if (empty($_SESSION['uid'])) {
 	acl::permit('/auth/sign-in');
 	acl::permit('/auth/sign-in', 'POST');
 	acl::permit('/auth/sign-out');
+	acl::permit('/hook/*');
 }
 
-if (!acl::may(radix::$path)) {
+if (!acl::may(Radix::$path)) {
 
 	if (empty($_SESSION['uid'])) {
 		if (empty($_SESSION['return-path'])) {
 			if (!empty($_SERVER['REQUEST_URI'])) {
-				$real_base = radix::base();
+				$real_base = Radix::base();
 				$want = $_SERVER['REQUEST_URI'];
 				$want_base = substr($want, 0, strlen($real_base));
 				if ($real_base == $want_base) {
@@ -96,18 +99,18 @@ if (!acl::may(radix::$path)) {
 				}
 			}
 		}
-		radix_session::flash('fail', 'Identity Required');
-		radix::redirect('/auth/sign-in');
+		Radix\Session::flash('fail', 'Identity Required');
+		Radix::redirect('/auth/sign-in');
 	}
 
-	radix_session::flash('fail', 'Access Denied to ' . radix::$path);
-	radix::redirect('/');
+	Radix\Session::flash('fail', 'Access Denied to ' . Radix::$path);
+	Radix::redirect('/');
 
 }
 
-radix::exec();
-radix::view();
-radix::send();
+Radix::exec();
+Radix::view();
+Radix::send();
 
 // Output Statistics
 if (defined('APP_INIT')) {
