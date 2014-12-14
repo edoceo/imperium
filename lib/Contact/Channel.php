@@ -12,28 +12,29 @@ namespace Edoceo\Imperium;
 
 class ContactChannel extends ImperiumBase
 {
-  protected $_table = 'contact_channel';
+	protected $_table = 'contact_channel';
 
-  public static $kind_list = array(
-    self::PHONE=>'Phone',
-    self::EMAIL=>'Email',
-    self::IM=>'I.M.',
-    self::FAX=>'Fax',
-    self::SIP=>'SIP',
-    self::PAGER=>'Pager',
-  );
+	public static $kind_list = array(
+		self::PHONE => 'Phone',
+		self::EMAIL => 'Email',
+		self::IM => 'I.M.',
+		self::FAX => 'Fax',
+		self::SIP => 'SIP',
+	);
 
-	//const OBJECT_TYPE = 202;
+	const PHONE = 100;
+	const EMAIL = 200;
+	const IM = 300;
+	const SIP = 400;
+	const FAX = 500;
 
-  const PHONE = 100;
-  const EMAIL = 200;
-  const IM = 300;
-  const SIP = 400;
-  const FAX = 500;
-  const PAGER = 600;
+	function save()
+	{
+		if (empty($this->_data['contact_id'])) {
+			$this->_data['contact_id'] = null;
+		}
 
-	public $kind;
-	public $name;
-	public $data;
+		return parent::save();
+	}
 
 }

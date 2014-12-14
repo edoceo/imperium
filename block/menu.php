@@ -62,9 +62,9 @@ echo '</li>';
 echo '<li><a href="' . Radix::link('/contact') . '"><i class="fa fa-users"></i> Contacts</a>';
     echo '<ul>';
     if (!empty($_ENV['contact']['id'])) {
-        echo '<li><a href="' . Radix::link('/contact/view?c=' . $_ENV['contact']['id']) . '">' . img('/silk/1.3/user.png','Back to Contact') . ' &laquo;' . $_ENV['contact']['name'] . '</a></li>';
+        echo '<li><a href="' . Radix::link('/contact/view?c=' . $_ENV['contact']['id']) . '"><i class="fa fa-user"></i> ' . $_ENV['contact']['name'] . '</a></li>';
         echo '<li><hr /></li>';
-        echo '<li><a href="' . Radix::link('/contact.channel/edit?c=' . $_ENV['contact']['id']) . '">' . img('/silk/1.3/add.png','Add Contact Channel') . ' Add Channel</a></li>';
+        echo '<li><a href="' . Radix::link('/contact/channel?a=create&amp;c=' . $_ENV['contact']['id']) . '"><i class="fa fa-plus"></i> Add Channel</a></li>';
         // echo '<li><a href="' . radix::link('/task/edit/link/' . $this->Contact->link() . '">' . img('/silk/1.3/note_add.png','Add Task') . ' Add Task</a></li>';
         // echo '<li><a href="' . radix::link('/history/edit/link/' . $this->Contact->link() . '">' . img('/silk/1.3/note_add.png','Add Note') . ' Add History</a></li>';
         //$menu[] = array('/timer/edit',$html->image('clock_add.png').' Clean');
@@ -127,9 +127,9 @@ echo '<li><a href="' . radix::link('/invoice') . '"><i class="fa fa-usd"></i> In
 
     // Create Invoice
     if ($_ENV['contact']['id']) {
-        echo '<li><a href="' . radix::link('/invoice/edit?c=' . $_ENV['contact']['id']) . '"><i class="fa fa-plus-square"></i> Create</a></li>';
+        echo '<li><a href="' . radix::link('/invoice/new?c=' . $_ENV['contact']['id']) . '"><i class="fa fa-plus-square"></i> Create</a></li>';
     } else {
-        echo '<li><a href="' . radix::link('/invoice/edit') . '"><i class="fa fa-plus-square"></i> Create</a></li>';
+        echo '<li><a href="' . radix::link('/invoice/new') . '"><i class="fa fa-plus-square"></i> Create</a></li>';
     }
     // echo '<li><a href="' . radix::link('/invoice/filter/active') . '">' , img('/silk/1.3/money_add.png','Active').' Active</a></li>';
     // echo '<li><a href="' . radix::link('/invoice/filter/past_due') . '">' , img('/silk/1.3/money_add.png','Past Due').' Past Due</a></li>';

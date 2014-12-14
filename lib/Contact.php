@@ -11,6 +11,8 @@
 
 namespace Edoceo\Imperium;
 
+use Radix;
+
 class Contact extends ImperiumBase
 {
     const FLAG_BILL = 0x00000020;
@@ -111,19 +113,19 @@ class Contact extends ImperiumBase
         $id = intval($this->id);
 
         // Check Workorder
-        $res = radix_db_sql::fetch_one('SELECT count(id) FROM workorder WHERE contact_id = ?', array($id));
+        $res = Radix\DB\SQL::fetch_one('SELECT count(id) FROM workorder WHERE contact_id = ?', array($id));
         if ($res > 0) {
         	throw new Exception("Cannot delete Contact who owns Work Orders");
         }
 
         // Check Invoice
-        $res = radix_db_sql::fetch_one('SELECT count(id) FROM invoice WHERE contact_id = ?', array($id));
+        $res = Radix\DB\SQL::fetch_one('SELECT count(id) FROM invoice WHERE contact_id = ?', array($id));
         if ($res > 0) {
         	throw new Exception("Cannot delete Contact who owns Invoices");
         }
 
-        radix_db_sql::query('DELETE FROM contact_address WHERE contact_id = ?', array($id));
-        radix_db_sql::query('DELETE FROM contact_channel WHERE contact_id = ?', array($id));
+        Radix\DB\SQL::query('DELETE FROM contact_address WHERE contact_id = ?', array($id));
+        Radix\DB\SQL::query('DELETE FROM contact_channel WHERE contact_id = ?', array($id));
 
         //$db->query("delete from workorder where contact_id = $id");
         //$this->WorkOrder->deleteAll("WorkOrder.contact_id=$id",false,false);
@@ -165,7 +167,7 @@ class Contact extends ImperiumBase
             $sql.= sprintf(' AND flag & %d = %d ',$flag,$flag);
         }
         $sql.= ' ORDER BY id ';
-        $res = radix_db_sql::fetchAll($sql);
+        $res = Radix\DB\SQL::fetchAll($sql);
         if ( (is_array($res)) && (count($res)>0) ) {
             return $res;
         }
@@ -266,7 +268,7 @@ class Contact extends ImperiumBase
 	function getAddressList($name=null)
 	{
 		if ($name == null) {
-			$rs = radix_db_sql::fetch_all('SELECT * FROM contact_address WHERE contact_id = ?', array($this->_data['id']));
+			$rs = Radix\DB\SQL::fetch_all('SELECT * FROM contact_address WHERE contact_id = ?', array($this->_data['id']));
 			$list = array();
 			foreach ($rs as $x) {
 				$list[] = new ContactAddress($x);
@@ -292,10 +294,10 @@ class Contact extends ImperiumBase
     {
         // Now Get Child Emails if Company?
         $sql = 'SELECT * FROM contact_channel '; // WHERE kind = 200 ';
-        $sql.= ' WHERE AND contact_id IN (SELECT id FROM contact WHERE ( id = ? OR parent_id = ? ) ) ';
-        $sql.= ' ORDER BY contact_id ';
+        $sql.= ' WHERE contact_id IN (SELECT id FROM contact WHERE id = ? OR parent_id = ? ) ';
+        $sql.= ' ORDER BY contact_id, name ';
         // $res = $db->fetchAll($sql);
-        $res = radix_db_sql::fetch_all($sql, array($this->_data['id'], $this->_data['id']));
+        $res = Radix\DB\SQL::fetch_all($sql, array($this->_data['id'], $this->_data['id']));
         $list = array();
         foreach ($res as $x) {
             $list[] = new ContactChannel($x);
