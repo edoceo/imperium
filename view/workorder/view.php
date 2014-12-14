@@ -10,6 +10,11 @@
     @since      File available since Release 1013
 */
 
+namespace Edoceo\Imperium;
+
+use Radix;
+use Radix\HTML\Form;
+
 // Jump List
 if (count($this->jump_list)) {
     echo '<div class="jump_list">';
@@ -27,7 +32,7 @@ if (count($this->jump_list)) {
     echo '</div>';
 }
 
-echo '<form action="' . radix::link('/workorder/save?w=' . $this->WorkOrder['id']) . '" method="post">';
+echo '<form action="' . Radix::link('/workorder/save?w=' . $this->WorkOrder['id']) . '" method="post">';
 echo star($this->WorkOrder['star'] ? $this->WorkOrder['star'] : 'star_' );
 echo '<table>';
 
@@ -38,27 +43,27 @@ if (empty($this->Contact['id'])) {
     echo '<td><input id="contact_name" name="contact_name" type="text" />';
     echo '</td>';
 } else {
-    echo '<td class="l">Contact:</td><td><a href="' . radix::link("/contact/view?c={$this->Contact['id']}") . '">' . html($this->Contact['name']) . '</a>';
-    echo "<br />Primary Phone: " . radix::block('stub-channel',array('data'=>$this->Contact['phone'])) . "</td>";
+    echo '<td class="l">Contact:</td><td><a href="' . Radix::link("/contact/view?c={$this->Contact['id']}") . '">' . html($this->Contact['name']) . '</a>';
+    echo "<br />Primary Phone: " . Radix::block('stub-channel',array('data'=>$this->Contact['phone'])) . "</td>";
 }
 // Date
-echo '<td class="l">Date:</td><td>' . radix_html_form::date('date',$this->WorkOrder['date']) . '</td>';
+echo '<td class="l">Date:</td><td>' . Form::date('date',$this->WorkOrder['date']) . '</td>';
 echo '</tr>';
 
 // Requester & Kind
 echo '<tr>';
 echo '<td class="l">Requester:</td>';
 echo '<td>';
-echo radix_html_form::text('requester', $this->WorkOrder['requester']);
+echo Form::text('requester', $this->WorkOrder['requester']);
 echo '</td>';
 // Kind
-echo '<td class="l">Kind:</td><td>' . radix_html_form::select('kind', $this->WorkOrder['kind'], $this->KindList) . '</td>';
+echo '<td class="l">Kind:</td><td>' . Form::select('kind', $this->WorkOrder['kind'], $this->KindList) . '</td>';
 echo '</tr>';
 
 // Rate & Units & Status
 echo '<tr>';
-$r = radix_html_form::number('base_rate',$this->WorkOrder['base_rate'],array('class'=>'rate'));
-$u = radix_html_form::select('base_unit', $this->WorkOrder['base_unit'], Base_Unit::getList());
+$r = Form::number('base_rate',$this->WorkOrder['base_rate'],array('class'=>'rate'));
+$u = Form::select('base_unit', $this->WorkOrder['base_unit'], Base_Unit::getList());
 echo "<td class='l'>Base Rate:</td><td class='nw'>$r/$u</td>";
 // Status
 echo '<td class="l">Status:</td><td>' . $this->WorkOrder['status'] . '</td>';
@@ -75,8 +80,8 @@ echo '</table>';
 
 // Hidden Fields & Buttons
 echo '<div class="cmd">';
-echo radix_html_form::hidden('id',$this->WorkOrder['id']);
-echo radix_html_form::hidden('contact_id',$this->WorkOrder['contact_id']);
+echo Form::hidden('id',$this->WorkOrder['id']);
+echo Form::hidden('contact_id',$this->WorkOrder['contact_id']);
 echo '<button class="good" name="a" type="submit" value="save">Save</button>';
 
 if (!empty($_ENV['workorder.workflow'])) {
@@ -120,7 +125,7 @@ if (!empty($this->WorkOrder['id'])) {
         'list' => $this->WorkOrderNoteList,
         'page' => $url,
     );
-    echo radix::block('note-list', $arg);
+    echo Radix::block('note-list', $arg);
 }
 
 // Work Order Files
@@ -131,7 +136,7 @@ if (!empty($this->WorkOrder['id'])) {
     //     'list' => $this->WorkOrderFileList,
     //     'page' => $url,
     // );
-    echo radix::block('file-list', $this->WorkOrderFileList); // $arg);
+    echo Radix::block('file-list', $this->WorkOrderFileList); // $arg);
 }
 
 // Work Order Items
@@ -182,7 +187,7 @@ if (count($this->WorkOrderItemList) > 0) {
         }
 
         // $name = (isset($woi->date) ? date('m/d/y ',strtotime($woi->date)) : null) . $woi->name;
-        $link = '<a class="ajax-edit" data-name="woi-edit" href="' . radix::link('/workorder/item?id=' . $woi['id']) . '">%s</a>';
+        $link = '<a class="ajax-edit" data-name="woi-edit" href="' . Radix::link('/workorder/item?id=' . $woi['id']) . '">%s</a>';
 
         echo '<tr class="rero">';
 

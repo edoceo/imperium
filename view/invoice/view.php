@@ -10,9 +10,14 @@
     @since      File available since Release 1013
 */
 
+namespace Edoceo\Imperium;
+
+use Radix;
+use Radix\HTML\Form;
+
 $_ENV['title'] = array('Invoice','#' .$this->Invoice['id']);
 
-App::addMRU(radix::link('/invoice/view?id=' . $this->Invoice['id']));
+App::addMRU(Radix::link('/invoice/view?id=' . $this->Invoice['id']));
 
 $contact_address_list = array();
 
@@ -27,14 +32,14 @@ if (count($this->jump_list)) {
         } else {
             $text = '#' . $x['id'] . ' &raquo;';
         }
-        $list[] = '<a href="' . radix::link('/invoice/view?i=' . $x['id']) . '">' . $text . '</a>';
+        $list[] = '<a href="' . Radix::link('/invoice/view?i=' . $x['id']) . '">' . $text . '</a>';
     }
     echo '<div class="jump_list">';
     echo implode(' | ', $list);
     echo '</div>';
 }
 
-echo '<form action="' . radix::link('/invoice/save?i=' . $this->Invoice['id']) . '" method="post">';
+echo '<form action="' . Radix::link('/invoice/save?i=' . $this->Invoice['id']) . '" method="post">';
 echo '<div style="float:right;">';
 echo star($this->Invoice['star'] ? $this->Invoice['star'] : 'star_' );
 echo '</div>';
@@ -47,20 +52,20 @@ if (empty($this->Contact['id'])) {
     echo '<td><input id="contact_name" name="contact_name" type="text" />';
     echo '<script type="text/javascript">';
     echo '$("#contact_name").autocomplete({ ';
-    echo ' source: "' . radix::link('/contact/ajax') . '", ';
+    echo ' source: "' . Radix::link('/contact/ajax') . '", ';
     echo ' change: function(event, ui) { if (ui.item) { $("#contact_id").val(ui.item.id); } } ';
     echo '}); ';
     echo '</script>';
     echo '</td>';
 } else {
     echo '<td class="l">Contact:</td>';
-    echo '<td><a href="' . radix::link('/contact/view?c='.$this->Contact['id']) . '">' . $this->Contact['name'] . '</a>';
+    echo '<td><a href="' . Radix::link('/contact/view?c='.$this->Contact['id']) . '">' . $this->Contact['name'] . '</a>';
     echo '</td>';
 }
 
 // Date & Due Information
 echo '<td class="l">Date:</td><td>';
-echo radix_html_form::date('date',$this->Invoice['date'], array('id'=>'iv_date'));
+echo Form::date('date',$this->Invoice['date'], array('id'=>'iv_date'));
 if ($this->Invoice['due_diff'] < 0) {
     echo '&nbsp;<span class="s">Due in ' . abs($this->Invoice['due_diff']) . ' days</span>';
 } else {
@@ -77,15 +82,15 @@ if (is_array($this->ContactAddressList)) {
     $list+= $this->ContactAddressList;
 }
 
-$input = radix_html_form::select('bill_address_id', $this->Invoice['bill_address_id'], $list,null);
+$input = Form::select('bill_address_id', $this->Invoice['bill_address_id'], $list,null);
 echo '<tr>';
 echo '<td class="b r">Bill To:</td><td>' . $input . '</td>';
 
-$input = radix_html_form::select('ship_address_id', $this->Invoice['ship_address_id'], $list,null);
+$input = Form::select('ship_address_id', $this->Invoice['ship_address_id'], $list,null);
 echo '<td class="b r">Ship To:</td><td>' . $input . '</td>';
 echo '</tr>';
 
-echo "<tr><td class='b r'>Note:</td><td colspan='3'>" . radix_html_form::textarea('note',$this->Invoice['note'],array('style'=>'height:3em;width:90%;')) . '</td></tr>';
+echo "<tr><td class='b r'>Note:</td><td colspan='3'>" . Form::textarea('note',$this->Invoice['note'],array('style'=>'height:3em;width:90%;')) . '</td></tr>';
 echo '<tr><td class="l">Bill Total:</td><td class="l">' . number_format($this->Invoice['bill_amount'],2)."</td></tr>";
 echo '<tr><td class="l">Paid Total:</td><td class="l"';
 if ($this->Invoice['paid_amount'] < $this->Invoice['bill_amount']) {
@@ -95,15 +100,15 @@ echo '>' . number_format($this->Invoice['paid_amount'], 2) . '</td></tr>';
 
 // Status
 echo '<tr>';
-echo '<td class="l">Status:</td><td>' . radix_html_form::select('status', $this->Invoice['status'], $this->StatusList) . '</td>';
+echo '<td class="l">Status:</td><td>' . Form::select('status', $this->Invoice['status'], $this->StatusList) . '</td>';
 echo '</tr>';
 
 echo '</table>';
 
 // Buttons
 echo '<div class="cmd">';
-echo radix_html_form::hidden('id',$this->Invoice['id']);
-echo radix_html_form::hidden('contact_id',$this->Invoice['contact_id']);
+echo Form::hidden('id',$this->Invoice['id']);
+echo Form::hidden('contact_id',$this->Invoice['contact_id']);
 echo '<input class="good" name="a" type="submit" value="Save">';
 
 // Hawk Monitoring?
@@ -140,22 +145,22 @@ echo '</form>';
 // Invoice Notes
 if (!empty($this->Invoice['id'])) {
 
-    $url = radix::link('/note/create?i=' . $this->Invoice['id']);
+    $url = Radix::link('/note/create?i=' . $this->Invoice['id']);
     $arg = array(
         'list' => $this->InvoiceNoteList,
         'page' => $url,
     );
-    echo radix::block('note-list',$arg);
+    echo Radix::block('note-list',$arg);
 }
 
 // Invoice Items
 // $base = Zend_Controller_Front::getInstance()->getBaseUrl();
 $item_total = 0;
 $item_tax_total = 0;
-//$link = radix::link('/invoice/item');
+//$link = Radix::link('/invoice/item');
 
 echo '<h2><i class="fa fa-list"></i> Invoice Items ';
-echo '<span class="s">[ <a class="fancybox fancybox.ajax" href="' . radix::link('/invoice/item?i=' . $this->Invoice['id']) . '">';
+echo '<span class="s">[ <a class="fancybox fancybox.ajax" href="' . Radix::link('/invoice/item?i=' . $this->Invoice['id']) . '">';
 echo img('/tango/24x24/actions/list-add.png','Add Item');
 echo '</a> ]</span>';
 echo '</h2>';
@@ -176,7 +181,7 @@ if ((isset($this->InvoiceItemList)) && (is_array($this->InvoiceItemList)) && (co
         }
 
         echo '<tr class="rero">';
-        echo '<td class="b"><a class="fancybox fancybox.ajax" href="' . radix::link('/invoice/item?id=' . $ivi['id']) . '">' .$ivi['name'] . '</a></td>';
+        echo '<td class="b"><a class="fancybox fancybox.ajax" href="' . Radix::link('/invoice/item?id=' . $ivi['id']) . '">' .$ivi['name'] . '</a></td>';
         echo '<td class="c b">' .number_format($ivi['quantity'],2) . '</td>';
         echo '<td class="r">' . number_format($ivi['rate'],2) . '/' . $ivi['unit'] . '</td>';
         echo '<td class="r">' . number_format($item_subtotal, 2) . '</td>';
@@ -209,12 +214,12 @@ if ( count($this->InvoiceTransactionList) > 0) {
 
         $sum+= $le->amount;
 
-        $link = radix::link('/account/transaction?id=' . $le->account_journal_id, ImperiumView::niceDate($le->date));
+        $link = Radix::link('/account/transaction?id=' . $le->account_journal_id, ImperiumView::niceDate($le->date));
 
         echo '<tr>';
         echo '<td class="c">' . $link . '</td>';
 
-        $link = radix::link('/account/journal?id=' . $le->account_id, $le->account_name);
+        $link = Radix::link('/account/journal?id=' . $le->account_id, $le->account_name);
         echo '<td>' . $link;
         if (strlen($le->note)) {
             echo '/'.$le->note;
@@ -237,4 +242,4 @@ if ( count($this->InvoiceTransactionList) > 0) {
 
 // History
 $args = array('list' => $this->Invoice->getHistory());
-echo radix::block('diff-list',$args);
+echo Radix::block('diff-list',$args);

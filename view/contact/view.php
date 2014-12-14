@@ -7,6 +7,7 @@
 namespace Edoceo\Imperium;
 
 use Radix;
+use Radix\HTML\Form;
 
 
 // Web Site & Email
@@ -23,8 +24,8 @@ $this->Contact['url'] = sprintf('%s://%s%s', $url['scheme'], $url['host'], $url[
 echo '<form action="' . Radix::link('/contact/save?c=' . $this->Contact['id']) . '" method="post">';
 
 echo '<div>';
-echo \radix_html_form::hidden('id',$this->Contact['id']);
-echo \radix_html_form::hidden('parent_id',$this->Contact['parent_id']);
+echo Form::hidden('id',$this->Contact['id']);
+echo Form::hidden('parent_id',$this->Contact['parent_id']);
 echo '</div>';
 
 ?>
@@ -47,7 +48,7 @@ echo '</div>';
 
 <div class="pure-g" style="position:relative;">
 <div class="pure-u-1-5"><div class="l">Contact:</div></div>
-<div class="pure-u-4-5"><?= \radix_html_form::text('contact',$this->Contact['contact'])?></div>
+<div class="pure-u-4-5"><?= Form::text('contact',$this->Contact['contact'])?></div>
 
 <div class="pure-u-1-5"><div class="l"><?php
 if (!empty($this->Contact['parent_id'])) {
@@ -56,19 +57,19 @@ if (!empty($this->Contact['parent_id'])) {
     echo 'Company:';
 }
 ?></div></div>
-<div class="pure-u-4-5"><?= \radix_html_form::text('company',$this->Contact['company'])?></div>
+<div class="pure-u-4-5"><?= Form::text('company',$this->Contact['company'])?></div>
 
 <div class="pure-u-1-5"><div class="l">Phone:</div></div>
-<div class="pure-u-4-5"><?= \radix_html_form::text('phone', $this->Contact['phone'])?></div>
+<div class="pure-u-4-5"><?= Form::text('phone', $this->Contact['phone'])?></div>
 
 <div class="pure-u-1-5"><div class="l"><?=( strlen($this->Contact['email']) ? '<a href="mailto:' . $this->Contact['email'] . '">Email:</a>' : 'Email:' ) ?></div></div>
-<div class="pure-u-4-5"><?= \radix_html_form::text('email', $this->Contact['email'])?></div>
+<div class="pure-u-4-5"><?= Form::text('email', $this->Contact['email'])?></div>
 
 <div class="pure-u-1-5"><div class="l"><?=( strlen($this->Contact['url']) ? '<a href="' . $this->Contact['url'] . '" target="_blank">Web-Site</a>:' : 'Web-Site:' ) ?></div></div>
-<div class="pure-u-4-5"><?= \radix_html_form::text('url', $this->Contact['url']) ?></div>
+<div class="pure-u-4-5"><?= Form::text('url', $this->Contact['url']) ?></div>
 
 <div class="pure-u-1-5"><div class="l">Tags:</div></div>
-<div class="pure-u-4-5"><?= \radix_html_form::text('tags', $this->Contact['tags']) ?></div>
+<div class="pure-u-4-5"><?= Form::text('tags', $this->Contact['tags']) ?></div>
 
 </div>
 
@@ -86,8 +87,8 @@ echo '<table>';
 
 // Kind & Status
 echo '<tr>';
-echo '<td class="l">Kind:</td><td>' . \radix_html_form::select('kind', $this->Contact['kind'], $this->KindList) . '</td>';
-echo '<td class="l">Status:</td><td>' . \radix_html_form::select('status', $this->Contact['status'], $this->StatusList) . '</td>';
+echo '<td class="l">Kind:</td><td>' . Form::select('kind', $this->Contact['kind'], $this->KindList) . '</td>';
+echo '<td class="l">Status:</td><td>' . Form::select('status', $this->Contact['status'], $this->StatusList) . '</td>';
 echo '</tr>';
 
 // Channels

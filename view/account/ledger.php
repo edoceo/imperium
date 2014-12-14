@@ -5,6 +5,11 @@
 
 */
 
+namespace Edoceo\Imperium;
+
+use Radix;
+use Radix\HTML\Form;
+
 $AccountList = array();
 $AccountList[-1] = 'All - General Ledger';
 foreach ($this->AccountList as $item) {
@@ -14,12 +19,12 @@ $_ENV['title'][] = count($this->LedgerEntryList) . ' entries';
 
 echo '<form method="get">';
 echo '<table>';
-echo '<tr><td class="b r">Account:</td><td colspan="4">' . radix_html_form::select('id', $this->Account['id'], $AccountList) . "</td></tr>";
+echo '<tr><td class="b r">Account:</td><td colspan="4">' . Form::select('id', $this->Account['id'], $AccountList) . "</td></tr>";
 echo '<tr>';
 echo '<td class="l">From:</td>';
-echo "<td>" . radix_html_form::date('d0',$this->date_alpha,array('size'=>12)) . "</td>";
+echo "<td>" . Form::date('d0',$this->date_alpha,array('size'=>12)) . "</td>";
 echo '<td class="b c">&nbsp;to&nbsp;</td>';
-echo "<td>" . radix_html_form::date('d1',$this->date_omega,array('size'=>12)) . "</td>";
+echo "<td>" . Form::date('d1',$this->date_omega,array('size'=>12)) . "</td>";
 echo "<td><input class='cb' name='c' type='submit' value='View' /></td>";
 echo '<td><input name="c" type="submit" value="Post" /></td>';
 echo '</tr>';
@@ -45,7 +50,7 @@ foreach ($this->LedgerEntryList as $le)
 
     echo '<tr class="rero">';
 
-    echo '<td class="c"><a href="' . radix::link('/account/transaction?id=' . $le['account_journal_id']) . '">' . $le['date'] . '</td>';
+    echo '<td class="c"><a href="' . Radix::link('/account/transaction?id=' . $le['account_journal_id']) . '">' . $le['date'] . '</td>';
     echo '<td>' . $le['account_name'] . '/' . $le['note'] . '</td>';
     echo sprintf('<td class="c">#%s%s</td>',$le['kind'], $le['account_journal_id']);
 
