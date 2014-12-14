@@ -170,7 +170,7 @@ class Account_Reconcile
             $sql.= " WHERE (date <= ?::timestamp + '5 days'::interval) AND (date >= ? ::timestamp - '5 days'::interval)";
             $sql.= ' AND account_id = ?';
             $sql.= ' AND abs(amount) = ?';
-            $ret[$i]->id = radix_db_sql::fetch_one($sql, array($ret[$i]->date, $ret[$i]->date, $opt['account_id'], abs($ret[$i]->abs)));
+            $ret[$i]->id = Radix\DB\SQL::fetch_one($sql, array($ret[$i]->date, $ret[$i]->date, $opt['account_id'], abs($ret[$i]->abs)));
 
             // $sql = 'select a.id,a.date,b.amount';
             // $sql.= ' from account_journal a join account_ledger b on a.id=b.account_journal_id ';
@@ -235,28 +235,35 @@ class Account_Reconcile
 
             $je = new stdClass();
             $je->date = strftime('%Y-%m-%d %H:%M:%S',strtotime($csv[0]));
-            $je->note = $csv[21];
-            $x = floatval(preg_replace('/[^\d\.]+/',null,$csv[13]));
+            $je->note = $csv[21] . '#' . $csv[22] . ' ' . $csv[26];
+            $je->ledger = array();
+            
+            // Transaction Amount
+            $le = array();
+            $x = floatval(preg_replace('/[^\d\.]+/',null,$csv[19])); // Is it 13 or 19?
             if ($x < 0) {
-                $je->cr = abs($x);
+                $le['cr'] = abs($x);
             } else {
-                $je->dr = abs($x);
+                $le['dr'] = abs($x);
             }
+            $je->ledger[] = $le;
 
             // Apply Filter Here?
             // $je = self::_filterEntry($je);
             // $je = self::_guessAccount($je);
 
-            $ret[] = $je;
-
             // The Fee Entry
             // $fee = floatval(preg_replace('/[^\d\.]+/',null,$csv[13]));
-            $je = new stdClass();
-            $je->date = $csv[0];
-            $je->note = 'Fee for Transaction #' . $csv[18];
+            $fee = floatval(preg_replace('/[^\d\.]+/',null,$csv[18]));
+            $je->ledger[] = array(
+            	'note' => 'Fee for Transaction #' . $csv[20],
+            	'abs' => abs($fee),
+            	'cr' => $fee,
+			);
             // = floatval(preg_replace('/[^\d\.]+/',null,$csv[13]));
-            $je->cr = floatval(preg_replace('/[^\d\.]+/',null,$csv[14]));
-            $je->abs = ($je->cr);
+            // $je->cr = floatval(preg_replace('/[^\d\.]+/',null,$csv[18]));
+            // $je->abs = ($je->cr);
+            
             $ret[] = $je;
 
         }

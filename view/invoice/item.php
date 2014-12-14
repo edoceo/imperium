@@ -10,10 +10,14 @@
     @since      File available since Release 1013
 */
 
-$n = radix_html_form::text('name', $this->InvoiceItem['name']);
-$q = radix_html_form::number('quantity', $this->InvoiceItem['quantity'], array('size'=>8));
-$r = radix_html_form::number('rate', $this->InvoiceItem->rate, array('size'=>8));
-$u = radix_html_form::select('unit', $this->InvoiceItem->unit, $this->UnitList);
+namespace Edoceo\Imperium;
+
+use Radix\HTML\Form;
+
+$n = Form::text('name', $this->InvoiceItem['name']);
+$q = Form::number('quantity', $this->InvoiceItem['quantity'], array('size'=>8));
+$r = Form::number('rate', $this->InvoiceItem->rate, array('size'=>8));
+$u = Form::select('unit', $this->InvoiceItem->unit, $this->UnitList);
 
 echo '<div>';
 
@@ -21,8 +25,8 @@ echo '<form method="post">';
 echo '<table>';
 
 // Kind & Date
-$k = radix_html_form::select('kind', $this->InvoiceItem['kind'], InvoiceItem::$kind_list);
-$d = radix_html_form::date('date', $this->InvoiceItem['date'], array('id'=>'woi_date','size'=>12));
+$k = Form::select('kind', $this->InvoiceItem['kind'], InvoiceItem::$kind_list);
+$d = Form::date('date', $this->InvoiceItem['date'], array('id'=>'woi_date','size'=>12));
 
 echo "<tr><td class='b r'>Kind:</td><td>$k</td><td class='b r'>Date:</td><td>$d</td></tr>";
 
@@ -41,7 +45,7 @@ echo '<tr>';
 echo '<td class="l">';
 echo '<span title="Input and email address here and a notification email will be sent">Notify:</span>';
 echo '</td>';
-echo '<td colspan="3">' . radix_html_form::text('notify', $this->WorkOrderItem['notify']) . '</td>';
+echo '<td colspan="3">' . Form::text('notify', $this->WorkOrderItem['notify']) . '</td>';
 echo '</tr>';
 
 // @todo Link to Work System (Redmine, Trac, &c)

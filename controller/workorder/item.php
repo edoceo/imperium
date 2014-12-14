@@ -3,6 +3,10 @@
 	Item Action handles requests to create, view and save an Item
 */
 
+namespace Edoceo\Imperium;
+
+use Radix;
+
 $_ENV['title'] = array('Work Order','Item');
 
 $mode = 'create';
@@ -48,7 +52,7 @@ case 'delete':
 	$wo = new WorkOrder($woi['workorder_id']);
 	$wo->delWorkOrderItem($woi['id']);
 
-	radix_session::flash('info', "Work Order Item {$this->WorkOrderItem['id']} deleted");
+	Radix\Session::flash('info', "Work Order Item {$this->WorkOrderItem['id']} deleted");
 	radix::redirect('/workorder/view?w=' . $wo['id']);
 
 	break;
@@ -73,10 +77,10 @@ case 'save':
 
 	// Save to DB
 	if ($id) {
-		radix_session::flash('info', "Work Order Item #$id saved");
+		\Radix\Session::flash('info', "Work Order Item #$id saved");
 	} else {
 		$id = $woi['id'];
-		radix_session::flash('info', "Work Order Item #$id created");
+		\Radix\Session::flash('info', "Work Order Item #$id created");
 	}
 	// $wo->save();
 
@@ -92,7 +96,7 @@ case 'save':
 		if (is_file($file)) {
 			$body = file_get_contents($file);
 		} else {
-			radix_session::flash('warn', 'Work Order Item Notification Template is missing');
+			Radix\Session::flash('warn', 'Work Order Item Notification Template is missing');
 			$body = "New Work Order Item\n";
 			$body.= "Work Order: \$wo_id\n";
 			$body.= "Item: \$wi_name\n";
@@ -137,7 +141,7 @@ case 'view':
 	$id = intval($_GET['id']);
 	$woi = new WorkOrderItem($id);
 	if (empty($woi['id'])) {
-		radix_session::flash('fail', sprintf('Cannot find Work Order Item #%d', $id));
+		Radix\Session::flash('fail', sprintf('Cannot find Work Order Item #%d', $id));
 		return;
 	}
 

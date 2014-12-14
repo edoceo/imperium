@@ -8,7 +8,7 @@ $a = new Account($_POST['id']);
 switch (strtolower($_POST['a'])) {
 case 'delete':
 	$a->delete();
-	radix_session::flash('info', "Account #{$a['id']} deleted");;
+	Radix\Session::flash('info', "Account #{$a['id']} deleted");;
 	break;
 case 'save':
 
@@ -21,7 +21,7 @@ case 'save':
 	$a['bank_routing'] = $_POST['bank_routing'];
 	$a->save();
 
-	radix_session::flash('info', "Account #{$a['id']} saved");
+	Radix\Session::flash('info', "Account #{$a['id']} saved");
 }
 
 radix::redirect('/account');

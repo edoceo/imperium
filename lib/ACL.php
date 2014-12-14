@@ -3,6 +3,8 @@
 
 */
 
+namespace Edoceo\Imperium;
+
 class ACL
 {
 

@@ -16,7 +16,7 @@ class AccountTaxForm extends ImperiumBase
 	{
 		$sql = 'SELECT * FROM account_tax_line WHERE account_tax_form_id = ? ORDER BY line';
 		$arg = array($this->_data['id']);
-		$res = radix_db_sql::fetchAll($sql, $arg);
+		$res = Radix\DB\SQL::fetchAll($sql, $arg);
 		return $res;
 	}
 }

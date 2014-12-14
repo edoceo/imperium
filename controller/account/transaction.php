@@ -4,6 +4,10 @@
 	@brief Show and Save Transactions
 */
 
+namespace Edoceo\Imperium;
+
+use Radix;
+
 // View!
 $id = intval($_GET['id']);
 if ($id < 0) {
@@ -52,9 +56,9 @@ case 'save-copy':
 	// $awj = AccountWizardJournal::makeFromAccountJournal($aje);
 
 	if ($id) {
-		radix_session::flash('info', 'Account Journal Entry #' . $id . ' updated');
+		Radix\Session::flash('info', 'Account Journal Entry #' . $id . ' updated');
 	} else {
-		radix_session::flash('info', 'Account Journal Entry #' . $aje['id'] . ' created');
+		Radix\Session::flash('info', 'Account Journal Entry #' . $aje['id'] . ' created');
 	}
 
 	// Save Ledger Entries
@@ -92,16 +96,16 @@ case 'save-copy':
 		// $awj->addLedgerEntry($ale);
 
 		if ($id) {
-			radix_session::flash('info', 'Account Ledger Entry #' . $id . ' updated');
+			Radix\Session::flash('info', 'Account Ledger Entry #' . $id . ' updated');
 		} else {
-			radix_session::flash('info', 'Account Ledger Entry #' . $ale['id'] . ' created');
+			Radix\Session::flash('info', 'Account Ledger Entry #' . $ale['id'] . ' created');
 		}
 	}
 
 	// Memorise the Transaction
 	if (1 == $_POST['memorise']) {
 		// $awj->save();
-		radix_session::flash('info', 'Account Wizard Memorised');
+		Radix\Session::flash('info', 'Account Wizard Memorised');
 	}
 
 	// File!
@@ -109,7 +113,7 @@ case 'save-copy':
 		 $bf = Base_File::copyPost($_FILES['file']);
 		 $bf['link'] = $bf->link($aje);
 		 $bf->save();
-		 radix_session::flash('info', 'Attachment Created');
+		 Radix\Session::flash('info', 'Attachment Created');
 	}
 
 	// Commit and Redirect
@@ -124,7 +128,7 @@ case 'save-copy':
 		// $_SESSION['account-transaction-list' = array();
 		// ] = $ale;
 		// // $_SESSION['new-transaction'] = $aje;
-		radix::redirect('/account/transaction');
+		Radix::redirect('/account/transaction');
 	}
 
 	// Redirect Back
@@ -133,7 +137,7 @@ case 'save-copy':
 		$ret = $_SESSION['return-path'];
 		unset($_SESSION['return-path']);
 	}
-	radix::redirect($ret);
+	Radix::redirect($ret);
 	break;
 }
 
@@ -160,7 +164,7 @@ if ($id) {
 	$sql.= ' WHERE account_ledger.account_journal_id = ? ';
 	$sql.= ' ORDER BY account_ledger.amount ASC, account.full_code ';
 
-	$this->AccountLedgerEntryList = radix_db_sql::fetch_all($sql, array($id)); // $this->_d->fetchAll($sql);
+	$this->AccountLedgerEntryList = Radix\DB\SQL::fetch_all($sql, array($id)); // $this->_d->fetchAll($sql);
 	$this->FileList = $this->AccountJournalEntry->getFiles();
 // } elseif (isset($this->_s->AccountTransaction)) {
 } elseif (!empty($_SESSION['account-transaction'])) {
@@ -187,7 +191,7 @@ if (!empty($this->AccountJournalEntry['id'])) {
 
 	// Prev Five
 	$s = sprintf('SELECT id FROM account_journal where id < %d order by id desc limit 5',$this->AccountJournalEntry['id']);
-	$r = radix_db_sql::fetch_all($s);
+	$r = Radix\DB\SQL::fetch_all($s);
 	$r = array_reverse($r);
 	foreach ($r as $x) {
 		$this->jump_list[] = array('controller'=>'account','action'=>'transaction','id'=>$x['id']);
@@ -196,7 +200,7 @@ if (!empty($this->AccountJournalEntry['id'])) {
 	$this->jump_list[] = array('controller'=>'account','action'=>'transaction','id'=>$this->AccountJournalEntry['id']);
 	// Next Five
 	$s = sprintf('SELECT id FROM account_journal where id > %d order by id asc limit 5',$this->AccountJournalEntry['id']);
-	$r = radix_db_sql::fetch_all($s);
+	$r = Radix\DB\SQL::fetch_all($s);
 	foreach ($r as $x) {
 		$this->jump_list[] = array('controller'=>'account','action'=>'transaction','id'=>$x['id']);
 	}

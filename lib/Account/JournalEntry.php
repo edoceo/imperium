@@ -27,8 +27,8 @@ class AccountJournalEntry extends ImperiumBase
 
 		$arg = array(intval($this->_data['id']));
 
-		radix_db_sql::query('DELETE FROM account_ledger where account_journal_id = ?', $arg);
-		radix_db_sql::query('DELETE FROM account_journal where id = ?', $arg);
+		Radix\DB\SQL::query('DELETE FROM account_ledger where account_journal_id = ?', $arg);
+		Radix\DB\SQL::query('DELETE FROM account_journal where id = ?', $arg);
 
 		return true;
 	}

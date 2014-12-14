@@ -11,6 +11,8 @@
 
 namespace Edoceo\Imperium;
 
+use Radix;
+
 class ImperiumBase implements \ArrayAccess
 {
 	protected $_data; // Object Data
@@ -49,7 +51,7 @@ class ImperiumBase implements \ArrayAccess
         // Load Database Record
         if ((is_numeric($x)) && (intval($x)>0)) {
             $sql = sprintf("select * from \"%s\" where id='%d'",$this->_table,intval($x));
-            $x = radix_db_sql::fetch_row($sql);
+            $x = Radix\DB\SQL::fetch_row($sql);
             if (is_object($x)) {
                 $p = get_object_vars($x);
                 foreach ($p as $k=>$v) {
@@ -85,7 +87,7 @@ class ImperiumBase implements \ArrayAccess
     */
     function delete()
     {
-        radix_db_sql::query("delete from {$this->_table} where id = {$this->_data['id']}");
+        Radix\DB\SQL::query("delete from {$this->_table} where id = {$this->_data['id']}");
     }
 
     /**
@@ -140,12 +142,12 @@ class ImperiumBase implements \ArrayAccess
 
         if ($this->_data['id']) {
             // if ($this->_diff) Base_Diff::diff($this);
-            radix_db_sql::update($this->_table,$rec,"id={$this->_data['id']}");
+            Radix\DB\SQL::update($this->_table,$rec,"id={$this->_data['id']}");
         } else {
-            $this->_data['id'] = radix_db_sql::insert($this->_table, $rec);
+            $this->_data['id'] = Radix\DB\SQL::insert($this->_table, $rec);
             if (intval($this->_data['id'])==0) {
                 radix::dump($this);
-                radix::dump(radix_db_sql::lastError());
+                radix::dump(Radix\DB\SQL::lastError());
                 radix::trace('Unexpected error saving: ' . get_class($this));
             }
             // if ($this->_diff) Base_Diff::diff($this);
@@ -233,7 +235,7 @@ class ImperiumBase implements \ArrayAccess
         // return $r;
         $sql = 'SELECT * FROM base_file WHERE link = ? ORDER BY name';
         $arg = array($this->link());
-        $ret = radix_db_sql::fetch_all($sql, $arg);
+        $ret = Radix\DB\SQL::fetch_all($sql, $arg);
         return $ret;
     }
 
@@ -263,7 +265,7 @@ class ImperiumBase implements \ArrayAccess
         // $s->from('object_history');
         // $s->where('link = ?', $this->link() );
         // $s->order('cts');
-        $r = radix_db_sql::fetch_all($s);
+        $r = Radix\DB\SQL::fetch_all($s);
         return $r;
     }
 
@@ -278,7 +280,7 @@ class ImperiumBase implements \ArrayAccess
 
         $sql = 'SELECT * FROM base_note WHERE link = ? ORDER BY name';
         $arg = array($this->link());
-        $ret = radix_db_sql::fetch_all($sql, $arg);
+        $ret = Radix\DB\SQL::fetch_all($sql, $arg);
 		return $ret;
 	}
 
@@ -322,7 +324,7 @@ class ImperiumBase implements \ArrayAccess
 		}
 
 		// Find and Return Value
-		$ot = radix_db_sql::fetchRow($sql);
+		$ot = Radix\DB\SQL::fetchRow($sql);
 		if ($ot) {
 			switch ($r) {
 			case 'id':

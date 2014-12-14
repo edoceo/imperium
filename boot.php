@@ -6,7 +6,15 @@
     @deprecated ReturnTo => ReturnPath
     @deprecated ReturnGood => ReturnPath ? ret=1
     @deprecated ReturnFail => ReturnPath ? ret=0
+    @deprecated $this->link
+    @deprecated $this->redirect
+    @deprecated $this->_s->
 */
+
+namespace Edoceo\Imperium;
+
+use Radix;
+use Radix\DB;
 
 error_reporting( (E_ALL | E_STRICT) ^ E_NOTICE );
 
@@ -20,11 +28,11 @@ define('APP_ROOT',dirname(__FILE__));
 define('APP_NAME','Edoceo Imperium');
 
 require_once('Radix.php');
-require_once('Radix/ACL.php');
-require_once('Radix/Filter.php');
-require_once('Radix/Format.php');
-require_once('Radix/Session.php');
-require_once('Radix/html/form.php');
+Radix::autoload();
+// require_once('lib/ACL.php');
+// require_once('Radix/Filter.php');
+// require_once('Radix/Format.php');
+// require_once('lib/Session.php');
 
 require_once('App.php');
 require_once('App_Mail.php');
@@ -67,8 +75,7 @@ App::load_config();
 //// set client_encoding='utf-8';
 //Zend_Registry::set('db',$x);
 //Zend_Db_Table_Abstract::setDefaultAdapter($x);
-require_once('Radix/db/sql.php');
-radix_db_sql::init("pgsql:host={$_ENV['database']['hostname']};dbname={$_ENV['database']['database']}",$_ENV['database']['username'],$_ENV['database']['password']);
+\Radix\DB\SQL::init("pgsql:host={$_ENV['database']['hostname']};dbname={$_ENV['database']['database']}",$_ENV['database']['username'],$_ENV['database']['password']);
 // App::$db = new radix_db_sql();
 
 /**

@@ -4,6 +4,10 @@
 	@brief View an Account Ledger
 */
 
+namespace Edoceo\Imperium;
+
+use Radix;
+
 $order = null;
 $param = array();
 $where = null;
@@ -25,7 +29,6 @@ if ( (strtolower($_GET['c'])=='post') && (!empty($this->Account['id'])) ) {
 
 	// Post to this Account
 	// New Transaction Holder
-	$at = new stdClass();
 	$at->AccountJournalEntry = new AccountJournalEntry();
 	$at->AccountJournalEntry['note'] = null;
 	$at->AccountLedgerEntryList = array();
@@ -56,8 +59,8 @@ if (empty($this->Account['id'])) {
 	$where = " (date>='{$this->date_alpha}' and date<='{$this->date_omega}') ";
 	$order = " date,kind, account_journal_id, amount asc ";
 
-	$this->dr_total = radix_db_sql::fetch_one("select sum(amount) from general_ledger where amount < 0 and $where");
-	$this->cr_total = radix_db_sql::fetch_one("select sum(amount) from general_ledger where amount > 0 and $where");
+	$this->dr_total = Radix\DB\SQL::fetch_one("select sum(amount) from general_ledger where amount < 0 and $where");
+	$this->cr_total = Radix\DB\SQL::fetch_one("select sum(amount) from general_ledger where amount > 0 and $where");
 
 	$this->Account = new Account(array('name'=>'General Ledger'));
 
@@ -94,9 +97,9 @@ if (strlen($_GET['link'])) {
 }
 
 $sql = "select * from general_ledger where $where order by $order";
-$res = radix_db_sql::fetch_all($sql, $param);
+$res = Radix\DB\SQL::fetch_all($sql, $param);
 if (empty($res)) {
-	echo radix_db_sql::lastError();
+	echo Radix\DB\SQL::lastError();
 	die(print_r($res));
 }
 $this->LedgerEntryList = $res;

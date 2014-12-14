@@ -27,7 +27,7 @@ $sql.= '  FROM workorder';
 $sql.= '  JOIN contact ON workorder.contact_id = contact.id ';
 $sql.= '  WHERE workorder.status = ?';
 $sql.= '  ORDER BY workorder.date';
-$res = radix_db_sql::fetch_all($sql,array('Pending','Active'));
+$res = Radix\DB\SQL::fetch_all($sql,array('Pending','Active'));
 
 
 // WorkOrder Items
@@ -40,7 +40,7 @@ $sql.= '  JOIN contact ON workorder.contact_id = contact.id ';
 $sql.= '  WHERE workorder_item.status = ? ';
 $sql.= '   AND workorder.status = ? ';
 $sql.= '  ORDER BY workorder_item.workorder_id';
-$res = radix_db_sql::fetch_all($sql,array('Pending','Active'));
+$res = Radix\DB\SQL::fetch_all($sql,array('Pending','Active'));
 
 if (count($res)) {
     $html.= _draw_details($res);
@@ -62,7 +62,7 @@ $sql.= '  JOIN workorder ON workorder_item.workorder_id = workorder.id ';
 $sql.= '  JOIN contact ON workorder.contact_id = contact.id ';
 $sql.= '  WHERE workorder_item.date = ? AND workorder_item.status = ? ';
 $sql.= '  ORDER BY workorder_item.workorder_id';
-$res = radix_db_sql::fetch_all($sql,array($date,'Complete'));
+$res = Radix\DB\SQL::fetch_all($sql,array($date,'Complete'));
 
 if (count($res)) {
     $html.= _draw_details($res);

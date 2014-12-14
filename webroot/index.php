@@ -4,6 +4,8 @@
     @brief Web Handler for Edoceo Imperium
 */
 
+namespace Edoceo\Imperium;
+
 use \Radix;
 
 // Uncomment to get timing outputs
@@ -74,16 +76,16 @@ if (!empty($x)) {
     // $auth->authenticate( new App_Auth($x,$_ENV['application']['auto_password'] ) );
 	$sql = 'SELECT id FROM auth_user WHERE username = ? AND password = ?';
 	$arg = array($_ENV['application']['auto_username'],$_ENV['application']['auto_username']);
-	$_SESSION['uid'] = radix_db_sql::fetch_one($sql,$arg);
+	$_SESSION['uid'] = Radix\DB\SQL::fetch_one($sql,$arg);
 }
 
 // radix_acl::permit('null','/auth/*');
 if (empty($_SESSION['uid'])) {
 	unset($_SESSION['_acl']);
-	acl::permit('/auth/sign-in');
-	acl::permit('/auth/sign-in', 'POST');
-	acl::permit('/auth/sign-out');
-	acl::permit('/hook/*');
+	ACL::permit('/auth/sign-in');
+	ACL::permit('/auth/sign-in', 'POST');
+	ACL::permit('/auth/sign-out');
+	ACL::permit('/hook/*');
 }
 
 if (!acl::may(Radix::$path)) {

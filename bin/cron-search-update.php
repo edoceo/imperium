@@ -11,7 +11,7 @@
 require_once(dirname(dirname(__FILE__)) . '/lib/cli.php');
 
 // We Re-Create the Table Each Time :(
-radix_db_sql::query('DROP TABLE full_text');
+Radix\DB\SQL::query('DROP TABLE full_text');
 
 $sql = 'CREATE TABLE full_text ( ';
 $sql.= ' link_to varchar(32) not null, ';
@@ -19,9 +19,9 @@ $sql.= ' link_id int not null, ';
 $sql.= ' name varchar(256), ';
 $sql.= ' ft text, ';
 $sql.= ' tv tsvector )';
-radix_db_sql::query($sql);
+Radix\DB\SQL::query($sql);
 
-radix_db_sql::query('CREATE INDEX full_text_tv_idx ON full_text USING gin(tv)');
+Radix\DB\SQL::query('CREATE INDEX full_text_tv_idx ON full_text USING gin(tv)');
 
 // List of Table to Index
 $tab_list = array(
@@ -90,6 +90,6 @@ foreach ($tab_list as $tab => $tab_spec) {
     $sql.= " FROM $tab";
 
     // echo "$sql\n";
-    radix_db_sql::query($sql);
+    Radix\DB\SQL::query($sql);
 }
 

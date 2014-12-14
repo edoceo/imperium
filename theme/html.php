@@ -4,6 +4,10 @@
     @brief A Single Column Layout, CSS Dropdown Menus
 */
 
+namespace Edoceo\Imperium;
+
+use Radix;
+
 // $layout = $this->layout();
 
 // Convert Controller Specified Array to String
@@ -25,19 +29,19 @@ echo '<link href="//gcdn.org/font-awesome/4.1.0/font-awesome.css" rel="styleshee
 echo '<link href="//gcdn.org/pure/0.5.0/pure.css" rel="stylesheet">';
 // echo '<link href="//gcdn.org/jquery-ui/1.10.2/smoothness.css" rel="stylesheet">';
 echo '<link href="//gcdn.org/radix/radix.css" rel="stylesheet">';
-echo '<link href="' . radix::link('/css/base.css') . '" rel="stylesheet">';
-echo '<link href="' . radix::link('/img/imperium-icon.ico') . '" rel="shortcut icon">';
-echo '<link href="' . radix::link('/img/imperium-icon.png') . '" rel="apple-touch-icon">';
+echo '<link href="' . Radix::link('/css/base.css') . '" rel="stylesheet">';
+echo '<link href="' . Radix::link('/img/imperium-icon.ico') . '" rel="shortcut icon">';
+echo '<link href="' . Radix::link('/img/imperium-icon.png') . '" rel="apple-touch-icon">';
 echo '<script src="//gcdn.org/jquery/1.10.2/jquery.js"></script>';
 echo '<script src="//gcdn.org/jquery-ui/1.10.2/jquery-ui.js"></script>';
-echo '<script src="' . radix::link('/js/imperium.js') . '"></script>';
-echo '<script>Imperium.base = "' . radix::base(true) . '";</script>';
+echo '<script src="' . Radix::link('/js/imperium.js') . '"></script>';
+echo '<script>Imperium.base = "' . Radix::base(true) . '";</script>';
 
 echo "</head>\n<body>\n";
 
 // Content Header
 echo '<header>';
-$menu = radix::block('menu.php');
+$menu = Radix::block('menu.php');
 if (!empty($menu)) {
     echo '<div id="menu">';
     echo $menu;
@@ -62,7 +66,7 @@ if (!empty($_ENV['h1'])) {
 	echo '<h1>' . $_ENV['h1'] . '</h1>';
 }
 
-echo radix_session::flash();
+echo \Radix\Session::flash();
 
 echo $this->body;
 
