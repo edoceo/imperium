@@ -8,9 +8,11 @@
     @since      File available since Release 1013
 */
 
-namespace Edoceo\Imperium;
+namespace Edoceo\Imperium\Auth;
 
-class Auth_Hash
+use Edoceo\Imperium\ImperiumBase;
+
+class Hash extends ImperiumBase
 {
     protected $_table = 'auth_hash';
 
@@ -27,11 +29,18 @@ class Auth_Hash
     */
     static function make($x)
     {
-        $t = new Zend_Db_Table(array('name'=>'auth_hash'));
-        $r = array();
-        $r['link'] = $x->link();
-        $r['hash'] = substr(hash('sha1',serialize($r).serialize($x)),0,64);
-        $t->insert($r);
-        return $r;
+    	$ah = new self();
+    	$ah['link'] = $x->link();
+    	$data = serialize($ah).serialize($x);
+    	$ah['hash'] = substr(hash('sha1', $data),0,64);
+    	$ah->save();
+
+    	return $ah;
+
+        // $t = new Zend_Db_Table(array('name'=>'auth_hash'));
+        // $r = array();
+        // $r['link'] = $x->link();
+        // $r['hash'] = substr(hash('sha1',serialize($r).serialize($x)),0,64);
+
     }
 }

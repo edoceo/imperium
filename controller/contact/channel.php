@@ -5,7 +5,8 @@
 
 namespace Edoceo\Imperium;
 
-use Radix;
+use Edoceo\Radix\Radix;
+use Edoceo\Radix\Session;
 
 $_ENV['title'] = array('Contact', 'Channel', 'View');
 

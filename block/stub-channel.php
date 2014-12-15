@@ -3,11 +3,13 @@
     Stub Channel
     Draws a Link and some pretty images to a channel
 
+    @todo Detect String?
+    
 */
 
 namespace Edoceo\Imperium;
 
-use Radix;
+use Edoceo\Radix\Radix;
 
 if (empty($data)) {
     return;

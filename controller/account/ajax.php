@@ -3,6 +3,10 @@
 	An AJAX Handler
 */
 
+namespace Edoceo\Imperium;
+
+use Edoceo\Radix\DB\SQL;
+
 $q = strtolower(trim($_GET['term']));
 if (strlen($q) == 1) {
 	$q = '^' . $q;
@@ -23,7 +27,7 @@ case 'account':
 	$sql.= ' FROM account';
 	$sql.= ' WHERE name ~* ? OR full_name ~* ?';
 	$sql.= ' ORDER BY full_name';
-	$res = Radix\DB\SQL::fetch_all($sql, array($q, "^$q"));
+	$res = SQL::fetch_all($sql, array($q, "^$q"));
 	die(json_encode($res));
 	break;
 
@@ -35,7 +39,7 @@ case 'contact':
 	$s->orWhere('company ~* ?','^'.$q);
 	$s->orWhere('name ~* ?','^'.$q);
 	$s->order(array('contact'));
-	$r = Radix\DB\SQL::fetch_all($s);
+	$r = SQL::fetch_all($s);
 
 	echo json_encode($r);
 }

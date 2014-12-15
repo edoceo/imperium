@@ -14,7 +14,7 @@ use Edoceo\Radix\HTML\Form;
 echo '<form method="post">';
 
 echo '<div>';
-// echo radix_html_form::hidden('id', $this->ContactChannel['id']);
+// echo Form::hidden('id', $this->ContactChannel['id']);
 echo Form::hidden('contact_id', $this->ContactChannel['contact_id']);
 echo '</div>';
 
@@ -22,7 +22,7 @@ echo '<table>';
 echo "<tr><td class='b r'>Kind:</td><td>" . Form::select('kind', $this->ContactChannel['kind'], ContactChannel::$kind_list) . '</td></tr>';
 echo "<tr><td class='b r'>Name:</td><td>" . Form::text('name', $this->ContactChannel['name']) . '</td></tr>';
 echo "<tr><td class='b r'>Data:</td><td>" . Form::text('data', $this->ContactChannel['data']) . '</td></tr>';
-// echo "<tr><td class='b r'>Primary:</td><td>". radix_html_form::formCheckbox('primary')."</td></tr>";
+// echo "<tr><td class='b r'>Primary:</td><td>". Form::formCheckbox('primary')."</td></tr>";
 echo '</table>';
 
 echo '<div class="bf">';
