@@ -4,6 +4,10 @@
     @brief Contacts Index View
 */
 
+namespace Edoceo\Imperium;
+
+use Edoceo\Radix\Radix;
+
 // if (empty($this->Page)) {
 //     return(0);
 // }
@@ -47,7 +51,7 @@ for ($i=65;$i<=90;$i++) {
 
 echo '<div class="jump_list">' . implode(' ',$list) . '</div>';
 
-echo radix::block('contact-list',array('list'=>$this->ContactList));
+echo Radix::block('contact-list',array('list'=>$this->ContactList));
 
 echo $page_link;
 

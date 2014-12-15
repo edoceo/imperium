@@ -5,12 +5,12 @@
 
 namespace Edoceo\Imperium;
 
-use Radix;
+use Edoceo\Radix\DB\SQL;
 
 if (empty($_GET['size'])) $_GET['size'] = 50;
 
 // Get Counts
-$this->page_max = Radix\DB\SQL::fetch_one('SELECT count(id) FROM invoice');
+$this->page_max = SQL::fetch_one('SELECT count(id) FROM invoice');
 $this->page_cur = min(max(1, $_GET['page']), $this->page_max);
 $_GET['size'] = min(max(20, $_GET['size']), 100);
 
@@ -21,7 +21,7 @@ $sql.= ' ORDER BY invoice.date DESC, invoice.id DESC ';
 $sql.= ' OFFSET ' . (($this->page_cur-1) * $_GET['size']);
 $sql.= ' LIMIT ' . $_GET['size'];
 
-$this->list = Radix\DB\SQL::fetch_all($sql);
+$this->list = SQL::fetch_all($sql);
 
 $a_id = $this->list[0]['id'];
 $z_id = $this->list[ count($this->list) - 1]['id'];

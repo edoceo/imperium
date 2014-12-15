@@ -12,8 +12,8 @@
 
 namespace Edoceo\Imperium;
 
-use Radix;
-use Radix\HTML\Form;
+use Edoceo\Radix\Radix;
+use Edoceo\Radix\HTML\Form;
 
 if (empty($this->WorkOrderItem)) {
     echo '<p class="fail">Failed to load a Work Order Item</p>';

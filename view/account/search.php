@@ -38,8 +38,8 @@ default:
 
 $sql.= ' ORDER BY date DESC, kind DESC, account_journal_id, amount ';
 
-$res = radix_db_sql::fetch_all($sql, $arg);
-radix_session::flash('fail', radix_db_sql::lastError());
+$res = Radix\DB\SQL::fetch_all($sql, $arg);
+radix_session::flash('fail', Radix\DB\SQL::lastError());
 if (empty($res) || (0 == count($res))) {
 	radix_session::flash('info', 'No Matching Transactions');
 	return(0);

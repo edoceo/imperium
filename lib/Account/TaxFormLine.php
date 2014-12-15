@@ -8,6 +8,10 @@
 	@since	  File available since Release 1013
 */
 
+namespace Edoceo\Imperium;
+
+use Radix;
+
 class AccountTaxFormLine extends ImperiumBase
 {
 	protected $_table = 'account_tax_line';
@@ -21,7 +25,7 @@ class AccountTaxFormLine extends ImperiumBase
 	//	$sql.= " where a.account_tax_line_id = '" . pg_escape_string($account_tax_line_id) . "'";
 	//	$sql.= " order by a.full_code";
 	//
-	//	$rs = radix_db_sql::fetchAll($sql);
+	//	$rs = Radix\DB\SQL::fetchAll($sql);
 	//
 	//	foreach ($rs as $x) {
 	//		$list[$x[0]['id']] = $x[0]['full_name'];
@@ -44,7 +48,7 @@ class AccountTaxFormLine extends ImperiumBase
 		$sql.= ' FROM account_tax_line';
 			$sql.= ' JOIN account_tax_form ON account_tax_line.account_tax_form_id = account_tax_form.id';
 		$sql.= ' ORDER BY account_tax_form.name,account_tax_line.sort';
-		$res = radix_db_sql::fetchAll($sql);
+		$res = Radix\DB\SQL::fetch_all($sql);
 		return $res;
 
 		// Specific Form?

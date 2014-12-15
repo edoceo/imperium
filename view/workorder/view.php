@@ -12,8 +12,8 @@
 
 namespace Edoceo\Imperium;
 
-use Radix;
-use Radix\HTML\Form;
+use Edoceo\Radix\Radix;
+use Edoceo\Radix\HTML\Form;
 
 // Jump List
 if (count($this->jump_list)) {
@@ -23,9 +23,9 @@ if (count($this->jump_list)) {
         if ($x == $this->WorkOrder['id']) {
             $list[] = '<span class="hi">#' . $x . '</span>';
         } elseif ($x < $this->WorkOrder['id'] ) {
-            $list[] = '<a href="' . radix::link('/workorder/view?w=' . $x) . '">&laquo; #' . $x . '</a>';
+            $list[] = '<a href="' . Radix::link('/workorder/view?w=' . $x) . '">&laquo; #' . $x . '</a>';
         } else {
-            $list[] = '<a href="' . radix::link('/workorder/view?w=' . $x) . '">#' . $x . ' &raquo;</a>';
+            $list[] = '<a href="' . Radix::link('/workorder/view?w=' . $x) . '">#' . $x . ' &raquo;</a>';
         }
     }
     echo implode(' | ',$list);

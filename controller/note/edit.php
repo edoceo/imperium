@@ -1,7 +1,9 @@
 <?php
 /**
-
+	Create a Note
 */
+
+namespace Edoceo\Imperium;
 
 $_ENV['title'] = array('Note','Create');
 

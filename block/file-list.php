@@ -6,6 +6,10 @@
     @note used to take a Page parameter for a Create Link, not used now
 */
 
+namespace Edoceo\Imperium;
+
+use Radix;
+
 if (empty($data)) {
     return(0);
 }
@@ -33,11 +37,11 @@ foreach ($data as $f) {
 
     echo '<tr class="rero">';
     echo '<td>' . img($mime['icon'],$mime['note']) . '</td>';
-    echo '<td><a href="' . radix::link('/file/view?id=' . $f['id']) . '">' . html($f['name']) . '</a></td>';
+    echo '<td><a href="' . Radix::link('/file/view?id=' . $f['id']) . '">' . html($f['name']) . '</a></td>';
     echo '<td class="r">' . html($mime['name']) . '</td>';
     echo '<td class="r">' . html( ImperiumView::niceSize($f['size']) ) . '</td>';
     // echo '<td>' . $this->link('/file/render/' . $f->id,   img('/tango/24x24/actions/edit-find.png','Render') ) . '</td>';
-    echo '<td><a href="' . radix::link('/file/download?id=' . $f['id']) . '">' . img('/tango/24x24/actions/document-save.png','Download') . '</td>';
+    echo '<td><a href="' . Radix::link('/file/download?id=' . $f['id']) . '">' . img('/tango/24x24/actions/document-save.png','Download') . '</td>';
     echo '</tr>';
 
 }

@@ -11,6 +11,10 @@
 
 namespace Edoceo\Imperium;
 
+use Edoceo\Radix\Radix;
+use Edoceo\Radix\DB\SQL;
+
+
 class WorkOrder extends ImperiumBase
 {
     protected $_table = 'workorder';
@@ -52,10 +56,10 @@ class WorkOrder extends ImperiumBase
     {
         $id = intval($this['id']);
         // $db = Zend_Registry::get('db');
-        radix_db_sql::query('DELETE FROM base_file WHERE link = ?', array($this->link()) );
-        radix_db_sql::query('DELETE FROM base_note WHERE link = ?', array($this->link()) );
-        radix_db_sql::query('DELETE FROM workorder_item WHERE workorder_id = ?', array($id) );
-        radix_db_sql::query('DELETE FROM workorder WHERE id = ?', array($id) );
+        SQL::query('DELETE FROM base_file WHERE link = ?', array($this->link()) );
+        SQL::query('DELETE FROM base_note WHERE link = ?', array($this->link()) );
+        SQL::query('DELETE FROM workorder_item WHERE workorder_id = ?', array($id) );
+        SQL::query('DELETE FROM workorder WHERE id = ?', array($id) );
         return true;
     }
 
@@ -103,11 +107,11 @@ class WorkOrder extends ImperiumBase
     */
     function delWorkOrderItem($id)
     {
-		radix_db_sql::query('begin');
-        radix_db_sql::query('DELETE from workorder_item WHERE id = ? AND workorder_id = ?', array($id, $this->_data['id']));
+		SQL::query('begin');
+        SQL::query('DELETE from workorder_item WHERE id = ? AND workorder_id = ?', array($id, $this->_data['id']));
         // Base_Diff::note($this,'Work Order Item #' . $id . ' removed');
         $this->_updateBalance();
-        radix_db_sql::query('commit');
+        SQL::query('commit');
         return true;
     }
 
@@ -118,7 +122,7 @@ class WorkOrder extends ImperiumBase
     {
         $sql = 'SELECT * FROM workorder_item WHERE workorder_id = ? ';
         $sql.= ' ORDER BY status, date, kind, a_rate, a_quantity ';
-        $res = radix_db_sql::fetch_all($sql, array($this->_data['id']));
+        $res = SQL::fetch_all($sql, array($this->_data['id']));
 
         $ret = array();
         foreach ($res as $x) {
@@ -248,9 +252,9 @@ class WorkOrder extends ImperiumBase
             $sql.= 'select sum(a_quantity * a_rate) from workorder_item ';
             $sql.= " where workorder_id = $id and status in ('Active','Complete') ";
         $sql.= ") where id=$id";
-        radix_db_sql::query($sql);
+        SQL::query($sql);
 
-        $this->bill_amount = radix_db_sql::fetch_one("SELECT bill_amount FROM workorder WHERE id = $id");
-        $this->open_amount = radix_db_sql::fetch_one("SELECT open_amount FROM workorder WHERE id = $id");
+        $this->bill_amount = SQL::fetch_one("SELECT bill_amount FROM workorder WHERE id = $id");
+        $this->open_amount = SQL::fetch_one("SELECT open_amount FROM workorder WHERE id = $id");
     }
 }

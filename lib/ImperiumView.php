@@ -8,6 +8,10 @@
 	@since      File available since Release 1013
 */
 
+namespace Edoceo\Imperium;
+
+use Radix;
+
 class ImperiumView
 {
 	static function drawSessionMessages() {

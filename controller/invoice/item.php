@@ -5,16 +5,18 @@
 	View/Edit an Item
 */
 
+namespace Edoceo\Imperium;
+
 $ii = new InvoiceItem(intval($_GET['id']));
 
 switch (strtolower($_POST['a'])) {
 case 'cancel':
-	radix::redirect('/invoice/view?i=' . $ii['invoice_id']);
+	Radix::redirect('/invoice/view?i=' . $ii['invoice_id']);
 	break;
 case 'delete':
 	$ii->delete();
-	radix_session::flash('info', sprintf('Invoice Item #%d was deleted',$ii['id']));
-	radix::redirect('/invoice/view?i=' . $ii['invoice_id']);
+	Radix\Session::flash('info', sprintf('Invoice Item #%d was deleted',$ii['id']));
+	Radix::redirect('/invoice/view?i=' . $ii['invoice_id']);
 	break;
 case 'save':
 
@@ -24,12 +26,12 @@ case 'save':
 	}
 	// Save to DB
 	$ii->save();
-	radix_session::flash('info', sprintf('Invoice Item #%d saved',$ii['id']));
+	Radix\Session::flash('info', sprintf('Invoice Item #%d saved',$ii['id']));
 	// @todo Update the Balance (Sloppy, should be in IV->saveItem()
 	$iv = new Invoice($_POST['invoice_id']);
 	$iv->save();
 
-	radix::redirect('/invoice/view?i=' . $ii['invoice_id']);
+	Radix::redirect('/invoice/view?i=' . $ii['invoice_id']);
 	break;
 // case 'create':
 default: // Create

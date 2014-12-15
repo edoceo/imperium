@@ -12,7 +12,7 @@
 
 namespace Edoceo\Imperium;
 
-use Radix\HTML\Form;
+use Edoceo\Radix\HTML\Form;
 
 $n = Form::text('name', $this->InvoiceItem['name']);
 $q = Form::number('quantity', $this->InvoiceItem['quantity'], array('size'=>8));

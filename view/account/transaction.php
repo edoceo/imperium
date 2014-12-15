@@ -5,6 +5,11 @@
 	Draws the form necessary to input a multi-account journal entry
 */
 
+namespace Edoceo\Imperium;
+
+use Edoceo\Radix\Radix;
+use Edoceo\Radix\HTML\Form;
+
 // @todo Set this in the controller
 $this->FileYes = ini_get('file_uploads');
 $this->FileMax = ImperiumView::niceSize( ini_get('upload_max_filesize') );
@@ -47,10 +52,10 @@ echo '<table>';
 echo '<tr>';
 // Date & Kind
 echo '<td class="l">Date:</td><td><input id="account-transaction-date" name="date" type="date" value="' . html($this->AccountJournalEntry['date']) . '"></td>';
-echo '<td class="l">Kind:</td><td>' . radix_html_form::select('kind', $this->AccountJournalEntry['kind'], array('N'=>'Normal','A'=>'Adjusting','C'=>'Closing')) . '</td>';
+echo '<td class="l">Kind:</td><td>' . Form::select('kind', $this->AccountJournalEntry['kind'], array('N'=>'Normal','A'=>'Adjusting','C'=>'Closing')) . '</td>';
 echo '</tr>';
 // Note
-echo '<tr><td class="l">Note:</td><td colspan="3">' . radix_html_form::text('note', $this->AccountJournalEntry['note'],array('autocomplete'=>'off', 'style'=>'width: 40em')) . "</td></tr>";
+echo '<tr><td class="l">Note:</td><td colspan="3">' . Form::text('note', $this->AccountJournalEntry['note'],array('autocomplete'=>'off', 'style'=>'width: 40em')) . "</td></tr>";
 echo '</table>';
 
 // Transaction Entry Lines
@@ -80,24 +85,24 @@ foreach ($this->AccountLedgerEntryList as $i=>$item) {
 	echo "<tr$css>";
 	echo '<td>';
 	// Ledger Entry ID, Account ID and Account Name
-	echo radix_html_form::hidden($i.'_id',$item['id']);
-	echo radix_html_form::hidden($i.'_account_id',$item['account_id'],array('class'=>'account-id'));
-	echo radix_html_form::text($i.'_account_name',$item['account_name'],array('class'=>'account-name'));
+	echo Form::hidden($i.'_id',$item['id']);
+	echo Form::hidden($i.'_account_id',$item['account_id'],array('class'=>'account-id'));
+	echo Form::text($i.'_account_name',$item['account_name'],array('class'=>'account-name'));
 	echo '<small class="account-id-v" id="' . $i . '_account_id_v"></small>';
 
 	echo '</td>';
 	// Link to Object
 	echo '<td>';
-    echo radix_html_form::select($i.'_link_to', $item['link_to'], $this->LinkToList);
-    echo radix_html_form::text($i.'_link_id', $item['link_id'], array('class' => 'link-to'));
+    echo Form::select($i.'_link_to', $item['link_to'], $this->LinkToList);
+    echo Form::text($i.'_link_id', $item['link_id'], array('class' => 'link-to'));
 	echo '</td>';
 
 	// Display Both
 	// Debit
-	echo "<td class='r'>" . radix_html_form::number($i.'_dr', $item['debit_amount']) . "</td>";
+	echo "<td class='r'>" . Form::number($i.'_dr', $item['debit_amount']) . "</td>";
 
 	// Credit
-	echo "<td class='r'>" . radix_html_form::number($i.'_cr', $item['credit_amount']) . "</td>";
+	echo "<td class='r'>" . Form::number($i.'_cr', $item['credit_amount']) . "</td>";
 
 	echo '</tr>';
 }
@@ -109,20 +114,20 @@ echo '</tr>';
 echo '</table>';
 
 // Attached Files
-echo radix::block('file-list', $this->FileList);
+echo Radix::block('file-list', $this->FileList);
 
 // Buttons & Hiddden
 echo '<div class="bf">';
-echo radix_html_form::hidden('id',$this->AccountJournalEntry['id']);
+echo Form::hidden('id',$this->AccountJournalEntry['id']);
 echo '<button accesskey="s" class="good" name="a" type="submit" value="save">Save</button>';
 echo '<button class="good" name="a" type="submit" value="save-copy">Save & Copy</button>';
 // echo '<input class="good" accesskey="s" name="a" type="submit" value="Save">';
-// echo radix_html_form::submit('c','Apply');
-// echo radix_html_form::button('a', 'Save');
+// echo Form::submit('c','Apply');
+// echo Form::button('a', 'Save');
 echo '<button accesskey="n" class="info" onclick="addLedgerEntryLine();" type="button">Add Line</button>';
 // Can Memorize New
 if (empty($this->AccountJournalEntry['id'])) {
-    echo radix_html_form::submit('a','Memorize');
+    echo Form::submit('a','Memorize');
 }
 if ($this->AccountJournalEntry['id']) {
 	echo '<input class="fail" name="a" type="submit" value="Delete">';
@@ -143,7 +148,7 @@ $args = array(
 //    'ajax' => true,
     'list' => $this->AccountJournalEntry->getHistory()
 );
-echo radix::block('diff-list',$args);
+echo Radix::block('diff-list',$args);
 
 ?>
 

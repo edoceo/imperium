@@ -4,6 +4,10 @@
 	Create a new Work Order
 */
 
+namespace Edoceo\Imperium;
+
+use Radix;
+
 $_ENV['title'] = array('Invoice','Create');
 $this->Invoice = new Invoice(null);
 
@@ -16,4 +20,4 @@ if (!empty($_GET['c'])) {
 	}
 }
 
-radix::$path = '/invoice/view';
+Radix::$path = '/invoice/view';

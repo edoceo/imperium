@@ -12,8 +12,8 @@
 
 namespace Edoceo\Imperium;
 
-use Radix;
-use Radix\HTML\Form;
+use Edoceo\Radix\Radix;
+use Edoceo\Radix\HTML\Form;
 
 $_ENV['title'] = array('Invoice','#' .$this->Invoice['id']);
 

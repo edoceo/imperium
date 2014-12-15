@@ -6,11 +6,12 @@
 namespace Edoceo\Imperium;
 
 use Radix;
+use Edoceo\Radix\DB\SQL;
 
 $sql = 'SELECT name AS id,name FROM base_enum WHERE link = ? ORDER BY sort';
 
-$this->KindList       = Radix\DB\SQL::fetch_mix($sql, array('contact-kind'));
-$this->StatusList     = Radix\DB\SQL::fetch_mix($sql, array('contact-status'));
+$this->KindList       = SQL::fetch_mix($sql, array('contact-kind'));
+$this->StatusList     = SQL::fetch_mix($sql, array('contact-status'));
 
 // function createAction()
 // {

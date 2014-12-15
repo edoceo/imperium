@@ -5,13 +5,13 @@
 
 namespace Edoceo\Imperium;
 
-use Radix;
+use Edoceo\Radix\DB\SQL;
 
 class Base_Unit
 {
     static function getList()
     {
     	$sql = 'select id,name from base_unit order by name';
-        return Radix\DB\SQL::fetch_mix($sql);
+        return SQL::fetch_mix($sql);
     }
 }

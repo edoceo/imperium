@@ -1,5 +1,10 @@
 <?php
 
+namespace Edoceo\Imperium;
+
+use Edoceo\Radix\DB\SQL;
+
+
 $id = intval($_GET['w']);
 
 $this->WorkOrder = new WorkOrder($id);
@@ -59,7 +64,7 @@ $this->jump_list = array();
 if ($this->WorkOrder['id'] > 0) {
 	// Prev Five
 	$s = sprintf('SELECT id FROM workorder where id < %d order by id desc limit 5',$this->WorkOrder['id']);
-	$r = radix_db_sql::fetch_all($s);
+	$r = SQL::fetch_all($s);
 	$r = array_reverse($r);
 	foreach ($r as $x) {
 		$this->jump_list[] = $x['id'];
@@ -68,7 +73,7 @@ if ($this->WorkOrder['id'] > 0) {
 	$this->jump_list[] = $this->WorkOrder['id'];
 	// Next Five
 	$s = sprintf('SELECT id FROM workorder where id > %d order by id asc limit 5',$this->WorkOrder['id']);
-	$r = radix_db_sql::fetch_all($s);
+	$r = SQL::fetch_all($s);
 	foreach ($r as $x) {
 		$this->jump_list[] = $x['id'];
 	}

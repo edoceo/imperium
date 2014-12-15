@@ -5,8 +5,9 @@
 
 namespace Edoceo\Imperium;
 
-use Radix;
-use Radix\DB;
+use Edoceo\Radix\Radix;
+use Edoceo\Radix\Session;
+use Edoceo\Radix\DB\SQL;
 
 switch (strtolower($_POST['a'])) {
 case 'sign in':
@@ -23,10 +24,10 @@ case 'sign in':
 		$_POST['password'],
 		sha1($_POST['username'] . $_POST['username']),
 	);
-	$res = Radix\DB\SQL::fetch_row($sql, $arg);
+	$res = SQL::fetch_row($sql, $arg);
 	if (empty($res)) {
 		// @todo Random Sleep
-		Radix\Session::flash('fail', 'Invalid username or password');
+		Session::flash('fail', 'Invalid username or password');
 		Radix::redirect();
 	}
 
@@ -46,7 +47,7 @@ case 'sign in':
 	acl::permit('/workorder*');
 	acl::permit('/settings*');
 
-	Radix\Session::flash('info', 'Sign In Successful');
+	Session::flash('info', 'Sign In Successful');
 
 	// Redirect
 	$ret = '/';
@@ -54,7 +55,7 @@ case 'sign in':
 		$ret = $_SESSION['return-path'];
 		unset($_SESSION['return-path']);
 	}
-	radix::redirect($ret);
+	Radix::redirect($ret);
 
 	break;
 }

@@ -6,8 +6,8 @@
 
 namespace Edoceo\Imperium;
 
-use Radix;
-use Radix\HTML\Form;
+use Edoceo\Radix\Radix;
+use Edoceo\Radix\HTML\Form;
 
 
 // Web Site & Email
@@ -282,8 +282,8 @@ if (empty($this->Contact['parent_id'])) {
         foreach ($this->ContactList as $item) {
             echo '<tr class="rero">';
             echo '<td><a href="' . Radix::link('/contact/view?c=' . $item['id']) . '">' . html($item['name']) . '</a></td>';
-            // echo '<td>' . radix::block('stub-channel', array('data'=>$item['phone'])) . '</td>';
-            // echo '<td>' . radix::block('stub-channel', array('data'=>$item['email'])) . '</td>';
+            // echo '<td>' . Radix::block('stub-channel', array('data'=>$item['phone'])) . '</td>';
+            // echo '<td>' . Radix::block('stub-channel', array('data'=>$item['email'])) . '</td>';
             echo '<td>' . html($item['phone']) . '</td>';
             echo '<td>' . html($item['email']) . '</td>';
             echo '</tr>';
@@ -302,7 +302,7 @@ echo Radix::block('note-list',$arg);
 
 // Files
 // Old way of Parameters
-// $url = radix::link('/file/create?c=' . $this->Contact['id']);
+// $url = Radix::link('/file/create?c=' . $this->Contact['id']);
 // $arg = array(
 //     'list' => $this->ContactFileList,
 //     'page' => $url,

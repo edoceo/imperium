@@ -4,6 +4,8 @@
 	@brief Application Static Class
 */
 
+namespace Edoceo\Imperium;
+
 class App
 {
 	public static $db;

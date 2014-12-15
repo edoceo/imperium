@@ -4,6 +4,10 @@
 	Create a new Work Order
 */
 
+namespace Edoceo\Imperium;
+
+use Radix;
+
 $_ENV['title'] = array('WorkOrder','Create');
 $this->WorkOrder = new WorkOrder(null);
 
@@ -21,4 +25,4 @@ if (!empty($_GET['c'])) {
 	}
 }
 
-radix::$path = '/workorder/view';
+Radix::$path = '/workorder/view';

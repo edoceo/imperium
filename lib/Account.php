@@ -10,7 +10,7 @@
 
 namespace Edoceo\Imperium;
 
-use Radix;
+use Edoceo\Radix\DB\SQL;
 
 class Account extends ImperiumBase
 {
@@ -102,7 +102,7 @@ class Account extends ImperiumBase
 		$i = 0;
 		while ($parent_id) {
 			$i++;
-			$rs = Radix\DB\SQL::fetchRow('SELECT parent_id,code FROM account where id = ?', array($parent_id));
+			$rs = SQL::fetchRow('SELECT parent_id,code FROM account where id = ?', array($parent_id));
 			if ($rs) {
 				$parent_id = $rs['parent_id'];
 				$path[] = $rs['code'];
@@ -202,7 +202,7 @@ class Account extends ImperiumBase
     function balanceUpdate()
     {
         // Get Current Balance
-        $x = Radix\DB\SQL::fetch_one('SELECT sum(amount) FROM account_ledger WHERE account_id = ?', array($this->_data['id']));
+        $x = SQL::fetch_one('SELECT sum(amount) FROM account_ledger WHERE account_id = ?', array($this->_data['id']));
         $balance = floatval($x);
 
         // Sum the Child Accounts
@@ -213,7 +213,7 @@ class Account extends ImperiumBase
         // }
 
         // Update Account
-        Radix\DB\SQL::query("UPDATE account SET balance = ? WHERE id = ?", array($balance, $this->_data['id']));
+        SQL::query("UPDATE account SET balance = ? WHERE id = ?", array($balance, $this->_data['id']));
         return $balance;
     }
 
@@ -242,7 +242,7 @@ class Account extends ImperiumBase
         	$arg[] = 'C';
         }
 
-        $ret = Radix\DB\SQL::fetch_one($sql, $arg);
+        $ret = SQL::fetch_one($sql, $arg);
         // Correct Balance to Positive Number
         if ( (substr($this->_data['kind'],0,5)=='Asset') || (substr($this->_data['kind'],0,7)=='Expense') || (strpos($this->_data['kind'],'Drawing') > 0) ) {
             $ret = $ret * -1;
@@ -278,7 +278,7 @@ class Account extends ImperiumBase
         	$date,
 		);
         if ($ex_close) $sql.= ' AND kind != \'C\'';
-		$x = Radix\DB\SQL::fetch_one($sql,$arg);
+		$x = SQL::fetch_one($sql,$arg);
         
         // Correct Balance to Positive Number
         if ( (substr($this->kind,0,5)=='Asset') || (substr($this->kind,0,7)=='Expense') || (strpos($this->kind,'Drawing') > 0) ) {
@@ -306,7 +306,7 @@ class Account extends ImperiumBase
 			$arg[] = 'C';
 		}
 
-		$ret = Radix\DB\SQL::fetch_one($sql, $arg);
+		$ret = SQL::fetch_one($sql, $arg);
 		$k = $this->_data['kind'];
 		if ( (substr($k,0,5)=='Asset') || (substr($k,0,7)=='Expense') || (strpos($k,'Drawing') > 0) ) {
 		  $ret = $ret * -1;
@@ -323,7 +323,7 @@ class Account extends ImperiumBase
         $sql.= " where account_id=$this->id ";
         $sql.= " and (date >= '$a_ts' and date <= '$z_ts' ) ";
         $sql.= " and amount > 0 ";
-        $x = Radix\DB\SQL::fetch_one($sql);
+        $x = SQL::fetch_one($sql);
         return abs($x);
     }
   /**
@@ -334,7 +334,7 @@ class Account extends ImperiumBase
         $sql.= " where account_id=$this->id and ";
         $sql.= "  (date >= '$a_ts' and date <= '$z_ts' ) ";
         $sql.= " and amount < 0 ";
-        $x = Radix\DB\SQL::fetch_one($sql);
+        $x = SQL::fetch_one($sql);
         return abs($x);
     }
 
@@ -376,7 +376,7 @@ class Account extends ImperiumBase
             // $sql.= ' JOIN account_tax_form ON account_tax_line.account_tax_form_id = account_tax_form.id ';
         $sql.= ' ORDER BY full_code ASC, code ASC';
 
-        $rs = Radix\DB\SQL::fetch_all($sql);
+        $rs = SQL::fetch_all($sql);
         $list = array();
         foreach ($rs as $x) {
             $list[] = new Account($x);
@@ -395,7 +395,7 @@ class Account extends ImperiumBase
         $sql.= " order by full_code asc, code asc";
 
         // $rs = $db->fetchPairs($sql);
-        $rs = Radix\DB\SQL::fetch_mix($sql);
+        $rs = SQL::fetch_mix($sql);
         return $rs;
     }
 }

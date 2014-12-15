@@ -13,6 +13,8 @@
 
 namespace Edoceo\Imperium;
 
+use Edoceo\Radix\DB\SQL;
+
 class Invoice extends ImperiumBase
 {
     const FLAG_OPEN = 0x00000001;
@@ -30,7 +32,7 @@ class Invoice extends ImperiumBase
     static function findByHash($h)
     {
         $sql = "select id from invoice where hash = ?";
-        $id = radix_db_sql::fetch_one($sql,array($h));
+        $id = SQL::fetch_one($sql,array($h));
         if ($id) {
           $x = new Invoice($id);
           return $x;
@@ -84,10 +86,11 @@ class Invoice extends ImperiumBase
     function delete()
     {
         $id = intval($this->_data['id']);
-        $db = Zend_Registry::get('db');
-        $db->query(sprintf("delete from base_note where link = '%s'",$this->link()));
-        $db->query("delete from invoice_item where invoice_id = $id");
-        $db->query("delete from invoice where id = $id");
+
+        SQL::query('DELETE FROM base_note WHERE link = ?', array($this->link()));
+        SQL::query('DELETE FROM invoice_item WHERE invoice_id = ?', array($id));
+        SQL::query('DELETE FROM invoice WHERE id = ?', array($id));
+
         return true;
     }
 
@@ -125,7 +128,7 @@ class Invoice extends ImperiumBase
     function delInvoiceItem($id)
     {
         // Base_Diff::note($this,'Invoice Item #' . $id . ' removed');
-        radix_db_sql::query('DELETE FROM invoice_item WHERE id = ?', array($id));
+        SQL::query('DELETE FROM invoice_item WHERE id = ?', array($id));
         $this->updateBalance();
         return true;
     }
@@ -137,7 +140,7 @@ class Invoice extends ImperiumBase
     {
         $sql = 'SELECT * FROM invoice_item WHERE invoice_id = ? ORDER BY line, rate DESC, quantity DESC';
         $arg = array($this->_data['id']);
-        $res = radix_db_sql::fetch_all($sql, $arg);
+        $res = SQL::fetch_all($sql, $arg);
 
         $ret = array();
         foreach ($res as $x) {
@@ -181,7 +184,7 @@ class Invoice extends ImperiumBase
         $sql.= sprintf(' al.link_to = %d AND al.link_id = %d',self::getObjectType($this),$this->id);
         $sql.= ' ORDER BY aj.date ASC, al.amount DESC';
 
-        $res = radix_db_sql::fetch_all($sql);
+        $res = SQL::fetch_all($sql);
         return $res;
     }
 
@@ -203,7 +206,7 @@ class Invoice extends ImperiumBase
         // If Posting & Paying do this
         $sql.= ' AND amount < 0 ';
         // Elseif CASH basis don't use AND amount...
-        $ret = radix_db_sql::fetch_one($sql);
+        $ret = SQL::fetch_one($sql);
         return $ret;
     }
 
@@ -219,10 +222,10 @@ class Invoice extends ImperiumBase
         $sql = 'UPDATE invoice SET ';
         // $r['sub_total'] = floatval($d->fetchOne("select sum( quantity * rate ) as sub_total from invoice_item where invoice_id={$id}"));
         $sql.= ' sub_total = ?, ';
-        $arg[] = floatval(radix_db_sql::fetch_one("select sum( quantity * rate ) as sub_total from invoice_item where invoice_id={$id}"));
+        $arg[] = floatval(SQL::fetch_one("select sum( quantity * rate ) as sub_total from invoice_item where invoice_id={$id}"));
         // $r['tax_total'] = floatval($d->fetchOne("select sum( quantity * rate * tax_rate) as tax_total from invoice_item where invoice_id={$id}"));
         $sql.= ' sub_total = ?, ';
-        $arg[] = floatval(radix_db_sql::fetch_one("select sum( quantity * rate * tax_rate) as tax_total from invoice_item where invoice_id={$id}"));
+        $arg[] = floatval(SQL::fetch_one("select sum( quantity * rate * tax_rate) as tax_total from invoice_item where invoice_id={$id}"));
         // $r['bill_amount'] = $r['sub_total'] + $r['tax_total'];
         $sql.= ' bill_amount = ?, ';
         $arg[] = $r['sub_total'] + $r['tax_total'];
@@ -241,7 +244,7 @@ class Invoice extends ImperiumBase
         $sql.= ' WHERE id = ?';
         $arg[] = $id;
 
-        radix_db_sql::query($sql, $arg);
+        SQL::query($sql, $arg);
 
         // @todo Save to Object Data?
         // $this->bill_amount = $r['bill_amount'];

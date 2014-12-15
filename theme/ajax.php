@@ -4,6 +4,8 @@
     @brief AJAX output
 */
 
+namespace Edoceo\Imperium;
+
 if (is_array($_ENV['title'])) {
     $_ENV['title'] = implode(' :: ',$_ENV['title']);
 }
