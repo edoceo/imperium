@@ -16,7 +16,8 @@
 
 namespace Edoceo\Imperium;
 
-use Radix;
+use Edoceo\Radix\Radix;
+
 
 if (!ACL::may('/block/menu')) {
 	return(0);

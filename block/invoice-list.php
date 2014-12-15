@@ -6,6 +6,10 @@
     @package Imperium
 */
 
+namespace Edoceo\Imperium;
+
+use Edoceo\Radix\Radix;
+
 if (empty($data) || empty($data['list'])) {
 	return(0);
 }
@@ -37,7 +41,7 @@ if (isset($paginator))
 // List Items
 foreach ($data['list'] as $x) {
 
-	//radix::dump($x);
+	//Radix::dump($x);
     // $item = new Invoice($x);
     $item = $x;
 
@@ -46,9 +50,9 @@ foreach ($data['list'] as $x) {
     // Star
     echo '<td>' . star($item['star']) . '</td>';
     // ID
-    echo '<td><a href="' . radix::link('/invoice/view?i=' . $item['id']) . '">#' . $item['id'] . '</a></td>';
+    echo '<td><a href="' . Radix::link('/invoice/view?i=' . $item['id']) . '">#' . $item['id'] . '</a></td>';
     // Printable Link
-    // echo '<td><a href="' . radix::link('/invoice/pdf?i=' . $item['id']) . '">' . img('/tango/22x22/devices/printer.png','Get PDF') . '</a></td>';
+    // echo '<td><a href="' . Radix::link('/invoice/pdf?i=' . $item['id']) . '">' . img('/tango/22x22/devices/printer.png','Get PDF') . '</a></td>';
 
     echo '<td>' . $item['status'] . '</td>';
 
@@ -74,7 +78,7 @@ foreach ($data['list'] as $x) {
     echo '<td>' . trim(substr($item['note'],0,$x)) . '</td>';
     //echo "<td>". $html->link($item['Contact']['name'],'/contacts/view/'.$item['Contact']['id']) . "</td>";
     if (isset($item['contact_name'])) {
-        echo '<td><a href="' . radix::link('/contact/view?c='.$item['contact_id']) . '">' . html($item['contact_name']) . '</a></td>';
+        echo '<td><a href="' . Radix::link('/contact/view?c='.$item['contact_id']) . '">' . html($item['contact_name']) . '</a></td>';
     } else {
         echo '<td>&nbsp;</td>';
     }

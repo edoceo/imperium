@@ -6,7 +6,9 @@
 
 namespace Edoceo\Imperium;
 
-use \Radix;
+use Edoceo\Radix\Radix;
+use Edoceo\Radix\Session;
+use Edoceo\Radix\DB\SQL;
 
 // Uncomment to get timing outputs
 define('APP_INIT', microtime(true));
@@ -24,7 +26,7 @@ if ('xmlhttprequest' == strtolower($_SERVER['HTTP_X_REQUESTED_WITH'])) {
 }
 
 Radix::init($opt);
-Radix\Session::init(array('name' => 'imperium'));
+Session::init(array('name' => 'imperium'));
 
 // Zend_Controller_Front
 // $front = Zend_Controller_Front::getInstance();
@@ -76,7 +78,7 @@ if (!empty($x)) {
     // $auth->authenticate( new App_Auth($x,$_ENV['application']['auto_password'] ) );
 	$sql = 'SELECT id FROM auth_user WHERE username = ? AND password = ?';
 	$arg = array($_ENV['application']['auto_username'],$_ENV['application']['auto_username']);
-	$_SESSION['uid'] = Radix\DB\SQL::fetch_one($sql,$arg);
+	$_SESSION['uid'] = SQL::fetch_one($sql,$arg);
 }
 
 // radix_acl::permit('null','/auth/*');
@@ -101,11 +103,11 @@ if (!acl::may(Radix::$path)) {
 				}
 			}
 		}
-		Radix\Session::flash('fail', 'Identity Required');
+		Session::flash('fail', 'Identity Required');
 		Radix::redirect('/auth/sign-in');
 	}
 
-	Radix\Session::flash('fail', 'Access Denied to ' . Radix::$path);
+	Session::flash('fail', 'Access Denied to ' . Radix::$path);
 	Radix::redirect('/');
 
 }

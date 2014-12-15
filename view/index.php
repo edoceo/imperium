@@ -4,6 +4,10 @@
 	@brief Imperium Dashboard View
 */
 
+namespace Edoceo\Imperium;
+
+use Edoceo\Radix\Radix;
+
 $list = array_keys($_ENV['data']);
 foreach ($list as $name) {
 
@@ -18,7 +22,7 @@ foreach ($list as $name) {
         // echo "<div style='display: table-cell;'>";
         echo '<div>'; // style='display: table-cell;'>";
         echo sprintf('<h2>%d %s</h2>',count($info['list']),$name);
-        echo radix::block($info['view'],array('list'=>$info['list'],'opts'=>array('head'=>true)));
+        echo Radix::block($info['view'],array('list'=>$info['list'],'opts'=>array('head'=>true)));
         echo '</div>';
         // radix::dump($info);
     }

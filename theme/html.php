@@ -6,7 +6,8 @@
 
 namespace Edoceo\Imperium;
 
-use Radix;
+use Edoceo\Radix\Radix;
+use Edoceo\Radix\Session;
 
 // $layout = $this->layout();
 
@@ -66,7 +67,7 @@ if (!empty($_ENV['h1'])) {
 	echo '<h1>' . $_ENV['h1'] . '</h1>';
 }
 
-echo \Radix\Session::flash();
+echo Session::flash();
 
 echo $this->body;
 

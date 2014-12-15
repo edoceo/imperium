@@ -7,6 +7,10 @@
     @package Edoceo Imperium
 */
 
+namespace Edoceo\Imperium;
+
+use Edoceo\Radix\Radix;
+
 if (empty($data) || empty($data['list'])) {
 	return(0);
 }
@@ -29,10 +33,10 @@ foreach ($data['list'] as $item) {
     // Star
     echo '<td>' . star($item['star']) . '</td>';
     // ID
-    echo '<td><a href="' . radix::link('/workorder/view?w=' . $item['id']) . '">#' . $item['id'] . '</td>';
+    echo '<td><a href="' . Radix::link('/workorder/view?w=' . $item['id']) . '">#' . $item['id'] . '</td>';
     // Printable Link
     if (in_array('print', $cols)) {
-		echo '<td><a href="' . radix::link('/workorder/pdf?w=' . $item['id']) . '">' . img('/tango/22x22/devices/printer.png','Get PDF') . '</a></td>';
+		echo '<td><a href="' . Radix::link('/workorder/pdf?w=' . $item['id']) . '">' . img('/tango/22x22/devices/printer.png','Get PDF') . '</a></td>';
 	}
 
     if ( (in_array('date',$cols)) && (isset($item['date'])) ) {
@@ -42,7 +46,7 @@ foreach ($data['list'] as $item) {
 
     if (isset($item['contact_name'])) {
         if (in_array('contact',$cols)) {
-            echo '<td><a href="' . radix::link('/contact/view?c=' . $item['contact_id']) . '">' . $item['contact_name'] . '</td>';
+            echo '<td><a href="' . Radix::link('/contact/view?c=' . $item['contact_id']) . '">' . $item['contact_name'] . '</td>';
         }
     }
     if (in_array('note',$cols)) {

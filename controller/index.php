@@ -6,8 +6,7 @@
 
 namespace Edoceo\Imperium;
 
-use Radix;
-use Radix\DB;
+use Edoceo\Radix\DB\SQL;
 
 $_ENV['title'] = 'Dashboard: ' . date('Y-m-d');
 
@@ -34,15 +33,15 @@ $data = array(
 	// 	'view' => '../elements/timer-list.phtml'),
 	'Pending Work Order Items' => array(
 		'css' => 'index_pack',
-		'list' => Radix\DB\SQL::fetch_all($sql_woi),
+		'list' => SQL::fetch_all($sql_woi),
 		'view' => 'workorder-list'),
 	'Active Work Orders' => array(
 		'css' => 'index_list',
-		'list' => Radix\DB\SQL::fetch_all($sql_w),
+		'list' => SQL::fetch_all($sql_w),
 		'view' => 'workorder-list'),
 	'Active Invoices' => array(
 		'css' => 'index_list',
-		'list' => Radix\DB\SQL::fetch_all("select invoice.*,b.name as contact_name from invoice join contact b on invoice.contact_id=b.id where ((invoice.paid_amount is null or invoice.paid_amount < invoice.bill_amount) and invoice.status in ('Active','Sent','Hawk')) order by invoice.date desc, invoice.id desc"),
+		'list' => SQL::fetch_all("select invoice.*,b.name as contact_name from invoice join contact b on invoice.contact_id=b.id where ((invoice.paid_amount is null or invoice.paid_amount < invoice.bill_amount) and invoice.status in ('Active','Sent','Hawk')) order by invoice.date desc, invoice.id desc"),
 		'view' => 'invoice-list'),
 );
 /*
