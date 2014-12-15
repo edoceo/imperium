@@ -5,7 +5,10 @@
 
 namespace Edoceo\Imperium;
 
-use Radix;
+use Edoceo\Radix\Radix;
+use Edoceo\Radix\Session;
+
+use Edoceo\Imperium\Auth\Hash;
 
 $id = intval($_GET['w']);
 $wo = new WorkOrder($id);
@@ -34,9 +37,9 @@ case 'send':
 	$co = new Contact($wo->contact_id);
 
 	// Make a Key
-	$ah = Auth_Hash::make($wo);
+	$ah = Hash::make($wo);
 
-	$this->_s->EmailComposeMessage = new stdClass();
+	$this->_s->EmailComposeMessage = new \stdClass();
 	$this->_s->EmailComposeMessage->to = $co->email;
 	$this->_s->EmailComposeMessage->subject = 'Work Order #' . $wo->id . ' from ' . $this->_c->Company->name;
 

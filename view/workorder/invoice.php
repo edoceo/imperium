@@ -7,10 +7,15 @@
     @todo Let User Change Status/Colour When Posting Invoice!
 */
 
+namespace Edoceo\Imperium;
+
+use Edoceo\Radix\Radix;
+use Edoceo\Radix\HTML\Form;
+
 echo '<form action="" method="post">';
 
 echo '<div>';
-echo radix_html_form::hidden('id',$this->WorkOrder['id']);
+echo Form::hidden('id',$this->WorkOrder['id']);
 //echo $this->formHidden('contact_id',$this->WorkOrder->contact_id);
 echo '</div>';
 
@@ -66,9 +71,9 @@ foreach ($this->WorkOrderItemList as $woi) {
     $name = html((isset($woi['date']) ? date('m/d/y ',strtotime($woi['date'])).'&nbsp;' : null) . $woi['name']);
 
     echo '<tr class="rero">';
-    echo '<td>' . radix_html_form::checkbox('woi_id[]', $woi['id'],array('checked'=>'checked')) . '</td>';
-    echo '<td>' . radix_html_form::text('woi_q_' . $woi['id'], $woi['a_quantity'], array('style'=>'width:3em')) . '</td>';
-    echo '<td>' . radix_html_form::text('woi_status_' . $woi['id'], $woi['status']) . '</td>';
+    echo '<td>' . Form::checkbox('woi_id[]', $woi['id'],array('checked'=>'checked')) . '</td>';
+    echo '<td>' . Form::text('woi_q_' . $woi['id'], $woi['a_quantity'], array('style'=>'width:3em')) . '</td>';
+    echo '<td>' . Form::text('woi_status_' . $woi['id'], $woi['status']) . '</td>';
 
     echo '<td class="c">' . $woi['kind'] .'</td>';
     //echo '<td><strong>' . $this->link('/workorder.item/view/' . $woi->id,$name) . '</strong></td>';

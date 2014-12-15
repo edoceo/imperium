@@ -4,6 +4,12 @@
 	@brief Convert WorkOrder to Invoice
 */
 
+namespace Edoceo\Imperium;
+
+use Edoceo\Radix\Radix;
+use Edoceo\Radix\Session;
+use Edoceo\Radix\DB\SQL;
+
 $wo = new WorkOrder(intval($_GET['w']));
 
 $_ENV['title'] = array("WorkOrder #{$wo['id']}", 'Build Invoice');

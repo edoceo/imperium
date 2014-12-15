@@ -5,9 +5,10 @@
 
 namespace Edoceo\Imperium;
 
-use Radix;
+use Edoceo\Radix\Radix;
+use Edoceo\Radix\Session;
 
-$_ENV['title'] = array('Work Order','Item');
+$_ENV['title'] = array('Work Order', 'Item');
 
 $mode = 'create';
 $x = intval($_GET['w']);
@@ -77,10 +78,10 @@ case 'save':
 
 	// Save to DB
 	if ($id) {
-		\Session::flash('info', "Work Order Item #$id saved");
+		Session::flash('info', "Work Order Item #$id saved");
 	} else {
 		$id = $woi['id'];
-		\Session::flash('info', "Work Order Item #$id created");
+		Session::flash('info', "Work Order Item #$id created");
 	}
 	// $wo->save();
 

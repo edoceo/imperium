@@ -7,8 +7,8 @@
 
 namespace Edoceo\Imperium;
 
-use Radix;
-use Radix\HTML\Form;
+use Edoceo\Radix\Radix;
+use Edoceo\Radix\HTML\Form;
 
 $AccountList = array();
 $AccountList[-1] = 'All - General Ledger';

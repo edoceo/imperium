@@ -5,7 +5,6 @@
 
 namespace Edoceo\Imperium;
 
-use Radix;
 use Edoceo\Radix\DB\SQL;
 
 $sql = 'SELECT name AS id,name FROM base_enum WHERE link = ? ORDER BY sort';

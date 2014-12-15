@@ -5,7 +5,9 @@
 
 namespace Edoceo\Imperium;
 
-use Radix;
+use Edoceo\Radix\Radix;
+use Edoceo\Radix\DB\SQL;
+use Edoceo\Radix\HTML\Form;
 
 $this->Account = new Account($_GET['id']);
 

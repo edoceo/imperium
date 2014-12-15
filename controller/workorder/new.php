@@ -6,7 +6,7 @@
 
 namespace Edoceo\Imperium;
 
-use Radix;
+use Edoceo\Radix\Radix;
 
 $_ENV['title'] = array('WorkOrder','Create');
 $this->WorkOrder = new WorkOrder(null);

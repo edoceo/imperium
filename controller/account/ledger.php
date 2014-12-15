@@ -6,7 +6,7 @@
 
 namespace Edoceo\Imperium;
 
-use Radix;
+use Edoceo\Radix\DB\SQL;
 
 $order = null;
 $param = array();

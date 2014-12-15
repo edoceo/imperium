@@ -44,7 +44,7 @@ if (empty($this->Contact['id'])) {
     echo '</td>';
 } else {
     echo '<td class="l">Contact:</td><td><a href="' . Radix::link("/contact/view?c={$this->Contact['id']}") . '">' . html($this->Contact['name']) . '</a>';
-    echo "<br />Primary Phone: " . Radix::block('stub-channel',array('data'=>$this->Contact['phone'])) . "</td>";
+    echo '<br /><i class="fa fa-phone"></i> ' . html($this->Contact['phone']) . '</td>';
 }
 // Date
 echo '<td class="l">Date:</td><td>' . Form::date('date',$this->WorkOrder['date']) . '</td>';
