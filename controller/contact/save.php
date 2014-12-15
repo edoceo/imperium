@@ -4,6 +4,11 @@
 	@brief Save a Contact
 */
 
+namespace Edoceo\Imperium;
+
+use Edoceo\Radix\Radix;
+use Edoceo\Radix\Session;
+
 $id = intval($_GET['c']);
 
 // Delete Requested?
