@@ -16,7 +16,7 @@ foreach ($list as $line) {
 	$line['balance'] = 0;
 	$line['accounts'] = array();
 
-	$res = Radix\DB\SQL::fetchAll("select id,name from account where account_tax_line_id = {$line['id']}");
+	$res = SQL::fetchAll("select id,name from account where account_tax_line_id = {$line['id']}");
 	foreach ($res as $x) {
 		$a = new Account($x);
 		// $a['balance'] = $a->balanceAt($this->date_omega);

@@ -34,7 +34,7 @@ foreach ($data['list'] as $item) {
     }
 
     $date = date('m/d/y',strtotime($item['cts']));
-	$link = radix::link('/note/view?id=' . $item['id']);
+	$link = Radix::link('/note/view?id=' . $item['id']);
 
     echo '<p>';
     switch ($item['kind']) {

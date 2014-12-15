@@ -3,7 +3,11 @@
 	Save a Note
 */
 
-radix::dump($_POST);
+namespace Edoceo\Imperium;
+
+use Radix;
+
+Radix::dump($_POST);
 
 $n = new Base_Note(intval($_POST['id']));
 
@@ -15,7 +19,7 @@ case 'delete':
 	$this->_s->info[] = 'Note #' . $id . ' was deleted';
 	break;
 case 'edit':
-	radix::redirect('/note/edit?id=' . $n->id);
+	Radix::redirect('/note/edit?id=' . $n->id);
 	break;
 case 'save':
 
@@ -39,10 +43,10 @@ case 'save':
 	$n->save();
 
 	if ($id) {
-		radix_session::flash('info', "Note #$id saved");
+		Session::flash('info', "Note #$id saved");
 	} else {
 		$id = $n['id'];
-		radix_session::flash('info', "Note #$id created");
+		Session::flash('info', "Note #$id created");
 	}
 
 	$back_page = '/note/view?id=' . $id;
@@ -55,4 +59,4 @@ if (!empty($n['link'])) {
 	}
 }
 
-radix::redirect($back_page);
+Radix::redirect($back_page);

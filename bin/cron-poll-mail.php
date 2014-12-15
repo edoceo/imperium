@@ -50,7 +50,7 @@ for ($i=$imap_stat['mail_count'];$i>=1;$i--) {
     $sql = 'SELECT contact.* FROM contact LEFT JOIN contact_channel ON contact.id = contact_channel.contact_id ';
     $sql.= ' WHERE contact.email = ? OR contact_channel.data ilike ? ';
     $arg = array($from_mail,$from_mail);
-    $res = Radix\DB\SQL::fetchAll($sql,$arg);
+    $res = SQL::fetchAll($sql,$arg);
 
     if ( (empty($res)) || (count($res) == 0) ) {
         echo "Skip: Unknown Sender: $from_mail\n";

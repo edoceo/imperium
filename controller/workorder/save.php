@@ -22,11 +22,11 @@ case 'close':
 	$this->_d->query($sql);
 	$wo->status = 'Closed';
 	$wo->save();
-	Radix\Session::flash('info', "Work Order #$id Closed");
+	Session::flash('info', "Work Order #$id Closed");
 	Radix::redirect(sprintf('/workorder/view?w=%d', $wo->id));
 case 'delete':
 	$wo->delete();
-	Radix\Session::flash('info', "Work Order #$id was deleted");
+	Session::flash('info', "Work Order #$id was deleted");
 	Radix::redirect('/workorder');
 	break;
 case 'send':
@@ -73,19 +73,19 @@ case 'save':
 	$wo->save();
 
 	if ($id) {
-		Radix\Session::flash('info', "Work Order #$id saved");
+		Session::flash('info', "Work Order #$id saved");
 	} else {
 		$id = $wo['id'];
-		Radix\Session::flash('info', "Work Order #$id created");
+		Session::flash('info', "Work Order #$id created");
 	}
 	Radix::redirect('/workorder/view?w=' . $id);
 	break;
 case 'void':
 	$sql = 'UPDATE workorder_item SET status = ? WHERE workorder_id = ? AND status = ?';
-	Radix\DB\SQL::query($sql, array('Void', $wo->id, 'Pending'));
+	SQL::query($sql, array('Void', $wo->id, 'Pending'));
 	$wo['status'] = 'Void';
 	$wo->save();
-	Radix\Session::flash('info', "Work Order #{$wo->id} voided");
+	Session::flash('info', "Work Order #{$wo->id} voided");
 	Radix::redirect('/');
 	break;
 

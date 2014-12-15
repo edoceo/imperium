@@ -52,8 +52,8 @@ case 'delete':
 	$wo = new WorkOrder($woi['workorder_id']);
 	$wo->delWorkOrderItem($woi['id']);
 
-	Radix\Session::flash('info', "Work Order Item {$this->WorkOrderItem['id']} deleted");
-	radix::redirect('/workorder/view?w=' . $wo['id']);
+	Session::flash('info', "Work Order Item {$this->WorkOrderItem['id']} deleted");
+	Radix::redirect('/workorder/view?w=' . $wo['id']);
 
 	break;
 
@@ -77,10 +77,10 @@ case 'save':
 
 	// Save to DB
 	if ($id) {
-		\Radix\Session::flash('info', "Work Order Item #$id saved");
+		\Session::flash('info', "Work Order Item #$id saved");
 	} else {
 		$id = $woi['id'];
-		\Radix\Session::flash('info', "Work Order Item #$id created");
+		\Session::flash('info', "Work Order Item #$id created");
 	}
 	// $wo->save();
 
@@ -96,7 +96,7 @@ case 'save':
 		if (is_file($file)) {
 			$body = file_get_contents($file);
 		} else {
-			Radix\Session::flash('warn', 'Work Order Item Notification Template is missing');
+			Session::flash('warn', 'Work Order Item Notification Template is missing');
 			$body = "New Work Order Item\n";
 			$body.= "Work Order: \$wo_id\n";
 			$body.= "Item: \$wi_name\n";
@@ -128,11 +128,11 @@ case 'save':
 
 		// Want to Add This History
 		$_SESSION['return-path'] = '/workorder/view?w=' . $wo['id'];
-		radix::redirect('/email/compose');
+		Radix::redirect('/email/compose');
 
 	}
 
-	radix::redirect('/workorder/view?w=' . $wo['id']);
+	Radix::redirect('/workorder/view?w=' . $wo['id']);
 
 	break;
 
@@ -141,7 +141,7 @@ case 'view':
 	$id = intval($_GET['id']);
 	$woi = new WorkOrderItem($id);
 	if (empty($woi['id'])) {
-		Radix\Session::flash('fail', sprintf('Cannot find Work Order Item #%d', $id));
+		Session::flash('fail', sprintf('Cannot find Work Order Item #%d', $id));
 		return;
 	}
 
@@ -151,5 +151,5 @@ case 'view':
 	break;
 	
 default:
-	radix::dump($_POST);
+	Radix::dump($_POST);
 }

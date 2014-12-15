@@ -170,7 +170,7 @@ class Account_Reconcile
             $sql.= " WHERE (date <= ?::timestamp + '5 days'::interval) AND (date >= ? ::timestamp - '5 days'::interval)";
             $sql.= ' AND account_id = ?';
             $sql.= ' AND abs(amount) = ?';
-            $ret[$i]->id = Radix\DB\SQL::fetch_one($sql, array($ret[$i]->date, $ret[$i]->date, $opt['account_id'], abs($ret[$i]->abs)));
+            $ret[$i]->id = SQL::fetch_one($sql, array($ret[$i]->date, $ret[$i]->date, $opt['account_id'], abs($ret[$i]->abs)));
 
             // $sql = 'select a.id,a.date,b.amount';
             // $sql.= ' from account_journal a join account_ledger b on a.id=b.account_journal_id ';

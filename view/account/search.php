@@ -38,10 +38,10 @@ default:
 
 $sql.= ' ORDER BY date DESC, kind DESC, account_journal_id, amount ';
 
-$res = Radix\DB\SQL::fetch_all($sql, $arg);
-radix_session::flash('fail', Radix\DB\SQL::lastError());
+$res = SQL::fetch_all($sql, $arg);
+Session::flash('fail', SQL::lastError());
 if (empty($res) || (0 == count($res))) {
-	radix_session::flash('info', 'No Matching Transactions');
+	Session::flash('info', 'No Matching Transactions');
 	return(0);
 }
 
@@ -51,7 +51,7 @@ foreach ($res as $rec) {
 	echo '<tr class="rero">';
 	if ($rec['account_journal_id'] != $account_journal_id_x) {
 		// Date
-		echo '<td class="c"><a href="' . radix::link('/account/transaction?id=' . $rec['account_journal_id']) . '">' . date('m/d/y', strtotime($rec['date'])) . '</a></td>';
+		echo '<td class="c"><a href="' . Radix::link('/account/transaction?id=' . $rec['account_journal_id']) . '">' . date('m/d/y', strtotime($rec['date'])) . '</a></td>';
 		// Name & Note
 		echo '<td>' . html($rec['note']) . '</td>';
 		echo '</tr>';
@@ -85,4 +85,4 @@ foreach ($res as $rec) {
 }
 echo '</table>';
 
-// radix::dump($rec);
+// Radix::dump($rec);

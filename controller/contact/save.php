@@ -51,8 +51,8 @@ case 'delete':
 
 	$c = new Contact($id);
 	$c->delete();
-	Radix\Session::flash('info', 'Contact #' . $id . ' was deleted');
-	radix::redirect('/contact');
+	Session::flash('info', 'Contact #' . $id . ' was deleted');
+	Radix::redirect('/contact');
 
 case 'save':
 
@@ -73,11 +73,11 @@ case 'save':
 	$co->save();
 
 	if ($id) {
-		Radix\Session::flash('info', "Contact #$id saved");
+		Session::flash('info', "Contact #$id saved");
 	} else {
 		$id = $co['id'];
-		Radix\Session::flash('info', "Contact #$id created");
+		Session::flash('info', "Contact #$id created");
 	}
 
-	radix::redirect('/contact/view?c=' . $id);
+	Radix::redirect('/contact/view?c=' . $id);
 }

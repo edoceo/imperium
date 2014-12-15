@@ -95,7 +95,7 @@ case 'view':
 
 			echo '<td>';
 			if ($je->id) {
-				echo radix::link('/account/transaction?id=' . $je->id,$je->id);
+				echo Radix::link('/account/transaction?id=' . $je->id,$je->id);
 				echo '<input name="' . sprintf('je%did',$je_i) . '" type="hidden" value="' . $je->id . '">';
 			} else {
 				echo '&mdash;';
@@ -120,7 +120,7 @@ case 'view':
 
     $max = ($le_i * 4);
     if ($max > intval(ini_get('max_input_vars'))) {
-    	Radix\Session::flash('warn', "There are too many elements for your system to handle, upload a smaller data set or increase <em>max_input_vars</em> above $max");
+    	Session::flash('warn', "There are too many elements for your system to handle, upload a smaller data set or increase <em>max_input_vars</em> above $max");
     }
 
     echo '</form>';

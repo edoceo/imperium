@@ -24,6 +24,6 @@ foreach ($list as $name) {
         echo sprintf('<h2>%d %s</h2>',count($info['list']),$name);
         echo Radix::block($info['view'],array('list'=>$info['list'],'opts'=>array('head'=>true)));
         echo '</div>';
-        // radix::dump($info);
+        // Radix::dump($info);
     }
 }

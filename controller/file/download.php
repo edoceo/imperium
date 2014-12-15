@@ -7,8 +7,8 @@
 $f = new Base_File(intval($_GET['id']));
 
 if (!is_file($f['path'])) {
-	radix_session::flash('fail', 'File not Found');
-	radix::redirect($_SERVER['HTTP_REFERER']);
+	Session::flash('fail', 'File not Found');
+	Radix::redirect($_SERVER['HTTP_REFERER']);
 }
 
 // $this->force_download = true;

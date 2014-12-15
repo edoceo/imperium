@@ -31,7 +31,7 @@ case 'sign in':
 		Radix::redirect();
 	}
 
-	// radix::dump($res);
+	// Radix::dump($res);
 	$_SESSION['uid'] = $res['id'];
 
 	acl::permit('/index');

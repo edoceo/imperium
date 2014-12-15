@@ -73,8 +73,8 @@ echo $this->body;
 
 echo '</div>'; // #core
 
-// radix::dump(str_replace('<br>', "\n", radix::info()));
-// radix::dump($_SESSION);
+// Radix::dump(str_replace('<br>', "\n", Radix::info()));
+// Radix::dump($_SESSION);
 
 ?>
 

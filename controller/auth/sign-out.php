@@ -3,5 +3,5 @@
 
 */
 
-Radix\Session::kill();
-radix::redirect('/auth/sign-in');
+Session::kill();
+Radix::redirect('/auth/sign-in');

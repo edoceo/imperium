@@ -59,8 +59,8 @@ if (empty($this->Account['id'])) {
 	$where = " (date>='{$this->date_alpha}' and date<='{$this->date_omega}') ";
 	$order = " date,kind, account_journal_id, amount asc ";
 
-	$this->dr_total = Radix\DB\SQL::fetch_one("select sum(amount) from general_ledger where amount < 0 and $where");
-	$this->cr_total = Radix\DB\SQL::fetch_one("select sum(amount) from general_ledger where amount > 0 and $where");
+	$this->dr_total = SQL::fetch_one("select sum(amount) from general_ledger where amount < 0 and $where");
+	$this->cr_total = SQL::fetch_one("select sum(amount) from general_ledger where amount > 0 and $where");
 
 	$this->Account = new Account(array('name'=>'General Ledger'));
 
@@ -97,9 +97,9 @@ if (strlen($_GET['link'])) {
 }
 
 $sql = "select * from general_ledger where $where order by $order";
-$res = Radix\DB\SQL::fetch_all($sql, $param);
+$res = SQL::fetch_all($sql, $param);
 if (empty($res)) {
-	echo Radix\DB\SQL::lastError();
+	echo SQL::lastError();
 	die(print_r($res));
 }
 $this->LedgerEntryList = $res;

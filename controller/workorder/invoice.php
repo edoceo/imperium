@@ -23,9 +23,9 @@ case 'invoice':
 	$msg = sprintf('Invoice #%d created from Work Order #%d with %d items', $iv['id'], $wo['id'], count($x));
 	// Base_Diff::note($wo,$this->_s->info);
 	// Base_Diff::note($iv,$this->_s->info);
-	Radix\Session::flash('info', $msg);
+	Session::flash('info', $msg);
 	// $this->_d->commit();
-	radix::redirect('/invoice/view?i=' . $iv['id']);
+	Radix::redirect('/invoice/view?i=' . $iv['id']);
 
 	break;
 }
@@ -42,7 +42,7 @@ $this->InvoiceList = array(0 => '- New -');
 
 $sql = 'SELECT * FROM invoice WHERE contact_id = ? AND status = ?';
 $arg = array($this->Contact['id'], 'Active');
-$res = Radix\DB\SQL::fetch_all($sql, $arg);
+$res = SQL::fetch_all($sql, $arg);
 
 foreach ($res as $x) {
 	$k = $x['id'];

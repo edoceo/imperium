@@ -31,7 +31,7 @@ case 'upload': // Read the Uploaded Data
 		);
 		$this->JournalEntryList = Account_Reconcile::parse($arg);
 	} else {
-		Radix\Session::flash('fail', 'Failed to Upload');
+		Session::flash('fail', 'Failed to Upload');
 	}
 
 	// @todo If the Target Account is Asset then Other Side Only (and vice-versa)
@@ -39,7 +39,7 @@ case 'upload': // Read the Uploaded Data
 	$sql.= 'FROM account ';
 	// $sql.= "WHERE kind like 'Expense%' ";
 	$sql.= 'ORDER BY full_code ASC, code ASC';
-	$this->AccountPairList = Radix\DB\SQL::fetchMix($sql);
+	$this->AccountPairList = SQL::fetchMix($sql);
 
 	$_SESSION['reconcile_upload_id'] = $_POST['upload_id'];
 	$_SESSION['reconcile_offset_id'] = $_POST['offset_id'];
@@ -52,7 +52,7 @@ case 'save': // Save the Uploaded Transactions
 
 	$_ENV['upload_account_id'] = $_SESSION['reconcile_upload_id'];
 	
-	radix::dump($_POST);
+	Radix::dump($_POST);
 	exit;
 
 	$c = ceil(count($_POST) / 4);
@@ -114,7 +114,7 @@ case 'save': // Save the Uploaded Transactions
 		$cr->save();
 	}
 
-	Radix\Session::flash('info', "Saved $i/$c Transactions");
+	Session::flash('info', "Saved $i/$c Transactions");
 
 	break;
 }

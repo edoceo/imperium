@@ -17,8 +17,8 @@ echo '</div>';
 echo '<table>';
 // Contact & Phone
 echo '<tr>';
-echo '<td class="b r">Contact:</td><td>' . radix::link("/contact/view/{$this->Contact['id']}","{$this->Contact['name']}") . '</td>';
-echo '<td class="b r">Phone:</td><td>' . radix::block('stub-channel', array('value'=>$this->Contact['phone'])) . '</td>';
+echo '<td class="b r">Contact:</td><td>' . Radix::link("/contact/view/{$this->Contact['id']}","{$this->Contact['name']}") . '</td>';
+echo '<td class="b r">Phone:</td><td>' . Radix::block('stub-channel', array('value'=>$this->Contact['phone'])) . '</td>';
 echo '</tr>';
 
 // Kind and Date
@@ -54,7 +54,7 @@ foreach ($this->WorkOrderItemList as $woi) {
     if ( ($x_kind != $woi['kind']) || ($x_status != $woi['status']) ) {
         //drawSummaryRow($bill_quantity, $bill_total);
         if ($woi['invoice_id']) {
-            $text = radix::link("/invoice/view/{$woi['invoice_id']}","Invoice #{$woi['invoice_id']}");
+            $text = Radix::link("/invoice/view/{$woi['invoice_id']}","Invoice #{$woi['invoice_id']}");
         } else {
             $text =  $woi['status'] . ' ' . $woi['kind'] . ' Items';
         }

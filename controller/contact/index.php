@@ -6,7 +6,9 @@
 
 namespace Edoceo\Imperium;
 
-use Radix;
+use Edoceo\Radix\Radix;
+use Edoceo\Radix\Session;
+use Edoceo\Radix\DB\SQL;
 
 
 $this->Char = $_GET['char'];
@@ -103,5 +105,5 @@ $sql->limitPage($this->view->Paginator->page,$this->view->Paginator->limit);
   );
 */
 
-$this->ContactList = Radix\DB\SQL::fetch_all($sql, $arg);
-Radix\Session::flash('fail', Radix\DB\SQL::lastError());
+$this->ContactList = SQL::fetch_all($sql, $arg);
+Session::flash('fail', SQL::lastError());

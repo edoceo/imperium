@@ -34,7 +34,7 @@ case 'company':
 	$arg[] = $q;
 	break;
 case 'email':
-	radix::bail(500);
+	Radix::bail(500);
 	$s = $this->_d->select();
 	$s->from('contact',array('email as result','name as label'));
 	$s->where('contact ~* ?',$q);
@@ -43,13 +43,13 @@ case 'email':
 	$s->distinct();
 	break;
 case 'kind':
-	radix::bail(500);
+	Radix::bail(500);
 	$s = $this->_d->select();
 	$s->from('contact',array('kind as result','kind as label'));
 	$s->distinct();
 	break;
 case 'status':
-	radix::bail(500);
+	Radix::bail(500);
 	$s = $this->_d->select();
 	$s->distinct();
 	$s->from('contact',array('status as result','status as label'));
@@ -63,7 +63,7 @@ default:
 	break;
 }
 
-$res = radix_db_sql::fetch_all($sql, $arg);
+$res = SQL::fetch_all($sql, $arg);
 
 header('Content-Type: application/json');
 

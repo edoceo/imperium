@@ -15,7 +15,7 @@ case 'cancel':
 	break;
 case 'delete':
 	$ii->delete();
-	Radix\Session::flash('info', sprintf('Invoice Item #%d was deleted',$ii['id']));
+	Session::flash('info', sprintf('Invoice Item #%d was deleted',$ii['id']));
 	Radix::redirect('/invoice/view?i=' . $ii['invoice_id']);
 	break;
 case 'save':
@@ -26,7 +26,7 @@ case 'save':
 	}
 	// Save to DB
 	$ii->save();
-	Radix\Session::flash('info', sprintf('Invoice Item #%d saved',$ii['id']));
+	Session::flash('info', sprintf('Invoice Item #%d saved',$ii['id']));
 	// @todo Update the Balance (Sloppy, should be in IV->saveItem()
 	$iv = new Invoice($_POST['invoice_id']);
 	$iv->save();

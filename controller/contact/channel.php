@@ -31,10 +31,10 @@ case 'save':
 	if (empty($this->ContactChannel['id'])) {
 		$this->ContactChannel['auth_user_id'] = $_SESSION['uid'];
 		$this->ContactChannel->save();
-		Radix\Session::flash('info', 'Contact Channel saved');
+		Session::flash('info', 'Contact Channel saved');
 	} else {
 		$this->ContactChannel->save();
-		Radix\Session::flash('info', 'Contact Channel created');
+		Session::flash('info', 'Contact Channel created');
 	}
 
 	Radix::redirect('/contact/view?c=' . $this->Contact['id']);
@@ -43,7 +43,7 @@ case 'cancel':
 	Radix::redirect('/contact/view?c=' . $this->Contact['id']);
 case 'delete':
 	$this->ContactChannel->delete();
-	Radix\Session::flash('info', 'Contact Channel #' . $id . ' was deleted');
+	Session::flash('info', 'Contact Channel #' . $id . ' was deleted');
 	Radix::redirect('/contact/view?c=' . $this->Contact['id']);
 	break;
 }

@@ -25,13 +25,13 @@ echo '<h1>Invoice Processor: ' . strftime('%Y-%m-%d',$time) . " for {$cli_opt['s
 $sql = 'SELECT count(id) FROM invoice ';
 $sql.= ' WHERE status IN (\'Active\') ';
 $sql.= ' AND (extract(days from current_timestamp - date) > ?) ';
-$res = Radix\DB\SQL::fetch_one($sql, array($cli_opt['span']));
+$res = SQL::fetch_one($sql, array($cli_opt['span']));
 echo "<p>" . $res . " Active Invoices to POST</p>\n";
 
 $sql = 'SELECT count(id) FROM invoice ';
 $sql.= ' WHERE status IN (\'Hawk\', \'Sent\') ';
 $sql.= ' AND (extract(days from current_timestamp - date) > ?) ';
-$res = Radix\DB\SQL::fetch_one($sql, array($cli_opt['span']));
+$res = SQL::fetch_one($sql, array($cli_opt['span']));
 echo "<p>" . $res . " Sent Invoices over {$cli_opt['span']} days old</p>\n";
 
 
@@ -40,7 +40,7 @@ $sql = 'SELECT *, extract(days from current_timestamp - date) as days FROM invoi
 $sql.= ' WHERE status IN (\'Hawk\', \'Sent\') ';
 // $sql.= ' AND ((extract(days from current_timestamp - date)::integer % ?) = 0) ';
 $sql.= ' ORDER BY date, contact_id, id ASC ';
-$res = Radix\DB\SQL::fetch_all($sql); // , array($cli_opt['span']));
+$res = SQL::fetch_all($sql); // , array($cli_opt['span']));
 
 echo "<p>Past Due Invoices: " . count($res) . "</p>\n";
 
@@ -65,7 +65,7 @@ foreach ($res as $rec) {
 	// $sql.= ' WHERE contact_id = ? AND status IN (\'Sent\') AND (extract(days from current_timestamp - date) >= ?) ';
 	// $sql.= ' ORDER BY date';
 	// $arg = array($co['id'], $cli_opt['span']);
-	// $iv_res = Radix\DB\SQL::fetch_all($sql, $arg);
+	// $iv_res = SQL::fetch_all($sql, $arg);
 
 	$mail = null;
 	$mail = trim(file_get_contents($file));
