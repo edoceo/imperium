@@ -5,16 +5,18 @@
 
 namespace Edoceo\Imperium;
 
+use Edoceo\Radix\Session;
 use Edoceo\Radix\DB\SQL;
 
 $id = intval($_GET['i']);
+
 $this->Invoice = new Invoice($id);
 if ( (!empty($_GET['sent'])) && ($_GET['sent'] == 'good') ) {
-	$this->_s->info[] = 'Invoice Status updated';
-	$this->Invoice->status = 'Sent';
+	Radix\Session::flash('info', 'Invoice Status updated');
+	$this->Invoice['status'] = 'Sent';
 	$this->Invoice->setFlag(Invoice::FLAG_SENT);
 	$this->Invoice->save();
-	Base_Diff::note($this->Invoice,$this->_s->info);
+	// Base_Diff::note($this->Invoice, $this->_s->info);
 }
 $this->Contact = new Contact($this->Invoice['contact_id']);
 $this->ContactAddressList = SQL::fetch_mix('select id,address from contact_address where contact_id = ?', array($this->Invoice['contact_id']));

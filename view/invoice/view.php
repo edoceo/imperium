@@ -17,7 +17,7 @@ use Edoceo\Radix\HTML\Form;
 
 $_ENV['title'] = array('Invoice','#' .$this->Invoice['id']);
 
-App::addMRU(Radix::link('/invoice/view?id=' . $this->Invoice['id']));
+App::addMRU(Radix::link('/invoice/view?i=' . $this->Invoice['id']));
 
 $contact_address_list = array();
 
@@ -40,9 +40,9 @@ if (count($this->jump_list)) {
 }
 
 echo '<form action="' . Radix::link('/invoice/save?i=' . $this->Invoice['id']) . '" method="post">';
-echo '<div style="float:right;">';
-echo star($this->Invoice['star'] ? $this->Invoice['star'] : 'star_' );
-echo '</div>';
+// echo '<div style="float:right;">';
+// echo star($this->Invoice['star'] ? $this->Invoice['star'] : 'star_' );
+// echo '</div>';
 
 echo '<table>';
 echo '<tr>';
@@ -107,16 +107,15 @@ echo '</table>';
 
 // Buttons
 echo '<div class="cmd">';
-echo Form::hidden('id',$this->Invoice['id']);
 echo Form::hidden('contact_id',$this->Invoice['contact_id']);
 echo '<input class="good" name="a" type="submit" value="Save">';
 
 // Hawk Monitoring?
 if ($this->Invoice->hasFlag(Invoice::FLAG_HAWK)) {
-    echo '<input name="c" type="submit" value="No Hawk">';
+    echo '<input name="a" type="submit" value="No Hawk">';
 } else {
     if ($this->Invoice->canHawk()) {
-        echo '<input name="c" type="submit" value="Hawk">';
+        echo '<input name="a" type="submit" value="Hawk">';
     }
 }
 
