@@ -82,22 +82,5 @@ echo '</div>'; // #core
 <a href="http://imperium.edoceo.com">Imperium</a> &#169; 2001-2014 <a href="http://edoceo.com/">Edoceo, Inc</a>
 </footer>
 
-<script type="text/javascript">
-$(document).ready(function() {
-    // $('input[type=text], textarea').focus(function(e) { this.select(); }).mouseup(function(e){ e.preventDefault(); });
-    // $('.fancybox').fancybox();
-    $('.ajax-edit').on('click',function(e) {
-        // var o = $(this).parent().offset();
-        var t = $(this).data('name');
-        $('#' + t).load(this.href,function(res,txt,xhr) {
-            $('#' + t).addClass('edit-show');
-            // $(document).animate({ scrollTop: o.top},'slow');
-            // $(document).scrollTop(o.top - 16);
-        });
-        e.preventDefault();
-    });
-    $(".star").on("click", star_step );
-});
-</script>
 </body>
 </html>

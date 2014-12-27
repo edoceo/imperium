@@ -3,7 +3,9 @@
     @brief Base JavaScript Library for Imperium
 */
 
-var Imperium = {};
+var Imperium = {
+	base:''
+};
 
 
 function toNumeric(e,l)
@@ -54,3 +56,31 @@ WorkOrder.initForm = function() {
 	//     change:function(event, ui) { if (ui.item) {  $("#add_contact_id").val(ui.item.id); $("#add_contact_name").val(ui.item.contact); } }
 	// });
 }
+
+$(function() {
+
+    $("#contact_name").autocomplete({
+		source: Imperium.base + '/contact/ajax',
+		change: function(event, ui) {
+			if (ui.item) {
+				$("#contact_id").val(ui.item.id);
+			}
+		}
+	});
+
+	// $('input[type=text], textarea').focus(function(e) { this.select(); }).mouseup(function(e){ e.preventDefault(); });
+	// $('.fancybox').fancybox();
+	$('.ajax-edit').on('click',function(e) {
+		// var o = $(this).parent().offset();
+		var t = $(this).data('name');
+		$('#' + t).load(this.href,function(res,txt,xhr) {
+			$('#' + t).addClass('edit-show');
+			// $(document).animate({ scrollTop: o.top},'slow');
+			// $(document).scrollTop(o.top - 16);
+		});
+		e.preventDefault();
+	});
+
+	$(".star").on("click", star_step );
+
+});

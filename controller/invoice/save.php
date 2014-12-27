@@ -56,8 +56,8 @@ case 'paid':
 	// New Transaction Holder
 	$at = new stdClass();
 	$at->AccountJournalEntry = new AccountJournalEntry();
-	$at->AccountJournalEntry['date = date('Y-m-d');
-	$at->AccountJournalEntry['note = 'Payment for Invoice #' . $Invoice['id'];
+	$at->AccountJournalEntry['date'] = date('Y-m-d');
+	$at->AccountJournalEntry['note'] = 'Payment for Invoice #' . $Invoice['id'];
 	$at->AccountLedgerEntryList = array();
 	// @todo Detect if should be Inbound Cash or Account Rx
 	// @todo: Remove Account Hard Coding

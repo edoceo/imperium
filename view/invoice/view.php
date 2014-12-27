@@ -50,12 +50,6 @@ echo '<tr>';
 if (empty($this->Contact['id'])) {
     echo '<td class="l">Contact:</td>';
     echo '<td><input id="contact_name" name="contact_name" type="text" />';
-    echo '<script type="text/javascript">';
-    echo '$("#contact_name").autocomplete({ ';
-    echo ' source: "' . Radix::link('/contact/ajax') . '", ';
-    echo ' change: function(event, ui) { if (ui.item) { $("#contact_id").val(ui.item.id); } } ';
-    echo '}); ';
-    echo '</script>';
     echo '</td>';
 } else {
     echo '<td class="l">Contact:</td>';
