@@ -175,6 +175,7 @@ class ImperiumBase implements \ArrayAccess
         $c = str_replace('\\', '/', $c);
         $c = basename($c);
         $c = strtolower($c);
+
         return sprintf('%s:%d', $c, intval($o['id']));
     }
 
@@ -285,7 +286,6 @@ class ImperiumBase implements \ArrayAccess
 
         $sql = 'SELECT * FROM base_note WHERE link = ? ORDER BY name';
         $arg = array($this->link());
-        \Edoceo\Radix\Radix::dump($arg);
         $ret = SQL::fetch_all($sql, $arg);
 		return $ret;
 	}
@@ -378,7 +378,7 @@ class ImperiumBase implements \ArrayAccess
         }
     }
     function setFlag($f) { $this->flag = (intval($this->flag) | $f); }
-    
+
     /*
 		Array Accessors
     */
