@@ -170,7 +170,12 @@ class ImperiumBase implements \ArrayAccess
         if ($o == null) {
             $o = $this;
         }
-        return sprintf('%s:%d',strtolower(get_class($o)),intval($o['id']));
+
+        $c = get_class($o);
+        $c = str_replace('\\', '/', $c);
+        $c = basename($c);
+        $c = strtolower($c);
+        return sprintf('%s:%d', $c, intval($o['id']));
     }
 
     /**
@@ -280,6 +285,7 @@ class ImperiumBase implements \ArrayAccess
 
         $sql = 'SELECT * FROM base_note WHERE link = ? ORDER BY name';
         $arg = array($this->link());
+        \Edoceo\Radix\Radix::dump($arg);
         $ret = SQL::fetch_all($sql, $arg);
 		return $ret;
 	}

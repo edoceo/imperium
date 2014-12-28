@@ -4,7 +4,12 @@
     @brief Views a Note using the note/edit element
 */
 
-echo '<form action="' . radix::link('/note/save') . '" id="note-edit-form" method="post">';
+namespace Edoceo\Imperium;
+
+use Edoceo\Radix\Radix;
+use Edoceo\Radix\HTML\Form;
+
+echo '<form action="' . Radix::link('/note/save') . '" id="note-edit-form" method="post">';
 echo '<table>';
 echo '<tr>';
 // Name
@@ -20,7 +25,7 @@ if ($this->Note['kind'] != 'Conversation') {
     }
     echo '</select>';
 } else {
-    echo $this->Note->kind;
+    echo $this->Note['kind'];
 }
 echo '</td>';
 
@@ -39,7 +44,7 @@ if (!empty($this->Note['link'])) {
     // @todo this is not elegant /djb 20111013
     if (preg_match('/(contact|invoice|workorder):(\d+)/',$this->Note['link'],$m)) {
         $page = '/' . $m[1] . '/view?' . substr($m[1],0,1) . '=' . $m[2];
-        echo '<a href="' . radix::link($page) . '">' . ucfirst($m[1]) . ' #' . $m[2] . '</a>';
+        echo '<a href="' . Radix::link($page) . '">' . ucfirst($m[1]) . ' #' . $m[2] . '</a>';
     } else {
         echo $this->Note['link'];
     }
@@ -70,8 +75,8 @@ echo '</textarea>';
 echo '</div>';
 
 echo '<div class="cmd">';
-echo radix_html_form::hidden('id',$this->Note['id']);
-echo radix_html_form::hidden('link',$this->Note['link']);
+echo Form::hidden('id',$this->Note['id']);
+echo Form::hidden('link',$this->Note['link']);
 echo '<input class="good" name="a" type="submit" value="Save">';
 if (!empty($this->Note['id'])) {
     echo '<input class="fail" name="a" type="submit" value="Delete">';
@@ -83,7 +88,3 @@ echo '</form>';
 // History
 // $args = array('list' => $this->Note->getHistory());
 // echo $this->partial('../elements/diff-list.phtml',$args);
-
-// echo '';
-// $(document).ready( function() { $('#note-text').wysiwyg(); });
-// echo '';

@@ -6,6 +6,10 @@
     @param $data('page', 'list') can be an object or an array
 */
 
+namespace Edoceo\Imperium;
+
+use Edoceo\Radix\Radix;
+
 echo '<h2>';
 echo '<a href="' . $data['page'] . '" onclick="$(\'#note-edit\').load(\'' . $data['page'] . '\'); return false;">';
 echo '<i class="fa fa-file-text-o"></i>';

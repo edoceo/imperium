@@ -5,9 +5,12 @@
 
 namespace Edoceo\Imperium;
 
-$_ENV['title'] = array('Note','Create');
+$_ENV['title'] = array('Note', 'Create');
 
 $n = new Base_Note();
+if (!empty($_GET['id'])) {
+	$n = new Base_Note(intval($_GET['id']));
+}
 
 // Linked to Object?
 if ($_GET['l'] == 'r') {

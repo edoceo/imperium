@@ -5,7 +5,8 @@
 
 namespace Edoceo\Imperium;
 
-use Radix;
+use Edoceo\Radix\Radix;
+use Edoceo\Radix\Session;
 
 Radix::dump($_POST);
 
@@ -16,10 +17,10 @@ case 'delete':
 	// @todo Check if IsAllowed
 	$back_page = '/';
 	$n->delete();
-	$this->_s->info[] = 'Note #' . $id . ' was deleted';
+	Session::flash('info', 'Note #' . $id . ' was deleted');
 	break;
 case 'edit':
-	Radix::redirect('/note/edit?id=' . $n->id);
+	Radix::redirect('/note/edit?id=' . $n['id']);
 	break;
 case 'save':
 
@@ -33,7 +34,7 @@ case 'save':
 	} else {
 		$n['data'] = trim($_POST['data']);
 	}
-	$x = str_replace(array('<br>','<br/>','<br />'),"\n",$n['data']);
+	$x = str_replace(array('<br>','<br/>','<br />'), "\n", $n['data']);
 	$x = trim(strip_tags($x));
 	$n['name'] = strtok($x,"\n");
 	$n['link'] = $_POST['link'];
