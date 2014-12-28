@@ -7,6 +7,10 @@
 
 */
 
+namespace Edoceo\Imperium;
+
+use Edoceo\Radix\DB\SQL;
+
 // CLI
 require_once(dirname(dirname(__FILE__)) . '/lib/cli.php');
 
@@ -66,8 +70,6 @@ $tab_list = array(
 foreach ($tab_list as $tab => $tab_spec) {
 
     // Add ft (Full Text) column
-    //$sql = "ALTER TABLE $t ADD COLUMN ft tsvector";
-    //echo "$sql\n";
     $sql = "DELETE FROM full_text WHERE link_to = '$tab'";
 
     // Update Desired Columns & Records to that Field
@@ -76,11 +78,11 @@ foreach ($tab_list as $tab => $tab_spec) {
         $buf[] = " coalesce($col::text,'') ";
     }
 
-    $sql = "INSERT INTO full_text "; //   $t SET ft = ";
+    $sql = "INSERT INTO full_text ";
     $sql.= " SELECT '$tab',id, ";
     switch ($tab) {
     case 'contact':
-        $sql.= " kind || ': ' || case when kind = 'Person' then contact else company end, ";
+        $sql.= " kind || ': ' || CASE WHEN kind = 'Person' THEN contact ELSE company END, ";
         break;
     default:
         $sql.= " '" . $tab_spec['name'] . " #' || id,";
