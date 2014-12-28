@@ -38,22 +38,22 @@ echo '<li><a href="' . Radix::link('/') . '" title="Dashboard"><i class="fa fa-d
 		echo '<li><hr /></li>';
 	}
 
-    echo '<li><a class="fancybox fancybox.ajax" href="' . Radix::link('/note/edit?l=r') . '">' . img('/tango/24x24/apps/accessories-text-editor.png','New Note') . ' New Note</a></li>';
-    echo '<li><a class="fancybox fancybox.ajax" href="' . Radix::link('/file/edit?l=r') . '">' . img('/tango/24x24/actions/document-new.png','New File') . ' New File</a></li>';
+    echo '<li><a class="fancybox fancybox.ajax" href="' . Radix::link('/note/edit?l=r') . '"><i class="fa fa-plus"></i><i class="fa fa-file-text-o"></i> New Note</a></li>';
+    echo '<li><a class="fancybox fancybox.ajax" href="' . Radix::link('/file/edit?l=r') . '"><i class="fa fa-plus"></i><i class="fa fa-file"></i> New File</a></li>';
 
     // echo '<li><a href="' . Radix::link('/task/edit">' . img('/silk/1.3/note_add.png','Add Task') . ' Task</a></li>';
     // echo '<li><a href="' . Radix::link('/alert/edit">' . img('/silk/1.3/bell_add.png','New Alert') . ' New Alert</a></li>';
-    echo '<li><a href="' . Radix::link('/timesheet') . '">' . img('/tango/24x24/actions/appointment-new.png','New Timer') . ' Time Sheet</a></li>';
+    echo '<li><a href="' . Radix::link('/timesheet') . '"><i class="fa fa-tasks"></i> Time Sheet</a></li>';
     // echo '<li><a class="fancybox fancybox.ajax" href="' . Radix::link('/timer/edit') . '">' . img('/tango/24x24/actions/appointment-new.png','New Timer') . ' New Timer</a></li>';
     echo '<li><hr /></li>';
 
     // Somehow get the list of possible Status and use that to build a list here, colours as well.
-    echo '<li><a href="' . Radix::link('/note') . '">' . img('/tango/24x24/apps/accessories-text-editor.png','Note List') .' Notes</a></li>';
-    echo '<li><a href="' . Radix::link('/file') . '">' . img('/tango/24x24/apps/system-file-manager.png','Files and Attachments') . ' Files</a></li>';
+    echo '<li><a href="' . Radix::link('/note') . '"><i class="fa fa-file-text-o"></i> Notes</a></li>';
+    echo '<li><a href="' . Radix::link('/file') . '"><i class="fa fa-file"></i> Files</a></li>';
     // echo '<li><a href="' . Radix::link('/calendar') . '">' . img('/tango/24x24/apps/system-file-manager.png','Calendar') . ' Calendar</a></li>';
     echo '<li><hr /></li>';
     // echo '<li><a href="' . Radix::link('/manual/'') . ' . $this->controller . '/' . $this->action . '"><img alt="Annotated Users Manual" src="' . Radix::link('/img/silk/help.png" /> Manual</a></li>';
-    echo '<li><a href="' . Radix::link('/settings') . '">' . img('/tango/24x24/categories/preferences-desktop.png','Settings') . ' Settings</a></li>';
+    echo '<li><a href="' . Radix::link('/settings') . '"><i class="fa fa-cogs"></i> Settings</a></li>';
     echo '<li><hr /></li>';
     echo '<li><a href="' . Radix::link('/auth/sign-out') . '"><i class="fa fa-sign-out"></i> Sign Out</a></li>';
     echo '</ul>';
@@ -98,7 +98,7 @@ echo '<li><a href="' . Radix::link('/workorder') . '"><i class="fa fa-clock-o"><
 
         echo '<li><hr /></li>';
         // $menu1[] = array("javascript:\$('#EmailSend').submit();",img('/silk/1.3/email_go.png','Send Email').' Send');
-        echo '<li><a href="' . Radix::link('/workorder/pdf?w=' . $_ENV['workorder']['id']) . '">' , img('/silk/1.3/page_white_acrobat.png','Download as PDF') , ' Printable</a></li>';
+        echo '<li><a href="' . Radix::link('/workorder/pdf?w=' . $_ENV['workorder']['id']) . '"><i class="fa fa-file-pdf-o"></i> Printable</a></li>';
 
         //$menu1[] = array('/service_orders/history',img('/silk/1.3/folder_page.png').' History');
         echo '<li><hr /></li>';
@@ -110,7 +110,7 @@ echo '<li><a href="' . Radix::link('/workorder') . '"><i class="fa fa-clock-o"><
         echo '<li><a href="' . Radix::link('/workorder/new') . '"><i class="fa fa-plus-square"></i> Create</a></li>';
     }
 
-    echo '<li><a href="' . Radix::link('/workorder/report') . '">' . img('/silk/1.3/chart_bar_edit.png','Reports') . ' Reports</a></li>';
+    echo '<li><a href="' . Radix::link('/workorder/report') . '"><i class="fa fa-bar-chart"></i> Reports</a></li>';
     // echo '<li><a href="' . Radix::link('/workorder/index/project' . img('/silk/1.3/table_lightning.png','List Projects') . ' Projects</a></li>';
     //$menu[] = array('/service_orders/index/project',img('/silk/1.3/table_lightning.png','List Projects').' Projects');
     echo '</ul>';
@@ -121,8 +121,8 @@ echo '<li><a href="' . Radix::link('/invoice') . '"><i class="fa fa-usd"></i> In
     echo '<ul>';
 
     if (!empty($_ENV['invoice']['id'])) {
-        echo '<li><a href="' . Radix::link('/invoice/view?i=' . $_ENV['invoice']['id']) . '">' . img('/silk/1.3/layout.png','Invoice') . ' &laquo;Invoice #' . $this->Invoice->id . '</a></li>';
-        echo '<li><a href="' . Radix::link('/invoice/pdf?i=' . $_ENV['invoice']['id']) . '">' . img('/silk/1.3/page_white_acrobat.png','Get PDF') . ' Printable</a></li>';
+        echo '<li><a href="' . Radix::link('/invoice/view?i=' . $_ENV['invoice']['id']) . '"><i class="fa fa-usd"></i> &laquo;Invoice #' . $this->Invoice->id . '</a></li>';
+        echo '<li><a href="' . Radix::link('/invoice/pdf?i=' . $_ENV['invoice']['id']) . '"><i class="fa fa-file-pdf-o"></i> Printable</a></li>';
         echo '<li><hr /></li>';
     }
 
@@ -135,7 +135,7 @@ echo '<li><a href="' . Radix::link('/invoice') . '"><i class="fa fa-usd"></i> In
     // echo '<li><a href="' . Radix::link('/invoice/filter/active') . '">' , img('/silk/1.3/money_add.png','Active').' Active</a></li>';
     // echo '<li><a href="' . Radix::link('/invoice/filter/past_due') . '">' , img('/silk/1.3/money_add.png','Past Due').' Past Due</a></li>';
     // echo '<li><a href="' . Radix::link('/invoice/filter/paid') . '">' , img('/silk/1.3/money_add.png','Paid').' Paid</a></li>';
-    echo '<li><a href="' . Radix::link('/invoice/report') . '">' . img('/silk/1.3/chart_bar_edit.png','Reports') . ' Reports</a></li>';
+    echo '<li><a href="' . Radix::link('/invoice/report') . '"><i class="fa fa-bar-chart"></i> Reports</a></li>';
     echo '</ul>';
 echo '</li>';
 
@@ -146,19 +146,19 @@ echo '<li><a href="' . Radix::link('/account') . '"><i class="fa fa-money"></i> 
     echo '<li><hr /></li>';
     echo '<li><a href="' . Radix::link('/account/edit') . '"><i class="fa fa-plus-square"></i> New Account</a></li>';
     // $menu1[] = array('/account/transaction',img('/silk/1.3/money_add.png','Transaction').' Transaction</a></li>';
-    echo '<li><a href="' . Radix::link('/account/cheque') . '">',img('/silk/1.3/money_add.png','Cheque').' Cheque</a></li>';
-    echo '<li><a href="' . Radix::link('/account.wizard') . '">',img('/silk/1.3/money_add.png','Wizard').' Wizard</a></li>';
-    echo '<li><a href="' . Radix::link('/account/reconcile') . '">',img('/silk/1.3/table_lightning.png','Reconcile to Bank Statement').' Reconcile</a></li>';
+    // echo '<li><a href="' . Radix::link('/account/cheque') . '"><i class="fa fa-bar-chart"></i> Cheque</a></li>';
+    echo '<li><a href="' . Radix::link('/account.wizard') . '"><i class="fa fa-magic"></i> Wizard</a></li>';
+    echo '<li><a href="' . Radix::link('/account/reconcile') . '"><i class="fa fa-refresh"></i> Reconcile</a></li>';
     //$menu1[] = array('/account/trial-balance',img('/silk/1.3/table_lightning.png','View Trial Balance').' Trial Balance');
-    echo '<li><a href="' . Radix::link('/account/close') . '">' , img('/silk/1.3/table_gear.png','Close Period') . ' Close Period</a></li>';
+    echo '<li><a href="' . Radix::link('/account/close') . '"><i class="fa fa-flag-checkered"></i> Close Period</a></li>';
     echo '<li><hr /></li>';
-    echo '<li><a href="' . Radix::link('/account/report/trial-balance') . '">',img('/silk/1.3/application_view_detail.png','Trial Balance').' Trial Balance</a></li>';
-    echo '<li><a href="' . Radix::link('/account/report/income') . '">',img('/silk/1.3/application_view_detail.png','Income Statement').' Income (P&amp;L)</a></li>';
-    echo '<li><a href="' . Radix::link('/account/report/owner-equity') . '">',img('/silk/1.3/application_view_detail.png','Owners Equity Statement').' Owner Equity</a></li>';
-    echo '<li><a href="' . Radix::link('/account/report/balance-sheet') . '">',img('/silk/1.3/application_view_detail.png','Balance Sheet').' Balance Sheet</a></li>';
-    echo '<li><a href="' . Radix::link('/account/report/cash-flow') . '">',img('/silk/1.3/application_view_detail.png','Cash Flow Statement').' Cash Flow</a></li>';
-    echo '<li><hr /></li>';
-    echo '<li><a href="' . Radix::link('/account/tax-form') . '">Tax Schedules</a></li>';
+    echo '<li><a href="' . Radix::link('/account/report/trial-balance') . '">Trial Balance</a></li>';
+    echo '<li><a href="' . Radix::link('/account/report/income') . '">Income (P&amp;L)</a></li>';
+    echo '<li><a href="' . Radix::link('/account/report/owner-equity') . '">Owner Equity</a></li>';
+    echo '<li><a href="' . Radix::link('/account/report/balance-sheet') . '">Balance Sheet</a></li>';
+    echo '<li><a href="' . Radix::link('/account/report/cash-flow') . '">Cash Flow</a></li>';
+    // echo '<li><hr /></li>';
+    // echo '<li><a href="' . Radix::link('/account/tax-form') . '">Tax Schedules</a></li>';
     echo '</ul>';
 echo '</li>';
 

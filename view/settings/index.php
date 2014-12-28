@@ -7,17 +7,21 @@
 	$this->view->PreferenceList = $cu->preference();
 */
 
+namespace Edoceo\Imperium;
+
+use Edoceo\Radix\Radix;
+
 echo '<ul>';
-echo '<li><a href="' . radix::link('/settings/business') . '">Business Profile</li>';
-echo '<li><a href="' . radix::link('/settings/profile') . '">User Profile</li>';
-echo '<li><a href="' . radix::link('/settings/password') . '">Change Password</li>';
-echo '<li><a href="' . radix::link('/settings/registry') . '">View Regsitry</li>';
-echo '<li><a href="' . radix::link('/settings/session') . '">View Session</li>';
+echo '<li><a href="' . Radix::link('/settings/business') . '">Business Profile</li>';
+echo '<li><a href="' . Radix::link('/settings/profile') . '">User Profile</li>';
+echo '<li><a href="' . Radix::link('/settings/password') . '">Change Password</li>';
+echo '<li><a href="' . Radix::link('/settings/registry') . '">View Regsitry</li>';
+echo '<li><a href="' . Radix::link('/settings/session') . '">View Session</li>';
 // note: to change the Business Profile edit the settings in APP /config/bootstrap.php
 
 if (!is_writable(APP_ROOT . '/var/')) {
 	echo '<li class="fail">Not Writable: ' . APP_ROOT . '/var/</li>';
-	echo '<li>chown -R ' . get_current_user() . ':' . APP_ROOT . '/var</li>';
+	echo '<li>chown -R ' . posix_getuid() . ':' . APP_ROOT . '/var</li>';
 }
 
 echo '</ul>';
@@ -25,23 +29,23 @@ echo '</ul>';
 
 echo '<hr>';
 echo '<ul>';
-echo '<li><a href="' . radix::link('/settings/dashboard') . '">Dashboard</a> - Configure layout and selection criteria</li>';
-echo '<li><a href="' . radix::link('/settings/workorder') . '">Work Orders</a> - Orders from Contacts to perform Work</li>';
-echo '<li><a href="' . radix::link('/settings/invoice') . '">Invoices</a> - Invoicing Contacts</li>';
-echo '<li><a href="' . radix::link('/settings/accounting') . '">Accounting</a> - Configure the accounting system.</li>';
+echo '<li><a href="' . Radix::link('/settings/dashboard') . '">Dashboard</a> - Configure layout and selection criteria</li>';
+echo '<li><a href="' . Radix::link('/settings/workorder') . '">Work Orders</a> - Orders from Contacts to perform Work</li>';
+echo '<li><a href="' . Radix::link('/settings/invoice') . '">Invoices</a> - Invoicing Contacts</li>';
+echo '<li><a href="' . Radix::link('/settings/accounting') . '">Accounting</a> - Configure the accounting system.</li>';
 //echo "<li>" . $html->link('Purchse Orders','/settings/purchase_orders') . " - Purchase Equipment from Vendors</li>";
 //echo "<hr />";
 //echo "<ul>";
-//echo "<li>" . radix::link('/settings/tags','Tags') . " - Object Tags and Categories</li>\n";
-//echo "<li>" . radix::link('/settings/labels','Colour Labels') . " - Colour labels for each Object</li>\n";
+//echo "<li>" . Radix::link('/settings/tags','Tags') . " - Object Tags and Categories</li>\n";
+//echo "<li>" . Radix::link('/settings/labels','Colour Labels') . " - Colour labels for each Object</li>\n";
 //echo "<li><a href='./plugins.php'>Plugins</a> - Frame Based Plugins</li>\n";
 //echo "<li><a href='./remember.php'>Remember Me</a> - Configure Imperium to remember you on this computer.</li>";
 
 //echo "</ul>\n";
 //echo "<hr />";
 //echo "<ul>";
-echo '<li><a href="' . radix::link('/settings/users') . '">Users</a></li>';
-echo '<li><a href="' . radix::link('/selenium') . '">Run Selenum Tests</a></li>';
+echo '<li><a href="' . Radix::link('/settings/users') . '">Users</a></li>';
+echo '<li><a href="' . Radix::link('/selenium') . '">Run Selenum Tests</a></li>';
 echo '</ul>';
 
 
@@ -53,11 +57,11 @@ echo '</ul>';
 <h3>Payment Notifications</h3>
 <dl>
 <dt>Gumroad</dt>
-<dd><code>https://<?=radix::$host?><?=radix::$base?>/hook/gumroad?auth=SomeKey</code></dd>
+<dd><code>https://<?=Radix::$host?><?=Radix::$base?>/hook/gumroad?auth=SomeKey</code></dd>
 <dd>See <a href="https://gumroad.com/settings/developer" target="_blank">gumroad.com/settings/developer</a> for more information.</dd>
 
 <dt>Paypal</dt>
-<dd><code>https://<?=radix::$host?><?=radix::$base?>/hook/paypal</code></dd>
+<dd><code>https://<?=Radix::$host?><?=Radix::$base?>/hook/paypal</code></dd>
 
 <dt>Square</dt>
 <dd>
@@ -70,17 +74,17 @@ echo '</ul>';
 </dd>
 
 <dt>Stripe</dt>
-<dd><code>https://<?=radix::$host?><?=radix::$base?>/hook/stripe</code></dd>
+<dd><code>https://<?=Radix::$host?><?=Radix::$base?>/hook/stripe</code></dd>
 
 </dl>
 
 <?php
 
 echo '<h2>Imperium Session</h2>';
-radix::dump($_SESSION);
+Radix::dump($_SESSION);
 
 echo '<h2>Imperium Config</h2>';
-radix::dump($_ENV);
+Radix::dump($_ENV);
 
 echo '<h2>Imperium Server</h2>';
-radix::dump($_SERVER);
+Radix::dump($_SERVER);
