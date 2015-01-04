@@ -74,9 +74,10 @@ class Invoice extends ImperiumBase
     */
     function save()
     {
-        // @todo Due to Zend bug we cannot re-make these fields NULL the only can be 0 (which would violate FK)
-        // if (empty($this->bill_address_id)) $this->bill_address_id = new Zend_Db_Expr('null');
-        // if (empty($this->ship_address_id)) $this->ship_address_id = new Zend_Db_Expr('null');
+        if (empty($this->_data['auth_user_id'])) {
+			$this->_data['auth_user_id'] = $_SESSION['uid'];
+        }
+
         parent::save();
         $this->_updateBalance();
     }
