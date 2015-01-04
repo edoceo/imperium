@@ -99,26 +99,32 @@ $(function() {
 		var m = null;
 
 		var alpha = $('#time_alpha').val();
+		var h_alpha, m_alpha = 0;
+		var h_omega, m_omega = 0;
 		var omega = $('#time_omega').val();
 
-		if (m = alpha.match(/^(\d+):(\d+):00$/)) {
+		if (m = alpha.match(/^(\d+):(\d+)$/)) {
 			h_alpha = parseInt(m[1]);
 			m_alpha = parseInt(m[2]) / 60 * 100;
 		}
 
-		if (m = omega.match(/^(\d+):(\d+):00$/)) {
+		if (m = omega.match(/^(\d+):(\d+)$/)) {
 			h_omega = parseInt(m[1]);
 			m_omega = parseInt(m[2]) / 60 * 100;
 		}
 
-		if (omega < alpha) {
+		if (h_omega < h_alpha) {
 			h_omega += 24;
 		}
 
 		var h_delta = h_omega - h_alpha;
 		var m_delta = Math.abs(m_omega - m_alpha);
+		if (m_delta > 0) {
+			--h_delta;
+			m_delta = 100 - m_delta;
+		}
 
-		$('#a_quantity').val(h_delta + '.' + m_delta);
+		$('#a_quantity').val(h_delta.toFixed(0) + '.' + m_delta.toFixed(0));
 	});
 
 	$('input[type=number]').on('blur', function() {
