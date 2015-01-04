@@ -129,7 +129,7 @@ class Invoice extends ImperiumBase
     {
         // Base_Diff::note($this,'Invoice Item #' . $id . ' removed');
         SQL::query('DELETE FROM invoice_item WHERE id = ?', array($id));
-        $this->updateBalance();
+        $this->_updateBalance();
         return true;
     }
 
@@ -217,21 +217,27 @@ class Invoice extends ImperiumBase
     private function _updateBalance()
     {
     	$id = intval($this->_data['id']);
+    	
+    	$sql = 'UPDATE invoice SET';
+    	$sql.= ' sub_total = ( SELECT SUM ( quantity * rate * (1 + tax_rate)) FROM invoice_item WHERE invoice_id = ?)';;
+    	$sql.= ', tax_total = ( SELECT SUM ( quantity * rate * tax_rate) FROM invoice_item WHERE invoice_id = ?)';
+    	$sql.= ', bill_amount = ( SELECT SUM ( quantity * rate * (1 + tax_rate)) FROM invoice_item WHERE invoice_id = ?) ';
+    	// $sql.= ', paid_amount =
+    	$sql.= ' WHERE id = ? ';
+    	SQL::query($sql, array($id, $id, $id, $id));
+    	// die(SQL::lastError());
 
         // $r = array();
-        $sql = 'UPDATE invoice SET ';
         // $r['sub_total'] = floatval($d->fetchOne("select sum( quantity * rate ) as sub_total from invoice_item where invoice_id={$id}"));
-        $sql.= ' sub_total = ?, ';
-        $arg[] = floatval(SQL::fetch_one("select sum( quantity * rate ) as sub_total from invoice_item where invoice_id={$id}"));
         // $r['tax_total'] = floatval($d->fetchOne("select sum( quantity * rate * tax_rate) as tax_total from invoice_item where invoice_id={$id}"));
-        $sql.= ' sub_total = ?, ';
-        $arg[] = floatval(SQL::fetch_one("select sum( quantity * rate * tax_rate) as tax_total from invoice_item where invoice_id={$id}"));
-        // $r['bill_amount'] = $r['sub_total'] + $r['tax_total'];
-        $sql.= ' bill_amount = ?, ';
-        $arg[] = $r['sub_total'] + $r['tax_total'];
-        // $r['paid_amount'] = $this->getTransactionSum();
-        $sql.= ' paid_amount = ? ';
-        $arg[] = $this->getTransactionSum();
+        // $sql.= ' sub_total = ?, ';
+        // $arg[] = floatval(SQL::fetch_one("select sum( quantity * rate * tax_rate) as tax_total from invoice_item where invoice_id={$id}"));
+        // // $r['bill_amount'] = $r['sub_total'] + $r['tax_total'];
+        // $sql.= ' bill_amount = ?, ';
+        // $arg[] = $r['sub_total'] + $r['tax_total'];
+        // // $r['paid_amount'] = $this->getTransactionSum();
+        // $sql.= ' paid_amount = ? ';
+        // $arg[] = $this->getTransactionSum();
 
         // @todo Force Marking as Paid Amount Full?
         // if ($this->status == 'Paid') {
@@ -240,11 +246,6 @@ class Invoice extends ImperiumBase
         // $w = array('id = ?'=>$this->id);
         // $t = new Zend_Db_Table(array('name'=>'invoice'));
         // $t->update($r,$w);
-
-        $sql.= ' WHERE id = ?';
-        $arg[] = $id;
-
-        SQL::query($sql, $arg);
 
         // @todo Save to Object Data?
         // $this->bill_amount = $r['bill_amount'];

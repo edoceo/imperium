@@ -138,8 +138,11 @@ textarea {
 input[type="date"] {
 	width:12em;
 }
-input[type="number"] {
-	width:6em;
+input[type="number"],
+input[type="time"]
+{
+	text-align: right;
+	width: 6em;
 }
 select {
 	margin:4px;
@@ -320,9 +323,23 @@ div.edit-show {
 .g {
 	font-size: 110%;
 }
+
+/** Label */
 .l {
-	text-align: left;
+	font-size: 22px;
+	font-weight: bold;
+	line-height: 32px;
+	position: relative;
+	text-align:right;
+	top: 50%;
+	/*
+	transform: translateY(-50%);
+	-ms-transform: translateY(-50%);
+	-webkit-transform: translateY(-50%);
+	*/
 }
+
+
 .r {
 	text-align: right;
 }

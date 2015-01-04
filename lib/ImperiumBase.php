@@ -330,7 +330,7 @@ class ImperiumBase implements \ArrayAccess
 		}
 
 		// Find and Return Value
-		$ot = SQL::fetchRow($sql);
+		$ot = SQL::fetch_row($sql);
 		if ($ot) {
 			switch ($r) {
 			case 'id':

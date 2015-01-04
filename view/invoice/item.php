@@ -14,45 +14,42 @@ namespace Edoceo\Imperium;
 
 use Edoceo\Radix\HTML\Form;
 
-$n = Form::text('name', $this->InvoiceItem['name']);
 $q = Form::number('quantity', $this->InvoiceItem['quantity'], array('size'=>8));
-$r = Form::number('rate', $this->InvoiceItem->rate, array('size'=>8));
-$u = Form::select('unit', $this->InvoiceItem->unit, $this->UnitList);
+$r = Form::number('rate', $this->InvoiceItem['rate'], array('size'=>8));
+$u = Form::select('unit', $this->InvoiceItem['unit'], $this->UnitList);
 
-echo '<div>';
+?>
 
-echo '<form method="post">';
-echo '<table>';
+<form method="post">
+<div class="pure-g">
+	<div class="pure-u-1-5"><div class="l">Kind:</div></div>
+	<div class="pure-u-1-5"><?= Form::select('kind', $this->InvoiceItem['kind'], InvoiceItem::$kind_list) ?></div>
+	<div class="pure-u-1-5"><div class="l">Date:</div></div>
+	<div class="pure-u-2-5"><?= Form::date('date', $this->InvoiceItem['date'], array('id'=>'woi_date','size'=>12)) ?></div>
 
-// Kind & Date
-$k = Form::select('kind', $this->InvoiceItem['kind'], InvoiceItem::$kind_list);
-$d = Form::date('date', $this->InvoiceItem['date'], array('id'=>'woi_date','size'=>12));
+	<div class="pure-u-1-5"><div class="l">Name:</div></div>
+	<div class="pure-u-4-5"><td colspan="3"><?= Form::text('name', $this->InvoiceItem['name']) ?></div>
 
-echo "<tr><td class='b r'>Kind:</td><td>$k</td><td class='b r'>Date:</td><td>$d</td></tr>";
+	<div class="pure-u-1-5"><div class="l">Note:</div></div>
+	<div class="pure-u-4-5"><textarea name="note"><?= html($this->InvoiceItem['note']) ?></textarea></div>
 
-echo "<tr><td class='l'>Cost:</td><td>$q&nbsp;<strong>@</strong>&nbsp;$r&nbsp;<strong>per</strong>&nbsp;$u</td>";
-echo '<td class="b r">Tax:</td><td><input maxlength="6" name="tax_rate" size="5" type="number" value="' . tax_rate_format($this->InvoiceItem->tax_rate) .'"></td>';
-echo '</tr>';
+	<div class="pure-u-1-5"><div class="l">Cost:</div></div>
+	<div class="pure-u-2-5"><?= $q ?> <strong>@</strong> <?=$r ?> <strong>per</strong> <?=$u?></div>
+	<div class="pure-u-1-5"><div class="l">Tax:</div></div>
+	<div class="pure-u-1-5"><input maxlength="6" name="tax_rate" size="5" step="0.001" type="number" value="<?= tax_rate_format($this->InvoiceItem['tax_rate']) ?>">%</div>
 
-// Name
-echo '<tr><td class="l">Name:</td><td colspan="3">' . $n . '</td></tr>';
+	<div class="pure-u-1-5"><div class="l" title="Input and email address here and a notification email will be sent">Notify:</div></div>
+	<div class="pure-u-4-5"><?= Form::text('notify', $this->WorkOrderItem['notify']) ?></div>
 
-// Note
-echo '<tr><td class="l">Note:</td><td colspan="3"><textarea name="note">'. html($this->InvoiceItem['note']) . '</textarea></td></tr>';
+</div>
 
-// Notify
-echo '<tr>';
-echo '<td class="l">';
-echo '<span title="Input and email address here and a notification email will be sent">Notify:</span>';
-echo '</td>';
-echo '<td colspan="3">' . Form::text('notify', $this->WorkOrderItem['notify']) . '</td>';
-echo '</tr>';
+<?php
 
 // @todo Link to Work System (Redmine, Trac, &c)
 // if (!empty($this->InvoiceItem->workorder_item_id)) {
-// 
+//
 //     $woi = new WorkOrderItem($this->InvoiceItem->workorder_item_id);
-// 
+//
 //     echo '<tr>';
 //     echo '<td class="l">WorkOrder</td>';
 //     echo '<td>';
@@ -64,19 +61,16 @@ echo '</tr>';
 //     echo '<tr>';
 // }
 
-echo '</table>';
-
 // Buttons
 echo '<div class="cmd">';
 echo '<input name="invoice_id" type="hidden" value="' . $this->Invoice['id'] . '">';
 echo '<button class="good" name="a" type="submit" value="save">Save</button>';
 if (!empty($this->InvoiceItem['id'])) {
-    echo '<button class="good" name="a" type="submit" value="delete">Delete</button>';
+    echo '<button class="fail" name="a" type="submit" value="delete">Delete</button>';
 }
 echo '</div>';
 
 echo '</form>';
-echo '</div>';
 
 // History
 // $args = array(

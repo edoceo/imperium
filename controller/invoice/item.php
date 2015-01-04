@@ -7,6 +7,9 @@
 
 namespace Edoceo\Imperium;
 
+use Edoceo\Radix\Radix;
+use Edoceo\Radix\Session;
+
 $ii = new InvoiceItem(intval($_GET['id']));
 
 switch (strtolower($_POST['a'])) {
@@ -14,9 +17,12 @@ case 'cancel':
 	Radix::redirect('/invoice/view?i=' . $ii['invoice_id']);
 	break;
 case 'delete':
-	$ii->delete();
-	Session::flash('info', sprintf('Invoice Item #%d was deleted',$ii['id']));
-	Radix::redirect('/invoice/view?i=' . $ii['invoice_id']);
+
+	$I = new Invoice($ii['invoice_id']);
+	$I->delInvoiceItem($ii['id']);
+	// $ii->delete();
+	Session::flash('warn', sprintf('Invoice Item #%d was deleted', $ii['id']));
+	Radix::redirect('/invoice/view?i=' . $I['id']);
 	break;
 case 'save':
 
@@ -46,8 +52,9 @@ default: // Create
 	}
 
 	// View
-	$this->InvoiceItem = new InvoiceItem(intval($_GET['id'])); // $db->fetchRow("select * from invoice_item where id = $id");
-	$this->Invoice = new Invoice($this->InvoiceItem->invoice_id); // $db->fetchRow("select * from invoice where id = {$this->view->InvoiceItem->invoice_id}");
+	$this->InvoiceItem = new InvoiceItem(intval($_GET['id']));
+	$this->Invoice = new Invoice($this->InvoiceItem['invoice_id']);
 
-	$_ENV['title'] = array('Invoice','#'.$this->Invoice->id,'Item','#' . $this->InvoiceItem['id']);
+	$_ENV['title'] = array('Invoice #'.$this->Invoice['id'],'Item #' . $this->InvoiceItem['id']);
 }
+
