@@ -3,9 +3,9 @@
 	Contact Channel Model
 
 	@copyright	2008 Edoceo, Inc
-	@package    edoceo-imperium
-	@link       http://imperium.edoceo.com
-	@since      File available since Release 1013
+	@package	edoceo-imperium
+	@link	   http://imperium.edoceo.com
+	@since	  File available since Release 1013
 */
 
 namespace Edoceo\Imperium;

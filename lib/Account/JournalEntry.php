@@ -1,8 +1,8 @@
 <?php
 /**
 	@copyright	2008 Edoceo, Inc
-	@link       http://imperium.edoceo.com
-	@since      File available since Release 2008.06.20
+	@link	   http://imperium.edoceo.com
+	@since	  File available since Release 2008.06.20
 */
 
 namespace Edoceo\Imperium;

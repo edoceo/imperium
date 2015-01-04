@@ -1,12 +1,12 @@
 <?php
 /**
-    @file
-    @breif Work Order Item Model
+	@file
+	@breif Work Order Item Model
 
-    @copyright	2003 Edoceo, Inc
-    @package    edoceo-imperium
-	@link       http://imperium.edoceo.com
-    @since      2003
+	@copyright	2003 Edoceo, Inc
+	@package	edoceo-imperium
+	@link	   http://imperium.edoceo.com
+	@since	  2003
 */
 
 namespace Edoceo\Imperium;
@@ -15,13 +15,13 @@ class WorkOrderItem extends ImperiumBase
 {
 	protected $_table = 'workorder_item';
 
-    public static $kind_list = array(
+	public static $kind_list = array(
 		'Labour'=>'Labour',
 		'Parts'=>'Parts',
 		'Registration'=>'Registration',
 		'Subscription'=>'Subscription',
 		'Travel'=>'Travel'
-    );
+	);
 
 	/**
 		Imperium Functions
@@ -29,16 +29,16 @@ class WorkOrderItem extends ImperiumBase
 	function __construct($x=null)
 	{
 		$this->_data['date'] = date('Y-m-d');
-        $this->_data['a_quantity'] = 2;
-        $this->_data['a_unit'] = 'hr';
-        $this->_data['e_unit'] = 'hr';
+		$this->_data['a_quantity'] = 2;
+		$this->_data['a_unit'] = 'hr';
+		$this->_data['e_unit'] = 'hr';
 
 		parent::__construct($x);
 
-        if (empty($this->_data['time_alpha'])) {
-            $this->_data['time_alpha'] = strftime('%H:%M',mktime(date('H')-1,0,0));
-            $this->_data['time_omega'] = strftime('%H:%M',mktime(date('H')+1,0,0));
-        }
+		if (empty($this->_data['time_alpha'])) {
+			$this->_data['time_alpha'] = strftime('%H:%M',mktime(date('H')-1,0,0));
+			$this->_data['time_omega'] = strftime('%H:%M',mktime(date('H')+1,0,0));
+		}
 	}
 
 	/**
@@ -47,9 +47,9 @@ class WorkOrderItem extends ImperiumBase
 	function save()
 	{
 
-        if (empty($this->_data['auth_user_id'])) {
-        	$this->_data['auth_user_id'] = $_SESSION['uid'];
-        }
+		if (empty($this->_data['auth_user_id'])) {
+			$this->_data['auth_user_id'] = $_SESSION['uid'];
+		}
 
 		if (strtotime($this->_data['date']) == false) {
 			$this->_data['date'] = null;
@@ -58,8 +58,8 @@ class WorkOrderItem extends ImperiumBase
 			if (empty($this->_data[$x])) $this->_data[$x] = 0;
 		}
 
-        $this->a_tax_rate = tax_rate_fix($this->a_tax_rate);
-        $this->e_tax_rate = tax_rate_fix($this->e_tax_rate);
+		$this->a_tax_rate = tax_rate_fix($this->a_tax_rate);
+		$this->e_tax_rate = tax_rate_fix($this->e_tax_rate);
 
 		parent::save();
 	}

@@ -29,22 +29,22 @@ class App
 
 		// Merge Enviroment
 		if ($x = getenv('IMPERIUM_CONFIG')) {
-		    $x = APP_ROOT . '/etc/' . $x . '.ini';
-		    if ( (is_file($x)) && (is_readable($x)) ) {
-		        $x = parse_ini_file($x,true);
-		        $x = array_change_key_case($x);
-		        $_ENV = array_merge_recursive($_ENV,$x);
-		    }
+			$x = APP_ROOT . '/etc/' . $x . '.ini';
+			if ( (is_file($x)) && (is_readable($x)) ) {
+				$x = parse_ini_file($x,true);
+				$x = array_change_key_case($x);
+				$_ENV = array_merge_recursive($_ENV,$x);
+			}
 		}
 		// Radix::dump($_ENV);
 
 		// Reduce to Singular Values
 		foreach ($_ENV as $k0=>$opt) {
-		    foreach ($opt as $k1=>$x) {
-		        if (is_array($_ENV[$k0][$k1])) {
-		            $_ENV[$k0][$k1] = array_pop($_ENV[$k0][$k1]);
-		        }
-		    }
+			foreach ($opt as $k1=>$x) {
+				if (is_array($_ENV[$k0][$k1])) {
+					$_ENV[$k0][$k1] = array_pop($_ENV[$k0][$k1]);
+				}
+			}
 		}
 		// Radix::dump($_ENV);
 

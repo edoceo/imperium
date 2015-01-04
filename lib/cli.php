@@ -5,7 +5,7 @@
 
 
 // Configurations
-$cli_opt = getopt('c:d:ms',array('config:','date:','diff:','mail','send'));
+$cli_opt = getopt('c:d:ms',array('config:','cron','date:','diff:','mail','send'));
 
 if (empty($cli_opt['config']) && !empty($cli_opt['c'])) $cli_opt['config'] = $cli_opt['c'];
 if (!empty($cli_opt['config'])) putenv('IMPERIUM_CONFIG=' . $cli_opt['config']);
