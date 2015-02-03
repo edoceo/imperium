@@ -6,7 +6,7 @@
 namespace Edoceo\Imperium;
 
 use Edoceo\Radix\Radix;
-use Edoceo\Radix\Sesssion;
+use Edoceo\Radix\Session;
 
 $Invoice = new Invoice(intval($_GET['i']));
 
@@ -54,7 +54,7 @@ case 'copy':
 case 'paid':
 
 	// New Transaction Holder
-	$at = new stdClass();
+	$at = new \stdClass();
 	$at->AccountJournalEntry = new AccountJournalEntry();
 	$at->AccountJournalEntry['date'] = date('Y-m-d');
 	$at->AccountJournalEntry['note'] = 'Payment for Invoice #' . $Invoice['id'];
@@ -157,7 +157,7 @@ case 'post':
 
 	// Generate a Transaction to Post to This Clients Account Receivable
 
-	$at = new stdClass();
+	$at = new \stdClass();
 	$at->AccountJournalEntry = new AccountJournalEntry();
 	$at->AccountJournalEntry['date'] = $Invoice['date'];
 	$at->AccountJournalEntry['note'] = 'Charge for Invoice #' . $Invoice['id'];
@@ -212,11 +212,13 @@ case 'save':
 	$Invoice->save();
 
 	if ($id) {
-		$this->_s->msg = 'Invoice #' . $Invoice['id'] . ' saved';
+		Session::flash('info', 'Invoice #' . $Invoice['id'] . ' saved');
 	} else {
-		$this->_s->msg = 'Invoice #' . $Invoice['id'] . ' created';
+		Session::flash('info', 'Invoice #' . $Invoice['id'] . ' created');
 	}
-	$this->redirect('/invoice/view?i=' . $Invoice['id']);
+
+	Radix::redirect('/invoice/view?i=' . $Invoice['id']);
+
 	break;
 
 // Email the Invoice
@@ -235,7 +237,7 @@ case 'send':
 
 	$ah = Auth_Hash::make($Invoice);
 
-	$this->_s->EmailComposeMessage = new stdClass();
+	$this->_s->EmailComposeMessage = new \stdClass();
 	$this->_s->EmailComposeMessage->to = $co['email'];
 	//$ss->EmailComposeMessage->to = $co->email;
 	//if ($co->kind != 'Person') {
