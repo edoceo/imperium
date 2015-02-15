@@ -30,22 +30,6 @@ echo '</div>';
 
 ?>
 
-<style>
-.l {
-	font-size: 22px;
-	font-weight: bold;
-	line-height: 32px;
-	position: relative;
-	text-align:right;
-	top: 50%;
-	/*
-	transform: translateY(-50%);
-	-ms-transform: translateY(-50%);
-	-webkit-transform: translateY(-50%);
-	*/
-}
-</style>
-
 <div class="pure-g" style="position:relative;">
 <div class="pure-u-1-5"><div class="l">Contact:</div></div>
 <div class="pure-u-4-5"><?= Form::text('contact',$this->Contact['contact'])?></div>

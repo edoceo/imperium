@@ -16,32 +16,32 @@ class ContactAddress extends ImperiumBase
 	protected $_table = 'contact_address';
 
 	public static $kind_list = array(
-		 'Billing' => 'Billing',
-		 'Home' => 'Home',
-		 'Mailing' => 'Mailing',
-		 'Office' => 'Office',
+		'Billing' => 'Billing',
+		'Home' => 'Home',
+		'Mailing' => 'Mailing',
+		'Office' => 'Office',
 	);
 
-	public $address;
-	public $city;
-	public $post_code;
-	public $kind;
-	public $rcpt;
-	public $country;
+	// public $address;
+	// public $city;
+	// public $post_code;
+	// public $kind;
+	// public $rcpt;
+	// public $country;
 
 	/**
 		Called when object used in string context - PHP Magic
 	*/
 	function __toString() {
 
-		$ret = strlen($this->address) ? trim($this->address) : null;
+		$ret = strlen($this->_data['address']) ? trim($this->_data['address']) : null;
 		$ret.= strlen($ret) ? "\n" : null;
-		if (stripos($ret,$this->city.', ')===false) {
-			$ret.= strlen($this->city) ? $this->city.', ' : null;
+		if (stripos($ret, $this->_data['city'].', ') === false) {
+			$ret.= strlen($this->_data['city']) ? $this->_data['city'].', ' : null;
 		}
 		//if (stripos($ret,"$this->state ")===false) $ret.= strlen($this->state) ? "$this->state " : null;
-		if ((strlen($this->post_code)>0) && (stripos($ret,$this->post_code)===false)) {
-			$ret.= strlen($this->post_code) ? $this->post_code : null;
+		if ((strlen($this->_data['post_code'])>0) && (stripos($ret, $this->_data['post_code'])===false)) {
+			$ret.= strlen($this->_data['post_code']) ? $this->_data['post_code'] : null;
 		}
 		//if (stripos($ret,$this->country)===false) $ret.= strlen(trim($this->country)) ? "$this->country" : null;
 		return trim(str_replace(array("\r","\n","\t"),' ',$ret));
