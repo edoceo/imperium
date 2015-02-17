@@ -14,12 +14,16 @@ use Edoceo\Radix\Radix;
 if (empty($data)) {
     return;
 }
-// Radix::dump($data);
-if (!($data instanceof ContactChannel)) {
-	echo "Invalid Parameter to stub-channel";
-	return(0);
-}
 
+if (is_array($data)) {
+	// OK
+} elseif (is_object($data)) {
+	// Radix::dump($data);
+	if (!($data instanceof ContactChannel)) {
+		echo "Invalid Parameter to stub-channel (" . print_r($data) . ')';
+		return(0);
+	}
+}
 
 // Just a String? Promot to Object
 // if (is_string($data)) {
