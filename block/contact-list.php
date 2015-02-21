@@ -23,6 +23,7 @@ foreach ($data['list'] as $item) {
     echo '<tr class="rero ' . $item['kind'] . '">';
     // Show Contact, if none show Name
     echo '<td>';
+	echo '<a href="' . Radix::link('/contact/view?c=' . $item['id']) . '">';
     switch (strtolower($item['kind'])) {
     case 'company':
         echo '<i class="fa fa-building"></i> ';
@@ -34,7 +35,8 @@ foreach ($data['list'] as $item) {
     default:
         echo '<i class="fa fa-user"></i> ';
     }
-    echo '<a href="' . Radix::link('/contact/view?c=' . $item['id']) . '">' . html($item['name']) . '</a>';
+	echo html($item['name']);
+    echo '</a>';
     echo '</td>';
 
     echo '<td>' . Radix::block('stub-channel',array('kind' => ContactChannel::PHONE, 'data'=>$item['phone'])) . '</td>';
