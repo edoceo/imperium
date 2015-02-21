@@ -12,14 +12,14 @@ use Edoceo\Radix\HTML\Form;
 
 // Web Site & Email
 $url = parse_url($this->Contact['url']);
-if (empty($url['scheme'])) $url['scheme'] = 'http';
-if (empty($url['host'])) {
-    $url['host'] = $url['path'];
-    $url['path'] = '/';
+if (!empty($url['host']) && !empty($url['path'])) {
+	if (empty($url['scheme'])) $url['scheme'] = 'http';
+	if (empty($url['host'])) {
+		$url['host'] = $url['path'];
+		$url['path'] = '/';
+	}
+	$this->Contact['url'] = sprintf('%s://%s%s', $url['scheme'], $url['host'], $url['path']);
 }
-//print_r($url);
-$this->Contact['url'] = sprintf('%s://%s%s', $url['scheme'], $url['host'], $url['path']);
-
 
 echo '<form action="' . Radix::link('/contact/save?c=' . $this->Contact['id']) . '" method="post">';
 
@@ -238,7 +238,7 @@ if ($this->Contact['id'] == 0) {
 }
 
 // Sub Addresses
-echo '<h2 id="ContactAddressHead"><a href="' . Radix::link('/contact/address?a=make') . '"><i class="fa fa-home"></i> Addresses</a></h2>';
+echo '<h2 id="ContactAddressHead"><a href="' . Radix::link('/contact/address?' . http_build_query(array('a' => 'make', 'c' => $this->Contact['id']))) . '"><i class="fa fa-home"></i> Addresses</a></h2>';
 if ($this->ContactAddressList) {
     echo "<div id='ContactAddressList'>";
     echo Radix::block('contact-address-list', array('list'=>$this->ContactAddressList));

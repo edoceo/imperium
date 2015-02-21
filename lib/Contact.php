@@ -12,6 +12,7 @@
 namespace Edoceo\Imperium;
 
 use Edoceo\Radix\DB\SQL;
+use Edoceo\Radix\Filter;
 
 class Contact extends ImperiumBase
 {
@@ -84,7 +85,7 @@ class Contact extends ImperiumBase
 		$this->_data['name'] = trim($this->_data['name']);
 		$this->_data['email'] = strtolower($this->_data['email']);
 		$this->_data['sound_code'] = metaphone($this->_data['name']);
-		$this->_data['url'] = strtolower($this->_data['url']);
+		$this->_data['url'] = Filter::uri($this->_data['url']);
 		$this->_data['ats'] = date('Y-m-d H:i:s');
 		$this->_data['cts'] = null;
 
