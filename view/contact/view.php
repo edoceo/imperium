@@ -55,10 +55,43 @@ if (!empty($this->Contact['parent_id'])) {
 <div class="pure-u-1-5"><div class="l">Tags:</div></div>
 <div class="pure-u-4-5"><?= Form::text('tags', $this->Contact['tags']) ?></div>
 
+<div class="pure-u-1 pure-u-md-1-2">
+	<!-- Table -->
+	<div>Kind: <?= Form::select('kind', $this->Contact['kind'], $this->KindList) ?></div>
+	<div>Status: <?= Form::select('status', $this->Contact['status'], $this->StatusList) ?></div>
+<?php
+	echo '<div>';
+	if (empty($this->Account['id'])) {
+		echo 'Account';
+	} else {
+		echo '<a href="' . Radix::link('/account/ledger?' . http_build_query(array('id'=>$this->Account->id))) . '">Account</a>:';
+	}
+	echo '</td><td colspan="3">';
+	if (empty($this->Account['id'])) {
+		echo '<button class="s" name="c" title="Create new Account for this Contact" type="submit" value="create-account">Create</button>';
+	} else {
+		echo '<input id="account" style="width:20em;" type="text" value="' . $this->Account['full_name'] . '">';
+		echo '<input id="account_id" name="account_id" type="hidden" value="' . $this->Account['id'] . '">';
+		echo ' $' . number_format($this->Account['balance'],2);
+	}
+	echo '</div>';
+?>
+</div>
+<div class="pure-u-1 pure-u-md-1-2">
+<?php
+$img = sprintf('/img/content/contact/%u/0.jpg', $this->Contact['id']);
+$src = sprintf('%s/webroot/%s', APP_ROOT, $img);
+if (is_file($src)) {
+	echo '<img alt="Snap" src="' . Radix::link($img) . '">';
+}
+?>
 </div>
 
-<?php
+</div>
 
+
+
+<?php
 echo '<table>';
 
 // First & Last Name
@@ -68,12 +101,6 @@ echo '<table>';
 //     echo '<td class="l" style="width:5em;">Last:</td><td>' . $this->formText('last_name',$this->Contact['last_name'],array('style'=>'width: 100%')) . '</td>';
 //     echo '</tr>';
 // }
-
-// Kind & Status
-echo '<tr>';
-echo '<td class="l">Kind:</td><td>' . Form::select('kind', $this->Contact['kind'], $this->KindList) . '</td>';
-echo '<td class="l">Status:</td><td>' . Form::select('status', $this->Contact['status'], $this->StatusList) . '</td>';
-echo '</tr>';
 
 // Channels
 if (!empty($this->ContactChannelList)) {
@@ -123,36 +150,21 @@ if (!empty($this->ContactChannelList)) {
 //     $AccountList[$x->id] = $x->full_name;
 // }
 
-echo '<tr>';
-echo '<td class="l">';
-if (empty($this->Account['id'])) {
-    echo 'Account';
-} else {
-    echo '<a href="' . Radix::link('/account/ledger?' . http_build_query(array('id'=>$this->Account->id))) . '">Account</a>:';
-}
-echo '</td><td colspan="3">';
-if (empty($this->Account['id'])) {
-    echo '<button class="s" name="c" title="Create new Account for this Contact" type="submit" value="create-account">Create</button>';
-} else {
-    echo '<input id="account" style="width:20em;" type="text" value="' . $this->Account['full_name'] . '">';
-    echo '<input id="account_id" name="account_id" type="hidden" value="' . $this->Account['id'] . '">';
-    echo ' $' . number_format($this->Account['balance'],2);
-}
-echo '</td></tr>';
-
 // Google Contact Detail
-echo '<tr><td class="l">Google:</td><td colspan="3"><div id="contact-google-area"><input id="contact-google-view" type="button" value="View" ></div></td></tr>';
+// echo '<tr><td class="l">Google:</td><td colspan="3"><div id="contact-google-area"><input id="contact-google-view" type="button" value="View" ></div></td></tr>';
 
 
 echo '</table>';
 
 echo '<div class="bf">';
+echo '<button class="exec" name="a" type="submit" value="capture">Photo</button>';
 echo '<input class="good" name="a" type="submit" value="Save">';
 //if ($this->Contact['kind'] == 'Person') {
 //    echo '<input name="c" title="Mark as Billing Contact" type="submit" value="Bill">';
 //    echo '<input name="c" title="Mark as Shipping Contact" type="submit" value="Ship">';
 //}
 echo '<input class="fail" name="a" type="submit" value="Delete">';
+//echo '<a class="button" href="' . Radix::link('/contact/merge?' . http_build_query(array('c' => $this->Contact['id']))) . '">Merge</a>';
 echo '</div>';
 echo '</form>';
 

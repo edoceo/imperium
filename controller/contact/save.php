@@ -13,6 +13,9 @@ $id = intval($_GET['c']);
 
 // Delete Requested?
 switch (strtolower($_POST['a'])) {
+case 'capture':
+	Radix::redirect('/contact/capture?c=' . $id);
+	break;
 case 'create-account':
 
 	$c = new Contact($id);
