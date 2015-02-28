@@ -20,6 +20,7 @@ class Contact extends ImperiumBase
 	const FLAG_SHIP = 0x00000040;
 	const FLAG_HIDE = 0x08000000;
 
+	protected $_meta = array();
 	protected $_table = 'contact';
 
 	/**
@@ -98,6 +99,15 @@ class Contact extends ImperiumBase
 		}
 
 		$ret = parent::save();
+
+		// Save Meta-Deta
+		if (0 != count($this->_meta)) {
+			$meta = $this->_meta;
+			$this->_meta = array();
+			foreach ($meta as $k => $v) {
+				$this->setMeta($k, $v);
+			}
+		}
 
 		return $ret;
 
@@ -328,4 +338,64 @@ class Contact extends ImperiumBase
 	$rs = $idc->query($sql);
 	return pg_numrows($rs) ? $rs : null;
   }
+
+	/**
+		Delete a Key
+		@param $k Key
+	*/
+	function delMeta($k)
+	{
+		if (empty($this->_data['id'])) {
+			unset($this->_meta[$k]);
+		}
+
+		$sql = 'DELETE FROM contact_meta';
+		$sql.= ' WHERE contact_id = ? AND key = ?';
+		$arg = array($this->_data['id'], $k);
+		$res = SQL::query($sql, $arg);
+
+		return $res;
+	}
+
+	/**
+		Delete a Key
+		@param $k Key
+	*/
+	function getMeta($k)
+	{
+		$sql = 'SELECT val FROM contact_meta';
+		$sql.= ' WHERE contact_id = ? AND key = ?';
+		$arg = array($this->_data['id'], $k);
+		$res = SQL::fetch_one($sql, $arg);
+
+		return $res;
+	}
+
+	/**
+		@param $k Key
+		@param $v Value
+	*/
+	function setMeta($k, $v)
+	{
+		if (empty($this->_data['id'])) {
+			// Save for the future
+			$this->_meta[$k] = $v;
+			return;
+		}
+
+		$sql = 'SELECT id FROM contact_meta';
+		$sql.= ' WHERE contact_id = ? AND key = ?';
+		$arg = array($this->_data['id'], $k);
+		$chk = SQL::fetch_one($sql, $arg);
+
+		if ($chk) {
+			$sql = 'UPDATE contact_meta SET val = ? WHERE contact_id = ? AND key = ?';
+			$arg = array($v, $this->_data['id'], $k);
+		} else {
+			$sql = 'INSERT INTO contact_meta (contact_id, key, val) VALUES (?, ?, ?)';
+			$arg = array($this->_data['id'], $k, $v);
+		}
+		return $res;
+	}
+
 }
