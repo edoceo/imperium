@@ -10,6 +10,7 @@ use Edoceo\Radix\Radix;
 use Edoceo\Radix\Session;
 
 $id = intval($_GET['c']);
+$co = new Contact($id);
 
 // Delete Requested?
 switch (strtolower($_POST['a'])) {
@@ -18,20 +19,18 @@ case 'capture':
 	break;
 case 'create-account':
 
-	$c = new Contact($id);
-
 	$a = new Account();
 	$a->kind = 'Sub: Customer';
 	$a->code = $id;
-	$a->name = $c->name;
+	$a->name = $co->name;
 	$a->parent_id = $_ENV['account']['contact_ledger_container_id'];
 	$a->active = 't';
 	$a->link_to = 'contact';
 	$a->link_id = $id;
 	$a->save();
 
-	$c->account_id = $a->id;
-	$c->save();
+	$co->account_id = $a->id;
+	$co->save();
 
 	$this->redirect('/contact/view?c=' . $id);
 
@@ -57,14 +56,24 @@ case 'delete':
 	$this->redirect('/contacts/view?c=' . $id);
 	*/
 
-	$c = new Contact($id);
-	$c->delete();
+	$co->delete();
 	Session::flash('info', 'Contact #' . $id . ' was deleted');
 	Radix::redirect('/contact');
 
+	break;
+
+case 'ping':
+
+   $ce = new Contact_Event();
+   $ce['contact_id'] = $co['id'];
+   $ce['cts'] = $_SERVER['REQUEST_TIME']; // Create Time
+   $ce['ats'] = $_SERVER['REQUEST_TIME'] + (86400 * 4); // Alert Time
+   $ce->save();
+
+   break;
+
 case 'save':
 
-	$co = new Contact($id);
 	$co['auth_user_id'] = $_SESSION['uid'];
 	$co['account_id']  = intval($_POST['account_id']);
 	$co['parent_id']  = null;
