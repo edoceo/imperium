@@ -39,9 +39,9 @@ require_once('App_Mail.php');
 require_once('ACL.php');
 require_once('ImperiumBase.php');
 require_once('ImperiumView.php');
+require_once('Auth/Hash.php');
 require_once('Base/File.php');
 require_once('Base/Note.php');
-// require_once('Base/Diff.php');
 require_once('Base/Unit.php');
 require_once('Account.php');
 require_once('Account/JournalEntry.php');
@@ -49,6 +49,7 @@ require_once('Account/LedgerEntry.php');
 require_once('Contact.php');
 require_once('Contact/Address.php');
 require_once('Contact/Channel.php');
+require_once('Contact/Event.php');
 require_once('Invoice.php');
 require_once('InvoiceItem.php');
 require_once('WorkOrder.php');
@@ -86,6 +87,7 @@ function html($x)
     return htmlspecialchars($x,ENT_QUOTES,'UTF-8',false);
 }
 
+// @deprecated
 function img($img,$alt=null)
 {
     $src = !empty($_SERVER['HTTPS']) ? 'https:' : 'http:';
@@ -129,9 +131,9 @@ function tax_rate_format($x)
 {
     $x = floatval($x);
     if ($x < 1) {
-        $x = sprintf('%0.4f',$x * 100);
-        $x = preg_replace('/0+$/',null,$x);
-        $x.= '%';
+        $x = sprintf('%0.3f', $x * 100);
+        // $x = preg_replace('/0+$/', null, $x);
+        // $x.= '%';
     }
     return $x;
 }
