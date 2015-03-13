@@ -11,6 +11,7 @@
     "minimum-stability": "dev",
 	"require": {
 		"edoceo/radix": "dev-master",
+		"erusev/parsedown": "1.5.1",
 		"michelf/php-markdown": "1.4.1",
         "pear-pear.php.net/Net_SMTP2": "0.1.0"
     },
