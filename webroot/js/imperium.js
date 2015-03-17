@@ -81,6 +81,23 @@ $(function() {
 		e.preventDefault();
 	});
 
+	// Zooms the text as you mouse-over
+	$('.grow-huge').on('mouseover', function(e) {
+
+		if (0 == $('#grow-huge-show').length) {
+			$(document.body).append('<div id="grow-huge-show"></div>');
+		}
+
+		var html = $(this).text();
+		html = html.replace('@', '<br>@<br>');
+
+		$('#grow-huge-show').html(html);
+		$('#grow-huge-show').on('mouseout', function() {
+			$('#grow-huge-show').remove();
+		});
+
+	});
+
 	$(".star").on("click", star_step );
 
 });

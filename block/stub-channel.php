@@ -42,11 +42,16 @@ if (is_array($data)) {
 // $edit_link = Radix::link('/contact.channel/view?id=' . $data['id']);
 
 switch ($data['kind']) {
-case ContactChannel::FAX:
-	$icon = '<i class="fa fa-fax"></i>';
+case ContactChannel::EMAIL:
+	echo '<a href="' . Radix::link('/contact/channel?id=' . $data['id']) . '"><i class="fa fa-envelope-o"></i></a> ';
 	break;
+case ContactChannel::FAX:
+	echo '<a href="' . Radix::link('/contact/channel?id=' . $data['id']) . '"><i class="fa fa-fax"></i></a> ';
+	break;
+case ContactChannel::PHONE:
+	echo '<a href="' . Radix::link('/contact/channel?id=' . $data['id']) . '"><i class="fa fa-phone"></i></a> ';
 default:
-	$icon = null;
+	echo '<a href="' . Radix::link('/contact/channel?id=' . $data['id']) . '">??</a> ';
 }
 
 // Name Formatting
@@ -58,8 +63,6 @@ if (strlen($data['name'])) {
 switch ($data['kind']) {
 case ContactChannel::PHONE:
 case ContactChannel::FAX:
-
-	echo '<a href="' . Radix::link('/contact/channel?id=' . $data['id']) . '"><i class="fa fa-phone"></i></a> ';
 
     if (preg_match('/[a-z]+/', $data['data'])) {
         // Ignore
@@ -86,7 +89,9 @@ case ContactChannel::FAX:
         // $f .= (strlen($ext) ? " x $ext" : null);
     }
 
+    echo '<span class="grow-huge">';
     echo sprintf('<a href="tel://%s">%s</a>', $link, html($data['data']));
+    echo '</span>';
 
     // if (!empty($data->id)) {
     // 
@@ -112,13 +117,14 @@ case ContactChannel::FAX:
 
 case ContactChannel::EMAIL:
 
-	echo '<a href="' . Radix::link('/contact/channel?id=' . $data['id']) . '"><i class="fa fa-envelope-o"></i></a> ';
-
     //$email_img = img('/silk/1.3/email_edit.png','Edit Email');
     //$image = img('/silk/1.3/email_go.png','Email');
+    echo '<span class="grow-huge">';
     echo '<a href="' . Radix::link('/email/compose?to=' . $data['data']) .'">';
     echo html($data['data']);
     echo '</a>';
+    echo '</span>';
+
     // if (!empty($data['id'])) {
     //     $i = img('/silk/1.3/email_edit.png','Edit Email');
     //     $html.= '<a href="' . $edit_link . '">';
