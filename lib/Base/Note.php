@@ -21,20 +21,27 @@ class Base_Note extends ImperiumBase
 	*/
 	function __construct($x=null)
 	{
-		$this->cts = date('Y-m-d');
-		$this->name = 'New Note';
-		$this->kind = 'Note';
-		$this->status = 'New';
+		$this->_data['cts'] = date('Y-m-d');
+		$this->_data['name'] = 'New Note';
+		$this->_data['kind'] = 'Note';
+		$this->_data['status'] = 'New';
 		parent::__construct($x);
 	}
+
 	/**
 		Saves the Note
 	*/
 	function save()
 	{
-		if ((strlen($this->cts)==0) || (strtotime($this->cts)<0)) $this->cts = date('Y-m-d');
-		$this->data = str_replace("\r\n","\n",$this->data);
-		$this->data = utf8_decode($this->data);
+		$this->_data['name'] = substr(strtok($this->_data['note'], "\n"), 0, 255);
+
+		$this->_data['note'] = str_replace("\r\n","\n",$this->_data['note']);
+		$this->_data = utf8_decode($this->_data['note']);
+
+		if ( (empty($this->_data['cts'])) || (strtotime($this->_data['cts']) <= 0) ) {
+			$this->_data['cts'] = date('Y-m-d');
+		}
+
 		return parent::save();
 	}
 }

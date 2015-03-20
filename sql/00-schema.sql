@@ -600,7 +600,7 @@ CREATE TABLE base_note (
     name character varying(256),
     star character varying(8) null,
     link character varying(64),
-    data text
+    note text
 );
 
 
