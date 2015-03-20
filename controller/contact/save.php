@@ -9,6 +9,8 @@ namespace Edoceo\Imperium;
 use Edoceo\Radix\Radix;
 use Edoceo\Radix\Session;
 
+use Edoceo\Imperium\Contact\Event;
+
 $id = intval($_GET['c']);
 $co = new Contact($id);
 
@@ -64,13 +66,17 @@ case 'delete':
 
 case 'ping':
 
-   $ce = new Contact_Event();
-   $ce['contact_id'] = $co['id'];
-   $ce['cts'] = $_SERVER['REQUEST_TIME']; // Create Time
-   $ce['ats'] = $_SERVER['REQUEST_TIME'] + (86400 * 4); // Alert Time
-   $ce->save();
+	$ce = new Event();
+	$ce['contact_id'] = $co['id'];
+	$ce['cts'] = $_SERVER['REQUEST_TIME']; // Create Time
+	$ce['xts'] = $_SERVER['REQUEST_TIME'] + (86400 * 4); // Alert Time
+	$ce['name'] = 'Ping this Contact';
+	$ce->save();
 
-   break;
+	Session::flash('info', 'Contact #' . $id . ' Event Added');
+	Radix::redirect('/contact');
+
+	break;
 
 case 'save':
 
