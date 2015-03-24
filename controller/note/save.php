@@ -34,14 +34,14 @@ case 'save':
 	$n['kind'] = $_POST['kind'];
 	// Append on Conversation
 	if ($n['kind'] == 'Conversation') {
-		$data = trim($n['data']);
+		$data = trim($n['note']);
 		$data.= "\n---\n# " . date('D \t\h\e jS \o\f F Y \a\t H:i') . "\n";
-		$data.= $_POST['data'];
-		$n['data'] = trim($data);
+		$data.= $_POST['note'];
+		$n['note'] = trim($data);
 	} else {
-		$n['data'] = trim($_POST['data']);
+		$n['note'] = trim($_POST['note']);
 	}
-	$x = str_replace(array('<br>','<br/>','<br />'), "\n", $n['data']);
+	$x = str_replace(array('<br>','<br/>','<br />'), "\n", $n['note']);
 	$x = trim(strip_tags($x));
 	$n['name'] = strtok($x,"\n");
 	$n['link'] = $_POST['link'];

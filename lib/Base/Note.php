@@ -33,10 +33,10 @@ class Base_Note extends ImperiumBase
 	*/
 	function save()
 	{
-		$this->_data['name'] = substr(strtok($this->_data['note'], "\n"), 0, 255);
-
 		$this->_data['note'] = str_replace("\r\n","\n",$this->_data['note']);
 		$this->_data['note'] = utf8_decode($this->_data['note']);
+
+		$this->_data['name'] = substr(strtok($this->_data['note'], "\n"), 0, 255);
 
 		if ( (empty($this->_data['cts'])) || (strtotime($this->_data['cts']) <= 0) ) {
 			$this->_data['cts'] = date('Y-m-d');

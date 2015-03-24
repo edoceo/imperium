@@ -58,19 +58,19 @@ if (!empty($this->Note['link'])) {
 
 // Previous text of Conversation
 if ($this->Note['kind'] == 'Conversation') {
-    echo '<tr><td colspan="6"><pre>' . $this->Note['data'] . '</pre></td></tr>';
-    $this->Note['data'] = null;
+    echo '<tr><td colspan="6"><pre>' . $this->Note['note'] . '</pre></td></tr>';
+    $this->Note['note'] = null;
 }
 
 echo '</td></tr>';
 echo '</table>';
 
-$c = ceil(substr_count($this->Note['data'],"\n")) + 2;
+$c = ceil(substr_count($this->Note['note'],"\n")) + 2;
 $rows = max(intval($c),12);
 
 echo '<div>';
-echo '<textarea id="note-text" name="data" style="height:' . $rows . 'em;padding:0px;width:700px;">';
-echo html($this->Note['data']);
+echo '<textarea id="note-text" name="note" style="height:' . $rows . 'em;padding:0px;width:700px;">';
+echo html($this->Note['note']);
 echo '</textarea>';
 echo '</div>';
 
