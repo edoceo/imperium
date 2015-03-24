@@ -10,7 +10,7 @@ use Edoceo\Radix\Radix;
 use Edoceo\Radix\HTML\Form;
 
 $this->Note = new Base_Note($_GET['id']);
-$_ENV['title'] = $this->Note['name'];
+$_ENV['title'] = array('Note', 'Edit', $this->Note['name']);
 
 $note = $this->Note['note'];
 

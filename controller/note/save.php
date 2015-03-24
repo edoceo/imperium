@@ -8,20 +8,27 @@ namespace Edoceo\Imperium;
 use Edoceo\Radix\Radix;
 use Edoceo\Radix\Session;
 
-Radix::dump($_POST);
+// Radix::dump($_POST);
 
 $n = new Base_Note(intval($_POST['id']));
+if (empty($n['auth_user_id'])) {
+	$n['auth_user_id'] = $_SESSION['uid'];
+}
 
 switch (strtolower($_POST['a'])) {
 case 'delete':
+
 	// @todo Check if IsAllowed
 	$back_page = '/';
 	$n->delete();
 	Session::flash('info', 'Note #' . $id . ' was deleted');
 	break;
+
 case 'edit':
+
 	Radix::redirect('/note/edit?id=' . $n['id']);
 	break;
+
 case 'save':
 
 	$n['kind'] = $_POST['kind'];
@@ -38,8 +45,6 @@ case 'save':
 	$x = trim(strip_tags($x));
 	$n['name'] = strtok($x,"\n");
 	$n['link'] = $_POST['link'];
-
-	if (empty($n['auth_user_id'])) $n['auth_user_id'] = $_SESSION['uid'];
 
 	$n->save();
 
