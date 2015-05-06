@@ -7,34 +7,60 @@
 namespace Edoceo\Imperium;
 
 use Edoceo\Radix\Radix;
+use Edoceo\Radix\Session;
 use Edoceo\Radix\DB\SQL;
 
-// Collect Search Term
-$term = null;
-if (!empty($_GET['q'])) {
-	$term = trim($_GET['q']);
-} else {
-	$term = $_SESSION['search-term'];
+switch ($_POST['a']) {
+case 'rebuild':
+	require_once(APP_ROOT . '/lib/Search.php');
+	Search::update();
+	Session::flash('info', 'Search Index Updated');
+	break;
 }
-if (strlen($term)==0) {
+
+// Collect Search Term
+$q = null;
+if (!empty($_GET['q'])) {
+	$q = trim($_GET['q']);
+}
+// Search Commands
+switch (substr($q, 0, 1)) {
+case '!':
+	break;
+case '#':
+	// Something with this Tag or Keyword
+	break;
+case '$':
+	break;
+case '*':
+	break;
+case '@':
+	break;
+case '~':
+	// Promote to RegExp Search
+	$q = '.*' . substr($q, 1) . '.*';
+	break;
+default:
+	// Check for ID Specific Queries
+	switch (strtok(strtolower($q),':')) {
+	case 'co':
+		Radix::redirect('/contact/view?c=' . strtok(':'));
+	case 'iv':
+		Radix::redirect('/invoice/view?i=' . strtok(':'));
+	case 'je':
+		Radix::redirect('/account/transaction?id=' . strtok(':'));
+	case 'wo':
+		Radix::redirect('/workorder/view?w=' . strtok(':'));
+	}
+}
+
+// Last Check
+if (strlen($q)==0) {
 	$_ENV['title'] = array('Search','No Term Submitted');
-	unset($_SESSION['search-term']);
+	_draw_rebuild_prompt();
 	return(0);
 }
 
-$_SESSION['search-term'] = $term;
-
-// Check for ID Specific Queries
-switch (strtok(strtolower($term),':')) {
-case 'co':
-	Radix::redirect('/contact/view?c=' . strtok(':'));
-case 'iv':
-	Radix::redirect('/invoice/view?i=' . strtok(':'));
-case 'je':
-	Radix::redirect('/account/transaction?id=' . strtok(':'));
-case 'wo':
-	Radix::redirect('/workorder/view?w=' . strtok(':'));
-}
 
 // PostgreSQL Full Text Search
 $sql = 'SELECT link_to,link_id,name, ';
@@ -44,25 +70,21 @@ $sql.= ' FROM full_text ';
 $sql.= ' WHERE tv @@ plainto_tsquery(?) ';
 $sql.= ' ORDER BY sort DESC, name';
 $arg = array(
-	$term,
-	$term,
-	$term,
+	$q,
+	$q,
+	$q,
 );
 
 $res = SQL::fetch_all($sql, $arg);
 $c = count($res);
 
-$_ENV['title'] = array('Search',$term, ($c==1 ? '1 result' : $c . ' results') );
-
-if (empty($term)) {
-    echo '<p class="info">No search performed</p>';
+if ($c == 0) {
+    echo '<p class="info">No results found for: ' . $q . '</p>';
+    _draw_rebuild_prompt();
     return(0);
 }
 
-if (count($res) == 0) {
-    echo '<p class="info">No results found for: ' . $term . '</p>';
-    return(0);
-}
+$_ENV['title'] = array('Search',$q, ($c==1 ? '1 result' : $c . ' results') );
 
 echo '<dl>';
 
@@ -104,4 +126,59 @@ foreach ($res as $k=>$item) {
     echo '<dt><a href="' . $link . '">' . $html . '</a></dt>';
     echo '<dd>' . $item['snip'] . '</dd>';
 
+}
+
+// Additional Search Contacts
+$arg = array();
+$sql = 'SELECT DISTINCT contact.id, contact.name';
+$sql.= ' FROM contact';
+$sql.= ' LEFT JOIN contact_address ON contact.id = contact_address.contact_id';
+$sql.= ' LEFT JOIN contact_channel ON contact.id = contact_channel.contact_id';
+$sql.= ' LEFT JOIN contact_meta ON contact.id = contact_meta.contact_id';
+$sql.= ' WHERE';
+$sql.= ' contact.name #op# ?';
+$arg[] = $q;
+$sql.= ' OR contact.email #op# ?';
+$arg[] = $q;
+$sql.= ' OR contact.phone #op# ?';
+$arg[] = $q;
+$sql.= ' OR contact_address.address #op# ?';
+$arg[] = $q;
+$sql.= ' OR contact_channel.data #op# ?';
+$arg[] = $q;
+$sql.= ' OR contact_meta.val #op# ?';
+$arg[] = $q;
+
+if (preg_match('/[_%]/', $q)) {
+	$sql = str_replace('#op#', 'LIKE', $sql);
+} elseif (preg_match('/[\.\*\+]/', $q)) {
+	$sql = str_replace('#op#', '~*', $sql);
+} else {
+	$sql = str_replace('#op#', '=', $sql);
+}
+
+//Radix::dump($sql);
+//Radix::dump($arg);
+$res = SQL::fetch_all($sql, $arg);
+// Radix::dump(SQL::lastError());
+
+if (count($res) != 0) {
+	// Radix::dump($res);
+	foreach ($res as $rec) {
+		echo '<dt><a href="' . Radix::link('/contact/view?c=' . $rec['id']) . '">Contact: ' . $rec['name'] . '</a></dt>';
+	}
+}
+
+echo '</dl>';
+
+/**
+	Draw the Rebuild Button
+*/
+function _draw_rebuild_prompt()
+{
+	echo '<div style="padding:32px;">';
+	echo '<form method="post">';
+	echo '<button name="a" value="rebuild">Rebuild Index</button>';
+	echo '</form>';
+	echo '</div>';
 }
