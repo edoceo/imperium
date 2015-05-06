@@ -62,6 +62,8 @@ if (strlen($q)==0) {
 }
 
 
+$idx = 0;
+
 // PostgreSQL Full Text Search
 $sql = 'SELECT link_to,link_id,name, ';
 $sql.= ' ts_headline(ft,plainto_tsquery(?)) as snip, ';
@@ -76,19 +78,12 @@ $arg = array(
 );
 
 $res = SQL::fetch_all($sql, $arg);
-$c = count($res);
-
-if ($c == 0) {
-    echo '<p class="info">No results found for: ' . $q . '</p>';
-    _draw_rebuild_prompt();
-    return(0);
-}
-
-$_ENV['title'] = array('Search',$q, ($c==1 ? '1 result' : $c . ' results') );
 
 echo '<dl>';
 
 foreach ($res as $k=>$item) {
+
+	$idx++;
 
     $html = htmlspecialchars($item['name']);
     $html.= ' <span class="s">(' . sprintf('%01d%%', $item['sort']*100) . ')</span>';
@@ -148,28 +143,34 @@ $sql.= ' OR contact_channel.data #op# ?';
 $arg[] = $q;
 $sql.= ' OR contact_meta.val #op# ?';
 $arg[] = $q;
+$sql.= ' ORDER BY contact.name';
 
 if (preg_match('/[_%]/', $q)) {
 	$sql = str_replace('#op#', 'LIKE', $sql);
-} elseif (preg_match('/[\.\*\+]/', $q)) {
+} elseif (preg_match('/[\.\*\+\?]/', $q)) {
 	$sql = str_replace('#op#', '~*', $sql);
 } else {
 	$sql = str_replace('#op#', '=', $sql);
 }
 
-//Radix::dump($sql);
-//Radix::dump($arg);
+// Radix::dump($sql);
+// Radix::dump($arg);
 $res = SQL::fetch_all($sql, $arg);
 // Radix::dump(SQL::lastError());
-
-if (count($res) != 0) {
-	// Radix::dump($res);
-	foreach ($res as $rec) {
-		echo '<dt><a href="' . Radix::link('/contact/view?c=' . $rec['id']) . '">Contact: ' . $rec['name'] . '</a></dt>';
-	}
+// Radix::dump($res);
+foreach ($res as $rec) {
+	$idx++;
+	echo '<dt><a href="' . Radix::link('/contact/view?c=' . $rec['id']) . '">Contact: ' . $rec['name'] . '</a></dt>';
 }
 
 echo '</dl>';
+
+if ($idx == 0) {
+    _draw_rebuild_prompt();
+    return(0);
+}
+
+$_ENV['title'] = array('Search', $q, ($idx==1 ? '1 result' : $idx . ' results') );
 
 /**
 	Draw the Rebuild Button
