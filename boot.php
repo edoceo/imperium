@@ -56,6 +56,8 @@ require_once('WorkOrder.php');
 require_once('WorkOrderItem.php');
 
 require_once(APP_ROOT . '/vendor/autoload.php');
+require_once('PDF/Base.php');
+require_once('PDF/Invoice.php');
 
 // Load Application Config
 App::load_config();
