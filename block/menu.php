@@ -80,7 +80,9 @@ echo '<li><a href="' . Radix::link('/contact') . '"><i class="fa fa-users"></i> 
     echo '<li><a href="' . Radix::link('/contact?kind=vendors') . '"><i class="fa fa-truck"></i> Vendors</a></li>';
     echo '<li><a href="' . Radix::link('/contact/labels') . '"><i class="fa fa-file-text-o"></i> Mail Labels</a></li>';
     //echo '<li><a href="' . Radix::link('/contact/export') . '">' . img('/silk/1.3/lorry.png','Export').' Export</a></li>';
-    echo '<li><a href="' . Radix::link('/contact/sync') . '"><i class="fa fa-refresh"></i> Sync</a></li>';
+	echo '<li><hr></li>';
+	echo '<li><a href="' . Radix::link('/contact/import') . '"><i class="fa fa-cloud-upload"></i> Import</a></li>';
+	echo '<li><a href="' . Radix::link('/contact/sync') . '"><i class="fa fa-refresh"></i> Sync</a></li>';
     echo '</ul>';
 echo '</li>';
 
@@ -121,7 +123,7 @@ echo '<li><a href="' . Radix::link('/invoice') . '"><i class="fa fa-usd"></i> In
     echo '<ul>';
 
     if (!empty($_ENV['invoice']['id'])) {
-        echo '<li><a href="' . Radix::link('/invoice/view?i=' . $_ENV['invoice']['id']) . '"><i class="fa fa-usd"></i> &laquo;Invoice #' . $this->Invoice->id . '</a></li>';
+        echo '<li><a href="' . Radix::link('/invoice/view?i=' . $_ENV['invoice']['id']) . '"><i class="fa fa-usd"></i> &laquo;Invoice #' . $_ENV['invoice']['id'] . '</a></li>';
         echo '<li><a href="' . Radix::link('/invoice/pdf?i=' . $_ENV['invoice']['id']) . '"><i class="fa fa-file-pdf-o"></i> Printable</a></li>';
         echo '<li><hr /></li>';
     }
