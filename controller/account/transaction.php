@@ -30,7 +30,14 @@ case 'delete':
 	$aje->delete();
 
 	Session::flash('info', sprintf('Journal Entry %d deleted', $aje['id']));
-	Radix::redirect('/account');
+
+	// Redirect
+	$ret = '/account';
+	if (!empty($_GET['r']) && ('/' == substr($_GET['r'], 0, 1))) {
+		$ret = $_GET['r'];
+	}
+
+	Radix::redirect($ret);
 
 	break;
 
