@@ -6,7 +6,9 @@
 
 namespace Edoceo\Imperium;
 
-use Radix;
+use Edoceo\Radix;
+use Edoceo\Radix\Session;
+use Edoceo\Radix\DB\SQL;
 
 // View!
 $id = intval($_GET['id']);
@@ -22,6 +24,16 @@ $_ENV['title'] = array('Accounts','Transaction', $id ? "#$id" : 'New' );
 if (!empty($_POST['a'])) $_POST['a'] = strtolower($_POST['a']);
 
 switch ($_POST['a']) {
+case 'delete':
+
+	$aje = new AccountJournalEntry(intval($_GET['id']));
+	$aje->delete();
+
+	Session::flash('info', sprintf('Journal Entry %d deleted', $aje['id']));
+	Radix::redirect('/account');
+
+	break;
+
 case 'save':
 case 'save-copy':
 
@@ -168,11 +180,10 @@ if ($id) {
 	$this->FileList = $this->AccountJournalEntry->getFiles();
 // } elseif (isset($this->_s->AccountTransaction)) {
 } elseif (!empty($_SESSION['account-transaction'])) {
-	die('no-account-sessoin');
-	$this->AccountJournalEntry = $_SESSION['account-transaction']['aje']; // $this->_s->AccountTransaction->AccountJournalEntry;
-	$this->AccountLedgerEntryList = $this->_s->AccountTransaction->AccountLedgerEntryList;
+	$this->AccountJournalEntry = $_SESSION['account-transaction']->AccountJournalEntry;
+	$this->AccountLedgerEntryList = $_SESSION['account-transaction']->AccountLedgerEntryList;
 	// @todo Here on on Save (above)?
-	unset($this->_s->AccountTransaction);
+	// unset($_SESSION['account-transaction']);
 } else {
 	$this->AccountJournalEntry = new AccountJournalEntry(null);
 	$this->AccountLedgerEntryList = array();

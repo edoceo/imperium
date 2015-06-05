@@ -7,11 +7,13 @@
 
 namespace Edoceo\Imperium;
 
+use Edoceo\Radix\DB\SQL;
+
 class AccountJournalEntry extends ImperiumBase
 {
 	protected $_table = 'account_journal';
 
-	function __construct($x)
+	function __construct($x=null)
 	{
 		parent::__construct($x);
 		if (empty($this->_data['date'])) {

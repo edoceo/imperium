@@ -25,7 +25,7 @@ echo '<button value="search">Search</button>';
 echo '</div>';
 
 echo '<p><strong>Cash</strong> basis, reports for money collected when B&amp;O</p>';
-echo '<p>Accounts for Period: ' . $this->AccountPeriod['date_alpha'] . ' - ' . $this->AccountPeriod['date_omega'] . '</p>';
+echo '<p>Accounts for Period: ' . $this->date_alpha . ' - ' . $this->date_omega . '</p>';
 
 echo '<table>';
 

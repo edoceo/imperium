@@ -7,7 +7,7 @@
 
 namespace Edoceo\Imperium;
 
-use Edoceo\Radix\Radix;
+use Edoceo\Radix;
 use Edoceo\Radix\HTML\Form;
 
 $AccountList = array();
@@ -47,12 +47,16 @@ foreach ($this->LedgerEntryList as $le)
 {
 	//$date = AppHelper::dateNice($le['date']);
 	//$link = '/accounts/journal/entry/'.$le['account_journal_id'];
+	$link = '/account/transaction?' . http_build_query(array(
+		'id' => $le['account_journal_id'],
+		'r' => '/account/ledger?' . http_build_query(array('id' => $this->Account['id'])),
+	));
 
     echo '<tr class="rero">';
 
-    echo '<td class="c"><a href="' . Radix::link('/account/transaction?id=' . $le['account_journal_id']) . '">' . $le['date'] . '</td>';
+    echo '<td class="c"><a href="' . Radix::link($link) . '">' . $le['date'] . '</td>';
     echo '<td>' . $le['account_name'] . '/' . $le['note'] . '</td>';
-    echo sprintf('<td class="c">#%s%s</td>',$le['kind'], $le['account_journal_id']);
+    echo sprintf('<td class="c">#%s%s</td>', $le['kind'], $le['account_journal_id']);
 
     // Object Link
     if (!empty($le['link_to'])) {
@@ -63,9 +67,9 @@ foreach ($this->LedgerEntryList as $le)
 
     // Debit or Credit
 	if ($le['amount'] > 0) {
-		echo "<td>&nbsp;</td><td class='r'>" . number_format($le['amount'],2)."</td>";
+		echo '<td></td><td class="r">' . number_format($le['amount'],2) . '</td>';
 	} else {
-		echo "<td class='r'>".number_format(abs($le['amount']),2)."</td><td>&nbsp;</td>";
+		echo "<td class='r'>" . number_format(abs($le['amount']),2) . '</td><td></td>';
 	}
 
     // Amount

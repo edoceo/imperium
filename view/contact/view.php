@@ -220,6 +220,7 @@ $(function() {
     		// @see http://en.wikipedia.org/wiki/Comparison_of_webmail_providers
     		switch (h) {
     		case 'aol.com':
+    		case 'comcast.net':
     		case 'facebook.com':
     		case 'gmail.com':
     		case 'hotmail.com':

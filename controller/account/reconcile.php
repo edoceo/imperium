@@ -4,6 +4,10 @@
 	@brief Accepts Uploaded Files, Saves to Journal/Ledger
 */
 
+namespace Edoceo\Imperium;
+
+use Edoceo\Radix;
+use Edoceo\Radix\DB\SQL;
 
 // See View
 if ( ($id = intval($_GET['id'])) > 0) {
@@ -17,6 +21,7 @@ if ( ($id = intval($_GET['id'])) > 0) {
 // Preveiw
 switch (strtolower($_POST['a'])) {
 case 'upload': // Read the Uploaded Data
+
 	$_ENV['mode'] = 'view';
 	// Zend_Debug::dump($_POST);
 	// Zend_Debug::dump($_FILES);
@@ -39,7 +44,7 @@ case 'upload': // Read the Uploaded Data
 	$sql.= 'FROM account ';
 	// $sql.= "WHERE kind like 'Expense%' ";
 	$sql.= 'ORDER BY full_code ASC, code ASC';
-	$this->AccountPairList = SQL::fetchMix($sql);
+	$this->AccountPairList = SQL::fetch_mix($sql);
 
 	$_SESSION['reconcile_upload_id'] = $_POST['upload_id'];
 	$_SESSION['reconcile_offset_id'] = $_POST['offset_id'];
@@ -51,9 +56,9 @@ case 'upload': // Read the Uploaded Data
 case 'save': // Save the Uploaded Transactions
 
 	$_ENV['upload_account_id'] = $_SESSION['reconcile_upload_id'];
-	
+
 	Radix::dump($_POST);
-	exit;
+	return(0);
 
 	$c = ceil(count($_POST) / 4);
 	for ($i=1;$i<=$c;$i++) {
@@ -117,4 +122,82 @@ case 'save': // Save the Uploaded Transactions
 	Session::flash('info', "Saved $i/$c Transactions");
 
 	break;
+
+case 'save-one': // Save the Uploaded Transactions
+
+	session_write_close();
+
+	header('Content-Type: application/json');
+
+	$_ENV['upload_account_id'] = $_SESSION['reconcile_upload_id'];
+
+	// Radix::dump($_POST);
+
+	if (!empty($_POST['id'])) {
+		header('HTTP/1.1 400 Bad Request', true, 400);
+		die(json_encode(array(
+			'status' => 'failure',
+			'detail' => 'ID Exists',
+		)));
+	}
+
+	// Skip Entries Missing Date (or the last of the count)
+	if (empty($_POST['date'])) {
+		header('HTTP/1.1 400 Bad Request', true, 400);
+		die(json_encode(array(
+			'status' => 'failure',
+			'detail' => 'Invalid Date',
+		)));
+	}
+
+	// Journal Entry
+	$je = new AccountJournalEntry();
+	$je['auth_user_id'] = $_SESSION['uid'];
+	$je['date'] = $_POST['date']; // $req->getPost('date');
+	$je['note'] = $_POST['note']; // $req->getPost('note');
+	$je['kind'] = 'N'; // $req->getPost('kind');
+	$je->save();
+
+	// Debit Side
+	$dr = new AccountLedgerEntry();
+	$dr['auth_user_id'] = $_SESSION['uid'];
+	$dr['account_journal_id'] = $je['id'];
+
+	// Credit Side
+	$cr = new AccountLedgerEntry();
+	$cr['auth_user_id'] = $_SESSION['uid'];
+	$cr['account_journal_id'] = $je['id'];
+
+	if (!empty($_POST['cr'])) {
+
+		// Credit to the Upload Target Account
+		$cr['account_id'] = $_ENV['upload_account_id'];
+		$cr['amount'] = abs(preg_replace('/[^\d\.]+/',null,$_POST['cr']));
+
+		$dr['account_id'] = $_POST['offset_account_id'];
+		$dr['amount'] = abs(preg_replace('/[^\d\.]+/',null,$_POST['cr'])) * -1;
+
+	} elseif (!empty($_POST['dr'])) {
+
+		// Debit to the Upload Target Account
+		$cr['account_id'] = $_POST['offset_account_id'];
+		$cr['amount'] = abs(preg_replace('/[^\d\.]+/',null, $_POST['dr']));
+
+		$dr['account_id'] = $_ENV['upload_account_id'];
+		$dr['amount'] = abs(preg_replace('/[^\d\.]+/',null, $_POST['dr'])) * -1;
+	}
+
+	$dr->save();
+	$cr->save();
+
+	die(json_encode(array(
+		'status' => 'success',
+		'result' => array(
+			'journal_entry_id' => $je['id'],
+		),
+		'detail' => 'Journal Entry ',
+	)));
+
+	break;
+
 }

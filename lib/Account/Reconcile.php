@@ -2,10 +2,11 @@
 /**
 	@file
 	@brief Account Reconciliation Tools
-	@version $Id$
-	:mode=php:tabSize=4:
-
 */
+
+namespace Edoceo\Imperium;
+
+use Edoceo\Radix\DB\SQL;
 
 class Account_Reconcile
 {
@@ -196,7 +197,7 @@ class Account_Reconcile
 		$ret = array();
 		$fh = fopen($file,'r');
 		while ($csv = fgetcsv($fh,4096)) {
-			$je = new stdClass();
+			$je = new \stdClass();
 			if (count($csv) < 4) {
 				continue;
 			}
