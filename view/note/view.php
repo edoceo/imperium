@@ -6,7 +6,7 @@
 
 namespace Edoceo\Imperium;
 
-use Edoceo\Radix\Radix;
+use Edoceo\Radix;
 use Edoceo\Radix\HTML\Form;
 
 $this->Note = new Base_Note($_GET['id']);

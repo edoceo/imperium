@@ -9,7 +9,7 @@
 
 namespace Edoceo\Imperium;
 
-use Edoceo\Radix\Radix;
+use Edoceo\Radix;
 
 echo '<ul>';
 echo '<li><a href="' . Radix::link('/settings/business') . '">Business Profile</li>';
@@ -25,7 +25,6 @@ if (!is_writable(APP_ROOT . '/var/')) {
 }
 
 echo '</ul>';
-
 
 echo '<hr>';
 echo '<ul>';
@@ -45,7 +44,7 @@ echo '<li><a href="' . Radix::link('/settings/accounting') . '">Accounting</a> -
 //echo "<hr />";
 //echo "<ul>";
 echo '<li><a href="' . Radix::link('/settings/users') . '">Users</a></li>';
-echo '<li><a href="' . Radix::link('/selenium') . '">Run Selenum Tests</a></li>';
+// echo '<li><a href="' . Radix::link('/selenium') . '">Run Selenum Tests</a></li>';
 echo '</ul>';
 
 
@@ -55,6 +54,8 @@ echo '</ul>';
 ?>
 
 <h3>Payment Notifications</h3>
+<p>Imperium can connect with a bunch of different payment systems.</p>
+
 <dl>
 <dt>Gumroad</dt>
 <dd><code>https://<?=Radix::$host?><?=Radix::$base?>/hook/gumroad?auth=SomeKey</code></dd>
@@ -66,7 +67,7 @@ echo '</ul>';
 <dt>Square</dt>
 <dd>
 	<ol>
-	<li>Create a New Application in Square <a href="https://connect.squareup.com/apps/new">connect.squareup.com/apps/new</a>.</li>
+	<li>Create a New Application in Square <a href="https://connect.squareup.com/apps/new" target="_blank">connect.squareup.com/apps/new</a>.</li>
 	<li>Enter <em>Imperium</em> as the App Name</li>
 	<li>Enter <em>https://<?php echo $_SERVER['SERVER_NAME'] ?>/imperium/auth/square</em> as the Redirect URL</li>
 	<li>Enter the Application ID, Application Secret and Personal Access Token into your Imperium configuration</li>
@@ -74,17 +75,23 @@ echo '</ul>';
 </dd>
 
 <dt>Stripe</dt>
-<dd><code>https://<?=Radix::$host?><?=Radix::$base?>/hook/stripe</code></dd>
-
+<dd>
+	<ol>
+	<li>Create a New Webhook in Stripe: <a href="https://dashboard.stripe.com/account/webhooks" target="_blank">dashboard.stripe.com/account/webhooks</a></li>
+	<li>Add URL: <code>https://<?=radix::$host?><?=radix::$base?>/hook/stripe</code></li>
+	<li>Add once for <em>Live</em> and once for <em>Test</em> mode</li>
+	<li>Click <em>Test Webhooks</em></li>
+	</ol>
 </dl>
 
 <?php
 
-echo '<h2>Imperium Session</h2>';
-Radix::dump($_SESSION);
-
-echo '<h2>Imperium Config</h2>';
-Radix::dump($_ENV);
-
-echo '<h2>Imperium Server</h2>';
-Radix::dump($_SERVER);
+// echo '<h2>Imperium Session</h2>';
+// Radix::dump($_SESSION);
+// 
+// echo '<h2>Imperium Config</h2>';
+// Radix::dump($_ENV);
+// 
+// echo '<h2>Imperium Server</h2>';
+// Radix::dump($_SERVER);
+// 

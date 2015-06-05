@@ -5,7 +5,7 @@
 
 namespace Edoceo\Imperium;
 
-use Edoceo\Radix\Radix;
+use Edoceo\Radix;
 use Edoceo\Radix\Session;
 
 $Invoice = new Invoice(intval($_GET['i']));
@@ -192,8 +192,11 @@ case 'post':
 	$at->AccountLedgerEntryList[] = $ale;
 
 	// @deprecated
-	$this->_s->AccountTransaction = $at;
-	$this->_s->ReturnTo = sprintf('/invoice/view?i=%d', $Invoice['id']);
+	// $this->_s->AccountTransaction = $at;
+	// $this->_s->ReturnTo = sprintf('/invoice/view?i=%d', $Invoice['id']);
+
+	$_SESSION['account-transaction'] = $at;
+	$_SESSION['return-path'] = sprintf('/invoice/view?i=%d', $Invoice['id']);
 
 	Radix::redirect('/account/transaction');
 

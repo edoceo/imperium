@@ -6,7 +6,7 @@
 
 namespace Edoceo\Imperium;
 
-use Edoceo\Radix\Radix;
+use Edoceo\Radix;
 
 // if (empty($this->Page)) {
 //     return(0);

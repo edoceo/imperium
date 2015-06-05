@@ -7,7 +7,7 @@
 
 namespace Edoceo\Imperium;
 
-use Edoceo\Radix\Radix;
+use Edoceo\Radix;
 use Edoceo\Radix\Session;
 
 $ii = new InvoiceItem(intval($_GET['id']));

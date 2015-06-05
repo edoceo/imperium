@@ -6,7 +6,7 @@
 
 namespace Edoceo\Imperium;
 
-use Edoceo\Radix\Radix;
+use Edoceo\Radix;
 use Edoceo\Radix\HTML\Form;
 
 
@@ -242,6 +242,15 @@ $(function() {
     		}
     	}
     });
+
+    // Ping the Contact
+    $('#exec-contact-ping').on('click', function(e) {
+		Imperium.modal('/contact/ping');
+		e.preventDefault();
+		e.stopPropagation();
+		return false;
+    });
+
 });
 </script>
 <?php

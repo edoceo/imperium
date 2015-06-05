@@ -6,7 +6,7 @@
 
 namespace Edoceo\Imperium;
 
-use Edoceo\Radix\Radix;
+use Edoceo\Radix;
 
 $_ENV['title'] = array('Invoice','Create');
 $this->Invoice = new Invoice(null);

@@ -6,7 +6,7 @@
 
 namespace Edoceo\Imperium;
 
-use Edoceo\Radix\Radix;
+use Edoceo\Radix;
 use Edoceo\Radix\Session;
 
 // $layout = $this->layout();
@@ -26,8 +26,9 @@ echo '<head>';
 echo '<meta name="viewport" content="initial-scale=1, user-scalable=yes">';
 echo '<title>Imperium: ' . $_ENV['title'] . '</title>';
 
-echo '<link href="//gcdn.org/font-awesome/4.2.0/font-awesome.css" rel="stylesheet">';
+echo '<link href="//gcdn.org/normalize/3.0.2/normalize.css" rel="stylesheet">';
 echo '<link href="//gcdn.org/pure/0.5.0/pure.css" rel="stylesheet">';
+echo '<link href="//gcdn.org/font-awesome/4.2.0/font-awesome.css" rel="stylesheet">';
 // echo '<link href="//gcdn.org/jquery-ui/1.10.2/smoothness.css" rel="stylesheet">';
 echo '<link href="//gcdn.org/radix/radix.css" rel="stylesheet">';
 echo '<link href="' . Radix::link('/css/base.css') . '" rel="stylesheet">';

@@ -5,7 +5,7 @@
 
 namespace Edoceo\Imperium;
 
-use Edoceo\Radix\Radix;
+use Edoceo\Radix;
 
 $_ENV['h1'] = $_ENV['title'] = 'Capture Image for ' . $this->Contact['name'];
 

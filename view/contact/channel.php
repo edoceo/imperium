@@ -8,7 +8,7 @@
 
 namespace Edoceo\Imperium;
 
-use Edoceo\Radix\Radix;
+use Edoceo\Radix;
 use Edoceo\Radix\HTML\Form;
 
 echo '<form method="post">';

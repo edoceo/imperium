@@ -10,7 +10,7 @@
 
 namespace Edoceo\Imperium;
 
-use Edoceo\Radix\Radix;
+use Edoceo\Radix;
 use Edoceo\Radix\HTML\Form;
 
 echo '<div class="bf c">';

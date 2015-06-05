@@ -6,7 +6,7 @@
 
 namespace Edoceo\Imperium;
 
-use Edoceo\Radix\Radix;
+use Edoceo\Radix;
 
 echo Radix::block('page-link', array(
 	'cur' => $this->page_cur,

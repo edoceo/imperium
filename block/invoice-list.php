@@ -8,7 +8,7 @@
 
 namespace Edoceo\Imperium;
 
-use Edoceo\Radix\Radix;
+use Edoceo\Radix;
 
 if (empty($data) || empty($data['list'])) {
 	return(0);

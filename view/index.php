@@ -6,7 +6,7 @@
 
 namespace Edoceo\Imperium;
 
-use Edoceo\Radix\Radix;
+use Edoceo\Radix;
 
 $list = array_keys($_ENV['data']);
 foreach ($list as $name) {

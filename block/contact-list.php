@@ -10,7 +10,7 @@
 
 namespace Edoceo\Imperium;
 
-use Edoceo\Radix\Radix;
+use Edoceo\Radix;
 
 echo '<table>';
 echo '<tr>';
