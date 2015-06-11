@@ -19,6 +19,17 @@ if (empty($_ENV['mode'])) {
     $_ENV['mode'] = 'load';
 }
 
+// Build list of Accounts
+$account_list_json = array();
+foreach ($this->AccountList as $i=>$a) {
+	$account_list_json[] = array(
+		'id' => $a['id'],
+		// 'label' => $a['full_name'],
+		'value' => $a['full_name'],
+	);
+};
+$account_list_json = json_encode($account_list_json);
+
 switch ($_ENV['mode']) {
 case 'save':
 case 'view':
@@ -36,6 +47,18 @@ case 'view':
     echo '<th>-</th>';
     echo '</tr>';
 
+    echo '<tr class="r">';
+    echo '<td><input style="width:1em;"></td>';
+    echo '<td><input id="filter-date" style="width:8em;"></td>';
+    echo '<td><input id="filter-note" style="width:30em;"></td>';
+    echo '<td><input style="width:30em;"></td>';
+    echo '<td><input></td>';
+    echo '<td><input></td>';
+    echo '<td></td>';
+    echo '<td></td>';
+    echo '</tr>';
+
+
     $cr = 0;
     $dr = 0;
     $je_i = 0;
@@ -43,9 +66,14 @@ case 'view':
     $date_alpha = $date_omega = null;
     foreach ($this->JournalEntryList as $je) {
 
+    	if (!empty($je->id)) {
+    		continue;
+    	}
+
         $je_i++;
 
         $offset_id = $_ENV['offset_account_id'];
+
         // Pattern Match to Find the Chosen Offseter?
         if (!empty($je->ledger)) {
         	//die("What?");
@@ -54,7 +82,7 @@ case 'view':
 
         		$le_i++;
 
-				echo '<tr class="rero">';
+				echo '<tr class="rero" id="journal-entry-index-' . $je_i . '">';
 				echo '<td class="r">' . $je_i . '</td>';
 				echo '<td class="c"><input name="' . sprintf('je%ddate',$je_i) . '" size="10" type="text" value="' . $je->date . '"></td>';
 				echo '<td><input name="' . sprintf('je%dnote',$je_i) . '" style="width:384px;" type="text" value="' . $je->note . '"></td>';
@@ -81,14 +109,18 @@ case 'view':
         	$le_i++;
 
         	// Simplex Type
-			echo '<tr class="rero">';
+			echo '<tr class="rero reconcile-item" id="journal-entry-index-' . $je_i . '">';
 			echo '<td class="r">' . $je_i . '</td>';
 			echo '<td class="c"><input id="' . sprintf('date-%d', $je_i) . '" name="' . sprintf('je%ddate',$je_i) . '" size="10" type="text" value="' . $je->date . '"></td>';
-			echo '<td><input id="' . sprintf('note-%d', $je_i) . '" name="' . sprintf('je%dnote',$je_i) . '" type="text" value="' . $je->note . '"></td>';
+			echo '<td><input class="reconcile-entry-note" id="' . sprintf('note-%d', $je_i) . '" name="' . sprintf('je%dnote',$je_i) . '" style="width: 30em;" type="text" value="' . $je->note . '"></td>';
 			// echo $this->formText('note',$je->note,array('style'=>'width:25em'));
 			// @todo Determine Side, which depends on the Kind of the Account for which side is which
+
+			// @todo Autocomplete
 			echo '<td>';
-			echo Form::select(sprintf('je%daccount_id',$je_i), $offset_id, $this->AccountPairList);
+			// echo Form::select(sprintf('je%daccount_id',$je_i), $offset_id, $this->AccountPairList);
+			echo '<input class="account-id" id="' . sprintf('account_id-%d', $je_i) . '" name="' . sprintf('account_id-%d', $je_i) . '" type="hidden" value="">';
+			echo '<input class="account-name ui-autocomplete-input" data-index="' . $je_i . '" id="' . sprintf('account_name-%d', $je_i) . '" name="' . sprintf('account_name-%d', $je_i) . '" style="width: 30em;" type="text" value="" autocomplete="off">';
 			echo '</td>';
 
 			if (!empty($je->dr)) {
@@ -101,17 +133,18 @@ case 'view':
 				echo '<td class="r">' . Form::text(sprintf('je%dcr',$je_i),number_format($je->cr,2),array('size'=>8)) . '</td>';
 			}
 
+			// Lookup / Found?
 			echo '<td>';
 			if ($je->id) {
-				echo Radix::link('/account/transaction?id=' . $je->id,$je->id);
-				echo '<input name="' . sprintf('je%did',$je_i) . '" type="hidden" value="' . $je->id . '">';
+				echo '<a href="' . Radix::link('/account/transaction?id=' . $je->id) . '">' . $je->id . '</a>';
+				echo '<input name="' . sprintf('je%did', $je_i) . '" type="hidden" value="' . $je->id . '">';
 			} else {
 				echo '&mdash;';
 			}
 			echo '</td>';
 
 			echo '<td>';
-			echo '<button class="save-entry" data-id="' . $je_i . '" type="button"><i class="fa fa-save"></i></button>';
+			echo '<button class="save-entry" data-index="' . $je_i . '" type="button"><i class="fa fa-save"></i></button>';
 			echo '</td>';
 
 			echo '</tr>';
@@ -140,7 +173,7 @@ default:
     echo '<fieldset><legend>Step 1 - Choose Account and Data File</legend>';
     echo '<table>';
     echo '<tr><td class="l" title="Transactions are being uploaded for this account">Account:</td><td>' . Form::select('upload_id', $this->Account->id, $this->AccountPairList)  . '</td></tr>';
-    echo '<tr><td class="l" title="Default off-set account for the transactions, a pending queue for reconciliation">Offset:</td><td>' . Form::select('offset_id', $_ENV['account']['reconcile_offset_id'], $this->AccountPairList)  . '</td></tr>';
+    // echo '<tr><td class="l" title="Default off-set account for the transactions, a pending queue for reconciliation">Offset:</td><td>' . Form::select('offset_id', $_ENV['account']['reconcile_offset_id'], $this->AccountPairList)  . '</td></tr>';
     echo '<tr><td class="l" title="Which data format is this in?">Format:</td><td>' . Form::select('format',null,Account_Reconcile::$format_list) . '</td></tr>';
     echo '<tr><td class="l">File:</td><td><input name="file" type="file">';
     echo ' <span class="s">(p:' . ini_get('post_max_size') . '/u:' . ini_get('upload_max_filesize') . ')</span>';
@@ -155,15 +188,67 @@ default:
 ?>
 
 <script>
-$(function() {
-	$('.save-entry').on('click', function() {
-		var je = $(this).data('id');
+function acChangeSelect(e, ui)
+{
+    var c = parseInt($(e.target).data('index'));
+	$('#account_id-' + c).val(ui.item.id);
+	$('#account_name-' + c).val(ui.item.value);
+}
 
-		var dts = $('#date-' + je).val();
-		var txt = $('#note-' + je).val();
-		var off = $('#je' + je + 'account_id').val();
-		var dr =  parseFloat($('#je' + je + 'dr').val(), 10) || 0;
-		var cr =  parseFloat($('#je' + je + 'cr').val(), 10) || 0;
+$(function() {
+
+    // $('input[type=text]').on('click', function() { this.select(); });
+    // $('input[type=number]').on('click', function() { this.select(); });
+    $('#filter-note').on('keyup', function() {
+
+    	var regx = new RegExp(this.value, 'i');
+
+		$('.reconcile-item').each(function(i, n) {
+			var note = $(n).find('.reconcile-entry-note').val();
+			if (regx.test(note)) {
+				$(n).show();
+				$(n).addClass('reconcile-show');
+				$(n).removeClass('reconcile-hide');
+			} else {
+				$(n).hide();
+				$(n).addClass('reconcile-hide');
+				$(n).removeClass('reconcile-show');
+			}
+		});
+    });
+
+    $('.account-name').autocomplete({
+		delay: 100,
+        source: <?= $account_list_json; ?>,
+        focus: acChangeSelect,
+        select: acChangeSelect,
+        change: acChangeSelect,
+        response: function(e, ui) {
+        	if (1 == ui.content.length) {
+        		ui.item = ui.content[0];
+        		delete ui.content;
+        		acChangeSelect(e, ui);
+        	}
+        }
+    });
+
+	$('.save-entry').on('click', function(e) {
+
+		console.log('.save-entry:(' + e.type + ')');
+
+		if ('keypress' === e.type) {
+			if (13 !== e.keyCode) {
+				return;
+			}
+		}
+
+		var jei = $(this).data('index');
+
+		var dts = $('#date-' + jei).val();
+		var txt = $('#note-' + jei).val();
+		var off = $('#account_id-' + jei).val();
+		var dr =  $('#je' + jei + 'dr').val();
+		var cr =  $('#je' + jei + 'cr').val();
 
 		var arg = {
 			a: 'save-one',
@@ -177,7 +262,13 @@ $(function() {
 		$.post('<?= Radix::link('/account/reconcile') ?>', arg, function(res, ret) {
 			switch (ret) {
 			case 'success':
+				// Advance to Next Visible
+				$('#journal-entry-index-' + jei).nextAll('.reconcile-show:first').find('.account-name').focus();
+				// $('#account_name-' + (jei + 1)).focus();
+
 				// Remove Row
+				$('#journal-entry-index-' + jei).remove();
+
 				break;
 			default:
 				alert(res);

@@ -23,8 +23,7 @@ switch (strtolower($_POST['a'])) {
 case 'upload': // Read the Uploaded Data
 
 	$_ENV['mode'] = 'view';
-	// Zend_Debug::dump($_POST);
-	// Zend_Debug::dump($_FILES);
+
 	if ($_FILES['file']['error']==0) {
 		$this->Account = new Account($_POST['account_id']);
 		$_ENV['title'] = array('Account','Reconcile', $this->Account['full_name'], 'Preview');
@@ -195,7 +194,7 @@ case 'save-one': // Save the Uploaded Transactions
 		'result' => array(
 			'journal_entry_id' => $je['id'],
 		),
-		'detail' => 'Journal Entry ',
+		'detail' => 'Journal Entry saved',
 	)));
 
 	break;

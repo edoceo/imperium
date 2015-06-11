@@ -3,6 +3,11 @@
 
 */
 
+use Edoceo\Radix;
+use Edoceo\Radix\Session;
+
+use Edoceo\Imperium\Account;
+
 $a = new Account($_POST['id']);
 
 switch (strtolower($_POST['a'])) {

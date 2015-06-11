@@ -15,6 +15,10 @@
     font-size:80%;
 }
 
+a {
+	color: inherit;
+}
+
 /* Reset Everything */
 a:hover {
 	color: @high_bg;
@@ -521,6 +525,23 @@ tr.yearly td
 #JournalEntry .link-to {
 	display:inline-block;
 	width:4em
+}
+
+
+/* Accounting Page Stuffs */
+.save-entry:active,
+.save-entry:focus {
+	border-color: #03c;
+	color: #03c;
+}
+
+
+/** Vendor Over-Rides **/
+.ui-autocomplete {
+	background: #fff;
+}
+.ui-helper-hidden-accessible {
+	display: none;
 }
 
 /* Smartphones (Portrait & Landscape) */

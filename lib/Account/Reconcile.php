@@ -276,8 +276,11 @@ class Account_Reconcile
 	*/
 	private static function _filterEntry($je)
 	{
-		$je->note = str_replace('CHECK CRD PURCHASE ',null,$je->note);
-		// $je->note = str_replace('CHECK CRD PURCHASE ',null,$je->note);
+		// Wells Fargo Noise
+		$je->note = str_replace('CHECK CRD PURCHASE ', null, $je->note);
+		$je->note = preg_replace('/^POS PURCHASE \- /', null, $je->note);
+		$je->note = preg_replace('/^PURCHASE AUTHORIZED ON /', null, $je->note);
+
 		return $je;
 	}
 	/**

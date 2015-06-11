@@ -6,6 +6,7 @@
 
 namespace Edoceo\Imperium;
 
+use Edoceo\Radix;
 use Edoceo\Radix\DB\SQL;
 
 $order = null;
@@ -96,12 +97,9 @@ if (strlen($_GET['link'])) {
 	}
 }
 
-$sql = "select * from general_ledger where $where order by $order";
+$sql = "SELECT * FROM general_ledger WHERE $where ORDER BY $order";
 $res = SQL::fetch_all($sql, $param);
-if (empty($res)) {
-	echo SQL::lastError();
-	die(print_r($res));
-}
+
 $this->LedgerEntryList = $res;
 
 $_ENV['title'] = array('General Ledger',"{$this->date_alpha_f} to {$this->date_omega_f}");
