@@ -295,6 +295,13 @@ $(function() {
 				// Remove Row
 				$('#journal-entry-index-' + jei).remove();
 
+				// Decrement Counter
+				var size = parseInt( $('#reconcile-item-size').html() ) || 0;
+				if (size > 1) {
+					size--;
+					$('#reconcile-item-size').html(size)
+				}
+
 				break;
 			default:
 				alert(res);
