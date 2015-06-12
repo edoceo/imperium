@@ -13,7 +13,7 @@ use Edoceo\Radix\HTML\Form;
 
 require_once(APP_ROOT . '/lib/Account/Reconcile.php');
 
-$_ENV['title'] = array('Account','Reconcile');
+$_ENV['title'] = array('Account', 'Reconcile');
 
 if (empty($_ENV['mode'])) {
     $_ENV['mode'] = 'load';
@@ -30,9 +30,29 @@ foreach ($this->AccountList as $i=>$a) {
 };
 $account_list_json = json_encode($account_list_json);
 
+?>
+
+<style>
+input[type="text"].ar-index {
+	font-size: 14px;
+	text-align: right;
+}
+input[type="text"].ar-date {
+	width: 6em;
+}
+input[type="text"].ar-note {
+	width: 20em;
+}
+</style>
+
+
+<?php
+
 switch ($_ENV['mode']) {
 case 'save':
 case 'view':
+	
+	$_ENV['title'][] = sprintf('<span id="reconcile-item-size">%d</span> Items', count($this->JournalEntryList));
 
     // View the Pending Transactions
     echo '<table>';
@@ -49,11 +69,11 @@ case 'view':
 
     echo '<tr class="r">';
     echo '<td><input style="width:1em;"></td>';
-    echo '<td><input id="filter-date" style="width:8em;"></td>';
-    echo '<td><input id="filter-note" style="width:30em;"></td>';
-    echo '<td><input style="width:30em;"></td>';
-    echo '<td><input></td>';
-    echo '<td><input></td>';
+    echo '<td><input class="ar-date" id="filter-date" type="text"></td>';
+    echo '<td><input class="ar-note" id="filter-note" type="text"></td>';
+    echo '<td><input class="ar-note" type="text"></td>';
+    echo '<td></td>';
+    echo '<td></td>';
     echo '<td></td>';
     echo '<td></td>';
     echo '</tr>';
@@ -69,23 +89,26 @@ case 'view':
     	if (!empty($je->id)) {
     		continue;
     	}
+    	
+    	// $je->note = str_shuffle($je->note);
 
         $je_i++;
 
         $offset_id = $_ENV['offset_account_id'];
 
+		echo '<tr class="rero reconcile-item" id="journal-entry-index-' . $je_i . '">';
+		echo '<td class="ar-index">' . $je_i . '</td>';
+
         // Pattern Match to Find the Chosen Offseter?
         if (!empty($je->ledger)) {
-        	//die("What?");
+        	die("What?");
 			$le_i = 0;
         	foreach ($je->ledger as $le) {
 
         		$le_i++;
 
-				echo '<tr class="rero" id="journal-entry-index-' . $je_i . '">';
-				echo '<td class="r">' . $je_i . '</td>';
-				echo '<td class="c"><input name="' . sprintf('je%ddate',$je_i) . '" size="10" type="text" value="' . $je->date . '"></td>';
-				echo '<td><input name="' . sprintf('je%dnote',$je_i) . '" style="width:384px;" type="text" value="' . $je->note . '"></td>';
+				echo '<td class="c"><input class="ar-date" name="' . sprintf('je%ddate',$je_i) . '" type="text" value="' . $je->date . '"></td>';
+				echo '<td><input class="ar-note" name="' . sprintf('je%dnote',$je_i) . '" type="text" value="' . $je->note . '"></td>';
 				// echo $this->formText('note',$je->note,array('style'=>'width:25em'));
 				// @todo Determine Side, which depends on the Kind of the Account for which side is which
 				echo '<td>';
@@ -109,10 +132,8 @@ case 'view':
         	$le_i++;
 
         	// Simplex Type
-			echo '<tr class="rero reconcile-item" id="journal-entry-index-' . $je_i . '">';
-			echo '<td class="r">' . $je_i . '</td>';
-			echo '<td class="c"><input id="' . sprintf('date-%d', $je_i) . '" name="' . sprintf('je%ddate',$je_i) . '" size="10" type="text" value="' . $je->date . '"></td>';
-			echo '<td><input class="reconcile-entry-note" id="' . sprintf('note-%d', $je_i) . '" name="' . sprintf('je%dnote',$je_i) . '" style="width: 30em;" type="text" value="' . $je->note . '"></td>';
+			echo '<td><input class="ar-date" id="' . sprintf('date-%d', $je_i) . '" name="' . sprintf('je%ddate',$je_i) . '" type="text" value="' . $je->date . '"></td>';
+			echo '<td><input class="reconcile-entry-note ar-note" id="' . sprintf('note-%d', $je_i) . '" name="' . sprintf('je%dnote',$je_i) . '" type="text" value="' . $je->note . '"></td>';
 			// echo $this->formText('note',$je->note,array('style'=>'width:25em'));
 			// @todo Determine Side, which depends on the Kind of the Account for which side is which
 
@@ -120,17 +141,19 @@ case 'view':
 			echo '<td>';
 			// echo Form::select(sprintf('je%daccount_id',$je_i), $offset_id, $this->AccountPairList);
 			echo '<input class="account-id" id="' . sprintf('account_id-%d', $je_i) . '" name="' . sprintf('account_id-%d', $je_i) . '" type="hidden" value="">';
-			echo '<input class="account-name ui-autocomplete-input" data-index="' . $je_i . '" id="' . sprintf('account_name-%d', $je_i) . '" name="' . sprintf('account_name-%d', $je_i) . '" style="width: 30em;" type="text" value="" autocomplete="off">';
+			echo '<input class="account-name ui-autocomplete-input ar-note" data-index="' . $je_i . '" id="' . sprintf('account_name-%d', $je_i) . '" name="' . sprintf('account_name-%d', $je_i) . '" type="text" value="" autocomplete="off">';
 			echo '</td>';
 
 			if (!empty($je->dr)) {
 				$dr += floatval($je->dr);
-				echo '<td class="r">' . Form::text(sprintf('je%ddr',$je_i),number_format($je->dr,2),array('size'=>8)) . '</td>';
+				echo '<td class="r">' . Form::number(sprintf('je%ddr',$je_i), sprintf('%0.2f', $je->dr), array('step'=>0.01)) . '</td>';
 				echo '<td>&nbsp;</td>';
-			} else {
+			} elseif (!empty($je->cr)) {
 				$cr += floatval($je->cr);
 				echo '<td>&nbsp;</td>';
-				echo '<td class="r">' . Form::text(sprintf('je%dcr',$je_i),number_format($je->cr,2),array('size'=>8)) . '</td>';
+				echo '<td class="r">' . Form::number(sprintf('je%dcr',$je_i), sprintf('%0.2f', $je->cr), array('step'=>0.01)) . '</td>';
+			} else {
+				die("Fail");
 			}
 
 			// Lookup / Found?
@@ -202,19 +225,22 @@ $(function() {
     $('#filter-note').on('keyup', function() {
 
     	var regx = new RegExp(this.value, 'i');
-
+    	var show = 0;
 		$('.reconcile-item').each(function(i, n) {
 			var note = $(n).find('.reconcile-entry-note').val();
 			if (regx.test(note)) {
 				$(n).show();
 				$(n).addClass('reconcile-show');
 				$(n).removeClass('reconcile-hide');
+				show++;
 			} else {
 				$(n).hide();
 				$(n).addClass('reconcile-hide');
 				$(n).removeClass('reconcile-show');
 			}
 		});
+
+		$('#reconcile-item-size').html(show);
     });
 
     $('.account-name').autocomplete({
