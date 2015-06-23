@@ -8,35 +8,38 @@ namespace Edoceo\Imperium;
 
 use Edoceo\Radix;
 use Edoceo\Radix\Session;
+use Edoceo\Radix\DB\SQL;
 
 use Edoceo\Imperium\Contact\Event;
 
-$id = intval($_GET['c']);
-$co = new Contact($id);
+$c = new Contact($_GET['c']);
 
 // Delete Requested?
 switch (strtolower($_POST['a'])) {
 case 'capture':
-	Radix::redirect('/contact/capture?c=' . $id);
+	Radix::redirect('/contact/capture?c=' . $c['id']); 
 	break;
 case 'create-account':
 
 	$a = new Account();
-	$a->kind = 'Sub: Customer';
-	$a->code = $id;
-	$a->name = $co->name;
-	$a->parent_id = $_ENV['account']['contact_ledger_container_id'];
-	$a->active = 't';
-	$a->link_to = 'contact';
-	$a->link_id = $id;
+	$a['kind'] = 'Sub: Customer';
+	$a['code'] = $id;
+	$a['name'] = $c['name'];
+	$a['parent_id'] = $_ENV['account']['contact_ledger_container_id'];
+	$a['active'] = 't';
+	$a['link_to'] = 'contact';
+	$a['link_id'] = $id;
 	$a->save();
 
-	$co->account_id = $a->id;
-	$co->save();
+	$c['account_id'] = $a['id'];
+	$c->save();
 
-	$this->redirect('/contact/view?c=' . $id);
+	Session::flash('fail', SQL::lastError());
+	Session::flash('info', sprintf('Account #%d Created', $a['id']));
+	Radix::redirect('/contact/view?c=' . $c['id']);
 
 	break;
+
 case 'delete':
 
 	/*
@@ -104,3 +107,5 @@ case 'save':
 
 	Radix::redirect('/contact/view?c=' . $id);
 }
+
+Radix::dump($_POST);

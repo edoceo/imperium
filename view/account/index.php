@@ -14,15 +14,19 @@ $_ENV['title'] = 'General Ledger';
 $x_kind = null;
 
 echo '<form action="" class="np" method="get">';
-echo Radix::block('account-period-input');
+echo Radix::block('account-period-input', array(
+	'm' => $this->Month,
+	'y' => $this->Year,
+	'p' => $this->Period,
+));
 echo '</form>';
 
 // Search
-echo '<form action="' . Radix::link('/account/search') . '">';
-echo '<div>';
-echo '<input type="text" name="q" value="">';
-echo '<button value="search">Search</button>';
-echo '</div>';
+// echo '<form action="' . Radix::link('/account/search') . '">';
+// echo '<div>';
+// echo '<input type="text" name="q" value="">';
+// echo '<button value="search">Search</button>';
+// echo '</div>';
 
 echo '<p><strong>Cash</strong> basis, reports for money collected when B&amp;O</p>';
 echo '<p>Accounts for Period: ' . $this->date_alpha . ' - ' . $this->date_omega . '</p>';
@@ -54,3 +58,5 @@ foreach ($this->AccountList as $item) {
 }
 
 echo '</table>';
+
+Radix::dump($_GET);

@@ -15,7 +15,13 @@ $AccountList[-1] = 'All - General Ledger';
 foreach ($this->AccountList as $item) {
     $AccountList[$item['id']] = $item['full_name'];
 }
-$_ENV['title'][] = count($this->LedgerEntryList) . ' entries';
+$_ENV['title'] = array(
+	'Accounts',
+	'Ledger',
+	$this->Account['full_name'],
+	sprintf('%s to %s', $this->date_alpha_f, $this->date_omega_f),
+	sprintf('%d entries', count($this->LedgerEntryList))
+);
 
 echo '<form method="get">';
 echo '<table>';
@@ -33,9 +39,11 @@ echo '</form>';
 
 // View Results
 
-$balance_x = $this->openBalance;
+$runbal = $this->openBalance;
+$cr_sum = 0;
+$dr_sum = 0;
 
-echo '<table>';
+echo '<table style="width:100%;">';
 echo '<tr><th>Date</th><th>Account/Note</th><th>Entry #</th><th>Link</th><th>Debit</th><th>Credit</th><th>Balance</th></tr>';
 
 echo '<tr class="rero">';
@@ -73,29 +81,31 @@ foreach ($this->LedgerEntryList as $le)
 	}
 
     // Amount
-    if (substr($this->Account['kind'],0,5)=='Asset') {
-        if ($le['amount'] < 0) {
-            $balance_x += abs($le['amount']);
-        } else {
-            $balance_x -= abs($le['amount']);
-        }
-    } else {
-        $balance_x += $le['amount'];
-    }
+	if ($le['amount'] < 0) {
+		$dr_sum += abs($le['amount']);
+		$runbal += abs($le['amount']);
+	} else {
+		$cr_sum += abs($le['amount']);
+		$runbal -= abs($le['amount']);
+	}
+    //if (substr($this->Account['kind'],0,5)=='Asset') {
+    //} else {
+    //    $runbal += $le['amount'];
+    //}
 
-    echo '<td class="r">' . number_format($balance_x,2) . '</td>';
+    echo '<td class="r">' . number_format($runbal, 2) . '</td>';
     echo '</tr>';
 
 }
 
 echo '<tr class="ro">';
 echo '<td class="b" colspan="4">Total:</td>';
-echo '<td class="b r">&curren;' . number_format($this->dr_total,2) . '</td>';
-echo '<td class="b r">&curren;' . number_format($this->cr_total,2) . '</td>';
+echo '<td class="b r">&curren;' . number_format($dr_sum, 2) . '</td>';
+echo '<td class="b r">&curren;' . number_format($cr_sum, 2) . '</td>';
 //if (substr($this->Account->kind,0,5)=='Asset') {
-//	echo '<td class="b r">&curren;' . number_format($balance_x * -1,2) . '</td>';
+//	echo '<td class="b r">&curren;' . number_format($runbal * -1,2) . '</td>';
 //} else {
-	echo '<td class="b r">&curren;' . number_format($balance_x,2) . '</td>';
+	echo '<td class="b r">&curren;' . number_format($runbal,2) . '</td>';
 //}
 echo '</tr>';
 echo '</table>';

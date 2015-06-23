@@ -72,15 +72,19 @@ class Account extends ImperiumBase
 	*/
 	function delete()
 	{
-		$id = intval($this->id);
-		$db = Zend_Registry::get('db');
-
 		// Remove Ledger Entries
-		$db->query("delete from account_ledger where account_journal_id in (select account_journal_id from account_ledger where account_id = $id)");
+		$sql = 'DELETE FROM account_ledger WHERE account_journal_id IN (SELECT account_journal_id FROM account_ledger WHERE account_id = ?)';
+		$arg = array($this->_data['id']);
+		SQL::query($sql, $arg);
+
 		// And the Journal Entries
-		$db->query("delete from account_journal where id not in (select account_journal_id from account_ledger)");
+		$sql = 'DELETE FROM account_journal WHERE id NOT IN (SELECT account_journal_id FROM account_ledger)';
+		SQL::query($sql);
+
 		// And th Account
-		$db->query("delete from account where id = $id");
+		$sql = 'DELETE FROM account WHERE id = ?';
+		$arg = array($this->_data['id']);
+		SQL::query($sql, $arg);
 
 		return true;
 	}
@@ -100,18 +104,22 @@ class Account extends ImperiumBase
 		$path[] = $this->_data['code'];
 		$parent_id = $this->_data['parent_id'];
 		$i = 0;
+
 		while ($parent_id) {
 			$i++;
-			$rs = SQL::fetchRow('SELECT parent_id,code FROM account where id = ?', array($parent_id));
-			if ($rs) {
-				$parent_id = $rs['parent_id'];
-				$path[] = $rs['code'];
+			$sql = 'SELECT parent_id,code FROM account where id = ?';
+			$arg = array($parent_id);
+			$res = SQL::fetch_row($sql, $arg);
+			if ($res) {
+				$parent_id = $res['parent_id'];
+				$path[] = $res['code'];
 			}
 			$parent_id = null;
 			if ($i > 5) {
 				break;
 			}
 		}
+
 		$this->_data['active'] = 't';
 		$this->_data['full_code'] = implode('/',array_reverse($path));
 		$this->_data['full_name'] = $this->_data['full_code'] . ' - ' . $this->_data['kind'] . ':' . $this->_data['name'];

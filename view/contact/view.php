@@ -55,27 +55,30 @@ if (!empty($this->Contact['parent_id'])) {
 <div class="pure-u-1-5"><div class="l">Tags:</div></div>
 <div class="pure-u-4-5"><?= Form::text('tags', $this->Contact['tags']) ?></div>
 
+<div class="pure-u-1-5"><div class="l"><?php
+if (empty($this->Account['id'])) {
+	echo 'Account:';
+} else {
+	echo '<a href="' . Radix::link('/account/ledger?' . http_build_query(array('id'=>$this->Account->id))) . '">Account</a>:';
+}
+?></div></div>
+<div class="pure-u-4-5"><?php
+if (empty($this->Account['id'])) {
+	echo '<button class="exec" name="a" title="Create new Account for this Contact" style="margin:4px;" type="submit" value="create-account">Create</button>';
+} else {
+	echo '<span style="font-size: 22px; line-height: 32px;">';
+	echo '$' . number_format($this->Account['balance'],2);
+	// echo '<input id="account" style="width:20em;" type="text" value="' . $this->Account['full_name'] . '">';
+	// echo '<input id="account_id" name="account_id" type="hidden" value="' . $this->Account['id'] . '">';
+	echo '</span>';
+}
+?>
+</div>
+
 <div class="pure-u-1 pure-u-md-1-2">
 	<!-- Table -->
 	<div>Kind: <?= Form::select('kind', $this->Contact['kind'], $this->KindList) ?></div>
 	<div>Status: <?= Form::select('status', $this->Contact['status'], $this->StatusList) ?></div>
-<?php
-	echo '<div>';
-	if (empty($this->Account['id'])) {
-		echo 'Account';
-	} else {
-		echo '<a href="' . Radix::link('/account/ledger?' . http_build_query(array('id'=>$this->Account->id))) . '">Account</a>:';
-	}
-	echo '</td><td colspan="3">';
-	if (empty($this->Account['id'])) {
-		echo '<button class="s" name="c" title="Create new Account for this Contact" type="submit" value="create-account">Create</button>';
-	} else {
-		echo '<input id="account" style="width:20em;" type="text" value="' . $this->Account['full_name'] . '">';
-		echo '<input id="account_id" name="account_id" type="hidden" value="' . $this->Account['id'] . '">';
-		echo ' $' . number_format($this->Account['balance'],2);
-	}
-	echo '</div>';
-?>
 </div>
 <div class="pure-u-1 pure-u-md-1-2">
 <?php

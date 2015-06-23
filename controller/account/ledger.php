@@ -81,7 +81,6 @@ if (empty($this->Account['id'])) {
 	);
 	$order = " date,kind desc,amount asc ";
 
-	$this->title = array('Ledger',"{$this->Account->full_name} from {$this->date_alpha_f} to {$this->date_omega_f}");
 	//$this->AccountLedger = $data;
 	$this->dr_total = abs($this->Account->debitTotal($this->date_alpha,$this->date_omega));
 	$this->cr_total = abs($this->Account->creditTotal($this->date_alpha,$this->date_omega));
@@ -102,7 +101,6 @@ $res = SQL::fetch_all($sql, $param);
 
 $this->LedgerEntryList = $res;
 
-$_ENV['title'] = array('General Ledger',"{$this->date_alpha_f} to {$this->date_omega_f}");
 // ImperiumView::mruAdd($this->link(),'Ledger ' . $this->Account->name);
 $_SESSION['return-path'] = '/account/ledger';
 

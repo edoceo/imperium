@@ -9,14 +9,14 @@ namespace Edoceo\Imperium;
 require_once('Account/Reconcile.php');
 require_once('Account/TaxFormLine.php');
 
-$_ENV['title'] = 'Accounts';
-
+// Set Default Data
 if (empty($_SESSION['account-view']['period'])) $_SESSION['account-view']['period'] = 'm';
 if (empty($_SESSION['account-view']['month'])) $_SESSION['account-view']['month'] = date('m');
 if (empty($_SESSION['account-view']['year'])) $_SESSION['account-view']['year'] = date('Y');
 if (empty($_SESSION['account-view']['date_alpha'])) $_SESSION['account-view']['date_alpha'] = date('Y-m-01');
 if (empty($_SESSION['account-view']['date_omega'])) $_SESSION['account-view']['date_omega'] = date('Y-m-t');
 
+// Attach to Context
 $this->Period = $_SESSION['account-view']['period'];
 $this->Month = $_SESSION['account-view']['month'];
 $this->Year = $_SESSION['account-view']['year'];
@@ -78,6 +78,10 @@ $_SESSION['account-view']['month'] = $this->Month;
 $_SESSION['account-view']['year'] = $this->Year;
 $_SESSION['account-view']['date_alpha'] = $this->date_alpha;
 $_SESSION['account-view']['date_omega'] = $this->date_omega;
+
+$_GET['p'] = $this->Period;
+$_GET['m'] = $this->Month;
+$_GET['y'] = $this->Year;
 
 // Build other View Data (Month, Year, Period)
 $this->MonthList = array();
