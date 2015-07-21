@@ -161,12 +161,9 @@ echo '</table>';
 
 echo '<div class="bf">';
 echo '<button class="exec" name="a" type="submit" value="capture">Photo</button>';
-echo '<input class="good" name="a" type="submit" value="Save">';
-//if ($this->Contact['kind'] == 'Person') {
-//    echo '<input name="c" title="Mark as Billing Contact" type="submit" value="Bill">';
-//    echo '<input name="c" title="Mark as Shipping Contact" type="submit" value="Ship">';
-//}
-echo '<input class="fail" name="a" type="submit" value="Delete">';
+echo '<button class="exec" id="exec-contact-ping" type="button" value="ping">Ping</button>';
+echo '<button class="good" name="a" type="submit" value="save">Save</button>';
+echo '<button class="fail" name="a" type="submit" value="delete">Delete</button>';
 //echo '<a class="button" href="' . Radix::link('/contact/merge?' . http_build_query(array('c' => $this->Contact['id']))) . '">Merge</a>';
 echo '</div>';
 echo '</form>';
@@ -215,6 +212,7 @@ $(function() {
         var u = "<?= Radix::link('/contact/ajax?field=google'); ?>";
         $("#contact-google-area").load(u);
     });
+
     $('#email').on('change', function(e) {
 		var t = $(this).val();
 		var m = t.match(/^(.+)@(.+)$/);
@@ -222,19 +220,23 @@ $(function() {
     		var h = m[2].toLowerCase();
     		// @see http://en.wikipedia.org/wiki/Comparison_of_webmail_providers
     		switch (h) {
-    		case 'aol.com':
-    		case 'comcast.net':
-    		case 'facebook.com':
-    		case 'gmail.com':
-    		case 'hotmail.com':
-    		case 'inbox.com':
-    		case 'mac.com':
-    		case 'mail.com':
-    		case 'mail.ru':
-    		case 'outlook.com':
-    		case 'sharklasers.com':
-    		case 'yahoo.com':
-    		case 'yandex.com':
+			case 'aol.com':
+			case 'comcast.net':
+			case 'facebook.com':
+			case 'gmail.com':
+			case 'hotmail.com':
+			case 'icloud.com':
+			case 'inbox.com':
+			case 'live.com':
+			case 'mac.com':
+			case 'mail.com':
+			case 'mail.ru':
+			case 'msn.com':
+			case 'outlook.com':
+			case 'pobox.com':
+			case 'sharklasers.com':
+			case 'yahoo.com':
+			case 'yandex.com':
     			return(0);
     			break;
     		}
@@ -248,7 +250,7 @@ $(function() {
 
     // Ping the Contact
     $('#exec-contact-ping').on('click', function(e) {
-		Imperium.modal('/contact/ping');
+		Imperium.modal('/contact/ping?c=<?= $this->Contact['id'] ?>');
 		e.preventDefault();
 		e.stopPropagation();
 		return false;

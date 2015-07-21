@@ -85,7 +85,9 @@ case 'save':
 
 	$C['auth_user_id'] = $_SESSION['uid'];
 	$C['account_id']  = intval($_POST['account_id']);
-	$C['parent_id']  = null;
+	if (!empty($_POST['parent_id'])) {
+		$C['parent_id'] = intval($_POST['parent_id']);
+	}
 	$C['kind']    = $_POST['kind'];
 	$C['status']  = $_POST['status'];
 	$C['contact'] = $_POST['contact'];

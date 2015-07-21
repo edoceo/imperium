@@ -94,7 +94,7 @@ class Contact extends ImperiumBase
 			$this->_data['account_id'] = null;
 		}
 
-		if (empty($this->_data['parent_id'])==0) {
+		if (empty($this->_data['parent_id'])) {
 			$this->_data['parent_id'] = null;
 		}
 
