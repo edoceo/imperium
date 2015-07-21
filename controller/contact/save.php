@@ -12,7 +12,7 @@ use Edoceo\Radix\DB\SQL;
 
 use Edoceo\Imperium\Contact\Event;
 
-$c = new Contact($_GET['c']);
+$C = new Contact($_GET['c']);
 
 // Delete Requested?
 switch (strtolower($_POST['a'])) {
@@ -24,19 +24,19 @@ case 'create-account':
 	$a = new Account();
 	$a['kind'] = 'Sub: Customer';
 	$a['code'] = $id;
-	$a['name'] = $c['name'];
+	$a['name'] = $C['name'];
 	$a['parent_id'] = $_ENV['account']['contact_ledger_container_id'];
 	$a['active'] = 't';
 	$a['link_to'] = 'contact';
 	$a['link_id'] = $id;
 	$a->save();
 
-	$c['account_id'] = $a['id'];
-	$c->save();
+	$C['account_id'] = $a['id'];
+	$C->save();
 
 	Session::flash('fail', SQL::lastError());
 	Session::flash('info', sprintf('Account #%d Created', $a['id']));
-	Radix::redirect('/contact/view?c=' . $c['id']);
+	Radix::redirect('/contact/view?c=' . $C['id']);
 
 	break;
 
@@ -61,8 +61,8 @@ case 'delete':
 	$this->redirect('/contacts/view?c=' . $id);
 	*/
 
-	$co->delete();
-	Session::flash('info', 'Contact #' . $id . ' was deleted');
+	$C->delete();
+	Session::flash('info', 'Contact #' . $C['id'] . ' was deleted');
 	Radix::redirect('/contact');
 
 	break;
@@ -70,7 +70,7 @@ case 'delete':
 case 'ping':
 
 	$ce = new Event();
-	$ce['contact_id'] = $co['id'];
+	$ce['contact_id'] = $C['id'];
 	$ce['cts'] = $_SERVER['REQUEST_TIME']; // Create Time
 	$ce['xts'] = $_SERVER['REQUEST_TIME'] + (86400 * 4); // Alert Time
 	$ce['name'] = 'Ping this Contact';
@@ -83,29 +83,29 @@ case 'ping':
 
 case 'save':
 
-	$co['auth_user_id'] = $_SESSION['uid'];
-	$co['account_id']  = intval($_POST['account_id']);
-	$co['parent_id']  = null;
-	$co['kind']    = $_POST['kind'];
-	$co['status']  = $_POST['status'];
-	$co['contact'] = $_POST['contact'];
-	$co['company'] = $_POST['company'];
-	$co['title'] = $_POST['title'];
-	$co['email'] = $_POST['email'];
-	$co['phone'] = $_POST['phone'];
-	$co['url'] = $_POST['url'];
-	$co['tags'] = $_POST['tags'];
+	$C['auth_user_id'] = $_SESSION['uid'];
+	$C['account_id']  = intval($_POST['account_id']);
+	$C['parent_id']  = null;
+	$C['kind']    = $_POST['kind'];
+	$C['status']  = $_POST['status'];
+	$C['contact'] = $_POST['contact'];
+	$C['company'] = $_POST['company'];
+	$C['title'] = $_POST['title'];
+	$C['email'] = $_POST['email'];
+	$C['phone'] = $_POST['phone'];
+	$C['url'] = $_POST['url'];
+	$C['tags'] = $_POST['tags'];
 
-	$co->save();
+	$C->save();
 
 	if ($id) {
-		Session::flash('info', "Contact #$id saved");
+		Session::flash('info', "Contact #{$C['id']} saved");
 	} else {
 		$id = $co['id'];
-		Session::flash('info', "Contact #$id created");
+		Session::flash('info', "Contact #{$C['id']} created");
 	}
 
-	Radix::redirect('/contact/view?c=' . $id);
+	Radix::redirect('/contact/view?c=' . $C['id']);
 }
 
-Radix::dump($_POST);
+// Radix::dump($_POST);
