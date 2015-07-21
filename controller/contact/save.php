@@ -35,7 +35,7 @@ case 'create-account':
 	$C->save();
 
 	Session::flash('fail', SQL::lastError());
-	Session::flash('info', sprintf('Account #%d Created', $a['id']));
+	Session::flash('info', sprintf('Account #%d created', $a['id']));
 	Radix::redirect('/contact/view?c=' . $C['id']);
 
 	break;
@@ -62,7 +62,7 @@ case 'delete':
 	*/
 
 	$C->delete();
-	Session::flash('info', 'Contact #' . $C['id'] . ' was deleted');
+	Session::flash('info', 'Contact #' . $C['id'] . ' deleted');
 	Radix::redirect('/contact');
 
 	break;
@@ -76,7 +76,7 @@ case 'ping':
 	$ce['name'] = 'Ping this Contact';
 	$ce->save();
 
-	Session::flash('info', 'Contact #' . $id . ' Event Added');
+	Session::flash('info', 'Contact #' . $id . ' event added');
 	Radix::redirect('/contact');
 
 	break;
@@ -98,13 +98,7 @@ case 'save':
 
 	$C->save();
 
-	if ($id) {
-		Session::flash('info', "Contact #{$C['id']} saved");
-	} else {
-		$id = $co['id'];
-		Session::flash('info', "Contact #{$C['id']} created");
-	}
-
+	Session::flash('info', "Contact #{$C['id']} saved");
 	Radix::redirect('/contact/view?c=' . $C['id']);
 }
 
