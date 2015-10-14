@@ -16,7 +16,7 @@ echo '<form action="' . Radix::link('/account/save') . '" method="post">';
 echo '<table>';
 
 echo "<tr><td class='l'>Kind:</td><td colspan='2'>" . Form::select('kind',$this->Account['kind'], $this->AccountKindList) . "</td></tr>";
-echo "<tr><td class='l'>Code &amp; Name:</td><td>" . Form::text('code', $this->Account['code'],array('size'=>6)) . '</td>';
+echo "<tr><td class='l'>Code &amp; Name:</td><td>" . Form::text('code', $this->Account['code'], array('size'=>6)) . '</td>';
 echo '<td>' . Form::text('name', $this->Account['name']) . '</td>';
 echo '</tr>';
 
@@ -57,7 +57,7 @@ foreach ($AccountTaxLineList as $x) {
 }
 // Radix::dump($AccountTaxLineList);
 // $list += $AccountTaxLineList;
-echo "<tr><td class='b r'>Tax Line:</td><td colspan='3'>" . Form::select('account_tax_line_id', $this->Account->account_tax_line_id, $list) . "</td>";
+echo "<tr><td class='b r'>Tax Line:</td><td colspan='3'>" . Form::select('account_tax_line_id', $this->Account['account_tax_line_id'], $list) . "</td>";
 
 /*
 // Asset Details
@@ -65,8 +65,8 @@ echo "<tr><td class='b r'>Opening Balance:</td><td>" . $imperiumForm->input('Acc
 */
 
 // Kind Bank Account Details
-echo "<tr><td class='b r'>Transit:</td><td colspan='2'>" . Form::text('bank_routing', $this->Account->bank_routing) . '</td></tr>';
-echo "<tr><td class='b r'>Account:</td><td colspan='2'>" . Form::text('bank_account', $this->Account->bank_account) . '</td></tr>';
+echo "<tr><td class='b r'>Transit:</td><td colspan='2'>" . Form::text('bank_routing', $this->Account['bank_routing']) . '</td></tr>';
+echo "<tr><td class='b r'>Account:</td><td colspan='2'>" . Form::text('bank_account', $this->Account['bank_account']) . '</td></tr>';
 
 echo '</table>';
 
