@@ -59,7 +59,7 @@ if (!empty($this->Contact['parent_id'])) {
 if (empty($this->Account['id'])) {
 	echo 'Account:';
 } else {
-	echo '<a href="' . Radix::link('/account/ledger?' . http_build_query(array('id'=>$this->Account->id))) . '">Account</a>:';
+	echo '<a href="' . Radix::link('/account/ledger?' . http_build_query(array('id' => $this->Account['id']))) . '">Account</a>:';
 }
 ?></div></div>
 <div class="pure-u-4-5"><?php
