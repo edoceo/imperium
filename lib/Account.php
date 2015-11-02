@@ -93,18 +93,25 @@ class Account extends ImperiumBase
 	*/
 	function save()
 	{
+		if (empty($this->_data['code'])) {
+			$this->_data['code'] = 0;
+		}
 		if (intval($this->_data['parent_id'])==0) $this->_data['parent_id'] = null;
 		if (intval($this->_data['account_tax_line_id'])==0) $this->_data['account_tax_line_id'] = null;
-		if (floatval($this->_data['balance'])==0) $this->_data['balance'] = null;
+		if (floatval($this->_data['balance'])==0) $this->_data['balance'] = 0;
 		if (intval($this->_data['link_to'])==0) $this->_data['link_to'] = null;
 		if (intval($this->_data['link_id'])==0) $this->_data['link_id'] = null;
 
 		// Build the Parent Path and Full Name
-		$path = array();
-		$path[] = $this->_data['code'];
+		$code_path = array();
+		if (!empty($this->_data['code'])) {
+			$code_path[] = $this->_data['code'];
+		}
 		$parent_id = $this->_data['parent_id'];
 		$i = 0;
 
+		// Multiple Parent Tree?
+		// Not Really Supported
 		while ($parent_id) {
 			$i++;
 			$sql = 'SELECT parent_id,code FROM account where id = ?';
@@ -112,7 +119,9 @@ class Account extends ImperiumBase
 			$res = SQL::fetch_row($sql, $arg);
 			if ($res) {
 				$parent_id = $res['parent_id'];
-				$path[] = $res['code'];
+				if (!empty($res['code'])) {
+					$code_path[] = $res['code'];
+				}
 			}
 			$parent_id = null;
 			if ($i > 5) {
@@ -121,11 +130,18 @@ class Account extends ImperiumBase
 		}
 
 		$this->_data['active'] = 't';
-		$this->_data['full_code'] = implode('/',array_reverse($path));
-		$this->_data['full_name'] = $this->_data['full_code'] . ' - ' . $this->_data['kind'] . ':' . $this->_data['name'];
+		if (count($code_path) > 0) {
+			$this->_data['full_code'] = implode('/',array_reverse($code_path));
+		}
+		if (!empty($this->_data['full_code'])) {
+			$this->_data['full_name'] = $this->_data['full_code'] . ' - ';
+		}
+		$this->_data['full_name'].= $this->_data['kind'] . ':' . $this->_data['name'];
+
 		$ret = parent::save();
+
 		$this->balanceUpdate();
-		//$this->balanceAtEnd(date('Y-m-d 23:59'));
+
 	}
 
 	/**

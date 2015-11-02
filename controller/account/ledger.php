@@ -101,6 +101,8 @@ $res = SQL::fetch_all($sql, $param);
 
 $this->LedgerEntryList = $res;
 
+$this->openBalance = $this->Account->balanceAt($this->date_alpha);
+
 // ImperiumView::mruAdd($this->link(),'Ledger ' . $this->Account->name);
 $_SESSION['return-path'] = '/account/ledger';
 
