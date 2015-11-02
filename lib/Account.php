@@ -255,10 +255,7 @@ class Account extends ImperiumBase
 		// @todo Detect the Period
 		// @todo Detect Account Type - Permanant Accounts since life of Biz, Temp since previous period
 
-		//$sql = "select sum(amount) as balance from general_ledger ";
-		//$sql.= " where account_id=$this->id and date < '$date' and date>='2006-01-01'";
-
-		$sql = 'SELECT sum(amount) FROM general_ledger WHERE account_id = ? AND date <= ? ';
+		$sql = 'SELECT sum(amount) FROM general_ledger WHERE account_id = ? AND date < ? ';
 		$arg = array($this->_data['id'],$date);
 
 		if ($ex_close) {
@@ -271,6 +268,7 @@ class Account extends ImperiumBase
 		if ( (substr($this->_data['kind'],0,5)=='Asset') || (substr($this->_data['kind'],0,7)=='Expense') || (strpos($this->_data['kind'],'Drawing') > 0) ) {
 			$ret = $ret * -1;
 		}
+
 		return floatval($ret);
 	}
 
