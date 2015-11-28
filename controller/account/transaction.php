@@ -1,7 +1,6 @@
 <?php
 /**
-	@file
-	@brief Show and Save Transactions
+	Show and Save Transactions
 */
 
 namespace Edoceo\Imperium;
@@ -66,10 +65,6 @@ case 'save-copy':
 	$aje['kind'] = $_POST['kind'];
 	$aje->save();
 	$_SESSION['account-transaction'] = $aje;
-
-	// $this->_s->AccountJournalEntry->date = $this->_request->getPost('date');
-	// Was throwing and __PHP_INcomplete_Class error ?
-	// $_SESSION['account']['date'] = $_POST['date'];
 
 	// And Make the Wizard
 	// $awj = AccountWizardJournal::makeFromAccountJournal($aje);
@@ -137,10 +132,6 @@ case 'save-copy':
 
 	// Commit and Redirect
 	// $this->_d->commit();
-
-	// if ('Apply' == $_POST['c']) {
-	// 	$this->_redirect('/account/transaction?id=' . $aje->id);
-	// }
 
 	if ('save-copy' == $_POST['a']) {
 		// $_SESSION['account-transaction'] = $aje;

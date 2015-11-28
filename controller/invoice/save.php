@@ -1,6 +1,6 @@
 <?php
 /**
-
+	Save or otherwise Process the Invoice
 */
 
 namespace Edoceo\Imperium;
@@ -51,6 +51,7 @@ case 'copy':
 	Radix::redirect('/invoice/view?i=' . $I_Copy['id']);
 
 	break;
+
 case 'paid':
 
 	// New Transaction Holder
@@ -60,7 +61,6 @@ case 'paid':
 	$at->AccountJournalEntry['note'] = 'Payment for Invoice #' . $Invoice['id'];
 	$at->AccountLedgerEntryList = array();
 	// @todo Detect if should be Inbound Cash or Account Rx
-	// @todo: Remove Account Hard Coding
 
 	// This is the Cash Based Method :(
 //			// Inbound Cash
@@ -84,11 +84,7 @@ case 'paid':
 	if (empty($C['account_id'])) {
 		 $a = new Account();
 		 $a['id'] = 0;
-		 $a['full_name'] = '- Uknown -';
-	//	 // $a->parent_id = 
-	//	 $a->name = $C->name;
-	//	 $a->code = sprintf('%04d',$C->id);
-	//	 $a->save();
+		 $a['full_name'] = '- Unknown -';
 	} else {
 		$a = new Account($C['account_id']);
 	}
@@ -96,17 +92,17 @@ case 'paid':
 	$ale['account_id'] = $a['id'];
 	$ale['account_name'] = $a['full_name'];
 	$ale['amount'] = abs($Invoice['bill_amount']) * -1;
-	$ale['link_to'] = ImperiumBase::getObjectType($Invoice);
+	$ale['link_to'] = 'invoice'; // ImperiumBase::getObjectType($Invoice);
 	$ale['link_id'] = $Invoice['id'];
 	$at->AccountLedgerEntryList[] = $ale;
 
 	// Credit AR
-	$a = new Account( $_ENV['account']['receive_account_id'] );
+	$a = new Account($_ENV['account']['receive_account_id']);
 	$ale = new AccountLedgerEntry();
 	$ale['account_id'] = $a['id'];
 	$ale['account_name'] = $a['full_name'];
 	$ale['amount'] = abs($Invoice['bill_amount']);
-	$ale['link_to'] = ImperiumBase::getObjectType('contact');
+	$ale['link_to'] = 'contact'; // ImperiumBase::getObjectType('contact');
 	$ale['link_id'] = $Invoice['contact_id'];
 	$at->AccountLedgerEntryList[] = $ale;
 
@@ -138,16 +134,9 @@ case 'paid':
 	}
 	// Credit Accounts Receivable
 
-	$this->_s->AccountTransaction = $at;
-	$this->_s->ReturnTo = sprintf('/invoice/view?i=%d',$Invoice->id);
-	// $ss->ReturnTo = '/invoice/payment/' . $iv->id . '?paid=true';
-	/*
-	$this->view->AccountJournalEntry = new AccountJournalEntry(null);
-	$this->view->AccountJournalEntry->date = date('m/d/Y');
-	$this->view->AccountLedgerEntryList = array();
-	$this->view->AccountLedgerEntryList[] = new AccountLedgerEntry(null);
-	$this->view->AccountLedgerEntryList[] = new AccountLedgerEntry(null);
-	*/
+	$_SESSION['account-transaction'] = $at;
+	$_SESSION['return-path'] = sprintf('/invoice/view?i=%d', $Invoice->id);
+
 	Radix::redirect('/account/transaction');
 
 // Post Charges to Customer Account
@@ -169,15 +158,11 @@ case 'post':
 	$ale['account_id'] = $a['id'];
 	$ale['account_name'] = $a['full_name'];
 	$ale['amount'] = abs($Invoice['bill_amount']) * -1;
-	$ale['link_to'] = ImperiumBase::getObjectType('contact');
+	$ale['link_to'] = 'contact';
 	$ale['link_id'] = $Invoice['contact_id'];
 	$at->AccountLedgerEntryList[] = $ale;
 
 	// Credit Customer Account - or Revenue for Instant Revenue?
-	// Old Query, Why from account by contact?
-	// $x = $this->_d->fetchRow('SELECT * FROM account WHERE contact_id = ?',array($c->id));
-	// if ($x->id) {
-	//	 $a = new Account($x->id);
 	if ($C['account_id']) {
 		$a = new Account($C['account_id']);
 	} else {
@@ -187,13 +172,9 @@ case 'post':
 	$ale['account_id'] = $a['id'];
 	$ale['account_name'] = $a['full_name'];
 	$ale['amount'] = abs($Invoice['bill_amount']);
-	$ale['link_to'] = ImperiumBase::getObjectType($Invoice);
+	$ale['link_to'] = 'invoice';
 	$ale['link_id'] = $Invoice['id'];
 	$at->AccountLedgerEntryList[] = $ale;
-
-	// @deprecated
-	// $this->_s->AccountTransaction = $at;
-	// $this->_s->ReturnTo = sprintf('/invoice/view?i=%d', $Invoice['id']);
 
 	$_SESSION['account-transaction'] = $at;
 	$_SESSION['return-path'] = sprintf('/invoice/view?i=%d', $Invoice['id']);
