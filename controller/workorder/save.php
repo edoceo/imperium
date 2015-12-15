@@ -7,7 +7,7 @@ namespace Edoceo\Imperium;
 
 use Edoceo\Radix;
 use Edoceo\Radix\Session;
-
+use Edoceo\Radix\DB\SQL;
 use Edoceo\Imperium\Auth\Hash;
 
 $id = intval($_GET['w']);
@@ -84,12 +84,15 @@ case 'save':
 	Radix::redirect('/workorder/view?w=' . $id);
 	break;
 case 'void':
-	$sql = 'UPDATE workorder_item SET status = ? WHERE workorder_id = ? AND status = ?';
-	SQL::query($sql, array('Void', $wo->id, 'Pending'));
+
+	$sql = 'UPDATE workorder_item SET status = ? WHERE workorder_id = ?';
+	$arg = array('Void', $wo['id']);
+	SQL::query($sql, $arg);
 	$wo['status'] = 'Void';
 	$wo->save();
-	Session::flash('info', "Work Order #{$wo->id} voided");
+	Session::flash('info', "Work Order #{$wo['id']} voided");
 	Radix::redirect('/');
+
 	break;
 
 }
