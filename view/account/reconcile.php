@@ -51,8 +51,6 @@ input[type="text"].ar-note {
 switch ($_ENV['mode']) {
 case 'save':
 case 'view':
-	
-	$_ENV['title'][] = sprintf('<span id="reconcile-item-size">%d</span> Items', count($this->JournalEntryList));
 
     // View the Pending Transactions
     echo '<table>';
@@ -71,7 +69,7 @@ case 'view':
     echo '<td><input style="width:1em;"></td>';
     echo '<td><input class="ar-date" id="filter-date" type="text"></td>';
     echo '<td><input class="ar-note" id="filter-note" type="text"></td>';
-    echo '<td><input class="ar-note" type="text"></td>';
+    echo '<td><input class="account-name ar-note" id="update-account" type="text"></td>';
     echo '<td></td>';
     echo '<td></td>';
     echo '<td></td>';
@@ -96,7 +94,7 @@ case 'view':
 
         $offset_id = $_ENV['offset_account_id'];
 
-		echo '<tr class="rero reconcile-item" id="journal-entry-index-' . $je_i . '">';
+		echo '<tr class="rero reconcile-item reconcile-show" id="journal-entry-index-' . $je_i . '">';
 		echo '<td class="ar-index">' . $je_i . '</td>';
 
         // Pattern Match to Find the Chosen Offseter?
@@ -177,11 +175,16 @@ case 'view':
         if (empty($date_alpha)) $date_alpha = $je->date;
         $date_omega = $je->date;
     }
+
+	// Footer
     echo '<tr>';
     echo '<td colspan="4">Summary: ' . $date_alpha . ' - ' . $date_omega . '</td>';
     echo '<td class="r">' . number_format($dr,2) . '</td>';
     echo '<td class="r">' . number_format($cr,2) . '</td>';
     echo '</table>';
+
+    // Set Title with Known Count
+	$_ENV['title'][] = sprintf('<span id="reconcile-item-size">%d</span> Items', $je_i);
 
     //$max = ($le_i * 4);
     //if ($max > intval(ini_get('max_input_vars'))) {
@@ -211,7 +214,28 @@ default:
 ?>
 
 <script>
-function acChangeSelect(e, ui)
+function acChange(e, ui)
+{
+    var c = parseInt($(e.target).data('index'));
+	$('#account_id-' + c).val(ui.item.id);
+	$('#account_name-' + c).val(ui.item.value);
+}
+
+function acFocus(e, ui)
+{
+    var c = parseInt($(e.target).data('index'));
+	$('#account_id-' + c).val(ui.item.id);
+	$('#account_name-' + c).val(ui.item.value);
+}
+
+function acSelect(e, ui)
+{
+    var c = parseInt($(e.target).data('index'));
+	$('#account_id-' + c).val(ui.item.id);
+	$('#account_name-' + c).val(ui.item.value);
+}
+
+function acChangeFocusSelect(e, ui)
 {
     var c = parseInt($(e.target).data('index'));
 	$('#account_id-' + c).val(ui.item.id);
@@ -243,17 +267,25 @@ $(function() {
 		$('#reconcile-item-size').html(show);
     });
 
+    // Set all Visible Accounts to this one
+    $('#update-account').on('blur change', function() {
+    	var a = $(this).val();
+		$('.reconcile-show .account-name').each(function(i, n) {
+			$(n).val(a).blur();
+		});
+    });
+
     $('.account-name').autocomplete({
 		delay: 100,
         source: <?= $account_list_json; ?>,
-        focus: acChangeSelect,
-        select: acChangeSelect,
-        change: acChangeSelect,
+        focus: acFocus,
+        select: acSelect,
+        change: acChange,
         response: function(e, ui) {
         	if (1 == ui.content.length) {
         		ui.item = ui.content[0];
         		delete ui.content;
-        		acChangeSelect(e, ui);
+        		acChangeFocusSelect(e, ui);
         	}
         }
     });

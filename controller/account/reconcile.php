@@ -52,6 +52,7 @@ case 'upload': // Read the Uploaded Data
 	$_ENV['offset_account_id'] = $_POST['offset_id'];
 
 	break;
+
 case 'save': // Save the Uploaded Transactions
 
 	$_ENV['upload_account_id'] = $_SESSION['reconcile_upload_id'];

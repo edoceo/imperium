@@ -4,7 +4,8 @@
 	@brief Income Statement
 */
 
-// $db = Zend_Registry::get('db');
+use Edoceo\Radix\Session;
+use Edoceo\Radix\DB\SQL;
 
 switch ($this->Period) {
 case 'm':
