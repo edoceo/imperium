@@ -21,24 +21,25 @@ if (is_array($_ENV['title'])) {
 	$_ENV['title'] = implode(' &raquo; ',$_ENV['title']);
 }
 
-echo "<!doctype html>\n<html>\n";
+echo "<!DOCTYPE html>\n<html>\n";
 echo '<head>';
+echo '<meta charset="utf-8">';
+echo '<meta http-equiv="x-ua-compatible" content="ie=edge">';
 echo '<meta name="viewport" content="initial-scale=1, user-scalable=yes">';
-echo '<title>Imperium: ' . $_ENV['title'] . '</title>';
-
 // echo '<link href="//gcdn.org/normalize/3.0.2/normalize.css" rel="stylesheet">';
-echo '<link href="//gcdn.org/pure/0.6.0/pure.css" rel="stylesheet">';
+// echo '<link href="//gcdn.org/pure/0.6.0/pure.css" rel="stylesheet">';
+// echo '<link href="//cdn.jsdelivr.net/picnicss/4.1.3/picnic.min.css" rel="stylesheet">';
 echo '<link href="//gcdn.org/font-awesome/4.2.0/font-awesome.css" rel="stylesheet">';
 // echo '<link href="//gcdn.org/jquery-ui/1.10.2/smoothness.css" rel="stylesheet">';
-echo '<link href="//gcdn.org/radix/radix.css" rel="stylesheet">';
-echo '<link href="' . Radix::link('/css/base.css') . '" rel="stylesheet">';
+// echo '<link href="//gcdn.org/radix/radix.css" rel="stylesheet">';
+echo '<link href="' . Radix::link('/css/app.css') . '" rel="stylesheet">';
 echo '<link href="' . Radix::link('/img/imperium-icon.ico') . '" rel="shortcut icon">';
 echo '<link href="' . Radix::link('/img/imperium-icon.png') . '" rel="apple-touch-icon">';
 echo '<script src="//gcdn.org/jquery/1.10.2/jquery.js"></script>';
 echo '<script src="//gcdn.org/jquery-ui/1.10.2/jquery-ui.js"></script>';
 echo '<script src="' . Radix::link('/js/imperium.js') . '"></script>';
 echo '<script>Imperium.base = "' . Radix::base(true) . '";</script>';
-
+echo '<title>Imperium: ' . $_ENV['title'] . '</title>';
 echo "</head>\n<body>\n";
 
 // Content Header

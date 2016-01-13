@@ -7,80 +7,85 @@
 namespace Edoceo\Imperium;
 
 use Edoceo\Radix;
+use Edoceo\Radix\Filter;
 use Edoceo\Radix\HTML\Form;
 
+App::addMRU('/contact/view?c=' . $this->Contact['id'], '<i class="fa fa-user"></i> ' . html($this->Contact['name']));
 
 // Web Site & Email
-$url = parse_url($this->Contact['url']);
-if (!empty($url['host']) && !empty($url['path'])) {
-	if (empty($url['scheme'])) $url['scheme'] = 'http';
-	if (empty($url['host'])) {
-		$url['host'] = $url['path'];
-		$url['path'] = '/';
-	}
-	$this->Contact['url'] = sprintf('%s://%s%s', $url['scheme'], $url['host'], $url['path']);
-}
-
-echo '<form action="' . Radix::link('/contact/save?c=' . $this->Contact['id']) . '" method="post">';
-
-echo '<div>';
-echo Form::hidden('id',$this->Contact['id']);
-echo Form::hidden('parent_id',$this->Contact['parent_id']);
-echo '</div>';
+$this->Contact['url'] = Filter::uri($this->Contact['url']);
 
 ?>
 
-<div class="pure-g" style="position:relative;">
-<div class="pure-u-1-5"><div class="l">Contact:</div></div>
-<div class="pure-u-4-5"><?= Form::text('contact',$this->Contact['contact'])?></div>
+<style>
+form div > label {
+	display: block;
+	font-weight: bold;
+}
+.fb {
+	display: flex;
+	flex-wrap: wrap;
+}
+.fb .fi {
+	flex: 1 1 auto;
+}
+</style>
 
-<div class="pure-u-1-5"><div class="l"><?php
+<form action="<?= Radix::link('/contact/save?c=' . $this->Contact['id']) ?>" method="post">
+
+<div>
+<?= Form::hidden('id',$this->Contact['id']); ?>
+<?= Form::hidden('parent_id',$this->Contact['parent_id']); ?>
+</div>
+
+<div class="fb" style="margin:16px;">
+
+<div class="fi">
+	<label>Contact:</label>
+	<?= Form::text('contact',$this->Contact['contact'])?>
+</div>
+<div class="fi">
+	<label>Company:</label>
+	<?= Form::text('company',$this->Contact['company'])?>
+<?php
 if (!empty($this->Contact['parent_id'])) {
-    echo '<a href="' . Radix::link('/contact/view?c=' . $this->Contact['parent_id']) . '">Company:</a>';
-} else {
-    echo 'Company:';
-}
-?></div></div>
-<div class="pure-u-4-5"><?= Form::text('company',$this->Contact['company'])?></div>
-
-<div class="pure-u-1-5"><div class="l">Phone:</div></div>
-<div class="pure-u-4-5"><?= Form::text('phone', $this->Contact['phone'])?></div>
-
-<div class="pure-u-1-5"><div class="l"><?=( strlen($this->Contact['email']) ? '<a href="mailto:' . $this->Contact['email'] . '">Email:</a>' : 'Email:' ) ?></div></div>
-<div class="pure-u-4-5"><?= Form::text('email', $this->Contact['email'])?></div>
-
-<div class="pure-u-1-5"><div class="l"><?=( strlen($this->Contact['url']) ? '<a href="' . $this->Contact['url'] . '" target="_blank">Web-Site</a>:' : 'Web-Site:' ) ?></div></div>
-<div class="pure-u-4-5"><?= Form::text('url', $this->Contact['url']) ?></div>
-
-<div class="pure-u-1-5"><div class="l">Tags:</div></div>
-<div class="pure-u-4-5"><?= Form::text('tags', $this->Contact['tags']) ?></div>
-
-<div class="pure-u-1-5"><div class="l"><?php
-if (empty($this->Account['id'])) {
-	echo 'Account:';
-} else {
-	echo '<a href="' . Radix::link('/account/ledger?' . http_build_query(array('id' => $this->Account['id']))) . '">Account</a>:';
-}
-?></div></div>
-<div class="pure-u-4-5"><?php
-if (empty($this->Account['id'])) {
-	echo '<button class="exec" name="a" title="Create new Account for this Contact" style="margin:4px;" type="submit" value="create-account">Create</button>';
-} else {
-	echo '<span style="font-size: 22px; line-height: 32px;">';
-	echo '$' . number_format($this->Account['balance'],2);
-	// echo '<input id="account" style="width:20em;" type="text" value="' . $this->Account['full_name'] . '">';
-	// echo '<input id="account_id" name="account_id" type="hidden" value="' . $this->Account['id'] . '">';
-	echo '</span>';
+    echo ' <a href="' . Radix::link('/contact/view?c=' . $this->Contact['parent_id']) . '"><i class="fa fa-bolt"></i></a>';
 }
 ?>
 </div>
 
-<div class="pure-u-1 pure-u-md-1-2">
-	<!-- Table -->
-	<div>Kind: <?= Form::select('kind', $this->Contact['kind'], $this->KindList) ?></div>
-	<div>Status: <?= Form::select('status', $this->Contact['status'], $this->StatusList) ?></div>
+<div class="fi">
+	<label>Phone:</label>
+	<?= Form::text('phone', $this->Contact['phone'])?>
 </div>
-<div class="pure-u-1 pure-u-md-1-2">
+
+<div class="fi">
+	<label><?=( strlen($this->Contact['email']) ? '<a href="mailto:' . $this->Contact['email'] . '">Email:</a>' : 'Email:' ) ?></label>
+	<?= Form::text('email', $this->Contact['email'])?>
+</div>
+
+<div class="fi">
+	<label><?=( strlen($this->Contact['url']) ? '<a href="' . $this->Contact['url'] . '" target="_blank">Web-Site</a>:' : 'Web-Site:' ) ?></label>
+	<?= Form::text('url', $this->Contact['url']) ?>
+</div>
+
+<div class="fi">
+	<label>Tags:</label>
+	<?= Form::text('tags', $this->Contact['tags']) ?>
+</div>
+
+<div class="fi">
+	<label>Kind</label>
+	<?= Form::select('kind', $this->Contact['kind'], $this->KindList) ?>
+</div>
+<div class="fi">
+	<label>Status:</label>
+	<?= Form::select('status', $this->Contact['status'], $this->StatusList) ?>
+</div>
+</div>
+
+<!-- Images? -->
+<div>
 <?php
 $img = sprintf('/img/content/contact/%u/0.jpg', $this->Contact['id']);
 $src = sprintf('%s/webroot/%s', APP_ROOT, $img);
@@ -90,21 +95,7 @@ if (is_file($src)) {
 ?>
 </div>
 
-</div>
-
-
-
 <?php
-echo '<table>';
-
-// First & Last Name
-// if ($this->Contact['kind'] == 'Person') {
-//     echo '<tr>';
-//     echo '<td class="l" style="width:6em;">First:</td><td>' . $this->formText('first_name',$this->Contact['first_name'],array('style'=>'width: 100%')) . '</td>';
-//     echo '<td class="l" style="width:5em;">Last:</td><td>' . $this->formText('last_name',$this->Contact['last_name'],array('style'=>'width: 100%')) . '</td>';
-//     echo '</tr>';
-// }
-
 // Channels
 if (!empty($this->ContactChannelList)) {
     $list = array();
@@ -130,36 +121,13 @@ if (!empty($this->ContactChannelList)) {
         //}
         $list[] = $buf;
     }
-    echo '<tr><td class="l">Channels:</td><td colspan="5">' . implode(', ', $list) . '</td></tr><tr>';
+    echo '<div style="margin:16px;"><label>Channels:</label>' . implode(', ', $list) . '</div>';
 }
-
-
-// Flags
-// $flag_list = array();
-// if ($this->Contact['kind'] == 'Person') {
-//     $flag_list[] = '<label style="margin-right:16px;"><input ' . ($this->Contact->hasFlag(Contact::FLAG_BILL) ? 'checked="checked" ' : null) . 'name="flag_bill" type="checkbox" value="1" /> Billing Contact</label>';
-//     $flag_list[] = '<label style="margin-right:16px;"><input ' . ($this->Contact->hasFlag(Contact::FLAG_SHIP) ? 'checked="checked" ' : null) . 'name="flag_ship" type="checkbox" value="1" /> Shipping Contact</label>';
-// }
-// if (count($flag_list)) {
-//     echo '<tr><td class="l">Flags:</td><td colspan="3">' . implode(' ',$flag_list) . '</td></tr>';
-// }
-
-// Account?
-// $list = Account::listAccounts();
-// $AccountList = array(
-//     null => '-None-',
-// );
-// foreach ($list as $x) {
-//     $AccountList[$x->id] = $x->full_name;
-// }
 
 // Google Contact Detail
 // echo '<tr><td class="l">Google:</td><td colspan="3"><div id="contact-google-area"><input id="contact-google-view" type="button" value="View" ></div></td></tr>';
 
-
-echo '</table>';
-
-echo '<div class="bf">';
+echo '<div class="form-controls">';
 echo '<button class="exec" name="a" type="submit" value="capture">Photo</button>';
 echo '<button class="exec" id="exec-contact-ping" type="button" value="ping">Ping</button>';
 echo '<button class="good" name="a" type="submit" value="save">Save</button>';
@@ -303,6 +271,13 @@ if (empty($this->Contact['parent_id'])) {
     }
 }
 
+// Event History
+//$arg = array(
+//    'list' => $this->ContactNoteList,
+//    'page' => Radix::link('/note/edit?c=' . $this->Contact['id']),
+//);
+//echo Radix::block('note-list',$arg);
+
 // Notes
 $arg = array(
     'list' => $this->ContactNoteList,
@@ -331,6 +306,23 @@ echo '<h2><a href="' . Radix::link('/invoice/new?c=' . $this->Contact['id']) . '
 if ($this->InvoiceList) {
     echo Radix::block('invoice-list', array('list'=>$this->InvoiceList));
 }
+
+// Accounts
+echo '<div>';
+echo '<h2>Accounts: </h2>';
+if (empty($this->Account['id'])) {
+	echo 'Receiveable:';
+	echo '<button class="exec" name="a" title="Create new Account for this Contact" style="margin:4px;" type="submit" value="create-account">Create</button>';
+} else {
+	echo '<a href="' . Radix::link('/account/ledger?' . http_build_query(array('id' => $this->Account['id']))) . '">Account</a>:';
+	echo '<span style="font-size: 22px; line-height: 32px;">';
+	echo '$' . number_format($this->Account['balance'],2);
+	// echo '<input id="account" style="width:20em;" type="text" value="' . $this->Account['full_name'] . '">';
+	// echo '<input id="account_id" name="account_id" type="hidden" value="' . $this->Account['id'] . '">';
+	echo '</span>';
+}
+echo '</div>';
+
 
 // History
 $x = array(

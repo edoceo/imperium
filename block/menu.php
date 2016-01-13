@@ -32,8 +32,9 @@ echo '<li><a href="' . Radix::link('/') . '" title="Dashboard"><i class="fa fa-d
 
     // Show MRU
 	if (!empty($_SESSION['mru']) && (count($_SESSION['mru']) > 0)) {
-		foreach ($_SESSION['mru'] as $i=>$key) {
-			echo '<li>' . $key . '</li>';
+		$mru = array_reverse($_SESSION['mru']);
+		foreach ($mru as $key => $val) {
+			echo '<li><a href="' . Radix::link($val['link']) . '">' . $val['html'] . '</a></li>';
 		}
 		echo '<li><hr /></li>';
 	}

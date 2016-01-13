@@ -22,7 +22,7 @@ $list = array();
 if ($page_cur > $page_min) {
 	$list[] = '<a href="?' . http_build_query(array_merge($_GET,array('page'=>($page_cur-1)))) . '">&laquo;&laquo;</a>';
 } else {
-	$list[] = '<span class="no">&laquo;&laquo;</span>';
+	$list[] = '<span class="off">&laquo;&laquo;</span>';
 }
 
 for ($page_idx = 1; $page_idx <= $page_max; $page_idx++) {
@@ -40,7 +40,7 @@ for ($page_idx = 1; $page_idx <= $page_max; $page_idx++) {
 if ($page_cur < $page_max) {
 	$list[] = '<a href="?' . http_build_query(array_merge($_GET,array('page'=>$page_cur+1))) . '">&raquo;&raquo;</a>';
 } else {
-	$list[] = '<span class="no">&raquo;&raquo;</span>';
+	$list[] = '<span class="off">&raquo;&raquo;</span>';
 }
 
     // Previous page link 
@@ -59,7 +59,7 @@ if ($page_cur < $page_max) {
     //     }
     // }
 
-echo '<div class="page_list">';
+echo '<div class="jump_list">';
 echo '<span style="float:right;">Page ' . $page_cur . '/' . $page_max . '</span>';
 echo implode('|',$list);
 echo '</div>';

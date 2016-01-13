@@ -3,7 +3,7 @@
 	@see http://www.w3.org/TR/CSS2/cascade.html#specificity
 */
 
-@body_bg: #f6f6f6;
+@body_bg: #fcfcfc;
 
 @high_bg: #377D9F;
 
@@ -25,11 +25,11 @@ a:hover {
 	cursor: pointer;
 }
 body {
-	background:@body_bg;
-	font-size:18px;
+	background: @body_bg;
+	font-size: 18px;
 }
 header {
-	background:@menu_bg;
+	background: @menu_bg;
 }
 header:after {
 	content: "";
@@ -71,6 +71,7 @@ dl {
 dt {
 	font-weight: bold;
 }
+
 footer {
     background:@menu_bg;
     border-top:1px solid #000;
@@ -123,22 +124,6 @@ hr {
 img {
 	vertical-align: bottom;
 }
-input[type="text"],
-input[type="date"],
-input[type="datetime"],
-input[type="email"],
-input[type="number"],
-input[type="password"],
-input[type="search"],
-input[type="tel"],
-input[type="time"],
-input[type="url"],
-textarea {
-	display:inline-block;
-	font-size:100%;
-	margin:4px;
-	width:99%;
-}
 input[type="date"] {
 	width:12em;
 }
@@ -147,10 +132,6 @@ input[type="time"]
 {
 	text-align: right;
 	width: 6em;
-}
-select {
-	margin:4px;
-	padding:6px;
 }
 
 li {
@@ -173,8 +154,11 @@ pre {
 	padding: 1px;
 }
 
+table {
+	width: 100%;
+}
 table td {
-	padding:4px;
+	padding: .25em;
 	vertical-align: top;
 }
 td.l {
@@ -329,6 +313,16 @@ div.edit-show {
 	word-wrap: break-word;
 }
 
+/**
+	Form Stuff
+*/
+.form-controls {
+	margin: 0.5em;
+	outline: 1px dashed #fff;
+	padding: 0 0 0 1em;
+}
+
+
 /* Edoceo Standard Classes */
 .b {
 	font-weight: bold;
@@ -339,22 +333,6 @@ div.edit-show {
 .g {
 	font-size: 110%;
 }
-
-/** Label */
-.l {
-	font-size: 22px;
-	font-weight: bold;
-	line-height: 32px;
-	position: relative;
-	text-align:right;
-	top: 50%;
-	/*
-	transform: translateY(-50%);
-	-ms-transform: translateY(-50%);
-	-webkit-transform: translateY(-50%);
-	*/
-}
-
 
 .r {
 	text-align: right;
@@ -385,53 +363,28 @@ div.edit-show {
 	text-indent: 2em;
 }
 
-.fb20 {
-	display: inline;
-	float: left;
-	width: 20%;
-}
-
-.fb40 {
-	display: inline;
-	float: left;
-	width: 40%;
-}
-.fb50 {
-	display: inline;
-	float: left;
-	width: 50%;
-}
-.fb60 {
-	display: inline;
-	float: left;
-	width: 60%;
-}
-
-.fb100 {
-	display: inline;
-	float: left;
-	width: 100%;
-}
-
 .m16 {
 	margin: 16px 16px 0px 16px;
 }
 
-.fail {
+/**
+	Radix Flash Messages
+*/
+div.fail {
 	background-color: #f00;
 	border-radius: 4px;
 	font-weight: 700;
 	margin: 5px;
 	text-align: center;
 }
-.info {
+div.info {
 	background-color: #369;
 	border-radius: 4px;
 	color: #fff;
 	font-weight: 700;
 	text-align: center;
 }
-.warn { background-color: #909;
+div.warn { background-color: #909;
 	border-radius: 4px;
 	color: #fff;
 	font-weight: 700;
@@ -440,6 +393,9 @@ div.edit-show {
 	text-align: center;
 }
 
+/**
+	Page List and Jump List Bar
+*/
 .jump_list {
 	background: #ccc;
 	margin: 4px auto;
@@ -451,19 +407,7 @@ div.edit-show {
 .jump_list a:hover {
 	color: #f00;
 }
-
-.page_list {
-	background: #ccc;
-	margin: 4px auto;
-	text-align:center;
-}
-.page_list a {
-	text-decoration: none;
-}
-.page_list a:hover {
-	color: #f00;
-}
-.page_list .no {
+.jump_list .off {
 	color: #999;
 }
 
@@ -535,6 +479,19 @@ tr.yearly td
 	color: #03c;
 }
 
+/** Over-Ride picni.css */
+.button, [type=submit], button {
+	margin: .3em;
+}
+
+[type=checkbox], [type=radio] {
+	opacity: 1;
+	width: 1.75em;
+}
+
+select {
+	width: inherit;
+}
 
 /** Vendor Over-Rides **/
 .ui-autocomplete {

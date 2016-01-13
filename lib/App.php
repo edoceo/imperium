@@ -56,38 +56,26 @@ class App
 	/**
 		Adds and Item to the MRU
 	*/
-	static function addMRU($x)
+	static function addMRU($l, $h)
 	{
 		if (empty($_SESSION['mru'])) $_SESSION['mru'] = array();
 		if (!is_array($_SESSION['mru'])) $_SESSION['mru'] = array();
 
-		if (empty($_SESSION['mru-list'])) $_SESSION['mru-list'] = array();
-		if (!is_array($_SESSION['mru-list'])) $_SESSION['mru-list'] = array();
+		$key = md5($l);
+		if (!empty($_SESSION['mru'][$key])) {
+			unset($_SESSION['mru'][$key]);
+		}
 
 		// Remove Tailing Items
-		while (count($_SESSION['mru']) > 5) { // $_SESSION['mru-max']) {
-			array_pop($_SESSION['mru']);
+		while (count($_SESSION['mru']) >= 5) { // $_SESSION['mru-max']) {
+			array_shift($_SESSION['mru']);
 		}
 
-		// $key_list = array_keys($_SESSION['mru']);
-		$key = md5(serialize($x));
-		// if (in_array($key, $_SESSION['mru-list'])) {
-		// 	// array_unshift($_SESSION['mru-list'], $key);
-		// 	// unset($_SESSION['mru-list'][$key]);
-		// 	// unset($_SESSION['mru'][$key]);
-		// }
-
-		if (is_object($x)) {
-			array_unshift($_SESSION['mru'], $x);
-		} elseif (is_array($x)) {
-			// array_unshift($_SESSION['mru'], $x);
-		} elseif (is_string($x)) {
-			// array_unshift($_SESSION['mru-list'], $key);
-			// array_unshift($key_list, $key);
-			$_SESSION['mru'][$key] = $x;
-		}
-
-		// $_SESSION['mru-list'] = $key_list;
+		// Add the new one (reverse on display
+		$_SESSION['mru'][$key] = array(
+			'link' => $l,
+			'html' => $h,
+		);
 
 	}
 
