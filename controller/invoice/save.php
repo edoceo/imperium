@@ -163,24 +163,22 @@ case 'post':
 	//$ale['amount'] = abs($Invoice['bill_amount']) * -1;
 	//$at->AccountLedgerEntryList[] = $ale;
 
-	// Debit Revenue
-	$a = new Account( $_ENV['account']['revenue_id'] );
-	$ale = new AccountLedgerEntry();
-	$ale['account_id'] = $a['id'];
-	$ale['account_name'] = $a['full_name'];
-	$ale['amount'] = abs($Invoice['bill_amount']) * -1;
-	// $ale['link_to'] = 'contact';
-	// $ale['link_id'] = $Invoice['contact_id'];
-	$at->AccountLedgerEntryList[] = $ale;
-
-	// Credit Customer Account
+	// Debit Customer
 	$a = new Account( $C['account_id'] );
 	$ale = new AccountLedgerEntry();
 	$ale['account_id'] = $a['id'];
 	$ale['account_name'] = $a['full_name'];
-	$ale['amount'] = abs($Invoice['bill_amount']);
+	$ale['amount'] = abs($Invoice['bill_amount']) * -1;
 	$ale['link_to'] = 'invoice';
 	$ale['link_id'] = $Invoice['id'];
+	$at->AccountLedgerEntryList[] = $ale;
+
+	// Credit Revenue
+	$a = new Account( $_ENV['account']['revenue_id'] );
+	$ale = new AccountLedgerEntry();
+	$ale['account_id'] = $a['id'];
+	$ale['account_name'] = $a['full_name'];
+	$ale['amount'] = abs($Invoice['bill_amount']);
 	$at->AccountLedgerEntryList[] = $ale;
 
 	$_SESSION['account-transaction'] = $at;
