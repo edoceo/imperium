@@ -143,7 +143,7 @@ case 'post':
 
 	$C = new Contact($Invoice['contact_id']);
 	if (empty($C['account_id'])) {
-		Session::flash('fail', 'Cannot Post Invoice unless the Contact has a Receive Account');
+		Session::flash('fail', 'Cannot Post Invoice unless the Contact has an Account');
 		Radix::redirect('/invoice/view?i=' . $Invoice['id']);
 	}
 
@@ -163,8 +163,18 @@ case 'post':
 	//$ale['amount'] = abs($Invoice['bill_amount']) * -1;
 	//$at->AccountLedgerEntryList[] = $ale;
 
-	// Credit Customer Account - or Revenue for Instant Revenue?
+	// Debit Revenue
 	$a = new Account( $_ENV['account']['revenue_id'] );
+	$ale = new AccountLedgerEntry();
+	$ale['account_id'] = $a['id'];
+	$ale['account_name'] = $a['full_name'];
+	$ale['amount'] = abs($Invoice['bill_amount']) * -1;
+	// $ale['link_to'] = 'contact';
+	// $ale['link_id'] = $Invoice['contact_id'];
+	$at->AccountLedgerEntryList[] = $ale;
+
+	// Credit Customer Account
+	$a = new Account( $C['account_id'] );
 	$ale = new AccountLedgerEntry();
 	$ale['account_id'] = $a['id'];
 	$ale['account_name'] = $a['full_name'];
@@ -172,15 +182,6 @@ case 'post':
 	$ale['link_to'] = 'invoice';
 	$ale['link_id'] = $Invoice['id'];
 	$at->AccountLedgerEntryList[] = $ale;
-
-	// Debit Accounts Receivable for this Client
-	$a = new Account( $_ENV['account']['revenue_account_id'] );
-	$ale = new AccountLedgerEntry();
-	$ale['account_id'] = $a['id'];
-	$ale['account_name'] = $a['full_name'];
-	$ale['amount'] = abs($Invoice['bill_amount']) * -1;
-	// $ale['link_to'] = 'contact';
-	// $ale['link_id'] = $Invoice['contact_id'];
 
 	$_SESSION['account-transaction'] = $at;
 	$_SESSION['return-path'] = sprintf('/invoice/view?i=%d', $Invoice['id']);

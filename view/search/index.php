@@ -165,10 +165,7 @@ foreach ($res as $rec) {
 
 echo '</dl>';
 
-if ($idx == 0) {
-    _draw_rebuild_prompt();
-    return(0);
-}
+_draw_rebuild_prompt();
 
 $_ENV['title'] = array('Search', $q, ($idx==1 ? '1 result' : $idx . ' results') );
 

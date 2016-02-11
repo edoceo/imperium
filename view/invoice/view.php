@@ -17,7 +17,7 @@ use Edoceo\Radix\HTML\Form;
 
 $_ENV['title'] = array('Invoice','#' .$this->Invoice['id']);
 
-App::addMRU(Radix::link('/invoice/view?i=' . $this->Invoice['id']));
+App::addMRU(Radix::link('/invoice/view?i=' . $this->Invoice['id']), sprintf('Invoice #%d', $this->Invoice['id']));
 
 $contact_address_list = array();
 

@@ -8,6 +8,18 @@
 
 _api_log_request();
 
+$fh = fopen('/tmp/paypal-ipn.log','a');
+echo "\nAt: " . strftime('%Y-%m-%d %H:%M:%S') . "\n";
+if (count($_GET)) {
+    echo "GET:\n";
+    fwrite($fh,print_r($_POST,true));
+}
+if (count($_POST)) {
+    echo "POST:\n";
+    fwrite($fh,print_r($_POST,true));
+}
+exit(0);
+
 // // read the post from PayPal system and add 'cmd'
 // $req = 'cmd=' . urlencode('_notify-validate');
 //  
@@ -19,17 +31,17 @@ _api_log_request();
 $post = $_POST;
 $post['cmd'] = '_notify-validate';
 
-$ch = curl_init();
-curl_setopt($ch, CURLOPT_URL, 'https://www.paypal.com/cgi-bin/webscr');
-curl_setopt($ch, CURLOPT_HEADER, false);
-curl_setopt($ch, CURLOPT_POST, true);
-curl_setopt($ch, CURLOPT_RETURNTRANSFER,true);
-curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
-curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 1);
-curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
-curl_setopt($ch, CURLOPT_HTTPHEADER, array('Host: www.paypal.com'));
-$res = curl_exec($ch);
-curl_close($ch);
+// $ch = curl_init();
+// curl_setopt($ch, CURLOPT_URL, 'https://www.paypal.com/cgi-bin/webscr');
+// curl_setopt($ch, CURLOPT_HEADER, false);
+// curl_setopt($ch, CURLOPT_POST, true);
+// curl_setopt($ch, CURLOPT_RETURNTRANSFER,true);
+// curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
+// curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 1);
+// curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
+// curl_setopt($ch, CURLOPT_HTTPHEADER, array('Host: www.paypal.com'));
+// $res = curl_exec($ch);
+// curl_close($ch);
 
 fwrite($fh,"\nPayPal Say:\n$res\n---\n");
 
@@ -60,22 +72,6 @@ fclose($fh);
 
 
 /* Another version */
-
-/**
-    @file
-    @brief PayPal IPN Event Listener
-*/
-
-$fh = fopen('/tmp/paypal-ipn.log','a');
-echo "\nAt: " . strftime('%Y-%m-%d %H:%M:%S') . "\n";
-if (count($_GET)) {
-    echo "GET:\n";
-    fwrite($fh,print_r($_POST,true));
-}
-if (count($_POST)) {
-    echo "POST:\n";
-    fwrite($fh,print_r($_POST,true));
-}
 
 // // read the post from PayPal system and add 'cmd'
 // $req = 'cmd=' . urlencode('_notify-validate');
