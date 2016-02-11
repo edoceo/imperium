@@ -51,9 +51,18 @@ class WorkOrderItem extends ImperiumBase
 			$this->_data['auth_user_id'] = $_SESSION['uid'];
 		}
 
+		// Fix Date/Time Values
 		if (strtotime($this->_data['date']) == false) {
 			$this->_data['date'] = null;
 		}
+		if (empty($this->_data['time_alpha'])) {
+			$this->_data['time_alpha'] = null;
+		}
+		if (empty($this->_data['time_omega'])) {
+			$this->_data['time_omega'] = null;
+		}
+
+		// Fix Numeric Values
 		foreach (array('e_quantity','e_rate','e_tax_rate', 'a_quantity', 'a_rate', 'a_tax_rate') as $x) {
 			if (empty($this->_data[$x])) $this->_data[$x] = 0;
 		}

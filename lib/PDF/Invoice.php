@@ -50,10 +50,10 @@ class Invoice extends Base
 		// Data
 		$this->setFont('', 'B', 12);
 		$this->setXY(1.25, 2.5);
-		$this->cell(3, 3/16, $co['name']);
+		$this->cell(3, 3/16, $co['company']);
 
 		$this->setXY(5.00, 2.5);
-		$this->cell(3, 3/16, $co['name']);
+		$this->cell(3, 3/16, $co['company']);
 
 		// @todo Somethign about New-Lines
 		$this->setXY(1.25, 3);
@@ -105,7 +105,7 @@ class Invoice extends Base
 
 		// Items Table
 		$this->setFont('', '', 12);
-		$y = 3.75;
+		$y = 3.75 + ( 1 / 16 );
 		$sub_total = 0;
 		$tax_total = 0;
 		$ivi_list = $iv->getInvoiceItems();
@@ -186,61 +186,72 @@ class Invoice extends Base
 		$this->setXY(7, $y);
 		$this->cell(1, 4/16, sprintf('$%.2f',$sub_total + $tax_total), null, null, 'R');
 
-//		// Account / Invoice Transactions
-//		$txn_list = $iv->getTransactions();
-//		$txn_total = 0;
-//
-//		$y -= 12;
-//		$page->drawLine(36,$y,576,$y);
-//		$y -= 12;
-//		$this->drawText('Account Transactions:',36,$y);
-//		$this->setFont('', '', 12);
-//		foreach ($txn_list as $txn) {
-//
-//			$y -= 12;
-//
-//			$t = strip_tags(ImperiumView::niceDate($txn->date));
-//
-//			// Amounts > 0 Are Payments
-//			if ($txn->amount >= 0) {
-//				$t.= ' ' . $txn->note;
-//				// $page->drawText(,36,$y);
-//			} else {
-//				$t.= ' Payment';
-//			}
-//
-//			// Note
-//			$this->drawText($t,36,$y);
-//
-//			// Amount
-//			$t = sprintf('$%.2f',$txn->amount);
-//			$w = $pdf->getTextWidthAscii($this->getFont(), $this->getFontSize(), $t);
-//			$this->drawText($t,574 - $w,$y);
-//
-//			// Add Sums
-//			$txn_total += $txn->amount;
-//		}
-//
+		// Account / Invoice Transactions
+		$txn_list = $iv->getTransactions();
+		$txn_total = 0;
+
+		//$y += 1/16;
+		//$this->line(0.5, $y, 8, $y);
+
+		$y += 1/2;
+		$this->setXY(0.5, $y);
+		$this->line(0.5, $y, 8, $y);
+		$this->cell(4.5, 4/16, 'Account Transactions:');
+		$y += 1/4;
+		// $this->setFont('', '', 12);
+		foreach ($txn_list as $txn) {
+
+			// $t = strip_tags(ImperiumView::niceDate($txn['date']));
+			$t = $txn['date'];
+
+			// Amounts > 0 Are Payments
+			if ($txn['amount'] >= 0) {
+				$t.= ' ' . $txn['note'];
+				// $page->drawText(,36,$y);
+			} else {
+				$t.= ' Payment';
+			}
+
+			// Note
+			$this->setXY(0.5, $y);
+			$this->cell(4.5, 1/2, $t);
+			// $this->drawText($t,36,$y);
+
+			// Amount
+			$t = sprintf('$%.2f',$txn['amount']);
+			// $w = $pdf->getTextWidthAscii($this->getFont(), $this->getFontSize(), $t);
+			// $this->drawText($t,574 - $w,$y);
+			$this->setXY(7, $y);
+			$this->cell(1, 1/2, $t, null, null, 'R');
+
+			// Add Sums
+			$txn_total += $txn['amount'];
+
+			$y += 1/4;
+		}
+
 //		// Double Line
 //		$y -= 4;
 //		$this->drawLine(36,$y,576,$y);
 //		$y -= 2;
 //		$this->drawLine(36,$y,576,$y);
 //		$y -= 4;
-//
-//		// Balance
+
+		// Balance
+		$this->setXY(0.5, 9);
+		$this->cell(4.5, 1/2, 'Balance:');
+
 //		$y -= 12;
 //		$this->drawText('Balance:',36,$y);
 //		$t = sprintf('$%.2f',$txn_total);
 //		$w = $this->getTextWidthAscii($page->getFont(),$page->getFontSize(),$t);
 //		$this->drawText($t,574 - $w,$y);
-//
+
 //		// Footer Line
-//		$this->drawLine(36,94,576,94);
-//
-//		// Footer Text
-//		$y = 81;
-//		$this->setFont('', '', 10);
+		$y = 9;
+		$this->line(0.5, $y, 8, $y);
+
+		// Footer Text
 //		$text = explode('\n',$_ENV['invoice']['foot_note']); // Split on Literal \n
 //		foreach ($text as $line) {
 //			$this->drawText($line,39,$y);
@@ -248,16 +259,15 @@ class Invoice extends Base
 //		}
 
 		// Footer Summary
-		/*
-		if ($this->_invoice->bill_amount==$this->_invoice->paid_amount)
-		{
-			$this->SetFont('Arial','B',12);
-			$this->SetTextColor(255,0,0);
-			$this->Cell(1,PDFDocument::PDF_LH_12,'Paid in Full','BRT',null,'R');
+		if ($iv['bill_amount'] ==$iv['paid_amount']) {
+			$this->setXY(7, 9);
+			$this->setTextColor(255, 0, 0);
+			$this->cell(1, 1/2, 'Paid', null, null, 'R');
 		} else {
+			//$this->SetFont('Arial','B',12);
+			//$this->SetTextColor(255,0,0);
+			//$this->Cell(1,PDFDocument::PDF_LH_12,'Paid in Full','BRT',null,'R');
 			$this->Cell(1,PDFDocument::PDF_LH_12,'$'.number_format($this->_invoice->bill_amount - $this->_invoice->paid_amount,2),'BRT',null,'R');
 		}
-		*/
-
 	}
 }

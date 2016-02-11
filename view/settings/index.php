@@ -11,19 +11,22 @@ namespace Edoceo\Imperium;
 
 use Edoceo\Radix;
 
-echo '<ul>';
-echo '<li><a href="' . Radix::link('/settings/business') . '">Business Profile</li>';
-echo '<li><a href="' . Radix::link('/settings/profile') . '">User Profile</li>';
-echo '<li><a href="' . Radix::link('/settings/password') . '">Change Password</li>';
-echo '<li><a href="' . Radix::link('/settings/registry') . '">View Regsitry</li>';
-echo '<li><a href="' . Radix::link('/settings/session') . '">View Session</li>';
-// note: to change the Business Profile edit the settings in APP /config/bootstrap.php
+$_ENV['title'] = 'Settings';
+
+acl::permit('/auth/google');
+
 
 if (!is_writable(APP_ROOT . '/var/')) {
 	echo '<li class="fail">Not Writable: ' . APP_ROOT . '/var/</li>';
 	echo '<li>chown -R ' . posix_getuid() . ':' . APP_ROOT . '/var</li>';
 }
 
+
+echo '<ul>';
+echo '<li><a href="' . Radix::link('/settings/business') . '">Business Profile</li>';
+echo '<li><a href="' . Radix::link('/settings/profile') . '">User Profile</li>';
+echo '<li><a href="' . Radix::link('/settings/password') . '">Change Password</li>';
+echo '<li><a href="' . Radix::link('/settings/session') . '">View Session</li>';
 echo '</ul>';
 
 echo '<hr>';
@@ -47,11 +50,15 @@ echo '<li><a href="' . Radix::link('/settings/users') . '">Users</a></li>';
 // echo '<li><a href="' . Radix::link('/selenium') . '">Run Selenum Tests</a></li>';
 echo '</ul>';
 
-
-
-
-
 ?>
+
+<h3>Service Integrations</h3>
+
+<dl>
+<dt><a href="<?= Radix::link('/auth/google') ?>">Google Apps</a></dt>
+<dd>Connect Calendar, Contacts and other Services: Authorize Google.</dd>
+</dl>
+
 
 <h3>Payment Notifications</h3>
 <p>Imperium can connect with a bunch of different payment systems.</p>

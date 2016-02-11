@@ -17,20 +17,11 @@ $_ENV['title'] = array("WorkOrder #{$wo['id']}", 'Build Invoice');
 switch (strtolower($_POST['cmd'])) {
 case 'invoice':
 
-	// if ($wo->status != 'Active') {
-	//     $this->_s->fail[] = 'Only Active WorkOrders may build an Invoice';
-	//     $this->redirect('/workorder/view?w=' . $id);
-	// }
-
-	// $this->_d->beginTransaction();
 	$iv = $wo->toInvoice($_POST['invoice_id']);
 	$x = $iv->getInvoiceItems();
 
 	$msg = sprintf('Invoice #%d created from Work Order #%d with %d items', $iv['id'], $wo['id'], count($x));
-	// Base_Diff::note($wo,$this->_s->info);
-	// Base_Diff::note($iv,$this->_s->info);
 	Session::flash('info', $msg);
-	// $this->_d->commit();
 	Radix::redirect('/invoice/view?i=' . $iv['id']);
 
 	break;

@@ -71,6 +71,14 @@ class WorkOrder extends ImperiumBase
 		if (empty($this->_data['auth_user_id'])) {
 			$this->_data['auth_user_id'] = $_SESSION['uid'];
 		}
+		if (empty($this->_data['base_rate'])) {
+			$this->_data['base_rate'] = null;
+		}
+		if (empty($this->_data['base_unit'])) {
+			$this->_data['base_unit'] = null;
+		}
+		
+		print_r($this->_data);
 		$x = parent::save();
 		$this->_updateBalance();
 		return $x;
@@ -88,6 +96,19 @@ class WorkOrder extends ImperiumBase
 		$sql.= 'WHERE workorder_contact.workorder_id = %d';
 		$res = $db->fetchAll(sprintf($sql,$this->id));
 		return (is_array($res) && count($res)) ? $res : null;
+	}
+
+	function getInvoices()
+	{
+		$sql = 'SELECT invoice.*, contact.name as contact_name ';
+		$sql.= ' FROM invoice ';
+		$sql.= ' JOIN contact ON invoice.contact_id=contact.id ';
+		$sql.= ' WHERE workorder_id = ?';
+		$sql.= ' ORDER BY invoice.date DESC, invoice.id DESC ';
+
+		$res = SQL::fetch_all($sql, array($this->_data['id']));
+
+		return $res;
 	}
 
 	/**
@@ -142,6 +163,17 @@ class WorkOrder extends ImperiumBase
 		$woi['a_unit'] = $this->_data['base_unit'];
 		$woi['e_rate'] = $this->_data['base_rate'];
 		$woi['e_unit'] = $this->_data['base_unit'];
+
+		switch ($this->_data['kind']) {
+		case 'Monthly':
+			$woi['kind'] = 'Subscription';
+			$woi['time_alpha'] = null;
+			$woi['time_omega'] = null;
+			$woi['e_unit'] = 'mo';
+			$woi['a_unit'] = 'mo';
+			$woi['a_quantity'] = 1;
+		}
+
 		return $woi;
 	}
 
@@ -186,6 +218,7 @@ class WorkOrder extends ImperiumBase
 			$iv = new Invoice();
 			$iv['auth_user_id'] = $this['auth_user_id'];
 			$iv['contact_id'] = $this['contact_id'];
+			$iv['workorder_id'] = $this['id'];
 			$iv['note'] = $this['note'];
 			$iv->save();
 		}

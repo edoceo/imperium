@@ -22,13 +22,11 @@ case 'capture':
 case 'create-account':
 
 	$a = new Account();
-	$a['kind'] = 'Sub: Customer';
-	$a['code'] = $id;
+	$a['kind'] = 'Asset';
+	$a['code'] = $C['id'];
 	$a['name'] = $C['name'];
-	$a['parent_id'] = $_ENV['account']['contact_ledger_container_id'];
+	$a['parent_id'] = $_ENV['account']['receive_account_id'];
 	$a['active'] = 't';
-	$a['link_to'] = 'contact';
-	$a['link_id'] = $id;
 	$a->save();
 
 	$C['account_id'] = $a['id'];
@@ -84,10 +82,10 @@ case 'ping':
 case 'save':
 
 	$C['auth_user_id'] = $_SESSION['uid'];
-	$C['account_id']  = intval($_POST['account_id']);
-	if (!empty($_POST['parent_id'])) {
-		$C['parent_id'] = intval($_POST['parent_id']);
-	}
+	//$C['account_id']  = intval($_POST['account_id']);
+	//if (!empty($_POST['parent_id'])) {
+	//	$C['parent_id'] = intval($_POST['parent_id']);
+	//}
 	$C['kind']    = $_POST['kind'];
 	$C['status']  = $_POST['status'];
 	$C['contact'] = $_POST['contact'];

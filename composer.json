@@ -10,10 +10,11 @@
     ],
     "minimum-stability": "dev",
 	"require": {
+        "pear-pear.php.net/Net_SMTP2": "0.1.0",
 		"edoceo/radix": "dev-master",
 		"erusev/parsedown": "1.5.3",
+		"google/apiclient": "1.1.6",
 		"michelf/php-markdown": "1.5.0",
-        "pear-pear.php.net/Net_SMTP2": "0.1.0",
         "tecnick.com/tcpdf": "6.2.8"
     },
     "require-dev": {

@@ -91,10 +91,13 @@ foreach ($this->AccountLedgerEntryList as $i=>$item) {
 	echo '<small class="account-id-v" id="' . $i . '_account_id_v"></small>';
 
 	echo '</td>';
+
 	// Link to Object
+	$to = strtok($item['link'], ':');
+	$id = strtok('');
 	echo '<td>';
-    echo Form::select($i.'_link_to', $item['link_to'], $this->LinkToList);
-    echo Form::text($i.'_link_id', $item['link_id'], array('class' => 'link-to'));
+	echo Form::select($i.'_link_to', $to, $this->LinkToList);
+	echo Form::text($i.'_link_id', $id, array('class' => 'link-to'));
 	echo '</td>';
 
 	// Display Both

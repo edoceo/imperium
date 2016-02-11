@@ -22,7 +22,7 @@ echo '</div>';
 echo '<table>';
 // Contact & Phone
 echo '<tr>';
-echo '<td class="b r">Contact:</td><td>' . Radix::link("/contact/view/{$this->Contact['id']}","{$this->Contact['name']}") . '</td>';
+echo '<td class="b r">Contact:</td><td><a href="' . Radix::link('/contact/view?c=' . $this->Contact['id']) . '">' . html($this->Contact['name']) . '</a></td>';
 echo '<td class="b r">Phone:</td><td>' . Radix::block('stub-channel', array('value'=>$this->Contact['phone'])) . '</td>';
 echo '</tr>';
 
