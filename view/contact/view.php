@@ -12,8 +12,9 @@ use Edoceo\Radix\HTML\Form;
 
 App::addMRU('/contact/view?c=' . $this->Contact['id'], '<i class="fa fa-user"></i> ' . html($this->Contact['name']));
 
-// Web Site & Email
-$this->Contact['url'] = Filter::uri($this->Contact['url']);
+if (!empty($this->Contact['id'])) {
+       App::addMRU('/contact/view?c=' . $this->Contact['id'], '<i class="fa fa-user"></i> ' . html($this->Contact['name']));
+}
 
 ?>
 

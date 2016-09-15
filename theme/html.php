@@ -1,7 +1,6 @@
 <?php
 /**
-    @file
-    @brief A Single Column Layout, CSS Dropdown Menus
+    Main HTML Theme
 */
 
 namespace Edoceo\Imperium;
@@ -24,23 +23,28 @@ if (is_array($_ENV['title'])) {
 echo "<!DOCTYPE html>\n<html>\n";
 echo '<head>';
 echo '<meta charset="utf-8">';
-echo '<meta http-equiv="x-ua-compatible" content="ie=edge">';
 echo '<meta name="viewport" content="initial-scale=1, user-scalable=yes">';
-// echo '<link href="//gcdn.org/normalize/3.0.2/normalize.css" rel="stylesheet">';
-// echo '<link href="//gcdn.org/pure/0.6.0/pure.css" rel="stylesheet">';
-// echo '<link href="//cdn.jsdelivr.net/picnicss/4.1.3/picnic.min.css" rel="stylesheet">';
-echo '<link href="//gcdn.org/font-awesome/4.2.0/font-awesome.css" rel="stylesheet">';
+//echo '<link href="' . Radix::link('/lib/reset-css/reset.css') . '" rel="stylesheet">';
+echo '<link href="' . Radix::link('/lib/HTML5-Reset/assets/css/reset.css') . '" rel="stylesheet">';
+echo '<link href="' . Radix::link('/lib/font-awesome/css/font-awesome.min.css') . '" rel="stylesheet">';
 // echo '<link href="//gcdn.org/jquery-ui/1.10.2/smoothness.css" rel="stylesheet">';
 // echo '<link href="//gcdn.org/radix/radix.css" rel="stylesheet">';
 echo '<link href="' . Radix::link('/css/app.css') . '" rel="stylesheet">';
 echo '<link href="' . Radix::link('/img/imperium-icon.ico') . '" rel="shortcut icon">';
 echo '<link href="' . Radix::link('/img/imperium-icon.png') . '" rel="apple-touch-icon">';
-echo '<script src="//gcdn.org/jquery/1.10.2/jquery.js"></script>';
-echo '<script src="//gcdn.org/jquery-ui/1.10.2/jquery-ui.js"></script>';
-echo '<script src="' . Radix::link('/js/imperium.js') . '"></script>';
-echo '<script>Imperium.base = "' . Radix::base(true) . '";</script>';
+echo '<script src="' . Radix::link('/lib/jquery/dist/jquery.min.js') . '"></script>';
+// echo '<script src="//gcdn.org/jquery-ui/1.10.2/jquery-ui.js"></script>';
+// echo '<script src="' . Radix::link('/js/imperium.js') . '"></script>';
+// echo '<script>Imperium.base = "' . Radix::base(true) . '";</script>';
 echo '<title>Imperium: ' . $_ENV['title'] . '</title>';
 echo "</head>\n<body>\n";
+
+$x = Session::flash();
+if (!empty($x)) {
+	echo '<div>';
+	echo $x;
+	echo '</div>';
+}
 
 // Content Header
 echo '<header>';
@@ -51,16 +55,7 @@ if (!empty($menu)) {
     echo '</div>';
 	// echo ImperiumView::mruDraw();
 }
-// if (!empty($this->title_one)) {
-//     echo '<h2>' . $this->title_one . '</h2>';
-// }
-// if (!empty($this->title_two)) {
-//     echo $this->title_two;
-// }
 echo '</header>';
-
-// Menu for Authenticated Users Only
-// $auth = Zend_Auth::getInstance();
 
 // Core of Page
 echo '<div id="core">';
@@ -69,19 +64,14 @@ if (!empty($_ENV['h1'])) {
 	echo '<h1>' . $_ENV['h1'] . '</h1>';
 }
 
-echo Session::flash();
-
 echo $this->body;
 
 echo '</div>'; // #core
 
-// Radix::dump(str_replace('<br>', "\n", Radix::info()));
-// Radix::dump($_SESSION);
-
 ?>
 
 <footer>
-<a href="http://imperium.edoceo.com">Imperium</a> &#169; 2001-2014 <a href="http://edoceo.com/">Edoceo, Inc</a>
+	<a href="http://imperium.edoceo.com">Imperium</a> &#169; 2001-2016 <a href="http://edoceo.com/">Edoceo, Inc</a>
 </footer>
 
 </body>

@@ -1,6 +1,5 @@
 <?php
 /**
-    @file
     @brief Imperium Main Menu Element
 
     Shows the main menu of the application
@@ -23,11 +22,8 @@ if (!ACL::may('/block/menu')) {
 	return(0);
 }
 
-// $here = $this->controller . '/' . $this->action;
-// $c = $this->controller == 'index' ? '/' : ('/' . $this->controller);
-
 echo '<ul class="menu">';
-echo '<li><a href="' . Radix::link('/') . '" title="Dashboard"><i class="fa fa-dashboard"></i> Dashboard</a>';
+echo '<li><a href="' . Radix::link('/') . '" title="Dashboard"><i class="fa fa-home"></i></a>';
     echo '<ul>';
 
     // Show MRU
@@ -39,8 +35,8 @@ echo '<li><a href="' . Radix::link('/') . '" title="Dashboard"><i class="fa fa-d
 		echo '<li><hr /></li>';
 	}
 
-    echo '<li><a class="fancybox fancybox.ajax" href="' . Radix::link('/note/edit?l=r') . '"><i class="fa fa-plus"></i><i class="fa fa-file-text-o"></i> New Note</a></li>';
-    echo '<li><a class="fancybox fancybox.ajax" href="' . Radix::link('/file/edit?l=r') . '"><i class="fa fa-plus"></i><i class="fa fa-file"></i> New File</a></li>';
+    echo '<li><a class="fancybox fancybox.ajax" href="' . Radix::link('/note/edit?l=r') . '"><i class="fa fa-file-text-o"></i> New Note</a></li>';
+    echo '<li><a class="fancybox fancybox.ajax" href="' . Radix::link('/file/edit?l=r') . '"><i class="fa fa-file"></i> New File</a></li>';
 
     // echo '<li><a href="' . Radix::link('/task/edit">' . img('/silk/1.3/note_add.png','Add Task') . ' Task</a></li>';
     // echo '<li><a href="' . Radix::link('/alert/edit">' . img('/silk/1.3/bell_add.png','New Alert') . ' New Alert</a></li>';

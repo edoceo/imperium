@@ -20,13 +20,19 @@ case 'bill':
 	// $this->_billAction();
 	break;
 case 'close':
-	$sql = "UPDATE workorder_item SET status = 'COMPLETE' ";
-	$sql.= sprintf('WHERE workorder_id = %d',$wo->id);
-	$this->_d->query($sql);
-	$wo->status = 'Closed';
+
+	$wo['status'] = 'Closed';
 	$wo->save();
+
+	$sql = 'UPDATE workorder_item SET status = ? WHERE workorder_id = ?';
+	$arg = array('COMPLETE', $wo['id']);
+	SQL::query($sql, $arg);
+
 	Session::flash('info', "Work Order #$id Closed");
-	Radix::redirect(sprintf('/workorder/view?w=%d', $wo->id));
+	Radix::redirect(sprintf('/workorder/view?w=%d', $wo['id']));
+
+	break;
+
 case 'delete':
 	$wo->delete();
 	Session::flash('info', "Work Order #$id was deleted");

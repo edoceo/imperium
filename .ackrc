@@ -1,0 +1,14 @@
+#
+
+--break
+--color
+
+--smart-case
+
+--sort-files
+
+--ignore-dir=node_modules/
+--ignore-dir=vendor/
+--ignore-dir=webroot/lib/
+
+--ignore-file=is:composer.phar

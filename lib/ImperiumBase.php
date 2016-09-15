@@ -291,19 +291,10 @@ class ImperiumBase implements \ArrayAccess
 	}
 
 	/**
-		ImperiumBase getObject
-		@todo Kill This
-	*/
-	// static function getObject($type,$id)
-	// {
-	// $x = new $type($id);
-	// return $x;
-	// }
-	/**
 		getObjectType
 		@param $o is the Object, ObjectName or ObjectInteger
 	*/
-	static function getObjectType($o,$r=null)
+	static function getObjectType($o, $r=null)
 	{
 		$arg = array();
 		$sql = 'SELECT * FROM base_object ';

@@ -1,6 +1,7 @@
 /**
 	Use `lessc --strict-imports --strict-math=on --strict-units=no --compresss --clean-css`
 	@see http://www.w3.org/TR/CSS2/cascade.html#specificity
+	:mode=css:
 */
 
 @body_bg: #fcfcfc;
@@ -26,7 +27,8 @@ a:hover {
 }
 body {
 	background: @body_bg;
-	font-size: 18px;
+	font-family: sans-serif;
+	font-size: 100%;
 }
 header {
 	background: @menu_bg;
@@ -38,29 +40,29 @@ header:after {
 }
 
 header div#logo {
-	width:256px;
+	width: 256px;
 }
 header h1 {
 	border:none;
 	clear:left;
-	font-size:24px;
-	margin: 0px;
-	padding: 0px;
+	font-size: 200%;
+	margin: 0;
+	padding: 0;
 	text-align: left;
 }
 header h2 {
 	border: none;
-	clear:left;
-	margin: 0px;
-	padding: 0px;
+	clear: left;
+	margin: 0;
+	padding: 0;
 	text-align: left;
 	text-indent: 1em;
 }
 
 code {
 	font-family: monospace;
-	margin: 0px;
-	padding: 0px;
+	margin: 0.25em;
+	padding: 0.25em;
 }
 dd {
 	margin: 4px;
@@ -73,17 +75,14 @@ dt {
 }
 
 footer {
-    background:@menu_bg;
-    border-top:1px solid #000;
-    bottom:0px;
-    color:@menu_fg;
-    font-size:14px;
-    font-weight:700;
-    line-height:22px;
-    position:fixed;
-    text-align:center;
-    width:100%;
+    background: @menu_bg;
+    color: @menu_fg;
+    font-size: 90%;
+    font-weight: 700;
+    text-align: center;
+    width: 100%;
 }
+
 footer a {
 	text-decoration:none;
 }
@@ -91,20 +90,20 @@ footer a:hover {
 	color:@body_bg;
 }
 h1 {
-	background:#369;
-	color:#f9f9f9;
+	background: #369;
+	color: #f9f9f9;
 	font-size: 130%;
 	font-weight: bold;
-	margin:0 -8px;
-	padding:2px;
+	margin: 0 0.25em;
+	padding: 0.25em;
 	text-align:center;
 }
 h2 {
 	border-bottom: 1px solid #369;
 	font-size: 120%;
 	font-weight: bold;
-	margin: 0px 0px 4px 0px;
-	padding: 4px 2px;
+	margin: 0.25em;
+	padding: 0.25em;
 }
 h2 span.s {
 	font-size: 80%;
@@ -113,19 +112,19 @@ h2 span.s {
 h3 {
 	font-size: 110%;
 	font-weight: bold;
-	margin: 4px 4px 0px 4px;
+	margin: 0.50em;
 	text-align: center;
 }
 hr {
 	border: 1px solid #369;
-	margin: 0px;
-	padding: 0px;
+	margin: 0;
+	padding: 0;
 }
 img {
 	vertical-align: bottom;
 }
 input[type="date"] {
-	width:12em;
+	width: 12em;
 }
 input[type="number"],
 input[type="time"]
@@ -135,15 +134,15 @@ input[type="time"]
 }
 
 li {
-	margin: 1px 1px 1px 20px;
+	margin: 0.1em 1em;
 }
 ol {
-	margin: 0px 5px;
-	padding: 0px 0px 0px 30px;
+	margin: 0 0.5em;
+	padding: 0 0 0 2em;
 	list-style-type: decimal;
 }
 p {
-	margin: 4px 8px;
+	margin: 0.25em 1em;
 }
 pre {
 	background: #ccc;
@@ -184,7 +183,7 @@ tr.ro {
 }
 
 ul {
-	padding: 6px 0px;
+	padding: 1em 0;
 	padding-left: 2em;
 }
 
@@ -199,72 +198,69 @@ ul {
 }
 
 div#menu {
-	clear:both;
-	color:@menu_fg;
-	font-size:20px;
+	clear: both;
+	color: @menu_fg;
 	font-weight:700;
-	height: 32px;
-	line-height:32px;
 	vertical-align:middle;
-	z-index:20;
+	z-index: 20;
 }
 div#menu ul {
-	background:@menu_bg;
-	clear:both;
-	list-style-type:none;
-	margin:0px;
-	padding:0px;
+	background: @menu_bg;
+	clear: both;
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
 }
 div#menu ul li:hover {
-    position:relative;
+    position: relative;
 }
 div#menu hr {
-	clear:both;
-	height:0px;
+	clear: both;
+	height: 0;
 }
 div#menu > ul > li {
-	float:left;
+	float: left;
 }
 
 div#menu ul ul {
 	border: 1px outset #000;
-    display:none;
-    left:-1px;
-    min-width:180px;
-    position:absolute;
-    top:98%;
-	z-index:21;
+    display: none;
+    left: -1px;
+    min-width: 180;
+    position: absolute;
+    top: 98%;
+	z-index: 21;
 }
 
 div#menu ul li:active > ul,
 div#menu ul li:focus > ul,
 div#menu ul li:hover > ul {
-    display:block;
+    display: block;
 }
 
 div#menu ul li {
-	margin:1px;
-	white-space:nowrap;
-	z-index:25;
+	margin: 1px;
+	white-space: nowrap;
+	z-index: 25;
 }
 div#menu ul li a {
-	display:block;
-	padding:0px 8px;
-	text-decoration:none;
+	display: block;
+	padding:0 0.5em;
+	text-decoration: none;
 }
 div#menu ul li a:hover {
-	background:@high_bg;
-	color:@body_bg;
+	background: @high_bg;
+	color: @body_bg;
 }
 div#menu ul hr {
-	border:1px outset #ccc;
-	margin:2px 4px;
+	border: 1px outset #ccc;
+	margin: 2px 4px;
 }
 div#menu form input {
     background: #e0e0e0 url('//gcdn.org/silk/1.3/zoom.png') no-repeat right;
     border: 1px solid #333;
     height:24px;
-    margin: 0px;
+    margin: 0;
     padding: 1px;
     min-width:128px;
 }
@@ -275,11 +271,11 @@ div#menu form input:focus {
 
 div#core {
 	margin:0 0 32px 0;
-	padding:0px 8px;
+	padding:0 8px;
 }
 
 div.cmd {
-	margin:0px;
+	margin:0;
 	padding:8px 32px;
 }
 
@@ -287,7 +283,7 @@ div.cmd {
 ul.cssMenu li
 {
      display:block;
-     margin:2px 0px 0px 2px;
+     margin:2px 0 0 2px;
 
 }
 
@@ -356,7 +352,7 @@ div.edit-show {
 .rc {
 	background: #fff;
 	border: 2px solid #1a6293;
-	border-radius: 10px;
+	border-radius: 10;
 	padding: 8px;
 }
 .ti {
@@ -364,7 +360,7 @@ div.edit-show {
 }
 
 .m16 {
-	margin: 16px 16px 0px 16px;
+	margin: 16px 16px 0 16px;
 }
 
 /**
@@ -502,7 +498,7 @@ select {
 }
 
 /* Smartphones (Portrait & Landscape) */
-@media only screen and (min-device-width : 320px) and (max-device-width : 480px)
+@media only screen and (min-device-width : 320) and (max-device-width : 480)
 {
 	div#menu ul li a span {
 		display:none;
@@ -513,8 +509,8 @@ select {
 @media print {
     * {
     	font-size:10pt;
-		margin:0px;
-		padding:0px;
+		margin:0;
+		padding:0;
 	}
     body {
     	background-color: #fff;
@@ -528,8 +524,8 @@ select {
 	}
     #core {
     	border:none;
-		left:0px;
-		top:0px;
+		left:0;
+		top:0;
 		width:100%;
 	}
     #foot {

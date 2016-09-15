@@ -97,11 +97,11 @@ case 'save-copy':
 		$ale['auth_user_id'] = $_SESSION['uid'];
 		$ale['account_id'] = $_POST["{$i}_account_id"];
 		$ale['account_journal_id'] = $aje['id'];
-		// $ale->note = $req->getPost($i . '_note');
 		$ale['amount'] = ($dr > $cr) ? abs($dr) * -1 : abs($cr);
 		// Bind to an object
-		$ale['link_id'] = $_POST["{$i}_link_id"];
-		$ale['link_to'] = $_POST["{$i}_link_to"];
+		// $ale['link_id'] = $_POST["{$i}_link_id"];
+		// $ale['link_to'] = $_POST["{$i}_link_to"];
+		$ale['link'] = sprintf('%s:%d', $_POST["{$i}_link_to"], $_POST["{$i}_link_id"]);
 		// Save Ledger Entry
 		$ale->save();
 

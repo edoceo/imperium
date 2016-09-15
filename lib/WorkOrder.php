@@ -218,7 +218,7 @@ class WorkOrder extends ImperiumBase
 			$iv = new Invoice();
 			$iv['auth_user_id'] = $this['auth_user_id'];
 			$iv['contact_id'] = $this['contact_id'];
-			$iv['workorder_id'] = $this['id'];
+			//$iv['workorder_id'] = $this['id'];
 			$iv['note'] = $this['note'];
 			$iv->save();
 		}

@@ -48,9 +48,6 @@ class Contact extends ImperiumBase
 		//	 if (empty($this->phone)) {
 		//		 $this->phone = $p->phone;
 		//	 }
-		//	 if (empty($this->url)) {
-		//		 $this->url = $p->url;
-		//	 }
 		//	 if (empty($this->company)) {
 		//		 $this->company = $p->company;
 		//	 }
