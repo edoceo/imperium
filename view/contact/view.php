@@ -111,7 +111,7 @@ if (!empty($this->ContactChannelList)) {
         //switch ($cc->kind) {
         //case ContactChannel::PHONE:
         //case ContactChannel::FAX:
-            
+
             //$buf.= $this->link('/contact.channel/view?id='.$cc->id,$phone_img);
         //    break;
         //case ContactChannel::EMAIL:
@@ -133,7 +133,7 @@ echo '<div class="form-controls">';
 echo '<button class="good" name="a" type="submit" value="save">Save</button>';
 // echo '<button class="exec" id="exec-contact-ping" type="button" value="ping">Ping</button>';
 // echo '<button class="exec" name="a" type="submit" value="capture">Photo</button>';
-// echo '<button class="fail" name="a" type="submit" value="delete">Delete</button>';
+echo '<button class="fail" name="a" type="submit" value="delete">Delete</button>';
 // echo '<a class="button" href="' . Radix::link('/contact/merge?' . http_build_query(array('c' => $this->Contact['id']))) . '">Merge</a>';
 echo '</div>';
 echo '</form>';
@@ -346,7 +346,7 @@ echo Radix::block('diff-list',$x);
 <script type='text/javascript'>
 $('#account').autocomplete({
     source: "<?= Radix::link('/account/ajax?a=account'); ?>",
-    change: function(event, ui) { 
+    change: function(event, ui) {
         if (ui.item) {
             $('#account').val(ui.item.label);
             $('#account_id').val(ui.item.id);

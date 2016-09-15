@@ -4,7 +4,7 @@
     Draws a Link and some pretty images to a channel
 
     @todo Detect String?
-    
+
 */
 
 namespace Edoceo\Imperium;
@@ -38,27 +38,38 @@ if (is_array($data)) {
 //         $data->kind = ContactChannel::PHONE;
 //     }
 // }
+//print_r($data);
 
 // $edit_link = Radix::link('/contact.channel/view?id=' . $data['id']);
-
+$icon = null;
 switch ($data['kind']) {
 case ContactChannel::EMAIL:
-	echo '<a href="' . Radix::link('/contact/channel?id=' . $data['id']) . '"><i class="fa fa-envelope-o"></i></a> ';
+	$icon = '<i class="fa fa-envelope-o"></i>';
 	break;
 case ContactChannel::FAX:
-	echo '<a href="' . Radix::link('/contact/channel?id=' . $data['id']) . '"><i class="fa fa-fax"></i></a> ';
+	$icon = '<i class="fa fa-fax"></i>';
 	break;
 case ContactChannel::PHONE:
-	echo '<a href="' . Radix::link('/contact/channel?id=' . $data['id']) . '"><i class="fa fa-phone"></i></a> ';
+	$icon = '<i class="fa fa-phone"></i>';
+	break;
 default:
-	echo '<a href="' . Radix::link('/contact/channel?id=' . $data['id']) . '">??</a> ';
+	$icon = '#' . $data['kind'];
 }
+
+$html = $icon;
+
+// Link if given the Channel ID
+if (!empty($data['id'])) {
+	$html = '<a href="' . Radix::link('/contact/channel?id=' . $data['id']) . '">' . $icon. '</a>';
+}
+
+$html.= ' ';
 
 // Name Formatting
 // $buf = ContactChannel::$kind_list[$cc->kind];
-if (strlen($data['name'])) {
-    $html.= $data['name'] . ': ';
-}
+//if (strlen($data['name'])) {
+//    $html.= $data['name'] . ': ';
+//}
 
 switch ($data['kind']) {
 case ContactChannel::PHONE:
@@ -68,7 +79,8 @@ case ContactChannel::FAX:
         // Ignore
     } else {
         // No Letters
-        $link = preg_replace('/[^\d]/',null, $link);
+        $href = preg_replace('/[^\d]/',null, $data['data']);
+        $href = sprintf('tel://%s', $href);
         // $ext = null;
 
         // if (strpos($number,'x')!==false) {
@@ -82,64 +94,36 @@ case ContactChannel::FAX:
         // } else {
         //     $f = trim($data['data']);
         // }
-        // 
+        //
         // if (strlen($n) == 0) $n = 'Empty';
         // if (strlen($f) == 0) $f = $n;
-        // 
+        //
         // $f .= (strlen($ext) ? " x $ext" : null);
     }
 
-    echo '<span class="grow-huge">';
-    echo sprintf('<a href="tel://%s">%s</a>', $link, html($data['data']));
-    echo '</span>';
+    $html.= '<span class="grow-huge">';
+    $html.= sprintf('<a href="%s">%s</a>', $href, html($data['data']));
+    $html.= '</span>';
 
-    // if (!empty($data->id)) {
-    // 
-    //     $i = img('/silk/1.3/telephone_edit.png','Edit Telephone Number');
-    // 
-    //     $html.= '<a class="fb" href="' . $edit_link . '">';
-    //     $html.= $i;
-    //     $html.= '</a>';
-    // }
-
-    // echo '&nbsp;<a href='sip:$n'>$image</a>';
-
-    //echo "<script type=\"text/javascript\">\n";
-    //echo "$(document).ready(function() {\n";
-    //echo "$('#ch$id').fancybox({'height':'20%'});\n"; // ,'titleShow':false,'width':'60%'});\n";
-    //echo "});</script>\n";
-    //echo '<div id="' . sprintf('phone-%x',$id) . '" style="display:none;font-size:28pt;">';
-    //echo $buf . '<br>' . $f;
-    //echo '</div>';
-
-    // $buf.= $this->link('/contact.channel/view?id='.$this->data->id,$phone_img);
     break;
 
 case ContactChannel::EMAIL:
 
-    //$email_img = img('/silk/1.3/email_edit.png','Edit Email');
-    //$image = img('/silk/1.3/email_go.png','Email');
-    echo '<span class="grow-huge">';
-    echo '<a href="' . Radix::link('/email/compose?to=' . $data['data']) .'">';
-    echo html($data['data']);
-    echo '</a>';
-    echo '</span>';
-
-    // if (!empty($data['id'])) {
-    //     $i = img('/silk/1.3/email_edit.png','Edit Email');
-    //     $html.= '<a href="' . $edit_link . '">';
-    //     $html.= $i;
-    //     $html.= '</a>';
-    // }
+    $html.= '<span class="grow-huge">';
+    $html.= '<a href="' . Radix::link('/email/compose?to=' . $data['data']) .'">';
+    $html.= html($data['data']);
+    $html.= '</a>';
+    $html.= '</span>';
 
     break;
+
 default:
-    // $i = img('/silk/1.3/email_edit.png','Edit Email');
-    echo '<a href="' . Radix::link('/contact/channel?id=' . $data['id']) . '">';
-    echo html($data['data']);
-    echo '</a>';
+
+    $html.= '<a href="' . Radix::link('/contact/channel?id=' . $data['id']) . '">';
+    $html.= html($data['data']);
+    $html.= '</a>';
+
+    break;
 }
 
-// echo trim("$icon $name $link");
-// 
-// echo $html;
+echo $html;

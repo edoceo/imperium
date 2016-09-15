@@ -33,7 +33,8 @@ if (count($this->jump_list)) {
 }
 
 echo '<form action="' . Radix::link('/workorder/save?w=' . $this->WorkOrder['id']) . '" method="post">';
-echo star($this->WorkOrder['star'] ? $this->WorkOrder['star'] : 'star_' );
+
+//echo star($this->WorkOrder['star'] ? $this->WorkOrder['star'] : 'star_' );
 echo '<table>';
 
 // Contact & Date Row
