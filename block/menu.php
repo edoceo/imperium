@@ -13,20 +13,29 @@
     @todo Make this much smarter, link to something with
 */
 
+// echo '<li><a href="' . Radix::link('/task/edit">' . img('/silk/1.3/note_add.png','Add Task') . ' Task</a></li>';
+// echo '<li><a href="' . Radix::link('/alert/edit">' . img('/silk/1.3/bell_add.png','New Alert') . ' New Alert</a></li>';
+// echo '<li><a class="fancybox fancybox.ajax" href="' . Radix::link('/timer/edit') . '">' . img('/tango/24x24/actions/appointment-new.png','New Timer') . ' New Timer</a></li>';
+// echo '<li><a href="' . Radix::link('/calendar') . '">' . img('/tango/24x24/apps/system-file-manager.png','Calendar') . ' Calendar</a></li>';
+// echo '<li><a href="' . Radix::link('/manual/'') . ' . $this->controller . '/' . $this->action . '"><img alt="Annotated Users Manual" src="' . Radix::link('/img/silk/help.png" /> Manual</a></li>';
+// echo '<li><a href="' . Radix::link('/contact/export') . '">' . img('/silk/1.3/lorry.png','Export').' Export</a></li>';
+
 namespace Edoceo\Imperium;
 
 use Edoceo\Radix;
-
 
 if (!ACL::may('/block/menu')) {
 	return(0);
 }
 
-echo '<ul class="menu">';
-echo '<li><a href="' . Radix::link('/') . '" title="Dashboard"><i class="fa fa-home"></i></a>';
-    echo '<ul>';
+?>
 
-    // Show MRU
+<nav class="one">
+<ul class="menu">
+<li><a href="<?= Radix::link('/') ?>" title="Dashboard"><i class="fa fa-home"></i></a>
+	<ul>
+	<?php
+	// Show MRU
 	if (!empty($_SESSION['mru']) && (count($_SESSION['mru']) > 0)) {
 		$mru = array_reverse($_SESSION['mru']);
 		foreach ($mru as $key => $val) {
@@ -34,55 +43,51 @@ echo '<li><a href="' . Radix::link('/') . '" title="Dashboard"><i class="fa fa-h
 		}
 		echo '<li><hr /></li>';
 	}
+	?>
+	<li><a class="fancybox fancybox.ajax" href="<?= Radix::link('/note/edit?l=r') ?>"><i class="fa fa-file-text-o"></i> New Note</a></li>
+	<li><a class="fancybox fancybox.ajax" href="<?= Radix::link('/file/edit?l=r') ?>"><i class="fa fa-file"></i> New File</a></li>
+	<li><a href="<?= Radix::link('/timesheet') ?>"><i class="fa fa-tasks"></i> Time Sheet</a></li>
+	<li><hr></li>
+	<?php
+	// Somehow get the list of possible Status and use that to build a list here, colours as well.
+	echo '<li><a href="' . Radix::link('/note') . '"><i class="fa fa-file-text-o"></i> Notes</a></li>';
+	echo '<li><a href="' . Radix::link('/file') . '"><i class="fa fa-file"></i> Files</a></li>';
+	echo '<li><hr /></li>';
+	echo '<li><a href="' . Radix::link('/settings') . '"><i class="fa fa-cogs"></i> Settings</a></li>';
+	echo '<li><hr /></li>';
+	echo '<li><a href="' . Radix::link('/auth/sign-out') . '"><i class="fa fa-sign-out"></i> Sign Out</a></li>';
+	?>
+	</ul>
+</li>
 
-    echo '<li><a class="fancybox fancybox.ajax" href="' . Radix::link('/note/edit?l=r') . '"><i class="fa fa-file-text-o"></i> New Note</a></li>';
-    echo '<li><a class="fancybox fancybox.ajax" href="' . Radix::link('/file/edit?l=r') . '"><i class="fa fa-file"></i> New File</a></li>';
-
-    // echo '<li><a href="' . Radix::link('/task/edit">' . img('/silk/1.3/note_add.png','Add Task') . ' Task</a></li>';
-    // echo '<li><a href="' . Radix::link('/alert/edit">' . img('/silk/1.3/bell_add.png','New Alert') . ' New Alert</a></li>';
-    echo '<li><a href="' . Radix::link('/timesheet') . '"><i class="fa fa-tasks"></i> Time Sheet</a></li>';
-    // echo '<li><a class="fancybox fancybox.ajax" href="' . Radix::link('/timer/edit') . '">' . img('/tango/24x24/actions/appointment-new.png','New Timer') . ' New Timer</a></li>';
-    echo '<li><hr /></li>';
-
-    // Somehow get the list of possible Status and use that to build a list here, colours as well.
-    echo '<li><a href="' . Radix::link('/note') . '"><i class="fa fa-file-text-o"></i> Notes</a></li>';
-    echo '<li><a href="' . Radix::link('/file') . '"><i class="fa fa-file"></i> Files</a></li>';
-    // echo '<li><a href="' . Radix::link('/calendar') . '">' . img('/tango/24x24/apps/system-file-manager.png','Calendar') . ' Calendar</a></li>';
-    echo '<li><hr /></li>';
-    // echo '<li><a href="' . Radix::link('/manual/'') . ' . $this->controller . '/' . $this->action . '"><img alt="Annotated Users Manual" src="' . Radix::link('/img/silk/help.png" /> Manual</a></li>';
-    echo '<li><a href="' . Radix::link('/settings') . '"><i class="fa fa-cogs"></i> Settings</a></li>';
-    echo '<li><hr /></li>';
-    echo '<li><a href="' . Radix::link('/auth/sign-out') . '"><i class="fa fa-sign-out"></i> Sign Out</a></li>';
-    echo '</ul>';
-echo '</li>';
-
-// Contacts
-echo '<li><a href="' . Radix::link('/contact') . '"><i class="fa fa-users"></i> Contacts</a>';
-    echo '<ul>';
-    if (!empty($_ENV['contact']['id'])) {
-        echo '<li><a href="' . Radix::link('/contact/view?c=' . $_ENV['contact']['id']) . '"><i class="fa fa-user"></i> ' . $_ENV['contact']['name'] . '</a></li>';
-        echo '<li><hr /></li>';
-        echo '<li><a href="' . Radix::link('/contact/channel?a=create&amp;c=' . $_ENV['contact']['id']) . '"><i class="fa fa-plus"></i> Add Channel</a></li>';
-        // echo '<li><a href="' . Radix::link('/task/edit/link/' . $this->Contact->link() . '">' . img('/silk/1.3/note_add.png','Add Task') . ' Add Task</a></li>';
-        // echo '<li><a href="' . Radix::link('/history/edit/link/' . $this->Contact->link() . '">' . img('/silk/1.3/note_add.png','Add Note') . ' Add History</a></li>';
-        //$menu[] = array('/timer/edit',$html->image('clock_add.png').' Clean');
-        //$menu[] = array('/timer/edit',$html->image('clock_add.png').' Search');
-        //$menu[] = array('/timer/edit',$html->image('clock_add.png').' Lists');
-        //$menu[] = array('/timer/edit',$html->image('clock_add.png').' Help');
-        echo '<li><hr /></li>';
-    }
-    echo '<li><a href="' . Radix::link('/contact/view') . '"><i class="fa fa-plus"></i> Create</a></li>';
-    echo '<li><a href="' . Radix::link('/contact?kind=contacts') . '"><i class="fa fa-users"></i> Contacts</a></li>';
-    echo '<li><a href="' . Radix::link('/contact?kind=companies') . '"><i class="fa fa-building"></i> Companies</a></li>';
-    echo '<li><a href="' . Radix::link('/contact?kind=vendors') . '"><i class="fa fa-truck"></i> Vendors</a></li>';
-    echo '<li><a href="' . Radix::link('/contact/labels') . '"><i class="fa fa-file-text-o"></i> Mail Labels</a></li>';
-    //echo '<li><a href="' . Radix::link('/contact/export') . '">' . img('/silk/1.3/lorry.png','Export').' Export</a></li>';
-	echo '<li><hr></li>';
-	echo '<li><a href="' . Radix::link('/contact/import') . '"><i class="fa fa-cloud-upload"></i> Import</a></li>';
-	echo '<li><a href="' . Radix::link('/contact/sync') . '"><i class="fa fa-refresh"></i> Sync</a></li>';
-    echo '</ul>';
-echo '</li>';
-
+<!-- Contacts -->
+<li><a href="<?= Radix::link('/contact') ?>"><i class="fa fa-users"></i> Contacts</a>
+<ul>
+<?php
+if (!empty($_ENV['contact']['id'])) {
+	echo '<li><a href="' . Radix::link('/contact/view?c=' . $_ENV['contact']['id']) . '"><i class="fa fa-user"></i> ' . $_ENV['contact']['name'] . '</a></li>';
+	echo '<li><hr /></li>';
+	echo '<li><a href="' . Radix::link('/contact/channel?a=create&amp;c=' . $_ENV['contact']['id']) . '"><i class="fa fa-plus"></i> Add Channel</a></li>';
+	// echo '<li><a href="' . Radix::link('/task/edit/link/' . $this->Contact->link() . '">' . img('/silk/1.3/note_add.png','Add Task') . ' Add Task</a></li>';
+	// echo '<li><a href="' . Radix::link('/history/edit/link/' . $this->Contact->link() . '">' . img('/silk/1.3/note_add.png','Add Note') . ' Add History</a></li>';
+	//$menu[] = array('/timer/edit',$html->image('clock_add.png').' Clean');
+	//$menu[] = array('/timer/edit',$html->image('clock_add.png').' Search');
+	//$menu[] = array('/timer/edit',$html->image('clock_add.png').' Lists');
+	//$menu[] = array('/timer/edit',$html->image('clock_add.png').' Help');
+	echo '<li><hr /></li>';
+}
+?>
+<li><a href="<?= Radix::link('/contact/view') ?>"><i class="fa fa-plus"></i> Create</a></li>
+<li><a href="<?= Radix::link('/contact?kind=contacts')  ?>"><i class="fa fa-users"></i> Contacts</a></li>
+<li><a href="<?= Radix::link('/contact?kind=companies') ?>"><i class="fa fa-building"></i> Companies</a></li>
+<li><a href="<?= Radix::link('/contact?kind=vendors') ?>"><i class="fa fa-truck"></i> Vendors</a></li>
+<li><a href="<?= Radix::link('/contact/labels') ?>"><i class="fa fa-file-text-o"></i> Mail Labels</a></li>
+<li><hr></li>
+<li><a href="<?= Radix::link('/contact/import') ?>"><i class="fa fa-cloud-upload"></i> Import</a></li>
+<li><a href="<?= Radix::link('/contact/sync') ?>"><i class="fa fa-refresh"></i> Sync</a></li>
+</ul>
+</li>
+<?php
 // Workorders
 echo '<li><a href="' . Radix::link('/workorder') . '"><i class="fa fa-clock-o"></i> Work Orders</a>';
     echo '<ul>';
@@ -139,7 +144,7 @@ echo '<li><a href="' . Radix::link('/invoice') . '"><i class="fa fa-usd"></i> In
 echo '</li>';
 
 // Accounting
-echo '<li><a href="' . Radix::link('/account') . '"><i class="fa fa-money"></i> Accounts</a>';
+echo '<li><a href="' . Radix::link('/account') . '"><i class="fa fa-bar-chart"></i> Accounts</a>';
     echo '<ul>';
     echo '<li><a href="' . Radix::link('/account/transaction?id=-1') . '"><i class="fa fa-plus-square"></i> Transaction</a></li>';
     echo '<li><hr /></li>';
@@ -151,11 +156,11 @@ echo '<li><a href="' . Radix::link('/account') . '"><i class="fa fa-money"></i> 
     //$menu1[] = array('/account/trial-balance',img('/silk/1.3/table_lightning.png','View Trial Balance').' Trial Balance');
     echo '<li><a href="' . Radix::link('/account/close') . '"><i class="fa fa-flag-checkered"></i> Close Period</a></li>';
     echo '<li><hr /></li>';
-    echo '<li><a href="' . Radix::link('/account/report/trial-balance') . '">Trial Balance</a></li>';
-    echo '<li><a href="' . Radix::link('/account/report/income') . '">Income (P&amp;L)</a></li>';
-    echo '<li><a href="' . Radix::link('/account/report/owner-equity') . '">Owner Equity</a></li>';
-    echo '<li><a href="' . Radix::link('/account/report/balance-sheet') . '">Balance Sheet</a></li>';
-    echo '<li><a href="' . Radix::link('/account/report/cash-flow') . '">Cash Flow</a></li>';
+    echo '<li><a href="' . Radix::link('/account/report/trial-balance') . '"><i class="fa fa-list-ol"></i> Trial Balance</a></li>';
+    echo '<li><a href="' . Radix::link('/account/report/income') . '"><i class="fa fa-list-ol"></i>  Income (P&amp;L)</a></li>';
+    echo '<li><a href="' . Radix::link('/account/report/owner-equity') . '"><i class="fa fa-list-ol"></i>  Owner Equity</a></li>';
+    echo '<li><a href="' . Radix::link('/account/report/balance-sheet') . '"><i class="fa fa-list-ol"></i> Balance Sheet</a></li>';
+    echo '<li><a href="' . Radix::link('/account/report/cash-flow') . '"><i class="fa fa-list-ol"></i> Cash Flow</a></li>';
     // echo '<li><hr /></li>';
     // echo '<li><a href="' . Radix::link('/account/tax-form') . '">Tax Schedules</a></li>';
     echo '</ul>';
@@ -186,8 +191,14 @@ if (count($list)) {
 }
 
 // Search Form
-echo '<li style="float:right;">';
+echo '<li>';
 echo '<form action="' . Radix::link('/search') . '" method="get">';
 echo '<input id="q" name="q" placeholder="Search" value="" />';
 echo '</form></li>';
 echo '</ul>';
+?>
+</nav>
+
+<nav class="two">
+	<i class="fa fa-gears"></i>
+</nav>

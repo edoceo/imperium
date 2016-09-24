@@ -33,18 +33,12 @@ echo '<link href="' . Radix::link('/css/app.css') . '" rel="stylesheet">';
 echo '<link href="' . Radix::link('/img/imperium-icon.ico') . '" rel="shortcut icon">';
 echo '<link href="' . Radix::link('/img/imperium-icon.png') . '" rel="apple-touch-icon">';
 echo '<script src="' . Radix::link('/lib/jquery/dist/jquery.min.js') . '"></script>';
+echo '<script src="' . Radix::link('/lib/jquery-ui/jquery-ui.min.js') . '"></script>';
 // echo '<script src="//gcdn.org/jquery-ui/1.10.2/jquery-ui.js"></script>';
 // echo '<script src="' . Radix::link('/js/imperium.js') . '"></script>';
 // echo '<script>Imperium.base = "' . Radix::base(true) . '";</script>';
 echo '<title>Imperium: ' . $_ENV['title'] . '</title>';
 echo "</head>\n<body>\n";
-
-$x = Session::flash();
-if (!empty($x)) {
-	echo '<div>';
-	echo $x;
-	echo '</div>';
-}
 
 // Content Header
 echo '<header>';
@@ -57,12 +51,21 @@ if (!empty($menu)) {
 }
 echo '</header>';
 
-// Core of Page
-echo '<div id="core">';
-
 if (!empty($_ENV['h1'])) {
 	echo '<h1>' . $_ENV['h1'] . '</h1>';
 }
+
+$x = Session::flash();
+$x = '<div class="info"><p>Work Order #22 saved</p></div>';
+if (!empty($x)) {
+	echo '<div class="radix-session-flash">';
+	echo $x;
+	echo '</div>';
+}
+
+
+// Core of Page
+echo '<div id="core">';
 
 echo $this->body;
 

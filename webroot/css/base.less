@@ -79,6 +79,7 @@ footer {
     color: @menu_fg;
     font-size: 90%;
     font-weight: 700;
+    padding: 2em;
     text-align: center;
     width: 100%;
 }
@@ -94,7 +95,7 @@ h1 {
 	color: #f9f9f9;
 	font-size: 130%;
 	font-weight: bold;
-	margin: 0 0.25em;
+	margin: 0;
 	padding: 0.25em;
 	text-align:center;
 }
@@ -187,96 +188,12 @@ ul {
 	padding-left: 2em;
 }
 
-/* Quick Search */
-
-/* Layout Stuffs */
-
 #mru_list {
 	font-size: 80%;
 	text-align: right;
 	text-decoration: none;
 }
 
-div#menu {
-	clear: both;
-	color: @menu_fg;
-	vertical-align: middle;
-	z-index: 20;
-
-	hr {
-		clear: both;
-		height: 0;
-	}
-}
-
-div#menu ul {
-
-	background: @menu_bg;
-	clear: both;
-	list-style-type: none;
-	margin: 0;
-	padding: 0;
-	vertical-align: text-bottom;
-
-	li {
-		font-size: 120%;
-		font-weight: 700;
-		margin: 0;
-		white-space: nowrap;
-		z-index: 25;
-	}
-
-	li:hover {
-		position: relative;
-	}
-
-	form input {
-		background: #e0e0e0;
-		border: none;
-		margin: 0;
-		padding: 0.1em;
-		min-width: 12em;
-	}
-	form input:focus {
-		background: @menu_fg;
-		color: @menu_bg;
-	}
-
-}
-
-div#menu > ul > li {
-	float: left;
-}
-
-div#menu ul ul {
-	border: 1px outset #000;
-    display: none;
-    left: -1px;
-    min-width: 180;
-    position: absolute;
-    top: 98%;
-	z-index: 21;
-}
-
-div#menu ul li:active > ul,
-div#menu ul li:focus > ul,
-div#menu ul li:hover > ul {
-    display: block;
-}
-
-div#menu ul li a {
-	display: block;
-	padding:0 0.5em;
-	text-decoration: none;
-}
-div#menu ul li a:hover {
-	background: @high_bg;
-	color: @body_bg;
-}
-div#menu ul hr {
-	border: 1px outset #ccc;
-	margin: 2px 4px;
-}
 
 div#core {
 	margin:0 0 32px 0;
@@ -286,19 +203,6 @@ div#core {
 div.cmd {
 	margin:0;
 	padding:8px 32px;
-}
-
-
-ul.cssMenu li
-{
-     display:block;
-     margin:2px 0 0 2px;
-
-}
-
-ul.cssMenu a:hover ul ul,
-ul.cssMenu a:hover a:hover ul ul {
-    display:none
 }
 
 div.edit-show {
@@ -372,49 +276,6 @@ div.edit-show {
 	margin: 16px 16px 0 16px;
 }
 
-/**
-	Radix Flash Messages
-*/
-div.fail {
-	background-color: #f00;
-	border-radius: 4px;
-	font-weight: 700;
-	margin: 5px;
-	text-align: center;
-}
-div.info {
-	background-color: #369;
-	border-radius: 4px;
-	color: #fff;
-	font-weight: 700;
-	text-align: center;
-}
-div.warn { background-color: #909;
-	border-radius: 4px;
-	color: #fff;
-	font-weight: 700;
-	margin: 5px;
-	padding: 5px;
-	text-align: center;
-}
-
-/**
-	Page List and Jump List Bar
-*/
-.jump_list {
-	background: #ccc;
-	margin: 4px auto;
-	text-align:center;
-}
-.jump_list a {
-	text-decoration: none;
-}
-.jump_list a:hover {
-	color: #f00;
-}
-.jump_list .off {
-	color: #999;
-}
 
 tr.hawk td
 {
