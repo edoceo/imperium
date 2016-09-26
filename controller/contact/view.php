@@ -24,9 +24,11 @@ $this->Account = $c->getAccount();
 
 $this->ContactList = array();
 
-if (empty($c->parent_id)) {
+if (empty($c['parent_id'])) {
 	// $this->ContactList = SQL::fetch_all("SELECT * FROM contact WHERE id != ? AND (parent_id = ? OR company = ?)",array($c->id,$c->id,$c->company));
-	$this->ContactList = SQL::fetch_all('SELECT * FROM contact WHERE id != ? AND parent_id = ?', array($c->id,$c->id));
+	$sql = 'SELECT * FROM contact WHERE id != ? AND parent_id = ?';
+	$arg = array($c['id'], $c['id']);
+	$this->ContactList = SQL::fetch_all($sql, $arg);
 }
 $this->ContactAddressList = $c->getAddressList();
 $this->ContactChannelList = $c->getChannelList();

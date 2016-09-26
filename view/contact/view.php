@@ -13,7 +13,7 @@ use Edoceo\Radix\HTML\Form;
 App::addMRU('/contact/view?c=' . $this->Contact['id'], '<i class="fa fa-user"></i> ' . html($this->Contact['name']));
 
 if (!empty($this->Contact['id'])) {
-       App::addMRU('/contact/view?c=' . $this->Contact['id'], '<i class="fa fa-user"></i> ' . html($this->Contact['name']));
+	App::addMRU('/contact/view?c=' . $this->Contact['id'], '<i class="fa fa-user"></i> ' . html($this->Contact['name']));
 }
 
 ?>
@@ -33,11 +33,6 @@ form div > label {
 </style>
 
 <form action="<?= Radix::link('/contact/save?c=' . $this->Contact['id']) ?>" autocomplete="off" method="post">
-
-<div>
-<?= Form::hidden('id',$this->Contact['id']); ?>
-<?= Form::hidden('parent_id',$this->Contact['parent_id']); ?>
-</div>
 
 <div class="fb" style="margin:16px;">
 
@@ -130,6 +125,7 @@ if (!empty($this->ContactChannelList)) {
 // echo '<tr><td class="l">Google:</td><td colspan="3"><div id="contact-google-area"><input id="contact-google-view" type="button" value="View" ></div></td></tr>';
 
 echo '<div class="form-controls">';
+echo Form::hidden('id',$this->Contact['id']);
 echo '<button class="good" name="a" type="submit" value="save">Save</button>';
 // echo '<button class="exec" id="exec-contact-ping" type="button" value="ping">Ping</button>';
 // echo '<button class="exec" name="a" type="submit" value="capture">Photo</button>';
@@ -255,11 +251,7 @@ if (empty($this->Contact['parent_id'])) {
     );
     $url = Radix::link('/contact/new?parent=' . $this->Contact['id']); // ($x,'default',true);
 
-    echo '<h2 id="sub-contacts"><a href="' . $url . '"><i class="fa fa-users"></i> Sub-Contacts</a>';
-    // echo '<span class="s">[ <a href="' . $url . '">';
-    // echo img('/silk/1.3/user_add.png','Add Contact');
-    // echo '</a> ]</span>';
-    echo '</h2>';
+    echo '<h2 id="sub-contacts"><a href="' . $url . '"><i class="fa fa-users"></i> Sub-Contacts</a></h2>';
 
     if (count($this->ContactList)) {
         echo '<table>';
