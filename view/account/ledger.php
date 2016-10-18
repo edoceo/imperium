@@ -2,7 +2,6 @@
 /**
   Account Ledger View
   Displays a list of the transactions in a ledger style format - showing only one account
-
 */
 
 namespace Edoceo\Imperium;
@@ -10,6 +9,12 @@ namespace Edoceo\Imperium;
 use Edoceo\Radix;
 use Edoceo\Radix\HTML\Form;
 
+//
+$runbal = $this->openBalance;
+$cr_sum = 0;
+$dr_sum = 0;
+
+// Form Select List
 $AccountList = array();
 $AccountList[-1] = 'All - General Ledger';
 foreach ($this->AccountList as $item) {
@@ -38,19 +43,27 @@ echo '</table>';
 echo '</form>';
 
 // View Results
+?>
+<table style="width:100%;">
+<thead>
+	<tr>
+	<th>Date</th>
+	<th>Account/Note</th>
+	<th>Entry #</th>
+	<th>Debit</th>
+	<th>Credit</th>
+	<th>Balance</th>
+	</tr>
+</thead>
 
-$runbal = $this->openBalance;
-$cr_sum = 0;
-$dr_sum = 0;
+<tbody>
 
-echo '<table style="width:100%;">';
-echo '<tr><th>Date</th><th>Account/Note</th><th>Entry #</th><th>Link</th><th>Debit</th><th>Credit</th><th>Balance</th></tr>';
+<tr class="rero">
+<td class="c">-Open-</td><td colspan="4">Opening Balance</td>
+<td class="b r"><?= number_format($this->openBalance, 2) ?></td>
+</tr>
 
-echo '<tr class="rero">';
-echo '<td class="c">-Open-</td><td colspan="5">Opening Balance</td>';
-echo '<td class="b r">' . number_format($this->openBalance, 2) . '</td>';
-echo '</tr>';
-
+<?php
 foreach ($this->LedgerEntryList as $le)
 {
 	//$date = AppHelper::dateNice($le['date']);
@@ -63,15 +76,15 @@ foreach ($this->LedgerEntryList as $le)
     echo '<tr class="rero">';
 
     echo '<td class="c"><a href="' . Radix::link($link) . '">' . $le['date'] . '</td>';
-    echo '<td>' . $le['account_name'] . '/' . $le['note'] . '</td>';
+    echo '<td>' . html($le['note']) . '</td>';
     echo sprintf('<td class="c">#%s%s</td>', $le['kind'], $le['account_journal_id']);
 
     // Object Link
-    if (!empty($le['link_to'])) {
-        echo sprintf('<td class="c">%s:%d</td>', $le['link_to'], $le['link_id']);
-    } else {
-        echo '<td></td>';
-    }
+    //if (!empty($le['link_to'])) {
+    //    echo sprintf('<td class="c">%s:%d</td>', $le['link_to'], $le['link_id']);
+    //} else {
+    //    echo '<td></td>';
+    //}
 
     // Debit or Credit
 	if ($le['amount'] > 0) {
@@ -99,7 +112,7 @@ foreach ($this->LedgerEntryList as $le)
 }
 
 echo '<tr class="ro">';
-echo '<td class="b" colspan="4">Total:</td>';
+echo '<td class="b" colspan="3">Total:</td>';
 echo '<td class="b r">&curren;' . number_format($dr_sum, 2) . '</td>';
 echo '<td class="b r">&curren;' . number_format($cr_sum, 2) . '</td>';
 //if (substr($this->Account->kind,0,5)=='Asset') {

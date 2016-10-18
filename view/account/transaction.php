@@ -3,6 +3,21 @@
 	Account Journal Entry View
 
 	Draws the form necessary to input a multi-account journal entry
+	
+	https://en.wikipedia.org/wiki/Double-entry_bookkeeping_system#Customer_ledger_cards
+	http://www.double-entry-bookkeeping.com/sales/revenue-received-in-advance/
+	http://accounting-simplified.com/accrued-income.html
+	http://accounting-simplified.com/prepaid-income.html
+	http://taxation.lawyers.com/treatment-of-advance-income-under-the-accrual-method.html
+
+	https://help.xero.com/us/Payments_PayInvoice
+	http://accounting-simplified.com/accounting-for-sales.html - Credit Sale
+	https://community.intuit.com/questions/836109-clearing-paid-invoices-without-double-counting-deposits
+	https://support.waveapps.com/entries/108008253-How-to-record-a-payment-on-an-invoice
+
+	https://www.freshbooks.com/support/journal-entries-an-overview-for-your-accountant#tocspecific
+	
+	https://www.freshbooks.com/support/how-does-freshbooks-calculate-accounts-receivable
 */
 
 namespace Edoceo\Imperium;
@@ -60,7 +75,7 @@ echo '</table>';
 
 // Transaction Entry Lines
 echo '<table id="JournalEntry">';
-echo '<tr><th>Account</th><th>Link</th><th>Debit</th><th>Credit</th></tr>';
+echo '<tr><th>Account</th><th>Debit</th><th>Credit</th></tr>';
 
 $AccountList = array();
 foreach ($this->AccountList as $item) {
@@ -85,20 +100,21 @@ foreach ($this->AccountLedgerEntryList as $i=>$item) {
 	echo "<tr$css>";
 	echo '<td>';
 	// Ledger Entry ID, Account ID and Account Name
-	echo Form::hidden($i.'_id',$item['id']);
-	echo Form::hidden($i.'_account_id',$item['account_id'],array('class'=>'account-id'));
-	echo Form::text($i.'_account_name',$item['account_name'],array('class'=>'account-name'));
-	echo '<small class="account-id-v" id="' . $i . '_account_id_v"></small>';
+	echo Form::hidden($i.'_id', $item['id']);
+	echo Form::hidden($i.'_account_id', $item['account_id'],array('class'=>'account-id'));
+	echo Form::text($i.'_account_name', $item['account_name'],array('class'=>'account-name'));
 
+	echo ' <small class="account-id-v" id="' . $i . '_account_id_v"></small>';
+	echo ' <small><a class="account-link" href="' . Radix::link('/account/ledger?id=' . $item['account_id']) . '" id="' . $i . '-account-link"><i class="fa fa-external-link"></a></small>';
 	echo '</td>';
 
 	// Link to Object
-	$to = strtok($item['link'], ':');
-	$id = strtok('');
-	echo '<td>';
-	echo Form::select($i.'_link_to', $to, $this->LinkToList);
-	echo Form::text($i.'_link_id', $id, array('class' => 'link-to'));
-	echo '</td>';
+	//$to = strtok($item['link'], ':');
+	//$id = strtok('');
+	//echo '<td>';
+	//echo Form::select($i.'_link_to', $to, $this->LinkToList);
+	//echo Form::text($i.'_link_id', $id, array('class' => 'link-to'));
+	//echo '</td>';
 
 	// Display Both
 	// Debit
@@ -110,7 +126,7 @@ foreach ($this->AccountLedgerEntryList as $i=>$item) {
 	echo '</tr>';
 }
 
-echo '<tr><td class="b" colspan="2"><strong>Total:</strong></td>';
+echo '<tr><td class="b"><strong>Total:</strong></td>';
 echo '<td class="r" id="drt">' . number_format(abs($dr_total),2) . '</td>';
 echo '<td class="r" id="crt">' . number_format(abs($cr_total),2) . '</td>';
 echo '</tr>';
@@ -202,35 +218,51 @@ function addLedgerEntryLine()
 	x.find('input[type=hidden]').attr({
 		id: c + '_id',
 		name: c + '_id',
+		value: '',
 	});
 	x.find('.account-id').attr({
 		id: c + '_account_id',
 		name: c + '_account_id',
+		value: '',
 	});
 	x.find('.account-name').attr({
 		id: c + '_account_name',
 		name: c + '_account_name',
+		value: '',
 	});
 	x.find('.account-id-v').attr({
 		id: c + '_account_id_v',
 	}).html('');
 
+	x.find('.account-link').attr({
+		id: c + '-account-link',
+		href: '#',
+	});
+
 	html += '<td>' + x.html() + '</td>';
 
     // Link Cell
-    var x = $(t.rows[c-1].cells[1]).clone(true);
-    x.find('select').attr('id', c + '_link_to').attr('name', c + '_link_to');
-    x.find('input').attr('id', c + '_link_id').attr('name', c + '_link_id');
-    html += '<td>' + x.html() + '</td>';
+    //var x = $(t.rows[c-1].cells[1]).clone(true);
+    //x.find('select').attr('id', c + '_link_to').attr('name', c + '_link_to');
+    //x.find('input').attr('id', c + '_link_id').attr('name', c + '_link_id');
+    //html += '<td>' + x.html() + '</td>';
 
     // Debit Cell
-    var x = $(t.rows[c-1].cells[2]).clone(true);
-    x.find('input').attr('id', c + '_dr').attr('name', c + '_dr').val('0.00');
+    var x = $(t.rows[c-1].cells[1]).clone(true);
+    x.find('input').attr({
+		id: c + '_cr',
+		name: c + '_dr',
+		value: ''
+	});
     html += '<td class="r">' + x.html() + '</td>';
 
     // Credit Cell
-    var x = $(t.rows[c-1].cells[3]).clone(true);
-    x.find('input').attr('id', c + '_cr').attr('name', c + '_cr').val('0.00');
+    var x = $(t.rows[c-1].cells[2]).clone(true);
+    x.find('input').attr({
+		id: c + '_cr',
+		name: c + '_cr',
+		value: ''
+	});
     html += '<td class="r">' + x.html() + '</td>';
     html += '</tr>';
 
@@ -269,7 +301,7 @@ function updateJournalEntryBalance()
         return;
     }
 
-    $(':submit').attr('disabled','disabled');
+    //$(':submit').attr('disabled','disabled');
     if (cr != 0) {
 		$('#crt').css('color','#ff0000');
     }

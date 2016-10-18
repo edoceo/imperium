@@ -48,6 +48,9 @@ case 'save-copy':
 	$_SESSION['account-transaction'] = null;
 	$_SESSION['account-transaction-list'] = array();
 
+	//Radix::dump($_POST);
+	//exit;
+
 	// Delete
 	// if ($req->getPost('c') == 'Delete') {
 	// 	$aje = new AccountJournalEntry($id);
@@ -77,6 +80,7 @@ case 'save-copy':
 
 	// Save Ledger Entries
 	foreach ($_POST as $k=>$v) {
+
 		// Trigger process only when matchin this
 		if (!preg_match('/^(\d+)_id$/',$k,$m)) {
 			continue; // ignore others

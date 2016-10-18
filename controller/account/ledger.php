@@ -87,6 +87,7 @@ if (empty($this->Account['id'])) {
 }
 
 if (strlen($_GET['link'])) {
+	throw new Exception('@deprecated');
 	// $l = ImperiumBase::getObjectType($o)
 	$l = Base_Link::load($_GET['link']);
 	$link_to = Base_Link::getObjectType($l,'id');  // Get Object Type ID
@@ -103,6 +104,4 @@ $this->LedgerEntryList = $res;
 
 $this->openBalance = $this->Account->balanceAt($this->date_alpha);
 
-// ImperiumView::mruAdd($this->link(),'Ledger ' . $this->Account->name);
 $_SESSION['return-path'] = '/account/ledger';
-

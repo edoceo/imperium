@@ -396,7 +396,7 @@ class Account extends ImperiumBase
 		$sql.= ' FROM account ';
 			$sql.= ' LEFT JOIN account_tax_line ON account.account_tax_line_id = account_tax_line.id';
 			// $sql.= ' JOIN account_tax_form ON account_tax_line.account_tax_form_id = account_tax_form.id ';
-		$sql.= ' ORDER BY full_code ASC, code ASC';
+		$sql.= ' ORDER BY kind, full_code ASC, code ASC';
 
 		$rs = SQL::fetch_all($sql);
 		$list = array();
