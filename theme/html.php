@@ -55,8 +55,8 @@ if (!empty($_ENV['h1'])) {
 	echo '<h1>' . $_ENV['h1'] . '</h1>';
 }
 
+// Flash Messages
 $x = Session::flash();
-$x = '<div class="info"><p>Work Order #22 saved</p></div>';
 if (!empty($x)) {
 	echo '<div class="radix-session-flash">';
 	echo $x;

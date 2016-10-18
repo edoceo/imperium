@@ -10,9 +10,6 @@ use Edoceo\Radix;
 use Edoceo\Radix\Session;
 use Edoceo\Radix\DB\SQL;
 
-// Uncomment to get timing outputs
-define('APP_INIT', microtime(true));
-
 header('Cache-Control: no-cache, must-revalidate');
 
 require_once(dirname(dirname(__FILE__)) . '/boot.php');
@@ -115,41 +112,3 @@ if (!acl::may(Radix::$path)) {
 Radix::exec();
 Radix::view();
 Radix::send();
-
-// Output Statistics
-if (defined('APP_INIT')) {
-
-    $res = getrusage();
-    $mem = sprintf('%0.1f', memory_get_peak_usage(true) / 1024);
-    $sec = sprintf('%0.4f', microtime(true) - APP_INIT);
-
-    echo "\n<!--\n";
-
-    echo "mem: {$mem}KiB\n"; 
-    echo "sec: {$sec}s\n";
-    echo "bio: {$res['ru_inblock']}/{$res['ru_oublock']}\n";
-    // echo 'Page Faults:  ' . $res['ru_minflt'] . "\n";
-    //echo 'V-Context Switches: ' . $res['ru_nvcsw'] . "\n";
-    //echo 'I-Context Switches: ' . $res['ru_nivcsw']  . "\n";
-    /*
-    $u0 = sprintf('%d.%06d',$_res_0['ru_utime.tv_sec'],$_res_0['ru_utime.tv_usec']);
-    $s0 = sprintf('%d.%06d',$_res_0['ru_stime.tv_sec'],$_res_0['ru_stime.tv_usec']);
-    $u1 = sprintf('%d.%06d',$res_1['ru_utime.tv_sec'],$res_1['ru_utime.tv_usec']);
-    $s1 = sprintf('%d.%06d',$res_1['ru_stime.tv_sec'],$res_1['ru_stime.tv_usec']);
-    */
-
-    //$utime = number_format($u1 - $u0,3);
-    //$stime = number_format($s1 - $s0,3);
-    //$rtime = number_format(((float)$new_usec + (float)$new_sec) - ((float)$old_usec + (float)$old_sec),3);
-
-    //echo 'uname: ' . php_uname() . "\n";
-    // $a = get_included_files();
-    // sort($a);
-    // echo implode("\n",$a);
-    // foreach ($a as $b) {
-    //   echo "$b\n";
-    // }
-    // */
-    // print_r($res);
-    echo "\n-->";
-}
