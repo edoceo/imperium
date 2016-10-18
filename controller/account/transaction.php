@@ -103,9 +103,7 @@ case 'save-copy':
 		$ale['account_journal_id'] = $aje['id'];
 		$ale['amount'] = ($dr > $cr) ? abs($dr) * -1 : abs($cr);
 		// Bind to an object
-		// $ale['link_id'] = $_POST["{$i}_link_id"];
-		// $ale['link_to'] = $_POST["{$i}_link_to"];
-		$ale['link'] = sprintf('%s:%d', $_POST["{$i}_link_to"], $_POST["{$i}_link_id"]);
+		//$ale['link'] = sprintf('%s:%d', $_POST["{$i}_link_to"], $_POST["{$i}_link_id"]);
 		// Save Ledger Entry
 		$ale->save();
 
@@ -218,10 +216,3 @@ if (!empty($this->AccountJournalEntry['id'])) {
 		$this->jump_list[] = array('controller'=>'account','action'=>'transaction','id'=>$x['id']);
 	}
 }
-
-$this->LinkToList = array(
-	'' => null,
-	'contact' => 'Contact',
-	'invoice' => 'Invoice',
-	'workorder' => 'Work Order',
-);

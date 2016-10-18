@@ -6,6 +6,8 @@
 
 namespace Edoceo\Imperium;
 
+use Edoceo\Radix;
+
 require_once('Account/Reconcile.php');
 require_once('Account/TaxFormLine.php');
 
@@ -106,3 +108,11 @@ $this->PeriodList = array(
 $this->AccountList = Account::listAccounts();
 $this->AccountKindList = Account::$kind_list;
 $this->AccountPairList = Account::listAccountPairs();
+
+// For use by the HTML Select
+$sel = array();
+$sel[-1] = 'All - General Ledger';
+foreach ($this->AccountList as $item) {
+    $sel[$item['id']] = $item['full_name'];
+}
+$this->AccountList_Select = $sel;

@@ -1,7 +1,7 @@
 <?php
 /**
-  Account Ledger View
-  Displays a list of the transactions in a ledger style format - showing only one account
+	Account Ledger View
+	Displays a list of the transactions in a ledger style format - showing only one account
 */
 
 namespace Edoceo\Imperium;
@@ -9,17 +9,6 @@ namespace Edoceo\Imperium;
 use Edoceo\Radix;
 use Edoceo\Radix\HTML\Form;
 
-//
-$runbal = $this->openBalance;
-$cr_sum = 0;
-$dr_sum = 0;
-
-// Form Select List
-$AccountList = array();
-$AccountList[-1] = 'All - General Ledger';
-foreach ($this->AccountList as $item) {
-    $AccountList[$item['id']] = $item['full_name'];
-}
 $_ENV['title'] = array(
 	'Accounts',
 	'Ledger',
@@ -30,7 +19,7 @@ $_ENV['title'] = array(
 
 echo '<form method="get">';
 echo '<table>';
-echo '<tr><td class="b r">Account:</td><td colspan="4">' . Form::select('id', $this->Account['id'], $AccountList) . "</td></tr>";
+echo '<tr><td class="b r">Account:</td><td colspan="4">' . Form::select('id', $this->Account['id'], $this->AccountList_Select) . "</td></tr>";
 echo '<tr>';
 echo '<td class="l">From:</td>';
 echo "<td>" . Form::date('d0',$this->date_alpha,array('size'=>12)) . "</td>";
@@ -41,6 +30,11 @@ echo '<td><input name="c" type="submit" value="Post" /></td>';
 echo '</tr>';
 echo '</table>';
 echo '</form>';
+
+//
+$runbal = $this->openBalance;
+$cr_sum = 0;
+$dr_sum = 0;
 
 // View Results
 ?>
