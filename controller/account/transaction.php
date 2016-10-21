@@ -48,8 +48,9 @@ case 'save-copy':
 	$_SESSION['account-transaction'] = null;
 	$_SESSION['account-transaction-list'] = array();
 
-	//Radix::dump($_POST);
-	//exit;
+	if (empty($aje['id'])) {
+		$_SESSION['account']['date'] = $_POST['date'];
+	}
 
 	// Delete
 	// if ($req->getPost('c') == 'Delete') {
@@ -185,10 +186,10 @@ if ($id) {
 	// @todo Here on on Save (above)?
 	// unset($_SESSION['account-transaction']);
 } else {
-	$this->AccountJournalEntry = new AccountJournalEntry(null);
+	$this->AccountJournalEntry = new AccountJournalEntry();
 	$this->AccountLedgerEntryList = array();
-	$this->AccountLedgerEntryList[] = new AccountLedgerEntry(null);
-	$this->AccountLedgerEntryList[] = new AccountLedgerEntry(null);
+	$this->AccountLedgerEntryList[] = new AccountLedgerEntry();
+	$this->AccountLedgerEntryList[] = new AccountLedgerEntry();
 }
 
 // Correct Missing Date

@@ -13,14 +13,6 @@ class AccountJournalEntry extends ImperiumBase
 {
 	protected $_table = 'account_journal';
 
-	function __construct($x=null)
-	{
-		parent::__construct($x);
-		if (empty($this->_data['date'])) {
-			$this->_data['date'] = strftime('%Y-%m-%d');
-		}
-	}
-
 	/**
 		Delete Ledger & Journal Entries
 	*/
@@ -39,6 +31,10 @@ class AccountJournalEntry extends ImperiumBase
 	*/
 	function save()
 	{
+		if (empty($this->_data['date'])) {
+			$this->_data['date'] = strftime('%Y-%m-%d');
+		}
+
 		if (strlen(trim($this->_data['note']))==0) {
 			$this->_data['note'] = null;
 		}

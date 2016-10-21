@@ -17,6 +17,8 @@ $_ENV['title'] = array(
 	sprintf('%d entries', count($this->LedgerEntryList))
 );
 
+// echo Radix::block('account-period-input');
+
 echo '<form method="get">';
 echo '<table>';
 echo '<tr><td class="b r">Account:</td><td colspan="4">' . Form::select('id', $this->Account['id'], $this->AccountList_Select) . "</td></tr>";
@@ -30,6 +32,9 @@ echo '<td><input name="c" type="submit" value="Post" /></td>';
 echo '</tr>';
 echo '</table>';
 echo '</form>';
+
+
+echo Radix::block('account-period-arrow', $this->date_alpha);
 
 //
 $runbal = $this->openBalance;
@@ -116,3 +121,5 @@ echo '<td class="b r">&curren;' . number_format($cr_sum, 2) . '</td>';
 //}
 echo '</tr>';
 echo '</table>';
+
+echo Radix::block('account-period-arrow', $this->date_alpha);
