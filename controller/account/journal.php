@@ -54,7 +54,7 @@ $this->openBalance = $this->Account->balanceAt($this->date_alpha);
 // $this->LedgerEntryList = $res;
 
 $where = " (account_id = ?) AND (account_journal.date >= ? AND account_journal.date <= ?) ";
-$where.= " AND account_ledger.amount < 0";
+//$where.= " AND account_ledger.amount < 0";
 $order = 'account_journal.date, account_journal.kind desc, account_ledger.amount ASC ';
 
 $sql = 'SELECT';

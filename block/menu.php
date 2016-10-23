@@ -149,19 +149,21 @@ echo '<li><a href="' . Radix::link('/account') . '"><i class="fa fa-bar-chart"><
     echo '<li><a href="' . Radix::link('/account/transaction?id=-1') . '"><i class="fa fa-plus-square"></i> Transaction</a></li>';
     echo '<li><hr /></li>';
     echo '<li><a href="' . Radix::link('/account/edit') . '"><i class="fa fa-plus-square"></i> New Account</a></li>';
-    // $menu1[] = array('/account/transaction',img('/silk/1.3/money_add.png','Transaction').' Transaction</a></li>';
     // echo '<li><a href="' . Radix::link('/account/cheque') . '"><i class="fa fa-bar-chart"></i> Cheque</a></li>';
-    echo '<li><a href="' . Radix::link('/account.wizard') . '"><i class="fa fa-magic"></i> Wizard</a></li>';
+//    echo '<li><a href="' . Radix::link('/account.wizard') . '"><i class="fa fa-magic"></i> Wizard</a></li>';
     echo '<li><a href="' . Radix::link('/account/reconcile') . '"><i class="fa fa-refresh"></i> Reconcile</a></li>';
-    //$menu1[] = array('/account/trial-balance',img('/silk/1.3/table_lightning.png','View Trial Balance').' Trial Balance');
     echo '<li><a href="' . Radix::link('/account/close') . '"><i class="fa fa-flag-checkered"></i> Close Period</a></li>';
+
     echo '<li><hr /></li>';
-    echo '<li><a href="' . Radix::link('/account/report/trial-balance') . '"><i class="fa fa-list-ol"></i> Trial Balance</a></li>';
     echo '<li><a href="' . Radix::link('/account/report/income') . '"><i class="fa fa-list-ol"></i>  Income (P&amp;L)</a></li>';
-    echo '<li><a href="' . Radix::link('/account/report/owner-equity') . '"><i class="fa fa-list-ol"></i>  Owner Equity</a></li>';
     echo '<li><a href="' . Radix::link('/account/report/balance-sheet') . '"><i class="fa fa-list-ol"></i> Balance Sheet</a></li>';
     echo '<li><a href="' . Radix::link('/account/report/cash-flow') . '"><i class="fa fa-list-ol"></i> Cash Flow</a></li>';
-    // echo '<li><hr /></li>';
+    echo '<li><a href="' . Radix::link('/account/report/retained-earnings') . '">Retained Earnings</a></li>';
+
+    echo '<li><hr /></li>';
+    echo '<li><a href="' . Radix::link('/account/report/trial-balance') . '"><i class="fa fa-list-ol"></i> Trial Balance</a></li>';
+    echo '<li><a href="' . Radix::link('/account/report/equity') . '"><i class="fa fa-list-ol"></i> Owner Equity</a></li>';
+
     // echo '<li><a href="' . Radix::link('/account/tax-form') . '">Tax Schedules</a></li>';
     echo '</ul>';
 echo '</li>';

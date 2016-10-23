@@ -18,37 +18,56 @@ $_ENV['title'] = array(
 	sprintf('%d entries', count($this->JournalEntryList))
 );
 
-echo '<form method="get">';
-echo '<table>';
-echo '<tr><td class="b r">Account:</td><td colspan="4">' . Form::select('id', $this->Account['id'], $this->AccountList_Select) . "</td></tr>";
-echo '<tr>';
-echo '<td class="l">From:</td>';
-echo "<td>" . Form::date('d0', $this->date_alpha, array('size'=>12)) . "</td>";
-echo '<td class="b c">&nbsp;to&nbsp;</td>';
-echo "<td>" . Form::date('d1', $this->date_omega, array('size'=>12)) . "</td>";
-echo "<td><input class='cb' name='c' type='submit' value='View' /></td>";
-echo '<td><input name="c" type="submit" value="Post" /></td>';
-echo '</tr>';
-echo '</table>';
-echo '</form>';
+//echo Radix::block('account-period-input');
 
-//
-$runbal = $this->openBalance;
+echo Radix::block('account-period-arrow', $this->date_alpha);
+
+// Counters
 $cr_sum = 0;
 $dr_sum = 0;
+$runbal = $this->openBalance;
+
+echo '<form method="get">';
+echo '<div style="display:flex; vertical-align:bottom;">';
+echo '<div style="flex:1 1 auto;">';
+echo Form::select('id', $this->Account['id'], $this->AccountList_Select);
+echo ' <a href="' . Radix::link('/account/ledger?' . http_build_query($_GET)) . '"><i class="fa fa-bar-chart">L</i></a>';
+echo ' <a href="' . Radix::link('/account/journal?' . http_build_query($_GET)) . '"><i class="fa fa-">J</i></a>';
+echo '</div>';
+echo '<div style="flex:1 1 auto;">' . Form::date('d0', $this->date_alpha, array('size'=>12)) . '</div>';
+echo '<div style="flex:1 1 auto;">' . Form::date('d1', $this->date_omega, array('size'=>12)) . '</div>';
+echo '<div style="flex:1 1 auto;"><input name="c" type="submit" value="View"></div>';
+echo '<div style="flex:1 1 auto;"><input name="c" type="submit" value="Post"></div>';
+echo '</div>';
+echo '</form>';
+
+echo Radix::block('account-period-arrow', $this->date_alpha);
 
 ?>
 
 <style>
-table tbody tr.je {
-	background: #666;
+table#account-journal-main {
+	position: relative;
 }
-table tbody td {
+table#account-journal-main thead td {
+	background: #aaa;
+	font-weight: bold;
+}
+table#account-journal-main tbody tr.je {
+	background: #999;
+}
+table#account-journal-main tbody td {
 	border: 1px solid #333;
+	font-weight: bold;
+}
+table#account-journal-main tfoot td {
+	background: #aaa;
+	font-weight: bold;
 }
 </style>
 
-<table>
+<!--
+<table id="account-journal-head" style="display:none; position:fixed; top:0;">
 <thead>
 	<tr>
 	<th>Date</th>
@@ -59,21 +78,35 @@ table tbody td {
 	<th>Balance</th>
 	</tr>
 </thead>
+</table>
+-->
+
+<table id="account-journal-main">
+<thead>
+	<tr>
+	<th>Date</th>
+	<th>Account/Note</th>
+	<th>Debit</th>
+	<th>Credit</th>
+	<th>Balance</th>
+	</tr>
+	<tr>
+	<td class="c">-Open-</td><td colspan="3">Opening Balance</td>
+	<td class="b r"><?= number_format($this->openBalance, 2) ?></td>
+	</tr>
+</thead>
 
 <tbody>
-
-<tr class="rero">
-<td class="c">-Open-</td><td colspan="4">Opening Balance</td>
-<td class="b r"><?= number_format($this->openBalance, 2) ?></td>
-</tr> 
-
 <?php
 foreach ($this->JournalEntryList as $je) {
+
+	$d = new \DateTime($je['date']);
+
 ?>
 	<tr class="je">
-    <td class="c"><a href="<?= Radix::link('/account/transaction?id=' . $je['id']) ?>"><?= html($je['date']) ?></a></td>
-	<td><?= html($je['note']) ?></td>
-	<td class="c" colspan="4"><?= sprintf('#%s%s', $je['kind'], $je['id']) ?></td>
+    <td class="c"><a href="<?= Radix::link('/account/transaction?id=' . $je['id']) ?>"><?= html($d->format('m/d')) ?></a></td>
+	<td colspan="3"><?= html($je['note']) ?></td>
+	<td class="c"><?= sprintf('#%s%s', $je['kind'], $je['id']) ?></td>
 	</tr>
 <?php
 
@@ -89,12 +122,14 @@ foreach ($this->JournalEntryList as $je) {
 	}
 
 	foreach ($res as $le) {
+
+		$code = $le['account_code'];
+		$name = preg_replace('|^[\d\/\- ]+|', null, $le['account_full_name']);
+
 ?>
 		<tr>
-		<td>-</td>
-		<td colspan="2">
-		<?= html($le['account_full_name']) ?>
-		</td>
+		<td><?= $code ?></td>
+		<td><?= html($name) ?></td>
 <?php
 		// Debit or Credit
 		if ($le['amount'] > 0) {
@@ -125,9 +160,55 @@ foreach ($this->JournalEntryList as $je) {
 
 ?>
 </tbody>
+<tfoot>
+	<tr>
+	<td colspan="2">Sum</td>
+	<td class="r"><?= number_format($dr_sum, 2) ?></td>
+	<td class="r"><?= number_format($cr_sum, 2) ?></td>
+	<td class="r"><?= number_format($runbal, 2) ?></td>
+	</tr>
+</tfoot>
 </table>
 
+<?= $back_next ?>
+
 <script>
-$("#d0").datepicker();
-$("#d1").datepicker();
+// $("#d0").datepicker();
+//$("#d1").datepicker();
+
+var fixHead = $("#account-journal-head");
+var offMain = $("#account-journal-main").offset().top;
+
+// var $header = $("#table-1 > thead").clone();
+// var $fixedHeader
+// .append($header);
+
+$(function() {
+
+	//$(window).on('scroll', function() {
+    //
+	//	var offset = $(this).scrollTop();
+	//	offset += 100;
+    //
+	//	if (offset >= offMain) { // && fixHead.is(":hidden")) {
+    //
+	//		//fixHead.show();
+	//		$("#account-journal-main thead").css('position', 'fixed');
+    //
+	//		//$("#account-journal-head td").each(function(index) {
+	//		//	var index2 = index;
+	//		//	$(this).width(function(index2) {
+	//		//		return $("#account-journal-main td").eq(index).width();
+	//		//	});
+	//		//});
+    //
+	//	} else if (offset < offMain) {
+	//		//fixHead.hide();
+	//		$("#account-journal-main thead").css('position', 'relative');
+	//	}
+    //
+	//});
+
+});
+
 </script>
