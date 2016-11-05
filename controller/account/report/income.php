@@ -32,6 +32,7 @@ if ('true' == $_GET['xc']) {
 $sql.= " group by a.id,a.full_code,a.code,a.name ";
 $sql.= " order by a.full_code,a.code ";
 //echo "<p>$sql</p>";
+
 $this->RevenueAccountList = SQL::fetch_all($sql);
 Session::flash('fail', SQL::lastError());
 

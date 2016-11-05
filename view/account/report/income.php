@@ -1,10 +1,7 @@
 <?php
 /**
 	Account Statements Income Statement View
-
 	Displays an Income Statement for a given time period
-
-  @package Edoceo Imperium
 */
 
 use Edoceo\Radix;
