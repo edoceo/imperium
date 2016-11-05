@@ -6,6 +6,7 @@
 namespace Edoceo\Imperium;
 
 use Edoceo\Radix;
+use Edoceo\Radix\Session;
 use Edoceo\Radix\DB\SQL;
 
 $order = null;
@@ -59,6 +60,7 @@ $order = 'account_journal.date, account_journal.kind desc, account_ledger.amount
 
 $sql = 'SELECT';
 $sql.= ' account_journal.id';
+$sql.= ', account_journal.flag';
 $sql.= ', account_journal.date';
 $sql.= ', account_journal.kind';
 $sql.= ', account_journal.note';
