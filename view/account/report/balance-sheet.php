@@ -14,6 +14,11 @@ echo '<form action="" class="np" method="get">';
 echo Radix::block('account-period-input');
 echo '</form>';
 
+// Year List
+// Quarter List
+// Common Period List
+
+
 switch ($this->Period) {
 case 'm':
 	$_ENV['h1'] = $_ENV['title'] = 'Monthly Balance Sheet for ' . $this->date_alpha_f;
@@ -29,17 +34,18 @@ default:
 	break;
 }
 
-$sql = 'select distinct type_sort,type,kind  ';
+$sql = 'select distinct kind, kind_sort';
 $sql.= ' from account ';
-$sql.= " where type in ('Asset','Liability') or kind = 'Equity: Owners Capital' ";
-$sql.= ' order by type_sort';
+// $sql.= " where type in ('Asset','Liability') or kind = 'Equity: Owners Capital' ";
+$sql.= ' order by kind_sort, kind';
 $AccountKindList = SQL::fetch_all($sql);
 $AccountBalanceList = array();
+
 echo '<table>';
 foreach ($AccountKindList as $kind) {
 
 	// Assets
-	$sql = 'select a.id,a.type,a.full_code,a.full_name,sum(b.amount) as balance';
+	$sql = 'select a.id,a.type,a.full_code,a.full_name, sum(b.amount) as balance';
 	$sql.= ' from account a join account_ledger b on a.id=b.account_id';
 	$sql.= ' join account_journal c on b.account_journal_id=c.id ';
 	//$sql.= "where substring(kind from 1 for 5) = 'Asset' and date_trunc('$trunc',c.date)='{$this->data['date']}' ";
@@ -48,19 +54,32 @@ foreach ($AccountKindList as $kind) {
 	$sql.= "order by a.full_code,a.full_name ";
 	$AccountList = SQL::fetch_all($sql);
 
+	if (0 == count($AccountList)) {
+		continue;
+	}
+
 	// Assets
-	echo '<tr><th class="l" colspan="3">' . html($kind['kind']) . '</th></tr>';
+	echo '<tr><th><h2>' . html($kind['kind']) . '</h2></th>';
+	echo '<th>Opening</th>';
+	echo '<th>Closing</th>';
+	echo '</tr>';
 
 	// $this->AssetAccountList = $AssetAccountList;
 	$bal = 0; // $sum;
 	// $sum = 0;
 	foreach ($AccountList as $item) {
 
-		if ($kind['type'] == 'Asset') {
-			$item['balance'] = ($item['balance'] * -1);
-		}
-		if ($item['balance'] == 0) {
-			continue;
+		$A = new Account($item);
+
+		$b0 = $A->balanceBefore($this->date_alpha);
+		$b1 = $A->balanceAt($this->date_omega);
+
+		switch ($kind['kind']) {
+		case 'Asset':
+		case 'Asset: Bank':
+			$b0 = $b0 * -1;
+			$b1 = $b1 * -1;
+			break;
 		}
 
 		$bal += $item['balance'];
@@ -75,14 +94,20 @@ foreach ($AccountKindList as $kind) {
 
 		echo '<tr>';
 		echo '<td style="text-indent:2em;"><a href="'. $uri . '">' . $item['full_name'] . '</a></td>';
-		echo '<td class="r">' . number_format($item['balance'], 2) . '</td>';
+		// echo '<td class="r">' . number_format($item['balance'], 2) . '</td>';
+
+
+
+		echo '<td class="r">' . number_format($b0, 2) . '</td>';
+		echo '<td class="r">' . number_format($b1, 2) . '</td>';
+
 		echo '</tr>';
 
 	}
 
 	echo '<tr class="ro">';
 	echo '<td class="b" colspan="2">Total ' . $kind['kind'] . ':</td>';
-	echo '<td class="r"><span class="du">' . number_format($bal, 2) . '</span></td>';
+	echo '<td class="r"><span class="du" style="font-weight:bold;">' . number_format($bal, 2) . '</span></td>';
 	echo '</tr>';
 	echo '<tr><td>&nbsp;</td></tr>';
 
@@ -90,7 +115,7 @@ foreach ($AccountKindList as $kind) {
 }
 echo '</table>';
 
-Radix::dump($AccountBalanceList);
+//Radix::dump($AccountBalanceList);
 
 return(0);
 

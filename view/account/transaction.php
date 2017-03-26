@@ -70,7 +70,12 @@ echo '<td class="l">Date:</td><td><input id="account-transaction-date" name="dat
 echo '<td class="l">Kind:</td><td>' . Form::select('kind', $this->AccountJournalEntry['kind'], array('N'=>'Normal','A'=>'Adjusting','C'=>'Closing')) . '</td>';
 echo '</tr>';
 // Note
-echo '<tr><td class="l">Note:</td><td colspan="3">' . Form::text('note', $this->AccountJournalEntry['note'],array('autocomplete'=>'off', 'style'=>'width: 40em')) . "</td></tr>";
+echo '<tr><td class="l">Note:</td><td>' . Form::text('note', $this->AccountJournalEntry['note'],array('autocomplete'=>'off', 'style'=>'width: 40em')) . "</td>";
+echo '</tr>';
+echo '<tr><td class="l">Flag:</td><td>';
+echo ' <label><input' . (($this->AccountJournalEntry['flag'] & 1) ? ' checked' : null) . ' name="flag[]" style="vertical-align:middle;" type="checkbox" value="1">Audited</label>';
+// echo ' <label><input name="flag[]" style="vertical-align:middle;" type="checkbox" value="2">Verified</label>';
+echo '</td></tr>';
 echo '</table>';
 
 // Transaction Entry Lines
@@ -168,6 +173,8 @@ $args = array(
     'list' => $this->AccountJournalEntry->getHistory()
 );
 echo Radix::block('diff-list',$args);
+
+// Radix::dump($this->AccountJournalEntry);
 
 ?>
 

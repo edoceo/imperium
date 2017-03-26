@@ -12,10 +12,10 @@ case 'm':
 	$_ENV['title'] = 'Income Statement: ' . $this->date_alpha_f;
 	break;
 case 'q':
-	$_ENV['title'] = 'Income Statement: Q:' . $this->date_alpha_f . ' to ' . $this->date_omega_f;
+	$_ENV['title'] = 'Income Statement: ' . $this->date_alpha_f . ' to ' . $this->date_omega_f;
 	break;
 case 'y':
-	$_ENV['title'] = 'Income Statement: Y:' . $this->date_alpha_f . ' to ' . $this->date_omega_f;
+	$_ENV['title'] = 'Income Statement: ' . $this->date_alpha_f . ' to ' . $this->date_omega_f;
 	break;
 default:
 	$_ENV['title'] = 'Income Statement: ' . $this->date_alpha_f . ' to ' . $this->date_omega_f;

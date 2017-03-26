@@ -145,88 +145,12 @@ class Account extends ImperiumBase
 	}
 
 	/**
-		@deprecated
-	*/
-//	function __get($key)
-//	{
-//		return false;
-//		die("@deprecated __get($key)");
-//		switch ($key) {
-//		/*
-//		case 'code_full':
-//				$code[] = $this->code;
-//				$parent_id = $this->parent_id;
-//				while ($parent_id)
-//				{
-//					$acct = $idc->fetchRow("select parent_id,code from account where id=$parent_id");
-//					if ($acct)
-//					{
-//						$parent_id = $acct->parent_id;
-//						$code[] = $acct->code;
-//					}
-//					if (count($code) > 5) break;
-//				}
-//				return implode('/', array_reverse($code) );
-//		*/
-//	case 'is_parent':
-//	  $rs = $db->fetchOne("select count(id) from account where parent_id=$this->id");
-//	  return $rs->c > 0;
-//	case 'life':
-//	  return $this->flag & (Account::PERMANENT | Account::TEMPORARY);
-//	case 'type':
-//	  // todo: this is broken
-//	  return $this->flag & (Account::ASSET | Account::LIABILITY | Account::EQUITY | Account::REVENUE | Account::EXPENSE);
-//	case 'type_code':
-//	  if ($this->flag & Account::ASSET) return 'A';
-//	  elseif ($this->flag & Account::LIABILITY) return 'L';
-//	  elseif ($this->flag & Account::EQUITY) return 'E';
-//	  elseif ($this->flag & Account::REVENUE) return 'R';
-//	  elseif ($this->flag & Account::EXPENSE) return 'X';
-//	  else return 'Unknown';
-//	case 'type_name':
-//	  if ($this->flag & Account::ASSET) return 'Asset';
-//	  elseif ($this->flag & Account::LIABILITY) return 'Liability';
-//	  elseif ($this->flag & Account::EQUITY) return 'Equity';
-//	  elseif ($this->flag & Account::REVENUE) return 'Revenue';
-//	  elseif ($this->flag & Account::EXPENSE) return 'Expense';
-//	  else return 'Unknown';
-//	case 'childAccountList':
-//			$db = Zend_Registry::get('db');
-//	  $rs = $db->fetchAll("select * from account where parent_id=$this->id order by flag,code,name");
-//	  return $rs;
-//	case 'flag_as_string':
-//	  $ret = '';
-//	  // Life
-//	  if ($this->flag & Account::TEMPORARY) $ret.= 'Temporary,';
-//	  if ($this->flag & Account::PERMANENT) $ret.= 'Permanent,';
-//	  // Type
-//	  if ($this->flag & Account::ASSET) $ret.= 'Asset,';
-//	  if ($this->flag & Account::LIABILITY) $ret.= 'Liability,';
-//	  if ($this->flag & Account::EQUITY) $ret.= 'Equity,';
-//	  if ($this->flag & Account::REVENUE) $ret.= 'Revenue,';
-//	  if ($this->flag & Account::EXPENSE) $ret.= 'Expense,';
-//	  /// Sub Type
-//	  if ($this->flag & Account::CASH) $ret.= 'Cash,';
-//	  if ($this->flag & Account::AP) $ret.= 'Accounts Payable,';
-//	  if ($this->flag & Account::AR) $ret.= 'Accounts Receiveable,';
-//	  // Class
-//	  if ($this->flag & Account::CHECKING) $ret.= 'Checking,';
-//	  if ($this->flag & Account::SAVINGS) $ret.= 'Savings,';
-//	  if ($this->flag & Account::MARKET) $ret.= 'Market,';
-//	  return strlen($ret) ? substr($ret,0,-1) : null;
-//	case 'flag_hex':
-//			return dechex($this->flag);
-//		}
-//	return null;
-//	}
-
-/**
 		Update the Balance of the Account to the Current Value
 	*/
 	function balanceUpdate()
 	{
 		// Get Current Balance
-		$x = SQL::fetch_one('SELECT sum(amount) FROM account_ledger WHERE account_id = ?', array($this->_data['id']));
+		$x = SQL::fetch_one('SELECT sum(amount) AS balance_update FROM account_ledger WHERE account_id = ?', array($this->_data['id']));
 		$balance = floatval($x);
 
 		// Sum the Child Accounts
@@ -250,13 +174,18 @@ class Account extends ImperiumBase
 	/**
 		Account balanceAt balance at close of a day
 	*/
-	function balanceAt($date,$ex_close=false)
+	function balanceAt($date=null, $ex_close=false)
 	{
 		// @todo Detect the Period
 		// @todo Detect Account Type - Permanant Accounts since life of Biz, Temp since previous period
 
-		$sql = 'SELECT sum(amount) FROM general_ledger WHERE account_id = ? AND date < ? ';
-		$arg = array($this->_data['id'],$date);
+		$sql = 'SELECT sum(amount) AS balance_at FROM general_ledger WHERE account_id = ?';
+		$arg = array($this->_data['id']);
+
+		if (!empty($date)) {
+			$sql.= ' AND date <= ? ';
+			$arg[] = $date;
+		}
 
 		if ($ex_close) {
 			$sql.= ' AND kind != ? ';
@@ -264,8 +193,9 @@ class Account extends ImperiumBase
 		}
 
 		$ret = SQL::fetch_one($sql, $arg);
+
 		// Correct Balance to Positive Number
-		if ( (substr($this->_data['kind'],0,5)=='Asset') || (substr($this->_data['kind'],0,7)=='Expense') || (strpos($this->_data['kind'],'Drawing') > 0) ) {
+		if ($this->_isDebitSide()) {
 			$ret = $ret * -1;
 		}
 
@@ -273,37 +203,23 @@ class Account extends ImperiumBase
 	}
 
 	/**
-		Account balanceBefre displays the balance before given date
+		Account balanceBefore displays the balance before given date
 	*/
-	function balanceBefore($date,$ex_close=false)
+	function balanceBefore($date, $ex_close=false)
 	{
-		// @todo Detect the Period
-		// @todo Detect Account Type - Permanant Accounts since life of Biz, Temp since previous period
-		//$sql = "select sum(amount) as balance from general_ledger ";
-		//$sql.= " where account_id=$this->id and date < '$date' and date>='2006-01-01'";
-	
-		// $sql = $d->select();
-		// $sql->from('general_ledger',array('sum(amount) as balance'));
-		// $sql->where('account_id = ?',intval($this->id));
-		// //$sql->where('date >= ?',$date_alpha);
-		// $sql->where('date < ?',$date);
-		// if ($ex_close) {
-		//	 $sql->where('kind != ?','C');
-		//	 //$sql.= " and kind != 'C' ";
-		// }
-		// // echo $sql->assemble() . '<br />';
-		// $x = $d->fetchOne($sql);
-		
-		$sql = 'SELECT sum(amount) AS balance FROM general_ledger WHERE account_id = ? AND date < ?';
+		$sql = 'SELECT sum(amount) AS balance FROM general_ledger';
+		$sql.= ' WHERE account_id = ? AND date < ?';
 		$arg = array(
-			$this->id,
+			$this->_data['id'],
 			$date,
 		);
-		if ($ex_close) $sql.= ' AND kind != \'C\'';
+		if ($ex_close) {
+			$sql.= ' AND kind != \'C\'';
+		}
 		$x = SQL::fetch_one($sql,$arg);
-		
+
 		// Correct Balance to Positive Number
-		if ( (substr($this->kind,0,5)=='Asset') || (substr($this->kind,0,7)=='Expense') || (strpos($this->kind,'Drawing') > 0) ) {
+		if ($this->_isDebitSide()) {
 			$x = $x * -1;
 		}
 		return floatval($x);
@@ -316,7 +232,7 @@ class Account extends ImperiumBase
 	function balanceSpan($date_alpha,$date_omega,$ex_close=false)
 	{
 		$arg = array();
-		$sql = 'SELECT sum(amount) FROM general_ledger ';
+		$sql = 'SELECT sum(amount) AS balance_span FROM general_ledger ';
 		$sql.= ' WHERE account_id = ?';
 		$arg[] = intval($this->_data['id']);
 		$sql.= ' AND (date >= ? AND date <= ? )';
@@ -329,8 +245,7 @@ class Account extends ImperiumBase
 		}
 
 		$ret = SQL::fetch_one($sql, $arg);
-		$k = $this->_data['kind'];
-		if ( (substr($k,0,5)=='Asset') || (substr($k,0,7)=='Expense') || (strpos($k,'Drawing') > 0) ) {
+		if ($this->_isDebitSide()) {
 		  $ret = $ret * -1;
 		}
 
@@ -338,25 +253,38 @@ class Account extends ImperiumBase
 	}
 
 	/**
+		
 	*/
-	function creditTotal($a_ts,$z_ts,$with_closing=true)
+	function creditTotal($a_ts, $z_ts, $with_closing=true)
 	{
-		$sql = "select sum(amount) from general_ledger ";
-		$sql.= " where account_id=$this->id ";
-		$sql.= " and (date >= '$a_ts' and date <= '$z_ts' ) ";
-		$sql.= " and amount > 0 ";
-		$x = SQL::fetch_one($sql);
+		$sql = "SELECT sum(amount) AS credit_sum FROM general_ledger ";
+		$sql.= ' WHERE account_id = ? ';
+		$sql.= ' AND (date >= ? and date <= ? ) ';
+		$sql.= ' AND amount > 0 ';
+		$arg = array(
+			$this->_data['id'],
+			$a_ts,
+			$z_ts
+		);
+		$x = SQL::fetch_one($sql, $arg);
 		return abs($x);
 	}
-  /**
-  */
-	function debitTotal($a_ts,$z_ts,$with_closing=true)
+
+	/**
+
+	*/
+	function debitTotal($a_ts, $z_ts, $with_closing=true)
 	{
-		$sql = "select sum(amount) from general_ledger ";
-		$sql.= " where account_id=$this->id and ";
-		$sql.= "  (date >= '$a_ts' and date <= '$z_ts' ) ";
-		$sql.= " and amount < 0 ";
-		$x = SQL::fetch_one($sql);
+		$sql = "SELECT sum(amount) AS debit_sum from general_ledger ";
+		$sql.= ' WHERE account_id = ?';
+		$sql.= ' AND (date >= ? and date <= ? )';
+		$sql.= ' AND amount < 0';
+		$arg = array(
+			$this->_data['id'],
+			$a_ts,
+			$z_ts
+		);
+		$x = SQL::fetch_one($sql, $arg);
 		return abs($x);
 	}
 
@@ -396,7 +324,7 @@ class Account extends ImperiumBase
 		$sql.= ' FROM account ';
 			$sql.= ' LEFT JOIN account_tax_line ON account.account_tax_line_id = account_tax_line.id';
 			// $sql.= ' JOIN account_tax_form ON account_tax_line.account_tax_form_id = account_tax_form.id ';
-		$sql.= ' ORDER BY kind, full_code ASC, code ASC';
+		$sql.= ' ORDER BY full_code ASC, code ASC';
 
 		$rs = SQL::fetch_all($sql);
 		$list = array();
@@ -419,5 +347,20 @@ class Account extends ImperiumBase
 		// $rs = $db->fetchPairs($sql);
 		$rs = SQL::fetch_mix($sql);
 		return $rs;
+	}
+
+	/**
+		If it's a Debit Side Bias Account (Asset, Expense, Drawing, etc)
+	*/
+	private function _isDebitSide()
+	{
+		$k = $this->_data['kind'];
+
+		if ( (substr($k,0,5)=='Asset') || (substr($k,0,7)=='Expense') || (strpos($k,'Drawing') > 0) ) {
+			return true;
+		}
+
+		return false;
+
 	}
 }

@@ -35,35 +35,32 @@ if (!empty($_GET['p'])) {
 // Initialise Inputs
 if ( (isset($_GET['d0'])) || (isset($_GET['d1'])) ) {
 	$this->Period = 'r';
-// //} elseif (isset($_SESSION['AccountPeriod']['date_alpha'])) {
-// //	$this->date_alpha = $_SESSION['AccountPeriod']['date_alpha'];
-// //	$this->date_omega = $_SESSION['AccountPeriod']['date_omega'];
 }
 
 switch ($this->Period) {
 case 'm':
-	$this->date_alpha = date('Y-m-d',mktime(0,0,0,$this->Month,1,$this->Year));
-	$this->date_omega = date('Y-m-t',mktime(0,0,0,$this->Month));
+	$this->date_alpha = date('Y-m-d', mktime(0,0,0, $this->Month, 1, $this->Year));
+	$this->date_omega = date('Y-m-t', mktime(0,0,0, $this->Month, 1, $this->Year));
 	break;
 case 'q':
 	// @note this may or may not be an accurate way to find the Quarter
-	$this->date_alpha = date('Y-m-d',mktime(0,0,0,$this->Month,1,$this->Year));
-	$this->date_omega = date('Y-m-t',mktime(0,0,0,$this->Month+2,1,$this->Year));
+	$this->date_alpha = date('Y-m-d', mktime(0,0,0,$this->Month, 1, $this->Year));
+	$this->date_omega = date('Y-m-t', mktime(0,0,0,$this->Month+2 , 1,$this->Year));
 	break;
 case 'y':
-	$this->date_alpha = date('Y-m-d',mktime(0,0,0,$this->Month,1,$this->Year));
-	$this->date_omega = date('Y-m-t',mktime(0,0,0,$this->Month+11,1,$this->Year));
+	$this->date_alpha = date('Y-m-d', mktime(0,0,0,$this->Month,1,$this->Year));
+	$this->date_omega = date('Y-m-t', mktime(0,0,0,$this->Month+11,1,$this->Year));
 	break;
 case 'r': // Range
 	if (!empty($_GET['d0'])) {
-		$this->date_alpha = date('Y-m-d',strtotime($_GET['d0']));
+		$this->date_alpha = date('Y-m-d', strtotime($_GET['d0']));
 	}
 	if (!empty($_GET['d1'])) {
-		$this->date_omega = date('Y-m-d',strtotime($_GET['d1']));
+		$this->date_omega = date('Y-m-d', strtotime($_GET['d1']));
 	}
 	// @todo decide to pick from Alpha or Omega date
-	// $this->Month = date('m', strtotime($_GET['d0']));
-	// $this->Year = date('Y', strtotime($_GET['d0']));
+	$this->Month = date('m', strtotime($_GET['d0']));
+	$this->Year = date('Y', strtotime($_GET['d0']));
 	break;
 }
 
@@ -71,13 +68,9 @@ case 'r': // Range
 $this->date_alpha_f = strftime('%B %Y',strtotime($this->date_alpha));
 $this->date_omega_f = strftime('%B %Y',strtotime($this->date_omega));
 
-// @deprecated
-// $_SESSION['AccountPeriod']['date_alpha'] = $this->date_alpha;
-// $_SESSION['AccountPeriod']['date_omega'] = $this->date_omega;
-
-$_SESSION['account-view']['period'] = $this->Period;
-$_SESSION['account-view']['month'] = $this->Month;
 $_SESSION['account-view']['year'] = $this->Year;
+$_SESSION['account-view']['month'] = $this->Month;
+$_SESSION['account-view']['period'] = $this->Period;
 $_SESSION['account-view']['date_alpha'] = $this->date_alpha;
 $_SESSION['account-view']['date_omega'] = $this->date_omega;
 
@@ -104,7 +97,6 @@ $this->PeriodList = array(
 );
 
 // Account List
-// $this->AccountPeriod = $this->_s->AccountPeriod;
 $this->AccountList = Account::listAccounts();
 $this->AccountKindList = Account::$kind_list;
 $this->AccountPairList = Account::listAccountPairs();

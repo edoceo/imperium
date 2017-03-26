@@ -67,7 +67,17 @@ case 'save-copy':
 	$aje['date'] = $_POST['date'];
 	$aje['note'] = $_POST['note'];
 	$aje['kind'] = $_POST['kind'];
+
+	$aje['flag'] = 0;
+	if (!empty($_POST['flag']) && (is_array($_POST['flag']))) {
+		foreach ($_POST['flag'] as $i => $f) {
+			$aje->setFlag($f);
+			//echo "\$aje->setFlag($f);\n";
+		}
+	}
+
 	$aje->save();
+
 	$_SESSION['account-transaction'] = $aje;
 
 	// And Make the Wizard

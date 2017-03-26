@@ -1,9 +1,6 @@
 <?php
 /**
-    @file
     @brief View for reconciling/importing transactions
-    @verison $Id$
-
 */
 
 namespace Edoceo\Imperium;
@@ -45,12 +42,17 @@ input[type="text"].ar-note {
 }
 </style>
 
-
 <?php
 
 switch ($_ENV['mode']) {
 case 'save':
 case 'view':
+
+    $cr = 0;
+    $dr = 0;
+    $je_i = 0;
+    $le_i = 0;
+    $date_alpha = $date_omega = null;
 
     // View the Pending Transactions
     echo '<table>';
@@ -69,25 +71,19 @@ case 'view':
     echo '<td><input style="width:1em;"></td>';
     echo '<td><input class="ar-date" id="filter-date" type="text"></td>';
     echo '<td><input class="ar-note" id="filter-note" type="text"></td>';
-    echo '<td><input class="account-name ar-note" id="update-account" type="text"></td>';
+    echo '<td><input id="update-account" type="text"></td>';
     echo '<td></td>';
     echo '<td></td>';
     echo '<td></td>';
     echo '<td></td>';
     echo '</tr>';
 
-
-    $cr = 0;
-    $dr = 0;
-    $je_i = 0;
-    $le_i = 0;
-    $date_alpha = $date_omega = null;
     foreach ($this->JournalEntryList as $je) {
 
     	if (!empty($je->id)) {
     		continue;
     	}
-    	
+
     	// $je->note = str_shuffle($je->note);
 
         $je_i++;
@@ -105,7 +101,7 @@ case 'view':
 
         		$le_i++;
 
-				echo '<td class="c"><input class="ar-date" name="' . sprintf('je%ddate',$je_i) . '" type="text" value="' . $je->date . '"></td>';
+				echo '<td class="c"><input class="ar-date" name="' . sprintf('je%ddate', $je_i) . '" type="text" value="' . $je->date . '"></td>';
 				echo '<td><input class="ar-note" name="' . sprintf('je%dnote',$je_i) . '" type="text" value="' . $je->note . '"></td>';
 				// echo $this->formText('note',$je->note,array('style'=>'width:25em'));
 				// @todo Determine Side, which depends on the Kind of the Account for which side is which
@@ -151,7 +147,8 @@ case 'view':
 				echo '<td>&nbsp;</td>';
 				echo '<td class="r">' . Form::number(sprintf('je%dcr',$je_i), sprintf('%0.2f', $je->cr), array('step'=>0.01)) . '</td>';
 			} else {
-				die("Fail");
+				echo '<td class="r">' . Form::number(sprintf('je%ddr',$je_i), sprintf('%0.2f', $je->dr), array('step'=>0.01)) . '</td>';
+				echo '<td class="r">' . Form::number(sprintf('je%dcr',$je_i), sprintf('%0.2f', $je->cr), array('step'=>0.01)) . '</td>';
 			}
 
 			// Lookup / Found?
@@ -166,6 +163,7 @@ case 'view':
 
 			echo '<td>';
 			echo '<button class="save-entry" data-index="' . $je_i . '" type="button"><i class="fa fa-save"></i></button>';
+			echo '<button class="drop-entry" data-index="' . $je_i . '" type="button"><i class="fa fa-times"></i></button>';
 			echo '</td>';
 
 			echo '</tr>';
@@ -208,6 +206,15 @@ default:
     echo '<div><input name="a" type="submit" value="Upload" /></div>';
     echo '</fieldset>';
     echo '</form>';
+?>
+
+	<section>
+	<p>PayPal has two different Types of Formats</p>
+	<p>PayPal Reports from https://business.paypal.com/merchantdata/reportHome</p>
+	</section>
+
+<?php
+
     return(0);
 }
 
@@ -216,28 +223,28 @@ default:
 <script>
 function acChange(e, ui)
 {
-    var c = parseInt($(e.target).data('index'));
+    var c = parseInt($(e.target).data('index'), 10) || 0;
 	$('#account_id-' + c).val(ui.item.id);
 	$('#account_name-' + c).val(ui.item.value);
 }
 
 function acFocus(e, ui)
 {
-    var c = parseInt($(e.target).data('index'));
+    var c = parseInt($(e.target).data('index'), 10) || 0;
 	$('#account_id-' + c).val(ui.item.id);
 	$('#account_name-' + c).val(ui.item.value);
 }
 
 function acSelect(e, ui)
 {
-    var c = parseInt($(e.target).data('index'));
+    var c = parseInt($(e.target).data('index'), 10) || 0;
 	$('#account_id-' + c).val(ui.item.id);
 	$('#account_name-' + c).val(ui.item.value);
 }
 
 function acChangeFocusSelect(e, ui)
 {
-    var c = parseInt($(e.target).data('index'));
+    var c = parseInt($(e.target).data('index'), 10) || 0;
 	$('#account_id-' + c).val(ui.item.id);
 	$('#account_name-' + c).val(ui.item.value);
 }
@@ -268,11 +275,21 @@ $(function() {
     });
 
     // Set all Visible Accounts to this one
-    $('#update-account').on('blur change', function() {
-    	var a = $(this).val();
-		$('.reconcile-show .account-name').each(function(i, n) {
-			$(n).val(a).blur();
-		});
+    $('#update-account').autocomplete({
+		delay: 100,
+        source: <?= $account_list_json; ?>,
+        select: function(e, ui) {
+        	$('.account-name').each(function(i, n) {
+				acChange({ target: n }, ui);
+        	});
+        },
+        response: function(e, ui) {
+        	if (1 == ui.content.length) {
+        		ui.item = ui.content[0];
+        		delete ui.content;
+        		acChangeFocusSelect(e, ui);
+        	}
+        }
     });
 
     $('.account-name').autocomplete({
@@ -288,6 +305,11 @@ $(function() {
         		acChangeFocusSelect(e, ui);
         	}
         }
+    });
+
+    $('.drop-entry').on('click', function(e) {
+		var jei = $(this).data('index');
+		$('#journal-entry-index-' + jei).remove();
     });
 
 	$('.save-entry').on('click', function(e) {
@@ -339,7 +361,6 @@ $(function() {
 				alert(res);
 			}
 		});
-
 	});
 });
 </script>

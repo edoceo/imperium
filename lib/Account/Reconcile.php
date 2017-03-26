@@ -6,20 +6,24 @@
 
 namespace Edoceo\Imperium;
 
+use Edoceo\Radix;
 use Edoceo\Radix\DB\SQL;
 
 class Account_Reconcile
 {
+
 	public static $format_list = array(
 		'csvwfb' => 'Wells Fargo Comma Seperated',
 		'square' => 'SquareUp Transaction CSV',
-		'paypal' => 'Paypal CSV',
-		'iq2005' => 'Intuit Quicken 2005 or newer',
-		'qb2000' => 'Quickbooks 2000 or newer',
-		'mm2002' => 'Microsoft Money 2002 or newer',
+		'paypal' => 'Paypal CSV - Type 1',
+		'paypal-2' => 'Paypal CSV - Type 2',
+		// 'iq2005' => 'Intuit Quicken 2005 or newer',
+		// 'qb2000' => 'Quickbooks 2000 or newer',
+		// 'mm2002' => 'Microsoft Money 2002 or newer',
 	);
 
 	/**
+		Parse the Data to Accounts
 	*/
 	static function parse($opt)
 	{
@@ -31,97 +35,11 @@ class Account_Reconcile
 		case 'csvwfb': // Wells Fargo CSV Format
 			$ret = self::_parseWellsFargo($opt['file']);
 			break;
-		case 'paypal';
-			// 0  = Date
-			// 4  = Note
-			// 6  = Gross
-			// 7  = Fee
-			// 8  = Net
-			// 11 = Transaction ID
-			// Zend_Debug::dump($_FILES['file']);
-			$fh = fopen($_FILES['file']['tmp_name'],'r');
-			while ($csv = fgetcsv($fh,4096)) {
-
-				// Ledger Entry for Paypal Deposit (Gross)
-				if (count($csv) < 11) {
-					continue;
-				}
-				// Skip first Row if Header
-				if ($csv[0] == 'Date') {
-					continue;
-				}
-				// Only Process Completed Transactions
-				if ($csv[5] == 'Pending') {
-					continue;
-				}
-				// Only Transactions with Fees Count
-				if ( (empty($csv[7])) && (empty($csv[8])) ) {
-					continue;
-				}
-
-				$le = new stdClass();
-				$le->date = $csv[0];
-				$le->note = $csv[4] . ' #' . $csv[11];
-				$le->account_id = null;
-				switch (trim($csv[4])) {
-				case 'Payment Received':
-				case 'eBay Payment Received':
-				case 'Shopping Cart Payment Received':
-					// Ledger Entry for Paypal Fee
-					$le->account_id = 111;
-					$le->note = 'Fee for Transaction #' . $csv[11] . '';
-					$le->amount = $le->dr = floatval(preg_replace('/[^\d\.\-]/',null,$csv[7]));
-					$this->view->JournalEntryList[] = $le;
-					// Ledger Entry for Paypal Deposit
-					$le = new stdClass();
-					$le->date = $csv[0];
-					$le->account_id = 8;
-					$le->note = $csv[4] . ' #' . $csv[11];
-					$le->amount = $le->cr = floatval(preg_replace('/[^\d\.\-]/',null,$csv[6]));
-					break;
-				// Money Leaves PayPal to Expense
-				case 'Payment Sent':
-				case 'Express Checkout Payment Sent':
-				case 'Shopping Cart Payment Sent':
-				case 'Web Accept Payment Sent':
-				case 'eBay Payment Sent':
-					// Debit to Checking
-					$le->amount = floatval(preg_replace('/[^\d\.\-]/',null,$csv[6]));
-					//if (floatval($le->amount) < 0) {
-					$le->dr = abs($le->amount);
-					$le->account_id = 26;
-					break;
-				case 'Add Funds from a Bank Account': // Happens before Update to ...
-				case 'Order': // Requested Money From Us, Paid on *Sent
-				case 'Pending Balance Payment':
-					continue 2; // Ignore
-					break;
-				case 'Refund':
-					// Debit to Checking
-					$le->amount = floatval(preg_replace('/[^\d\.\-]/',null,$csv[6]));
-					$le->cr = abs($le->amount);
-					$le->account_id = 26;
-					break;
-				case 'Update to Add Funds from a Bank Account': // Money Into Paypal from Bank
-					// Debit to Checking
-					$le->amount = floatval(preg_replace('/[^\d\.\-]/',null,$csv[6]));
-					$le->cr = abs($le->amount);
-					$le->account_id = 1;
-					break;
-				case 'Withdraw Funds to a Bank Account':
-					// Debit to Checking
-					$le->amount = floatval(preg_replace('/[^\d\.\-]/',null,$csv[6]));
-					//if (floatval($le->amount) < 0) {
-					$le->dr = abs($le->amount);
-					$le->account_id = 1;
-					break;
-				default:
-					die($csv[4]);
-				}
-				$this->view->JournalEntryList[] = $le;
-			}
-			//Zend_Debug::dump($this->view->JournalEntryList);
-			//exit(0);
+		case 'paypal':
+			$ret = self::_parsePayPal_v1($opt['file']);
+			break;
+		case 'paypal-2':
+			$ret = self::_parsePayPal_v2($opt['file']);
 			break;
 		case 'qfx': // Quicken 2004 Web Connect
 			//echo "<pre>".htmlspecialchars($buf)."</pre>";
@@ -154,39 +72,51 @@ class Account_Reconcile
 			break;
 		}
 
+		// Query: Find Matching Entry
+		$sql = 'SELECT account_journal_id, date, amount FROM general_ledger';
+		$sql.= " WHERE (date <= ?::timestamp + '2 days'::interval) AND (date >= ? ::timestamp - '2 days'::interval)";
+		$sql.= ' AND account_id = ?';
+		$sql.= ' AND abs(amount) = ?';
+		$sql.= ' LIMIT 1';
+
 		// Now Spin Each List Item and Discover Existing Journal Entry?
 		$c = count($ret);
 		for ($i=0;$i<$c;$i++) {
 
-			// Old
-			// $s = $d->select();
-			// $s->from('general_ledger',array('account_journal_id','date','amount'));
-			// $s->where(" (date <= ?::timestamp + '5 days'::interval) AND (date >= ? ::timestamp - '5 days'::interval) ",$ret[$i]->date);
-			// $s->where(' account_id = ?',$opt['account_id']);
-			// $s->where(' abs(amount) = ?',abs($ret[$i]->abs));
-			// $ret[$i]->id = $d->fetchOne($s);
+			$arg = array($ret[$i]->date, $ret[$i]->date, $opt['account_id'], abs($ret[$i]->amount));
 
-			// New
-			$sql = 'SELECT account_journal_id, date, amount FROM general_ledger';
-			$sql.= " WHERE (date <= ?::timestamp + '5 days'::interval) AND (date >= ? ::timestamp - '5 days'::interval)";
-			$sql.= ' AND account_id = ?';
-			$sql.= ' AND abs(amount) = ?';
-			$ret[$i]->id = SQL::fetch_one($sql, array($ret[$i]->date, $ret[$i]->date, $opt['account_id'], abs($ret[$i]->abs)));
+			$ret[$i]->id = SQL::fetch_one($sql, $arg);
+			//Radix::dump($sql);
+			//Radix::dump($arg);
 
-			// $sql = 'select a.id,a.date,b.amount';
-			// $sql.= ' from account_journal a join account_ledger b on a.id=b.account_journal_id ';
-			// $sql.= ' where ';
-			// $sql.= " (date<='{$je->date}'::timestamp+'5 days'::interval and date>='{$je->date}'::timestamp-'5 days'::interval) ";
-			// $sql.= " and abs(b.amount)='{$je->abs}' ";
-			// $sql.= ' b.account_id=' . $acct_id and abs(b.amount)='".abs($entry->amount)."' ";
-			// echo "$sql\n";
-			// echo $s->assemble();
+			$err = SQL::lastError();
+			if (!empty($err)) {
+				die("err:$err");
+			}
+			//Radix::dump($err);
+			//Radix::dump($ret[$i]);
+			//exit;
 
 		}
 
-		uasort($ret,array(self,'_sortCallback'));
+		uasort($ret, array(self,'_sortCallback'));
 
 		return $ret;
+	}
+
+	/**
+		Parse PayPal Transaction Data
+	*/
+	private static function _parsePayPal_v1($file)
+	{
+		require_once(__DIR__ . '/Reconcile_PayPal_v1.php');
+		return Account_Reconcile_PayPal_v1::parse($file);
+	}
+
+	private static function _parsePayPal_v2($file)
+	{
+		require_once(__DIR__ . '/Reconcile_PayPal_v2.php');
+		return Account_Reconcile_PayPal_v2::parse($file);
 	}
 
 	/**
@@ -203,7 +133,7 @@ class Account_Reconcile
 			}
 			$je->date = $csv[0];
 			$je->note = $csv[4];
-			$je->abs = abs(preg_replace('/[^\d\.]+/',null,$csv[1]));
+			$je->amount = abs(preg_replace('/[^\d\.]+/',null,$csv[1]));
 			if ($csv[1] < 0) {
 				$je->cr = abs($csv[1]);
 			} else {
@@ -263,7 +193,7 @@ class Account_Reconcile
 			);
 			// = floatval(preg_replace('/[^\d\.]+/',null,$csv[13]));
 			// $je->cr = floatval(preg_replace('/[^\d\.]+/',null,$csv[18]));
-			// $je->abs = ($je->cr);
+			// $je->amount = ($je->cr);
 			
 			$ret[] = $je;
 
@@ -303,8 +233,8 @@ class Account_Reconcile
 			return ($x0 > $x1);
 		}
 		// Compare by Amount (Highest First)
-		$x0 = floatval($a->abs);
-		$x1 = floatval($b->abs);
+		$x0 = floatval($a->amount);
+		$x1 = floatval($b->amount);
 		return ($x0 < $x1);
 	}
 }

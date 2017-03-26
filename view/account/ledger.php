@@ -21,7 +21,10 @@ $_ENV['title'] = array(
 
 echo '<form method="get">';
 echo '<table>';
-echo '<tr><td class="b r">Account:</td><td colspan="4">' . Form::select('id', $this->Account['id'], $this->AccountList_Select) . "</td></tr>";
+echo '<tr><td class="b r">Account:</td><td colspan="4">' . Form::select('id', $this->Account['id'], $this->AccountList_Select);
+echo ' <a href="' . Radix::link('/account/journal?' . http_build_query($_GET)) . '"><i class="fa fa-list" title="Journal"></i></a>';
+echo ' <a href="' . Radix::link('/account/edit?id=' . $this->Account['id']) . '"><i class="fa fa-edit" title="Edit"></i></a>';
+echo '</td></tr>';
 echo '<tr>';
 echo '<td class="l">From:</td>';
 echo "<td>" . Form::date('d0',$this->date_alpha,array('size'=>12)) . "</td>";

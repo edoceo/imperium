@@ -15,9 +15,18 @@ use Edoceo\Radix\HTML\Form;
 
 echo '<div class="bf c">';
 
-echo Form::select('m', $_GET['m'], Radix::$view->MonthList); //null,$this->data['month'],null,false); // Month
-echo Form::select('y', $_GET['y'], Radix::$view->YearList ); //null,$this->data['year'],null,false); // Year
-echo Form::select('p', $_GET['p'], Radix::$view->PeriodList); //null,$this->data['period'],null,false); // Period
+$m = $_GET['m'];
+$y = $_GET['y'];
+$p = $_GET['p'];
+
+if (!empty($data)) {
+	if (!empty($data['m'])) $m = $data['m'];
+	if (!empty($data['y'])) $m = $data['y'];
+	if (!empty($data['p'])) $m = $data['p'];
+}
+echo Form::select('m', $m, Radix::$view->MonthList); //null,$this->data['month'],null,false); // Month
+echo Form::select('y', $y, Radix::$view->YearList ); //null,$this->data['year'],null,false); // Year
+echo Form::select('p', $p, Radix::$view->PeriodList); //null,$this->data['period'],null,false); // Period
 echo Form::submit('c', 'View');
 
 echo '<div class="bf c">';

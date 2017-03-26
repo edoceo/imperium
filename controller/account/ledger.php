@@ -84,6 +84,7 @@ if (empty($this->Account['id'])) {
 	//$this->AccountLedger = $data;
 	$this->dr_total = abs($this->Account->debitTotal($this->date_alpha,$this->date_omega));
 	$this->cr_total = abs($this->Account->creditTotal($this->date_alpha,$this->date_omega));
+
 }
 
 if (strlen($_GET['link'])) {

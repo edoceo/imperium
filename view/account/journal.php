@@ -24,6 +24,7 @@ $_ENV['title'] = array(
 $cr_sum = 0;
 $dr_sum = 0;
 $runbal = $this->openBalance;
+$prev_b = 0;
 
 echo '<form method="get">';
 echo '<div style="display:flex; flex-wrap:wrap; font-size:120%; vertical-align:middle; margin:0.25em;">';
@@ -36,27 +37,62 @@ echo '<div style="flex:1 1 auto;"><input name="c" type="submit" value="View"> <i
 echo '</div>';
 echo '</form>';
 
+echo Radix::block('account-period-arrow', $this->date_alpha);
+
 // echo ' <a href="' . Radix::link('/account/ledger?' . http_build_query($_GET)) . '"><i class="fa fa-bar-chart">L</i></a>';
 // echo ' <a href="' . Radix::link('/account/journal?' . http_build_query($_GET)) . '"><i class="fa fa-">J</i></a>';
 
-echo Radix::block('account-period-arrow', $this->date_alpha);
+echo '<div style="display:flex; flex-wrap:wrap;">';
+echo '<div style="flex: 1 1 auto;">';
+	echo '<h2>Opening Balance ' . number_format($this->Account->balanceBefore($this->date_alpha), 2) . '</h2>';
+echo '</div>';
+echo '<div style="flex: 1 1 auto;">';
+echo '<h2>Closing Balance ' . number_format($this->Account->balanceAt($this->date_omega), 2) . '</h2>';
+echo '</div>';
+echo '</div>';
 
 ?>
 
 <style>
 table#account-journal-main {
+	margin-bottom: 1em;
+	margin-top: 1em;
 	position: relative;
 }
-table#account-journal-main thead td {
+table#account-journal-main thead th {
+	background: transparent;
+	padding: 0.25em;
+}
+table#account-journal-main thead tr {
+	background: #ccc;
+	border: 1px solid #666;
+	font-weight: bold;
+}
+table#account-journal-main thead tr.open {
 	background: #aaa;
-	font-weight: bold;
 }
+
 table#account-journal-main tbody tr.je {
-	background: #999;
+	border-top: 1px solid #333;
+	border-left: 1px solid #333;
+	border-right: 1px solid #333;
+	background: #eee;
 }
-table#account-journal-main tbody td {
-	border: 1px solid #333;
+table#account-journal-main tbody tr.je td {
 	font-weight: bold;
+}
+table#account-journal-main tbody tr.le {
+	border-left: 1px solid #333;
+	border-right: 1px solid #333;
+}
+table#account-journal-main tbody tr.le td {
+	border: none;
+}
+table#account-journal-main tbody tr.le td.crdr {
+	/* border-bottom: 1px solid #aaa; */
+	font-weight: bold;
+	text-align: right;
+	width: 8em;
 }
 table#account-journal-main tfoot td {
 	background: #aaa;
@@ -64,38 +100,27 @@ table#account-journal-main tfoot td {
 }
 </style>
 
-<!--
-<table id="account-journal-head" style="display:none; position:fixed; top:0;">
-<thead>
-	<tr>
-	<th>Date</th>
-	<th>Account/Note</th>
-	<th>Entry #</th>
-	<th>Debit</th>
-	<th>Credit</th>
-	<th>Balance</th>
-	</tr>
-</thead>
-</table>
--->
-
 <table id="account-journal-main">
 <thead>
 	<tr>
+	<th>TXN/Code</th>
 	<th>Date</th>
 	<th>Account/Note</th>
 	<th>Debit</th>
 	<th>Credit</th>
 	<th>Balance</th>
 	</tr>
-	<tr>
-	<td class="c">-Open-</td><td colspan="3">Opening Balance</td>
-	<td class="b r"><?= number_format($this->openBalance, 2) ?></td>
+	<tr class="open">
+	<th class="c">-Open-</th>
+	<th colspan="4"></th>
+	<th class="b r"><?= number_format($this->openBalance, 2) ?></th>
 	</tr>
 </thead>
 
 <tbody>
 <?php
+
+$prev_b = $this->openBalance;
 
 $Journal_Entry_Stat = array();
 
@@ -103,45 +128,17 @@ foreach ($this->JournalEntryList as $je) {
 
 	$d = new \DateTime($je['date']);
 
-?>
-	<tr class="je">
-    <td class="c"><a href="<?= Radix::link('/account/transaction?id=' . $je['id']) ?>"><?= html($d->format('m/d')) ?></a></td>
-	<td colspan="3"><?= html($je['note']) ?></td>
-	<td class="c"<?= ($je['flag'] == 0 ? ' style="background:#e00;"' : null) ?>><a href="<?= Radix::link('/account/transaction?id=' . $je['id']) ?>"><?= sprintf('#%s%s', $je['kind'], $je['id']) ?></a></td>
-	</tr>
-<?php
-
-	$sql = 'SELECT *, CASE account_id WHEN ? THEN 1 ELSE 2 END AS sort FROM general_ledger WHERE account_journal_id = ?';
+	$sql = 'SELECT *';
+	$sql.= ', CASE account_id WHEN ? THEN 1 ELSE 2 END AS sort';
+	$sql.= ' FROM general_ledger WHERE account_journal_id = ?';
 	$sql.= ' ORDER BY sort ASC, amount ASC';
 	// $sql = sprintf($sql, $je['id']);
 	$arg = array($this->Account['id'], $je['id']);
 	$res = SQL::fetch_all($sql, $arg);
-	// echo SQL::lastError();
 
-	if (count($res) < 2) {
-		die("Bad Journal Entry");
-	}
+	ob_start();
 
 	foreach ($res as $le) {
-
-		$code = $le['account_code'];
-		$name = preg_replace('|^[\d\/\- ]+|', null, $le['account_full_name']);
-
-		if ($le['account_id'] != $this->Account['id']) {
-			$code = '<a href="' . Radix::link('/account/journal?id=' . $le['account_id']) . '">+' . $le['account_code'] . '</a>';
-		}
-
-?>
-		<tr>
-		<td><?= $code ?></td>
-		<td><?= html($name) ?></td>
-<?php
-		// Debit or Credit
-		if ($le['amount'] > 0) {
-			echo '<td></td><td class="r">' . number_format($le['amount'], 2) . '</td>';
-		} else {
-			echo "<td class='r'>" . number_format(abs($le['amount']), 2) . '</td><td></td>';
-		}
 
 		// Running Balance
 		if ($this->Account['id'] == $le['account_id']) {
@@ -152,38 +149,76 @@ foreach ($this->JournalEntryList as $je) {
 				$cr_sum += abs($le['amount']);
 				$runbal -= abs($le['amount']);
 			}
-			echo '<td class="r">' . number_format($runbal, 2) . '</td>';
 		} else {
-			echo '<td></td>';
-		}
-
-?>
-		</tr>
-<?php
-
-		if ($le['account_id'] != $this->Account['id']) {
-			$k = sprintf('%s %s', $le['account_code'], $name);
-			if (empty($Journal_Entry_Stat[ $k ])) {
-				$Journal_Entry_Stat[$k] = $le['amount'];
+			$x = $le['full_name'];
+			if (empty($Journal_Entry_Stat[ $x ])) {
+				$Journal_Entry_Stat[$x] = $le['amount'];
 			} else {
-				$Journal_Entry_Stat[$k] += $le['amount'];
+				$Journal_Entry_Stat[$x] += $le['amount'];
 			}
 		}
 
+		echo '<tr class="le">';
+
+		if ($this->Account['id'] == $le['account_id']) {
+			echo '<td colspan="3">' . html($le['full_name']) . '</td>';
+		} else {
+			echo '<td colspan="3" style="text-indent:3em;">';
+			echo '<a href="' . Radix::link('/account/journal?id=' . $le['account_id']) . '">';
+			echo html($le['full_name']);
+			echo '</a>';
+			echo '</td>';
+		}
+
+		// Debit or Credit
+		if ($le['amount'] > 0) {
+			echo '<td class="crdr"></td><td class="crdr">' . number_format($le['amount'], 2) . '</td>';
+		} else {
+			echo '<td class="crdr">' . number_format(abs($le['amount']), 2) . '</td><td class="crdr"></td>';
+		}
+
+		//if ($le['account_id'] == $this->Account['id']) {
+		//	echo '<td class="r">' . number_format($runbal, 2) . '</td>';
+		//}
+		echo '<td></td>';
+		echo '</tr>';
 	}
+
+	$le_html = ob_get_clean();
+?>
+
+	<tr class="je">
+	<td class="c"<?= ($je['flag'] == 0 ? ' style="background:#e00;"' : null) ?>><a href="<?= Radix::link('/account/transaction?id=' . $je['id']) ?>"><?= sprintf('#%s%s', $je['kind'], $je['id']) ?></a></td>
+	<td class="c"><?= html($d->format('m/d')) ?></td>
+	<td colspan="3"><?= html($je['note']) ?></td>
+	<?php
+	//if ($runbal > $prev_b) {
+		echo '<td class="r">' . number_format($runbal, 2) . '</td>';
+	//} else {
+	//	echo '<td class="r" style="color:#c00;">' . number_format($runbal, 2) . '</td>';
+	//}
+	//$prev_b = $runbal;
+	?>
+	</tr>
+
+	<?= $le_html ?>
+
+<?php
 }
 
 ?>
 </tbody>
 <tfoot>
 	<tr>
-	<td colspan="2">Sum</td>
+	<td colspan="3">Sum</td>
 	<td class="r"><?= number_format($dr_sum, 2) ?></td>
 	<td class="r"><?= number_format($cr_sum, 2) ?></td>
 	<td class="r"><?= number_format($runbal, 2) ?></td>
 	</tr>
 </tfoot>
 </table>
+
+<?= Radix::block('account-period-arrow', $this->date_alpha); ?>
 
 <section>
 <h2>Offset Summary</h2>
@@ -207,45 +242,7 @@ foreach ($Journal_Entry_Stat as $a => $v) {
 </table>
 </section>
 
-<?= $back_next ?>
+<?php
 
-<script>
-// $("#d0").datepicker();
-//$("#d1").datepicker();
-
-var fixHead = $("#account-journal-head");
-var offMain = $("#account-journal-main").offset().top;
-
-// var $header = $("#table-1 > thead").clone();
-// var $fixedHeader
-// .append($header);
-
-$(function() {
-
-	//$(window).on('scroll', function() {
-    //
-	//	var offset = $(this).scrollTop();
-	//	offset += 100;
-    //
-	//	if (offset >= offMain) { // && fixHead.is(":hidden")) {
-    //
-	//		//fixHead.show();
-	//		$("#account-journal-main thead").css('position', 'fixed');
-    //
-	//		//$("#account-journal-head td").each(function(index) {
-	//		//	var index2 = index;
-	//		//	$(this).width(function(index2) {
-	//		//		return $("#account-journal-main td").eq(index).width();
-	//		//	});
-	//		//});
-    //
-	//	} else if (offset < offMain) {
-	//		//fixHead.hide();
-	//		$("#account-journal-main thead").css('position', 'relative');
-	//	}
-    //
-	//});
-
-});
-
-</script>
+// echo Radix::dump($res);
+// Radix::dump($Journal_Entry_Stat);

@@ -6,14 +6,15 @@
 
 use Edoceo\Radix;
 
+$cr_total = $dr_total = 0;
 
 // Input Form
+echo '<div class="print-hide">';
 echo '<form>';
-// echo $this->form('AccountStatement',array('action'=>$this->appurl.'/account.statement/income','class'=>'np'));
 echo Radix::block('account-period-input');
 echo '</form>';
-
-$cr_total = $dr_total = 0;
+echo Radix::block('account-period-arrow', $this->date_alpha);
+echo '</div>';
 
 // Revenues
 echo '<table class="w">';
