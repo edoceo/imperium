@@ -345,15 +345,15 @@ class ImperiumBase implements \ArrayAccess
 	/**
 		Flag Handling
 	*/
-	function delFlag($f) { $this->flag = (intval($this->flag) & ~$f); }
-	function hasFlag($f) { return (intval($this->flag) & $f); }
+	function delFlag($f) { $this->_data['flag'] = (intval($this->_data['flag']) & ~$f); }
+	function hasFlag($f) { return (intval($this->_data['flag']) & $f); }
 	function getFlag($fmt='d')
 	{
 		switch($fmt) {
 		case 'b': // Binary
-			return sprintf('0b%032s',decbin($this->flag));
+			return sprintf('0b%032s',decbin($this->_data['flag']));
 		case 'd': // Decimal
-			return sprintf('%u',$this->flag);
+			return sprintf('%u',$this->_data['flag']);
 		case 's': // String
 			$rc = new ReflectionClass($this);
 			$set = $rc->getConstants();
@@ -365,14 +365,29 @@ class ImperiumBase implements \ArrayAccess
 			}
 			return implode(',',$ret);
 		case 'x': // Hex
-			return sprintf('0x%08x',$this->flag);
+			return sprintf('0x%08x',$this->_data['flag']);
 		}
 	}
-	function setFlag($f) { $this->flag = (intval($this->flag) | $f); }
+	function setFlag($f)
+	{
+		$this->_data['flag'] = (intval($this->_data['flag']) | $f);
+	}
 
 	/*
 		Array Accessors
 	*/
+	public function toArray()
+	{
+		if (empty($this->_data)) {
+			return array();
+		}
+
+		$d = $this->_data;
+		ksort($d);
+
+		return $d;
+	}
+
 	/**
 		@return Boolean
 	*/

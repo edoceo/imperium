@@ -1,7 +1,6 @@
 <?php
 /**
-	@file
-	@brief Account Reconciliation Tools
+	Account Reconciliation Tools
 */
 
 namespace Edoceo\Imperium;
@@ -11,7 +10,9 @@ use Edoceo\Radix\DB\SQL;
 
 class Account_Reconcile
 {
-
+	/**
+		List of supported formats
+	*/
 	public static $format_list = array(
 		'csvwfb' => 'Wells Fargo Comma Seperated',
 		'square' => 'SquareUp Transaction CSV',
