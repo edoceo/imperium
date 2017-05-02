@@ -39,8 +39,17 @@ echo '</form>';
 
 echo Radix::block('account-period-arrow', $this->date_alpha);
 
+echo '<div style="display:flex; flex-wrap:wrap;">';
+echo '<div style="flex: 1 1 auto;">';
+	echo '<h2>Opening Balance ' . number_format($this->Account->balanceBefore($this->date_alpha), 2) . '</h2>';
+echo '</div>';
+echo '<div style="flex: 1 1 auto;">';
+echo '<h2>Closing Balance ' . number_format($this->Account->balanceAt($this->date_omega), 2) . '</h2>';
+echo '</div>';
+echo '</div>';
+
 //
-$runbal = $this->openBalance;
+$runbal = $this->balanceAlpha;
 $cr_sum = 0;
 $dr_sum = 0;
 
@@ -62,7 +71,7 @@ $dr_sum = 0;
 
 <tr class="rero">
 <td class="c">-Open-</td><td colspan="4">Opening Balance</td>
-<td class="b r"><?= number_format($this->openBalance, 2) ?></td>
+<td class="b r"><?= number_format($this->balanceAlpha, 2) ?></td>
 </tr>
 
 <?php
@@ -79,7 +88,10 @@ foreach ($this->LedgerEntryList as $le)
 
     echo '<td class="c"><a href="' . Radix::link($link) . '">' . $le['date'] . '</td>';
     echo '<td>' . html($le['note']) . '</td>';
-    echo sprintf('<td class="c">#%s%s</td>', $le['kind'], $le['account_journal_id']);
+    echo sprintf('<td class="c"%s>#%s%s</td>',
+    	($le['flag'] == 0 ? ' style="background:#e00;"' : null),
+    	$le['kind'],
+    	$le['account_journal_id']);
 
     // Object Link
     //if (!empty($le['link_to'])) {

@@ -44,6 +44,7 @@ require_once('Base/File.php');
 require_once('Base/Note.php');
 require_once('Base/Unit.php');
 require_once('Account.php');
+require_once('Account/Period.php');
 require_once('Account/JournalEntry.php');
 require_once('Account/LedgerEntry.php');
 require_once('Contact.php');

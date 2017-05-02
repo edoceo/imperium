@@ -1,7 +1,6 @@
 <?php
 /**
-	@file
-	@brief Master Controller for Account 
+	Master Controller for Account
 */
 
 namespace Edoceo\Imperium;
@@ -15,15 +14,15 @@ require_once('Account/TaxFormLine.php');
 if (empty($_SESSION['account-view']['period'])) $_SESSION['account-view']['period'] = 'm';
 if (empty($_SESSION['account-view']['month'])) $_SESSION['account-view']['month'] = date('m');
 if (empty($_SESSION['account-view']['year'])) $_SESSION['account-view']['year'] = date('Y');
-if (empty($_SESSION['account-view']['date_alpha'])) $_SESSION['account-view']['date_alpha'] = date('Y-m-01');
-if (empty($_SESSION['account-view']['date_omega'])) $_SESSION['account-view']['date_omega'] = date('Y-m-t');
+if (empty($_SESSION['account-view']['date_alpha'])) $_SESSION['account-view']['date_alpha'] = strtotime(date('Y-m-01'));
+if (empty($_SESSION['account-view']['date_omega'])) $_SESSION['account-view']['date_omega'] = strtotime(date('Y-m-t'));
 
 // Attach to Context
 $this->Period = $_SESSION['account-view']['period'];
 $this->Month = $_SESSION['account-view']['month'];
 $this->Year = $_SESSION['account-view']['year'];
-$this->date_alpha = $_SESSION['account-view']['date_alpha'];
-$this->date_omega = $_SESSION['account-view']['date_omega'];
+$this->date_alpha_ts = $_SESSION['account-view']['date_alpha'];
+$this->date_omega_ts = $_SESSION['account-view']['date_omega'];
 
 if (!empty($_GET['p'])) {
 	$this->Period = $_GET['p'];
@@ -33,40 +32,44 @@ if (!empty($_GET['p'])) {
 
 // @todo this is duplicated in the AccountStatement Controller - how to reslove?
 // Initialise Inputs
-if ( (isset($_GET['d0'])) || (isset($_GET['d1'])) ) {
+if ( (isset($_GET['d0'])) && (isset($_GET['d1'])) ) {
 	$this->Period = 'r';
 }
 
 switch ($this->Period) {
 case 'm':
-	$this->date_alpha = date('Y-m-d', mktime(0,0,0, $this->Month, 1, $this->Year));
-	$this->date_omega = date('Y-m-t', mktime(0,0,0, $this->Month, 1, $this->Year));
+	$this->date_alpha_ts = mktime(0,0,0, $this->Month, 1, $this->Year);
+	$this->date_omega_ts = mktime(0,0,0, $this->Month, 1, $this->Year);
 	break;
 case 'q':
 	// @note this may or may not be an accurate way to find the Quarter
-	$this->date_alpha = date('Y-m-d', mktime(0,0,0,$this->Month, 1, $this->Year));
-	$this->date_omega = date('Y-m-t', mktime(0,0,0,$this->Month+2 , 1,$this->Year));
+	$this->date_alpha_ts = mktime(0,0,0,$this->Month, 1, $this->Year);
+	$this->date_omega_ts = mktime(0,0,0,$this->Month+2 , 1,$this->Year);
 	break;
 case 'y':
-	$this->date_alpha = date('Y-m-d', mktime(0,0,0,$this->Month,1,$this->Year));
-	$this->date_omega = date('Y-m-t', mktime(0,0,0,$this->Month+11,1,$this->Year));
+	$this->date_alpha_ts = mktime(0,0,0,$this->Month,1,$this->Year);
+	$this->date_omega_ts = mktime(0,0,0,$this->Month+11,1,$this->Year);
 	break;
 case 'r': // Range
+
 	if (!empty($_GET['d0'])) {
-		$this->date_alpha = date('Y-m-d', strtotime($_GET['d0']));
+		$this->date_alpha_ts = strtotime($_GET['d0']);
 	}
 	if (!empty($_GET['d1'])) {
-		$this->date_omega = date('Y-m-d', strtotime($_GET['d1']));
+		$this->date_omega_ts = strtotime($_GET['d1']);
 	}
-	// @todo decide to pick from Alpha or Omega date
-	$this->Month = date('m', strtotime($_GET['d0']));
-	$this->Year = date('Y', strtotime($_GET['d0']));
+
 	break;
 }
 
 // Format Date
-$this->date_alpha_f = strftime('%B %Y',strtotime($this->date_alpha));
-$this->date_omega_f = strftime('%B %Y',strtotime($this->date_omega));
+$this->date_alpha = date('Y-m-d', $this->date_alpha_ts);
+$this->date_omega = date('Y-m-d', $this->date_omega_ts);
+$this->date_alpha_f = strftime('%B %Y', $this->date_alpha_ts);
+$this->date_omega_f = strftime('%B %Y', $this->date_omega_ts);
+
+$this->Month = date('m', $this->date_alpha_ts);
+$this->Year = date('Y', $this->date_alpha_ts);
 
 $_SESSION['account-view']['year'] = $this->Year;
 $_SESSION['account-view']['month'] = $this->Month;

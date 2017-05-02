@@ -34,7 +34,8 @@ if ( ($id = intval($_GET['id'])) > 0) {
 // Show this specific Account
 $_SESSION['account-id'] = $this->Account['id'];
 
-$this->openBalance = $this->Account->balanceAt($this->date_alpha);
+$this->balanceAlpha = $this->Account->balanceBefore($this->date_alpha);
+$this->balanceOmega = $this->Account->balanceAt($this->date_omega);
 
 // $where = " (account_id = ? OR parent_id = ?) AND (date >= ? AND date <= ?) ";
 // $param = array(
@@ -78,10 +79,10 @@ $arg = array(
 	$this->date_omega,
 );
 
-// Radix::dump($sql);
+///Radix::dump($sql);
 
 $res = SQL::fetch_all($sql, $arg);
-// echo SQL::lastError();
+//echo SQL::lastError();
 
 $this->JournalEntryList = $res;
 

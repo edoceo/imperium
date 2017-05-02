@@ -55,7 +55,6 @@ if ( (strtolower($_GET['c'])=='post') && (!empty($this->Account['id'])) ) {
 if (empty($this->Account['id'])) {
 
 	// Show General Ledger (All Accounts!)
-	$this->openBalance = 0;
 
 	$where = " (date>='{$this->date_alpha}' and date<='{$this->date_omega}') ";
 	$order = " date,kind, account_journal_id, amount asc ";
@@ -70,9 +69,7 @@ if (empty($this->Account['id'])) {
 	// Show this specific Account
 	$_SESSION['account-id'] = $this->Account['id'];
 
-	$this->openBalance = $this->Account->balanceBefore($this->date_alpha);
-
-	$where = " (account_id = ? OR parent_id = ?) AND (date >= ? AND date <= ?) ";
+	$where = " (account_id = ? OR account_parent_id = ?) AND (date >= ? AND date <= ?) ";
 	$param = array(
 		$this->Account['id'],
 		$this->Account['id'],
@@ -103,6 +100,7 @@ $res = SQL::fetch_all($sql, $param);
 
 $this->LedgerEntryList = $res;
 
-$this->openBalance = $this->Account->balanceAt($this->date_alpha);
+$this->balanceAlpha = $this->Account->balanceBefore($this->date_alpha);
+$this->balanceOmega = $this->Account->balanceAt($this->date_omega);
 
 $_SESSION['return-path'] = '/account/ledger';

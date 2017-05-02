@@ -23,7 +23,7 @@ $_ENV['title'] = array(
 // Counters
 $cr_sum = 0;
 $dr_sum = 0;
-$runbal = $this->openBalance;
+$runbal = $this->balanceAlpha;
 $prev_b = 0;
 
 echo '<form method="get">';
@@ -44,10 +44,10 @@ echo Radix::block('account-period-arrow', $this->date_alpha);
 
 echo '<div style="display:flex; flex-wrap:wrap;">';
 echo '<div style="flex: 1 1 auto;">';
-	echo '<h2>Opening Balance ' . number_format($this->Account->balanceBefore($this->date_alpha), 2) . '</h2>';
+	echo '<h2>Opening Balance ' . number_format($this->balanceAlpha, 2) . '</h2>';
 echo '</div>';
 echo '<div style="flex: 1 1 auto;">';
-echo '<h2>Closing Balance ' . number_format($this->Account->balanceAt($this->date_omega), 2) . '</h2>';
+echo '<h2>Closing Balance ' . number_format($this->balanceOmega, 2) . '</h2>';
 echo '</div>';
 echo '</div>';
 
@@ -113,14 +113,14 @@ table#account-journal-main tfoot td {
 	<tr class="open">
 	<th class="c">-Open-</th>
 	<th colspan="4"></th>
-	<th class="b r"><?= number_format($this->openBalance, 2) ?></th>
+	<th class="b r"><?= number_format($this->balanceAlpha, 2) ?></th>
 	</tr>
 </thead>
 
 <tbody>
 <?php
 
-$prev_b = $this->openBalance;
+$prev_b = $this->balanceAlpha;
 
 $Journal_Entry_Stat = array();
 

@@ -60,8 +60,9 @@ foreach ($AccountKindList as $kind) {
 
 	// Assets
 	echo '<tr><th><h2>' . html($kind['kind']) . '</h2></th>';
-	echo '<th>Opening</th>';
-	echo '<th>Closing</th>';
+	echo '<th class="r">Opening</th>';
+	echo '<th class="r">Closing</th>';
+	echo '<th class="r">Delta</th>';
 	echo '</tr>';
 
 	// $this->AssetAccountList = $AssetAccountList;
@@ -100,6 +101,8 @@ foreach ($AccountKindList as $kind) {
 
 		echo '<td class="r">' . number_format($b0, 2) . '</td>';
 		echo '<td class="r">' . number_format($b1, 2) . '</td>';
+
+		echo '<td class="r">' . number_format($b1 - $b0, 2) . '</td>';
 
 		echo '</tr>';
 

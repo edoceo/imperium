@@ -13,7 +13,7 @@ namespace Edoceo\Imperium;
 use Edoceo\Radix;
 use Edoceo\Radix\HTML\Form;
 
-echo '<div class="bf c">';
+echo '<div class="bf c" id="account-period-input">';
 
 $m = $_GET['m'];
 $y = $_GET['y'];
@@ -21,8 +21,8 @@ $p = $_GET['p'];
 
 if (!empty($data)) {
 	if (!empty($data['m'])) $m = $data['m'];
-	if (!empty($data['y'])) $m = $data['y'];
-	if (!empty($data['p'])) $m = $data['p'];
+	if (!empty($data['y'])) $y = $data['y'];
+	if (!empty($data['p'])) $p = $data['p'];
 }
 echo Form::select('m', $m, Radix::$view->MonthList); //null,$this->data['month'],null,false); // Month
 echo Form::select('y', $y, Radix::$view->YearList ); //null,$this->data['year'],null,false); // Year

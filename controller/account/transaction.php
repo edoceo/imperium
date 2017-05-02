@@ -26,8 +26,13 @@ switch ($_POST['a']) {
 case 'delete':
 
 	$aje = new AccountJournalEntry(intval($_GET['id']));
-	$aje->delete();
+	$adp = AccountPeriod::findByDate($aje['date']);
+	if ($adp->isClosed()) {
+		//Session::flash('fail', 'Account Period is closed');
+		//Radix::redirect();
+	}
 
+	$aje->delete();
 	Session::flash('info', sprintf('Journal Entry %d deleted', $aje['id']));
 
 	// Redirect
@@ -42,6 +47,12 @@ case 'delete':
 
 case 'save':
 case 'save-copy':
+
+	$adp = AccountPeriod::findByDate($_POST['date']);
+	if ($adp->isClosed()) {
+		Session::flash('fail', 'Account Period is closed');
+		Radix::redirect();
+	}
 
 	$id = intval($_GET['id']);
 
