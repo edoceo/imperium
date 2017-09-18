@@ -30,48 +30,10 @@ body {
 	font-family: sans-serif;
 	font-size: 100%;
 }
-header {
-	background: @menu_bg;
-}
-header:after {
-	content: "";
-	display:table;
-	clear:both;
-}
-
-header div#logo {
-	width: 256px;
-}
-header h1 {
-	border:none;
-	clear:left;
-	font-size: 200%;
-	margin: 0;
-	padding: 0;
-	text-align: left;
-}
-header h2 {
-	border: none;
-	clear: left;
-	margin: 0;
-	padding: 0;
-	text-align: left;
-	text-indent: 1em;
-}
-
 code {
 	font-family: monospace;
 	margin: 0.25em;
 	padding: 0.25em;
-}
-dd {
-	margin: 4px;
-}
-dl {
-	margin: 5px;
-}
-dt {
-	font-weight: bold;
 }
 
 footer {
@@ -93,36 +55,19 @@ footer a:hover {
 h1 {
 	background: #369;
 	color: #f9f9f9;
-	font-size: 130%;
-	font-weight: bold;
-	margin: 0;
-	padding: 0.25em;
 	text-align:center;
 }
 h2 {
 	border-bottom: 1px solid #369;
-	font-size: 120%;
-	font-weight: bold;
-	margin: 0.25em;
-	padding: 0.25em;
 }
 h2 span.s {
 	font-size: 80%;
 	font-weight: normal;
 }
-h3 {
-	font-size: 110%;
-	font-weight: bold;
-	margin: 0.50em;
-	text-align: center;
-}
 hr {
 	border: 1px solid #369;
 	margin: 0;
 	padding: 0;
-}
-img {
-	vertical-align: bottom;
 }
 input[type="date"] {
 	width: 12em;
@@ -133,18 +78,6 @@ input[type="time"]
 	text-align: right;
 	width: 6em;
 }
-
-li {
-	margin: 0.1em 1em;
-}
-ol {
-	margin: 0 0.5em;
-	padding: 0 0 0 2em;
-	list-style-type: decimal;
-}
-p {
-	margin: 0.25em 1em;
-}
 pre {
 	background: #ccc;
 	border: 1px solid #999;
@@ -154,13 +87,6 @@ pre {
 	padding: 1px;
 }
 
-table {
-	width: 100%;
-}
-table td {
-	padding: .25em;
-	vertical-align: top;
-}
 td.l {
 	font-weight: 700;
 	text-align: right;
@@ -181,11 +107,6 @@ tr.rero:hover {
 }
 tr.ro {
 	background-color: #ccc;
-}
-
-ul {
-	padding: 1em 0;
-	padding-left: 2em;
 }
 
 #mru_list {
@@ -221,16 +142,6 @@ div.edit-show {
 	width: 80%;
 	word-wrap: break-word;
 }
-
-/**
-	Form Stuff
-*/
-.form-controls {
-	margin: 0.5em;
-	outline: 1px dashed #fff;
-	padding: 0 0 0 1em;
-}
-
 
 /* Edoceo Standard Classes */
 .b {
@@ -387,11 +298,6 @@ select {
 		font-size:10pt;
 		width: 100%;
 	}
-    #menu {
-    	border:none;
-		display: none;
-		visibility: hidden;
-	}
     #core {
     	border:none;
 		left:0;
@@ -403,6 +309,10 @@ select {
 		visibility: hidden;
 	}
     .np {
+    	display: none;
+		visibility: hidden;
+	}
+	.print-hide {
     	display: none;
 		visibility: hidden;
 	}
