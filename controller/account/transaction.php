@@ -63,14 +63,6 @@ case 'save-copy':
 		$_SESSION['account']['date'] = $_POST['date'];
 	}
 
-	// Delete
-	// if ($req->getPost('c') == 'Delete') {
-	// 	$aje = new AccountJournalEntry($id);
-	// 	$aje->delete();
-	// 	$this->_s->info = 'Journal Entry #' . $id . ' deleted';
-	// 	$this->redirect('/account/ledger');
-	// }
-
 	// $this->_d->beginTransaction();
 
 	$aje = new AccountJournalEntry($id);
@@ -113,17 +105,19 @@ case 'save-copy':
 		// Debit or Credit
 		$dr = floatval( preg_replace('/[^\d\.]+/',null,$_POST["{$i}_dr"]));
 		$cr = floatval( preg_replace('/[^\d\.]+/',null,$_POST["{$i}_cr"]));
-		// Skip Empty
-		if ( ($cr == 0) && ($dr == 0) ) {
-			continue;
-		}
 
 		$id = intval($_POST["{$i}_id"]);
 		$ale = new AccountLedgerEntry($id);
 		$ale['auth_user_id'] = $_SESSION['uid'];
-		$ale['account_id'] = $_POST["{$i}_account_id"];
+		$ale['account_id'] = intval($_POST["{$i}_account_id"]);
 		$ale['account_journal_id'] = $aje['id'];
 		$ale['amount'] = ($dr > $cr) ? abs($dr) * -1 : abs($cr);
+
+		// Skip Empty
+		if ( ($ale['account_id'] == 0) && ($ale['amount'] == 0) ) {
+			continue;
+		}
+
 		// Bind to an object
 		//$ale['link'] = sprintf('%s:%d', $_POST["{$i}_link_to"], $_POST["{$i}_link_id"]);
 		// Save Ledger Entry

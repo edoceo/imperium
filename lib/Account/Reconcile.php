@@ -81,26 +81,27 @@ class Account_Reconcile
 		$sql.= ' LIMIT 1';
 
 		// Now Spin Each List Item and Discover Existing Journal Entry?
-		$c = count($ret);
-		for ($i=0;$i<$c;$i++) {
-
-			$arg = array($ret[$i]->date, $ret[$i]->date, $opt['account_id'], abs($ret[$i]->amount));
-
-			$ret[$i]->id = SQL::fetch_one($sql, $arg);
-			//Radix::dump($sql);
-			//Radix::dump($arg);
-
-			$err = SQL::lastError();
-			if (!empty($err)) {
-				die("err:$err");
-			}
-			//Radix::dump($err);
-			//Radix::dump($ret[$i]);
-			//exit;
-
-		}
-
-		uasort($ret, array(self,'_sortCallback'));
+//		$c = count($ret);
+//
+//		for ($i=0;$i<$c;$i++) {
+//
+//			$arg = array($ret[$i]->date, $ret[$i]->date, $opt['account_id'], abs($ret[$i]->amount));
+//
+//			$ret[$i]->id = SQL::fetch_one($sql, $arg);
+//			//Radix::dump($sql);
+//			//Radix::dump($arg);
+//
+//			$err = SQL::lastError();
+//			if (!empty($err)) {
+//				die("err:$err");
+//			}
+//			//Radix::dump($err);
+//			//Radix::dump($ret[$i]);
+//			//exit;
+//
+//		}
+//
+//		uasort($ret, array(self,'_sortCallback'));
 
 		return $ret;
 	}

@@ -52,7 +52,7 @@ class Account_Reconcile_PayPal_v2
 			'Reference Txn ID'
 		);
 
-		while ($csv = fgetcsv($fh, 4096, "\t")) {
+		while ($csv = fgetcsv($fh, 4096, ',')) {
 
 			// Skip first Row if Header
 			if ($csv[0] == 'Date') {

@@ -39,7 +39,7 @@ if ( (isset($_GET['d0'])) && (isset($_GET['d1'])) ) {
 switch ($this->Period) {
 case 'm':
 	$this->date_alpha_ts = mktime(0,0,0, $this->Month, 1, $this->Year);
-	$this->date_omega_ts = mktime(0,0,0, $this->Month, 1, $this->Year);
+	$this->date_omega_ts = mktime(23, 59, 59, $this->Month + 1, 0, $this->Year); // Zero Day of Next Month is really last day of "this" month
 	break;
 case 'q':
 	// @note this may or may not be an accurate way to find the Quarter
@@ -74,8 +74,8 @@ $this->Year = date('Y', $this->date_alpha_ts);
 $_SESSION['account-view']['year'] = $this->Year;
 $_SESSION['account-view']['month'] = $this->Month;
 $_SESSION['account-view']['period'] = $this->Period;
-$_SESSION['account-view']['date_alpha'] = $this->date_alpha;
-$_SESSION['account-view']['date_omega'] = $this->date_omega;
+$_SESSION['account-view']['date_alpha'] = $this->date_alpha_ts;
+$_SESSION['account-view']['date_omega'] = $this->date_omega_ts;
 
 $_GET['p'] = $this->Period;
 $_GET['m'] = $this->Month;

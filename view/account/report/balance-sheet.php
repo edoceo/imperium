@@ -10,9 +10,13 @@ namespace Edoceo\Imperium;
 use Edoceo\Radix;
 use Edoceo\Radix\DB\SQL;
 
-echo '<form action="" class="np" method="get">';
+// Input Form
+echo '<div class="print-hide">';
+echo '<form>';
 echo Radix::block('account-period-input');
 echo '</form>';
+echo Radix::block('account-period-arrow', $this->date_alpha);
+echo '</div>';
 
 // Year List
 // Quarter List

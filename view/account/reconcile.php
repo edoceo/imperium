@@ -38,7 +38,7 @@ input[type="text"].ar-date {
 	width: 6em;
 }
 input[type="text"].ar-note {
-	width: 20em;
+	width: 100%;
 }
 </style>
 

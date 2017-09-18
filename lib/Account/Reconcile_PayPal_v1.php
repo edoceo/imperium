@@ -53,15 +53,15 @@ class Account_Reconcile_PayPal_v1
 			'Item_Code',
 		);
 
-		while ($csv = fgetcsv($fh, 4096, "\t")) {
+		while ($csv = fgetcsv($fh, 4096, ',')) {
 
 			// Skip first Row if Header
 			if ($csv[0] == 'Date') {
 				continue;
 			}
-			//if ($csv[0] == 'Date') {
-			//	continue;
-			//}
+			if ($csv[1] == 'Time') {
+				continue;
+			}
 			if ($csv[3] == 'Name') {
 				continue;
 			}
