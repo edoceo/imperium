@@ -28,33 +28,44 @@ $x_kind = null;
 // echo '<button value="search">Search</button>';
 // echo '</div>';
 
+echo '<div class="container">';
 echo '<p><strong>Cash</strong> basis, reports for money collected when B&amp;O</p>';
 //echo '<p>Accounts for Period: ' . $this->date_alpha . ' - ' . $this->date_omega . '</p>';
-
-echo '<table>';
+echo '<table class="table table-hover">';
 
 foreach ($this->AccountList as $item) {
 
     if ($x_kind != $item['kind']) {
-        echo "<tr><th>Code</th><th>{$item['kind']}</th><th>Balance</th><th colspan='3'>Actions</th></tr>";
+        echo "<tr><th>Code</th><th>{$item['kind']}</th><th>Balance</th><th>Actions</th></tr>";
     }
 
-    echo '<tr class="rero">';
+    echo '<tr>';
 
     $indent = str_repeat('&nbsp;',substr_count($item['full_code'],'/'));
+
     echo '<td>' . $indent . '<a href="' . Radix::link('/account/ledger?id='.$item['id']) . '">' . html($item['full_code']) . '</td>';
-    echo "<td>{$item['name']}";
+
+    echo '<td>';
+    echo '<a href="' . Radix::link('/account/ledger?id='.$item['id']) . '">';
+    echo html($item['name']);
 	if (strlen($item['account_tax_line_name'])) {
 		echo " <span class='s'>({$item['account_tax_line_name']})</span>";
 	}
+	echo '</a>';
 	echo '</td>';
+
     echo '<td class="r">' . number_format(abs($item['balance']), 2) . '</td>';
     // echo '<td class="r"><a href="' . Radix::link('/account/ledger?id=' . $item['id']) . '">' . $img_al . '</td>';
-    echo '<td class="r"><a href="' . Radix::link('/account/journal?id=' . $item['id']) . '"><i class="fa fa-align-left"></i></td>';
-    echo '<td class="r"><a href="' . Radix::link('/account/edit?id=' . $item['id']) . '"><i class="fa fa-check-square-o"></i></td>';
+
+    echo '<td class="r">';
+    echo ' <a href="' . Radix::link('/account/journal?id=' . $item['id']) . '"><i class="fa fa-align-left"></i></a>';
+    echo ' <a href="' . Radix::link('/account/edit?id=' . $item['id']) . '"><i class="fa fa-check-square-o"></i></a>';
+    echo '</td>';
+
     echo '</tr>';
 
     $x_kind = $item['kind'];
 }
 
 echo '</table>';
+echo '</div>';

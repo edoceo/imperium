@@ -23,13 +23,12 @@
 namespace Edoceo\Imperium;
 
 use Edoceo\Radix;
+use Edoceo\Radix\Layout;
 use Edoceo\Radix\HTML\Form;
 
 // @todo Set this in the controller
 $this->FileYes = ini_get('file_uploads');
 $this->FileMax = ImperiumView::niceSize( ini_get('upload_max_filesize') );
-
-$css = null;
 
 $cr_total = 0;
 $dr_total = 0;
@@ -61,26 +60,39 @@ if (count($this->jump_list)) {
     echo '</div>';
 }
 
-echo '<form enctype="multipart/form-data" method="post">';
+?>
 
-echo '<table>';
-echo '<tr>';
-// Date & Kind
-echo '<td class="l">Date:</td><td><input id="account-transaction-date" name="date" type="date" value="' . html($this->AccountJournalEntry['date']) . '"></td>';
-echo '<td class="l">Kind:</td><td>' . Form::select('kind', $this->AccountJournalEntry['kind'], array('N'=>'Normal','A'=>'Adjusting','C'=>'Closing')) . '</td>';
-echo '</tr>';
-// Note
-echo '<tr><td class="l">Note:</td><td>' . Form::text('note', $this->AccountJournalEntry['note'],array('autocomplete'=>'off', 'style'=>'width: 40em')) . "</td>";
-echo '</tr>';
-echo '<tr><td class="l">Flag:</td><td>';
-echo ' <label><input' . (($this->AccountJournalEntry['flag'] & 1) ? ' checked' : null) . ' name="flag[]" style="vertical-align:middle;" type="checkbox" value="1">Audited</label>';
-// echo ' <label><input name="flag[]" style="vertical-align:middle;" type="checkbox" value="2">Verified</label>';
-echo '</td></tr>';
-echo '</table>';
+<form enctype="multipart/form-data" method="post">
+<div class="row">
+<div class="col-md-6">
+	<label>Date:</label>
+	<input class="form-control" id="account-transaction-date" name="date" type="date" value="<?= html($this->AccountJournalEntry['date']) ?>">
+</div>
+<div class="col-md-6">
+	<label>Kind:</label>
+	<?= Form::select('kind', $this->AccountJournalEntry['kind'], array('N'=>'Normal','A'=>'Adjusting','C'=>'Closing'), array('class' => 'form-control')) ?>
+</div>
+</div>
 
-// Transaction Entry Lines
-echo '<table id="JournalEntry">';
-echo '<tr><th>Account</th><th>Debit</th><th>Credit</th></tr>';
+<div class="row">
+<div class="col-md-10">
+	<label>Note:</label>
+	<?= Form::text('note', $this->AccountJournalEntry['note'],array('autocomplete'=>'off', 'class'=>'form-control')) ?>
+</div>
+<div class="col-md-2">
+	<label>Flag:</label>
+	<div>
+	<label><input<?= (($this->AccountJournalEntry['flag'] & 1) ? ' checked' : null) ?> name="flag[]" style="vertical-align:middle;" type="checkbox" value="1">Audited</label>
+	</div>
+</div>
+</div>
+
+<table class="table" id="JournalEntry">
+<thead>
+	<tr><th>Account</th><th>Debit</th><th>Credit</th></tr>
+</thead>
+<tbody>
+<?php
 
 $AccountList = array();
 foreach ($this->AccountList as $item) {
@@ -100,9 +112,7 @@ foreach ($this->AccountLedgerEntryList as $i=>$item) {
 		$item['credit_amount'] = null;
 	}
 
-	$css = $css==' class="re"' ? ' class="ro"' : ' class="re"';
-
-	echo "<tr$css>";
+	echo '<tr>';
 	echo '<td>';
 	// Ledger Entry ID, Account ID and Account Name
 	echo Form::hidden($i.'_id', $item['id']);
@@ -135,6 +145,7 @@ echo '<tr><td class="b"><strong>Total:</strong></td>';
 echo '<td class="r" id="drt">' . number_format(abs($dr_total),2) . '</td>';
 echo '<td class="r" id="crt">' . number_format(abs($cr_total),2) . '</td>';
 echo '</tr>';
+echo '</tbody>';
 echo '</table>';
 
 // Attached Files
@@ -143,18 +154,18 @@ echo Radix::block('file-list', $this->FileList);
 // Buttons & Hiddden
 echo '<div class="bf">';
 echo Form::hidden('id',$this->AccountJournalEntry['id']);
-echo '<button accesskey="s" class="good" name="a" type="submit" value="save">Save</button>';
-echo '<button class="good" name="a" type="submit" value="save-copy">Save & Copy</button>';
+echo '<button class="btn btn-primary" accesskey="s" class="good" name="a" type="submit" value="save">Save</button>';
+echo '<button class="btn btn-primary" name="a" type="submit" value="save-copy">Save & Copy</button>';
 // echo '<input class="good" accesskey="s" name="a" type="submit" value="Save">';
 // echo Form::submit('c','Apply');
 // echo Form::button('a', 'Save');
-echo '<button accesskey="n" class="info" onclick="addLedgerEntryLine();" type="button">Add Line</button>';
+echo '<button class="btn" accesskey="n" class="info" onclick="addLedgerEntryLine();" type="button">Add Line</button>';
 // Can Memorize New
 if (empty($this->AccountJournalEntry['id'])) {
     echo Form::submit('a','Memorize');
 }
 if ($this->AccountJournalEntry['id']) {
-	echo '<input class="fail" name="a" type="submit" value="Delete">';
+	echo '<input class="btn btn-danger" name="a" type="submit" value="Delete">';
 }
 echo '</div>';
 
@@ -332,7 +343,11 @@ function updateJournalEntryBalance()
 		}
 	}
 }
+</script>
 
+<?php
+
+Layout::addScript(<<<EOS
 $(function() {
 
     $('#account-transaction-date').focus();
@@ -341,6 +356,5 @@ $(function() {
     acInit();
 
 });
-</script>
-
-<?php
+EOS
+);

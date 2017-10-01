@@ -6,6 +6,7 @@
 namespace Edoceo\Imperium;
 
 use Edoceo\Radix;
+use Edoceo\Radix\Layout;
 use Edoceo\Radix\Session;
 
 // $layout = $this->layout();
@@ -61,21 +62,18 @@ if (!empty($x)) {
 
 
 // Core of Page
-echo '<div id="core">';
-
 echo $this->body;
-
-echo '</div>'; // #core
 
 ?>
 
 <footer>
-	<a href="http://imperium.edoceo.com">Imperium</a> &#169; 2001-2016 <a href="http://edoceo.com/">Edoceo, Inc</a>
+	<a href="https://edoceo.com/imperium">Imperium</a> &#169; 2001-2017 <a href="https://edoceo.com/">Edoceo, Inc</a>
 </footer>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js" integrity="sha256-KM512VNnjElC30ehFwehXjx1YCHPiQkOPmqnrWtpccM=" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha256-DiWJXXyq81WlPRnDfGmgYZj2aOVCKyEdJ1l+2TmDuAs=" crossorigin="anonymous"></script>
-
+<?= Layout::getScript() ?>
 </body>
 </html>
