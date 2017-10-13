@@ -17,13 +17,13 @@ echo Radix::block('account-period-arrow', $this->date_alpha);
 echo '</div>';
 
 // Revenues
-echo '<table class="w">';
+echo '<table class="table">';
 echo '<tr class="ro"><th class="l" colspan="3" >Revenues</td></tr>';
 foreach ($this->RevenueAccountList as $a) {
 
     $uri = Radix::link('/account/ledger?' . http_build_query(array('id'=>$a['account_id'], 'd0'=>$this->date_alpha, 'd1'=>$this->date_omega)));
 
-    echo '<tr class="rero">';
+    echo '<tr>';
     //echo "<td style='padding-left: 2em;'>{$item->full_code}  {$item->account_name}</td>";
     echo '<td style="padding-left: 2em;"><a href="' . $uri . '">' . $a['full_code']. ' '. $a['full_name'] . '</a></td>';
     echo '<td>&nbsp;</td><td class="r">' . number_format($a['balance'],2) . '</td>';
@@ -40,7 +40,7 @@ foreach ($this->ExpenseAccountList as $a) {
 
     $uri = Radix::link('/account/ledger?' . http_build_query(array('id'=>$a['account_id'], 'd0'=>$this->date_alpha, 'd1'=>$this->date_omega)));
 
-    echo '<tr class="rero">';
+    echo '<tr>';
     echo '<td style="padding-left: 2em;"><a href="'. $uri . '">' . $a['full_code']. ' '. $a['full_name'] . '</a></td>';
     echo "<td class='r'>" . number_format($a['balance'] * -1 , 2) . '</td><td>&nbsp;</td>';
     echo '</tr>';

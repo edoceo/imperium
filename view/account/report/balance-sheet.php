@@ -45,7 +45,7 @@ $sql.= ' order by kind_sort, kind';
 $AccountKindList = SQL::fetch_all($sql);
 $AccountBalanceList = array();
 
-echo '<table>';
+echo '<table class="table">';
 foreach ($AccountKindList as $kind) {
 
 	// Assets
@@ -192,7 +192,7 @@ echo $this->render('../elements/account-period-input.phtml');
 echo '</form>';
 
 // Statement Table
-echo '<table class="w">';
+echo '<table class="table">';
 // Assets
 echo '<tr><th class="l" colspan="3">Assets</th></tr>';
 

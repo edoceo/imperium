@@ -25,7 +25,7 @@ echo '<form>';
 echo Radix::block('account-period-input');
 echo '</form>';
 
-echo '<table>';
+echo '<table class="table">';
 
 // @todo Break this down waaayyy better, look at the samples.
 // @todo This might involve tagging each and every Journal Entry as to how it affects Cash Flow (if at all)
