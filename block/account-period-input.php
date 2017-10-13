@@ -24,9 +24,9 @@ if (!empty($data)) {
 	if (!empty($data['y'])) $y = $data['y'];
 	if (!empty($data['p'])) $p = $data['p'];
 }
-echo Form::select('m', $m, Radix::$view->MonthList); //null,$this->data['month'],null,false); // Month
-echo Form::select('y', $y, Radix::$view->YearList ); //null,$this->data['year'],null,false); // Year
-echo Form::select('p', $p, Radix::$view->PeriodList); //null,$this->data['period'],null,false); // Period
+echo Form::select('m', $m, Radix::$view->MonthList, array('class' => 'form-control'));
+echo Form::select('y', $y, Radix::$view->YearList, array('class' => 'form-control'));
+echo Form::select('p', $p, Radix::$view->PeriodList, array('class' => 'form-control'));
 echo Form::submit('c', 'View');
 
 echo '<div class="bf c">';

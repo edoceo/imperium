@@ -6,6 +6,7 @@
 namespace Edoceo\Imperium;
 
 use Edoceo\Radix\DB\SQL;
+use Edoceo\Radix\Session;
 
 if (empty($_GET['c'])) {
 	return(0);

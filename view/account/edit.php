@@ -1,6 +1,6 @@
 <?php
 /**
-    @todo Link this Account to A Customer
+	Account Edit
 */
 
 namespace Edoceo\Imperium;
@@ -11,26 +11,88 @@ use Edoceo\Radix\HTML\Form;
 
 $this->Account = new Account($_GET['id']);
 
-// $this->form('Account',array('action'=>$this->appurl.'/account/save','method'=>'post'));
-echo '<form action="' . Radix::link('/account/save') . '" method="post">';
-echo '<table>';
+// Parent Account
+$Account_Parent_list = array(0 => '- None -');
+$Account_Parent_list[0] = '- None -';
+foreach ($this->AccountList as $x) {
+	if (!empty($x['parent_id'])) {
+		continue;
+	}
+	$Account_Parent_list[$x['id']] = $x['full_name'];
+}
 
-echo "<tr><td class='l'>Kind:</td><td colspan='2'>" . Form::select('kind',$this->Account['kind'], $this->AccountKindList) . "</td></tr>";
-echo "<tr><td class='l'>Code &amp; Name:</td><td>" . Form::text('code', $this->Account['code'], array('size'=>6)) . '</td>';
-echo '<td>' . Form::text('name', $this->Account['name']) . '</td>';
-echo '</tr>';
+$res = AccountTaxFormLine::listTaxLines();
+$Account_TaxRec_list = array(0 => '- None -');
+foreach ($res as $x) {
+	$Account_TaxRec_list[ $x['id'] ] = $x['name'];
+}
 
+?>
+
+<form action="<?= Radix::link('/account/save') ?>" method="post">
+<div class="container">
+
+<div class="row">
+<div class="col-md-6">
+	<div class="form-group">
+		<label>Kind:</label>
+		<?= Form::select('kind',$this->Account['kind'], $this->AccountKindList, array('class' => 'form-control')) ?>
+	</div>
+</div>
+<div class="col-md-6">
+	<div class="form-group">
+		<label>Parent:</label>
+		<?= Form::select('parent_id', $this->Account['parent_id'], $Account_Parent_list, array('class' => 'form-control')) ?>
+	</div>
+</div>
+</div>
+
+<div class="row">
+<div class="col-md-4">
+	<div class="form-group">
+		<label>Code:</label>
+		<?= Form::text('code', $this->Account['code'], array('class' => 'form-control', 'size'=> 6)) ?>
+	</div>
+</div>
+<div class="col-md-8">
+	<div class="form-group">
+		<label>Name:</label>
+		<?= Form::text('name', $this->Account['name'], array('class' => 'form-control')) ?>
+	</div>
+</div>
+</div>
+
+<div class="row">
+<div class="col-md-4">
+	<div class="form-group">
+		<label>Account:</label>
+		<?= Form::text('bank_account', $this->Account['bank_account'], array('class' => 'form-control')) ?>
+	</div>
+</div>
+<div class="col-md-4">
+	<div class="form-group">
+		<label>Transit:</label>
+		<?= Form::text('bank_routing', $this->Account['bank_routing'], array('class' => 'form-control')) ?>
+	</div>
+</div>
+<div class="col-md-4">
+	<div class="form-group">
+		<label>Tax Line:</label>
+		<?= Form::select('account_tax_line_id', $this->Account['account_tax_line_id'], $Account_TaxRec_list, array('class' => 'form-control')) ?>
+	</div>
+</div>
+</div> <!-- /.row -->
+
+
+<div class="cmd">
+	<?= Form::hidden('id', $this->Account['id']) ?>
+	<button class="btn btn-primary" name="a" type="submit" value="Save">Save</button>
+	<button class="btn btn-danger" name="a" type="submit" value="Delete">Delete</button>
+</div>
+
+<?php
 // Note
 // echo "<tr><td class='b r'>Note:</td><td colspan='2'>" . $this->formText('note',$this->Account->note,array('size'=>40)) . "</td></tr>";
-
-// Parent Account
-$list = array(0 => '- None -');
-$list[0] = '- None -';
-foreach ($this->AccountList as $item) {
-    if (!empty($item['parent_id'])) continue;
-	$list[$item['id']] = $item['full_name'];
-}
-echo "<tr><td class='b r'>Parent:</td><td colspan='2'>" . Form::select('parent_id', $this->Account['parent_id'], $list) . '</td></tr>';
 
 /*
 echo "<tr><td class='b r'>Type:</td><td><select name='flag_life'>";
@@ -50,26 +112,6 @@ foreach (array('Checking'=>Account::CHECKING,'Savings'=>Account::SAVINGS,'Market
 echo "</select></td></tr>\n";
 */
 
-$list = array(0 => '- None -');
-$AccountTaxLineList = AccountTaxFormLine::listTaxLines();
-foreach ($AccountTaxLineList as $x) {
-	$list[ $x['id'] ] = $x['name'];
-}
-// Radix::dump($AccountTaxLineList);
-// $list += $AccountTaxLineList;
-echo "<tr><td class='b r'>Tax Line:</td><td colspan='3'>" . Form::select('account_tax_line_id', $this->Account['account_tax_line_id'], $list) . "</td>";
-
-/*
-// Asset Details
-echo "<tr><td class='b r'>Opening Balance:</td><td>" . $imperiumForm->input('Account.code',am($opts,array('class'=>'tb','size'=>8))) . "</td></tr>";
-*/
-
-// Kind Bank Account Details
-echo "<tr><td class='b r'>Transit:</td><td colspan='2'>" . Form::text('bank_routing', $this->Account['bank_routing']) . '</td></tr>';
-echo "<tr><td class='b r'>Account:</td><td colspan='2'>" . Form::text('bank_account', $this->Account['bank_account']) . '</td></tr>';
-
-echo '</table>';
-
 /*
 echo $imperiumForm->checkbox('Income Statement');
 echo $imperiumForm->checkbox('Equity Statement');
@@ -77,14 +119,9 @@ echo $imperiumForm->checkbox('Balance Sheet');
 echo $imperiumForm->checkbox('Cash Flow');
 */
 
-echo '<div class="cmd">';
-echo Form::hidden('id', $this->Account['id']);
-echo '<input name="a" type="submit" value="Save">';
-echo '<input name="a" type="submit" value="Delete">';
-echo '</div>';
-
-echo '</form>';
-
 // Show Transaction Count
 $res = SQL::fetch_one('SELECT count(id) FROM account_ledger WHERE account_id = ?', array($this->Account['id']));
 echo '<p>' . $res . ' total transactions in this account</p>';
+
+echo '</div>';
+echo '</form>';

@@ -23,6 +23,14 @@ $q = null;
 if (!empty($_GET['q'])) {
 	$q = trim($_GET['q']);
 }
+
+// Last Check
+if (strlen($q)==0) {
+	$_ENV['title'] = array('Search','No Term Submitted');
+	_draw_rebuild_prompt();
+	return(0);
+}
+
 // Search Commands
 switch (substr($q, 0, 1)) {
 case '!':
@@ -54,14 +62,6 @@ default:
 	}
 }
 
-// Last Check
-if (strlen($q)==0) {
-	$_ENV['title'] = array('Search','No Term Submitted');
-	_draw_rebuild_prompt();
-	return(0);
-}
-
-
 $idx = 0;
 
 // PostgreSQL Full Text Search
@@ -79,6 +79,7 @@ $arg = array(
 
 $res = SQL::fetch_all($sql, $arg);
 
+echo '<div class="container">';
 echo '<dl>';
 
 foreach ($res as $k=>$item) {
@@ -129,7 +130,7 @@ $sql = 'SELECT DISTINCT contact.id, contact.name';
 $sql.= ' FROM contact';
 $sql.= ' LEFT JOIN contact_address ON contact.id = contact_address.contact_id';
 $sql.= ' LEFT JOIN contact_channel ON contact.id = contact_channel.contact_id';
-$sql.= ' LEFT JOIN contact_meta ON contact.id = contact_meta.contact_id';
+//$sql.= ' LEFT JOIN contact_meta ON contact.id = contact_meta.contact_id';
 $sql.= ' WHERE';
 $sql.= ' contact.name #op# ?';
 $arg[] = $q;
@@ -141,8 +142,8 @@ $sql.= ' OR contact_address.address #op# ?';
 $arg[] = $q;
 $sql.= ' OR contact_channel.data #op# ?';
 $arg[] = $q;
-$sql.= ' OR contact_meta.val #op# ?';
-$arg[] = $q;
+//$sql.= ' OR contact_meta.val #op# ?';
+//$arg[] = $q;
 $sql.= ' ORDER BY contact.name';
 
 if (preg_match('/[_%]/', $q)) {
@@ -153,10 +154,12 @@ if (preg_match('/[_%]/', $q)) {
 	$sql = str_replace('#op#', '=', $sql);
 }
 
-// Radix::dump($sql);
-// Radix::dump($arg);
+Radix::dump($sql);
+Radix::dump($arg);
+
 $res = SQL::fetch_all($sql, $arg);
-// Radix::dump(SQL::lastError());
+Radix::dump(SQL::lastError());
+
 // Radix::dump($res);
 foreach ($res as $rec) {
 	$idx++;
@@ -166,6 +169,8 @@ foreach ($res as $rec) {
 echo '</dl>';
 
 _draw_rebuild_prompt();
+
+echo '</div>';
 
 $_ENV['title'] = array('Search', $q, ($idx==1 ? '1 result' : $idx . ' results') );
 

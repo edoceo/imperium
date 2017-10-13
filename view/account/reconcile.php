@@ -68,7 +68,7 @@ case 'view':
     echo '<th>-</th>';
     echo '</tr>';
 
-    echo '<tr class="r">';
+    echo '<tr>';
     echo '<td><input style="width:1em;"></td>';
     echo '<td><input class="ar-date" id="filter-date" type="text"></td>';
     echo '<td><input class="ar-note" id="filter-note" type="text"></td>';
@@ -195,7 +195,7 @@ case 'view':
 case 'load':
 default:
 ?>
-
+	<div class="container">
     <form enctype="multipart/form-data" method="post">
     <fieldset>
 		<legend>Step 1 - Choose Account and Data File</legend>
@@ -227,6 +227,7 @@ default:
 	<p>PayPal has two different Types of Formats</p>
 	<p>PayPal Reports from https://business.paypal.com/merchantdata/reportHome</p>
 	</section>
+	</div>
 
 <?php
 

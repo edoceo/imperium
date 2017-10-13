@@ -123,7 +123,7 @@ class Account_Reconcile_PayPal_v1
 					$le2->date = $csv['Date'];
 					$le2->amount = $csv['Fee'];
 					// $le2->account_id = 78; // Expense: PayPal Fees
-					$le2->note = 'Fee for Transaction #' . $csv['Transaction'] . '';
+					$le2->note = 'Fee for Transaction #' . $csv['Transaction'];
 					$le2->cr = abs($le2->amount);
 					$ret[] = $le2;
 
@@ -165,8 +165,18 @@ class Account_Reconcile_PayPal_v1
 			//case 'Refund':
 			case 'Payment Refund':
 
-				$le->dr = abs($le->amount);
+				$le->cr = abs($le->amount);
 				$ret[] = $le;
+
+				// Ledger Entry for Paypal Fee
+				$le2 = new \stdClass();
+				$le2->date = $csv['Date'];
+				$le2->amount = $csv['Fee'];
+				// $le2->account_id = 78; // Expense: PayPal Fees
+				$le2->note = 'Fee Reversal Transaction #' . $csv['Transaction'];
+				$le2->dr = abs($le2->amount);
+				$ret[] = $le2;
+
 
 				break;
 

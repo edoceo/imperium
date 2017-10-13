@@ -9,7 +9,7 @@ use Edoceo\Radix;
 $cr_total = $dr_total = 0;
 
 // Input Form
-echo '<div class="print-hide">';
+echo '<div class="np">';
 echo '<form>';
 echo Radix::block('account-period-input');
 echo '</form>';
