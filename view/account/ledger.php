@@ -17,6 +17,7 @@ $_ENV['title'] = array(
 	sprintf('%d entries', count($this->LedgerEntryList))
 );
 
+//
 $runbal = $this->balanceAlpha;
 $cr_sum = 0;
 $dr_sum = 0;
@@ -110,23 +111,51 @@ echo '</table>';
 $html_table = ob_get_clean();
 
 // Output Begins
+?>
+<form method="get">
+<div class="container">
 
-echo '<form method="get">';
-echo '<table>';
-echo '<tr><td class="b r">Account:</td><td colspan="4">' . Form::select('id', $this->Account['id'], $this->AccountList_Select, array('class' => 'form-control'));
-echo ' <a href="' . Radix::link('/account/journal?' . http_build_query($_GET)) . '"><i class="fa fa-list" title="Journal"></i></a>';
-echo ' <a href="' . Radix::link('/account/edit?id=' . $this->Account['id']) . '"><i class="fa fa-edit" title="Edit"></i></a>';
-echo '</td></tr>';
-echo '<tr>';
-echo '<td class="l">From:</td>';
-echo "<td>" . Form::date('d0',$this->date_alpha,array('size'=>12)) . "</td>";
-echo '<td class="b c">&nbsp;to&nbsp;</td>';
-echo "<td>" . Form::date('d1',$this->date_omega,array('size'=>12)) . "</td>";
-echo "<td><input class='cb' name='c' type='submit' value='View' /></td>";
-echo '<td><input name="c" type="submit" value="Post" /></td>';
-echo '</tr>';
-echo '</table>';
-echo '</form>';
+<div class="row">
+<div class="col-md-6">
+<div class="form-group">
+	<label>Account:</label>
+	<div class="input-group">
+		<?= Form::select('id', $this->Account['id'], $this->AccountList_Select, array('class' => 'form-control')) ?>
+		<span class="input-group-btn">
+			<a class="btn" style="width: 3em;" href="<?= Radix::link('/account/journal?' . http_build_query($_GET)) ?>"><i class="fa fa-list" title="Journal"></i></a>
+			<a class="btn" style="width: 3em;" href="<?= Radix::link('/account/edit?id=' . $this->Account['id']) ?>"><i class="fa fa-edit" title="Edit"></i></a>
+		</span>
+	</div>
+</div>
+</div>
+
+<div class="col-md-3">
+<div class="form-group">
+	<label>From:</label>
+	<?= Form::date('d0',$this->date_alpha, array('class' => 'form-control')) ?>
+</div>
+</div>
+<div class="col-md-3">
+<div class="form-group">
+	<label>To:</label>
+	<?= Form::date('d1',$this->date_omega, array('class' => 'form-control')) ?>
+</div>
+</div>
+</div> <!-- /.row -->
+
+<div class="row">
+<div class="col-md-4">
+	<button class="btn btn-primary" name="c" type="submit" value="view">View</button>
+	<button class="btn" name="c" type="submit" value="post">Post</button>
+</div>
+</div> <!-- /.row -->
+
+</div> <!-- /.container -->
+</form>
+
+<?php
+
+echo '<div class="container-fluid">';
 
 echo Radix::block('account-period-arrow', $this->date_alpha);
 
@@ -147,8 +176,10 @@ echo '</div>';
 echo '<div class="col-md-3">';
 echo '<h2 class="c">Closing: ' . number_format($this->Account->balanceAt($this->date_omega), 2) . '</h2>';
 echo '</div>';
-echo '</div>';
+echo '</div>'; // /.row
 
 echo $html_table;
 
 echo Radix::block('account-period-arrow', $this->date_alpha);
+
+echo '</div>';
