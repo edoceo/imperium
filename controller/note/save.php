@@ -37,9 +37,9 @@ case 'save':
 		$data = trim($n['note']);
 		$data.= "\n---\n# " . date('D \t\h\e jS \o\f F Y \a\t H:i') . "\n";
 		$data.= $_POST['note'];
-		$n['note'] = trim($data);
+		$n['data'] = trim($data);
 	} else {
-		$n['note'] = trim($_POST['note']);
+		$n['data'] = trim($_POST['note']);
 	}
 	$x = str_replace(array('<br>','<br/>','<br />'), "\n", $n['note']);
 	$x = trim(strip_tags($x));

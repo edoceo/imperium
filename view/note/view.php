@@ -12,7 +12,7 @@ use Edoceo\Radix\HTML\Form;
 $this->Note = new Base_Note($_GET['id']);
 $_ENV['title'] = array('Note', 'Edit', $this->Note['name']);
 
-$note = $this->Note['note'];
+$note = $this->Note['data'];
 
 if (class_exists('\\Parsedown')) {
 	$P = new \Parsedown();
@@ -30,3 +30,5 @@ echo Form::hidden('link', $this->Note['link']);
 echo '<input class="exec" name="a" type="submit" value="Edit">';
 echo '</div>';
 echo '</form>';
+
+Radix::dump($this->Note);
