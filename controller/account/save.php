@@ -29,4 +29,9 @@ case 'save':
 	Session::flash('info', "Account #{$a['id']} saved");
 }
 
-Radix::redirect('/account');
+$r = '/account';
+if (!empty($_POST['r'])) {
+	$r = $_POST['r'];
+}
+
+Radix::redirect($r);

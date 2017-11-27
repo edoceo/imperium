@@ -85,6 +85,7 @@ foreach ($res as $x) {
 
 
 <div class="cmd">
+	<?= Form::hidden('r', $_GET['r']) ?>
 	<?= Form::hidden('id', $this->Account['id']) ?>
 	<button class="btn btn-primary" name="a" type="submit" value="Save">Save</button>
 	<button class="btn btn-danger" name="a" type="submit" value="Delete">Delete</button>

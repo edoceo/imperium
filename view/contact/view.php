@@ -10,79 +10,86 @@ use Edoceo\Radix;
 use Edoceo\Radix\Filter;
 use Edoceo\Radix\HTML\Form;
 
-App::addMRU('/contact/view?c=' . $this->Contact['id'], '<i class="fa fa-user"></i> ' . html($this->Contact['name']));
-
 if (!empty($this->Contact['id'])) {
 	App::addMRU('/contact/view?c=' . $this->Contact['id'], '<i class="fa fa-user"></i> ' . html($this->Contact['name']));
 }
 
 ?>
 
-<style>
-form div > label {
-	display: block;
-	font-weight: bold;
-}
-.fb {
-	display: flex;
-	flex-wrap: wrap;
-}
-.fb .fi {
-	flex: 1 1 auto;
-}
-</style>
+<div class="container-fluid">
 
 <form action="<?= Radix::link('/contact/save?c=' . $this->Contact['id']) ?>" autocomplete="off" method="post">
 
-<div class="fb" style="margin:16px;">
-
-<div class="fi">
-	<label>Contact:</label>
-	<?= Form::text('contact',$this->Contact['contact'])?>
+<div class="row">
+<div class="col-md-6">
+	<div class="form-group">
+		<label>Contact:</label>
+		<?= Form::text('contact',$this->Contact['contact'], array('class' => 'form-control')) ?>
+	</div>
 </div>
-<div class="fi">
-	<label>Company:</label>
-	<?= Form::text('company',$this->Contact['company'])?>
-	<?= Form::hidden('parent_id', $this->Contact['parent_id']) ?>
-<?php
-if (!empty($this->Contact['parent_id'])) {
-    echo ' <a href="' . Radix::link('/contact/view?c=' . $this->Contact['parent_id']) . '"><i class="fa fa-bolt"></i></a>';
-}
-?>
+<div class="col-md-6">
+	<div class="form-group">
+		<label>Company:</label>
+		<div class="input-group">
+		<?= Form::text('company',$this->Contact['company'], array('class' => 'form-control'))?>
+		<?php
+		if (!empty($this->Contact['parent_id'])) {
+			echo '<span class="input-group-addon">';
+			echo '<a href="' . Radix::link('/contact/view?c=' . $this->Contact['parent_id']) . '"><i class="fa fa-bolt"></i></a>';
+			echo '</span>';
+		}
+		?>
+		</div>
+		<?= Form::hidden('parent_id', $this->Contact['parent_id']) ?>
+	</div>
 </div>
-
-<div class="fi">
-	<label>Phone:</label>
-	<?= Form::text('phone', $this->Contact['phone'])?>
-</div>
-
-<div class="fi">
-	<label><?=( strlen($this->Contact['email']) ? '<a href="mailto:' . $this->Contact['email'] . '">Email:</a>' : 'Email:' ) ?></label>
-	<?= Form::text('email', $this->Contact['email'])?>
 </div>
 
-<div class="fi">
-	<label><?=( strlen($this->Contact['url']) ? '<a href="' . $this->Contact['url'] . '" target="_blank">Web-Site</a>:' : 'Web-Site:' ) ?></label>
-	<?= Form::text('url', $this->Contact['url']) ?>
+<div class="row">
+<div class="col-md-6">
+	<div class="form-group">
+		<label>Phone:</label>
+		<?= Form::text('phone', $this->Contact['phone'], array('class' => 'form-control'))?>
+	</div>
 </div>
 
-<div class="fi">
-	<label>Tags:</label>
-	<?= Form::text('tags', $this->Contact['tags']) ?>
+<div class="col-md-6">
+	<div class="form-group">
+		<label><?=( strlen($this->Contact['email']) ? '<a href="mailto:' . $this->Contact['email'] . '">Email:</a>' : 'Email:' ) ?></label>
+		<?= Form::text('email', $this->Contact['email'], array('class' => 'form-control'))?>
+	</div>
+</div>
 </div>
 
-<div class="fi">
-	<label>Kind</label>
-	<?= Form::select('kind', $this->Contact['kind'], $this->KindList) ?>
+<div class="row">
+<div class="col-md-5">
+	<div class="form-group">
+		<label><?=( strlen($this->Contact['url']) ? '<a href="' . $this->Contact['url'] . '" target="_blank">Web-Site</a>:' : 'Web-Site:' ) ?></label>
+		<?= Form::text('url', $this->Contact['url'], array('class' => 'form-control')) ?>
+	</div>
 </div>
-<div class="fi">
-	<label>Status:</label>
-	<?= Form::select('status', $this->Contact['status'], $this->StatusList) ?>
+<div class="col-md-3">
+	<div class="form-group">
+		<label>Tags:</label>
+		<?= Form::text('tags', $this->Contact['tags'], array('class' => 'form-control')) ?>
+	</div>
 </div>
+<div class="col-md-2">
+	<div class="form-group">
+		<label>Kind</label>
+		<?= Form::select('kind', $this->Contact['kind'], $this->KindList, array('class' => 'form-control')) ?>
+	</div>
 </div>
+<div class="col-md-2">
+	<div class="form-group">
+		<label>Status:</label>
+		<?= Form::select('status', $this->Contact['status'], $this->StatusList, array('class' => 'form-control')) ?>
+	</div>
+</div>
+</div> <!-- /.row -->
 
 <!-- Images? -->
-<div>
+<div class="row">
 <?php
 $img = sprintf('/img/content/contact/%u/0.jpg', $this->Contact['id']);
 $src = sprintf('%s/webroot/%s', APP_ROOT, $img);
@@ -124,17 +131,21 @@ if (!empty($this->ContactChannelList)) {
 // Google Contact Detail
 // echo '<tr><td class="l">Google:</td><td colspan="3"><div id="contact-google-area"><input id="contact-google-view" type="button" value="View" ></div></td></tr>';
 
-echo '<div class="form-controls">';
+echo '<div class="form-actions">';
 echo Form::hidden('id',$this->Contact['id']);
-echo '<button class="good" name="a" type="submit" value="save">Save</button>';
+echo '<button class="btn btn-primary" name="a" type="submit" value="save">Save</button>';
 // echo '<button class="exec" id="exec-contact-ping" type="button" value="ping">Ping</button>';
 // echo '<button class="exec" name="a" type="submit" value="capture">Photo</button>';
-echo '<button class="fail" name="a" type="submit" value="delete">Delete</button>';
+echo '<button class="btn btn-danger" name="a" type="submit" value="delete">Delete</button>';
 // echo '<a class="button" href="' . Radix::link('/contact/merge?' . http_build_query(array('c' => $this->Contact['id']))) . '">Merge</a>';
 echo '</div>';
-echo '</form>';
 
 ?>
+
+</form>
+
+</div> <!-- /.container-fluid -->
+
 <script>
 $(function() {
 
@@ -234,6 +245,8 @@ if ($this->Contact['id'] == 0) {
 }
 
 // Sub Addresses
+echo '<div class="container-fluid">';
+
 echo '<h2 id="ContactAddressHead"><a href="' . Radix::link('/contact/address?' . http_build_query(array('a' => 'make', 'c' => $this->Contact['id']))) . '"><i class="fa fa-home"></i> Addresses</a></h2>';
 if ($this->ContactAddressList) {
     echo "<div id='ContactAddressList'>";
@@ -267,6 +280,7 @@ if (empty($this->Contact['parent_id'])) {
         echo '</table>';
     }
 }
+echo '</div>';
 
 // Event History
 //$arg = array(
@@ -281,7 +295,9 @@ $arg = array(
     'page' => Radix::link('/note/edit?c=' . $this->Contact['id']),
 );
 
+echo '<div class="container-fluid">';
 echo Radix::block('note-list',$arg);
+echo '</div>';
 
 // Files
 // Old way of Parameters
@@ -290,22 +306,29 @@ echo Radix::block('note-list',$arg);
 //     'list' => $this->ContactFileList,
 //     'page' => $url,
 // );
+
+echo '<div class="container-fluid">';
 echo Radix::block('file-list', $this->ContactFileList);
+echo '</div>';
 
 // Work Orders
+echo '<div class="container-fluid">';
 echo '<h2><a href="' . Radix::link('/workorder/new?c=' . $this->Contact['id']) . '"><i class="fa fa-clock-o"></i> Work Orders</a></h2>';
 if ($this->WorkOrderList) {
     echo Radix::block('workorder-list',array('list'=>$this->WorkOrderList));
 }
+echo '</div>';
 
 // Invoices
+echo '<div class="container-fluid">';
 echo '<h2><a href="' . Radix::link('/invoice/new?c=' . $this->Contact['id']) . '"><i class="fa fa-list"></i> Invoices</a></h2>';
 if ($this->InvoiceList) {
     echo Radix::block('invoice-list', array('list'=>$this->InvoiceList));
 }
+echo '</div>';
 
 // Accounts
-echo '<div>';
+echo '<div class="container-fluid">';
 echo '<h2>Accounts: </h2>';
 if (empty($this->Account['id'])) {
 ?>

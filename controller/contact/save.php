@@ -17,8 +17,11 @@ $C = new Contact($_GET['c']);
 // Delete Requested?
 switch (strtolower($_POST['a'])) {
 case 'capture':
-	Radix::redirect('/contact/capture?c=' . $c['id']); 
+
+	Radix::redirect('/contact/capture?c=' . $c['id']);
+
 	break;
+
 case 'create-account':
 
 	$a = new Account();
@@ -34,7 +37,10 @@ case 'create-account':
 
 	Session::flash('fail', SQL::lastError());
 	Session::flash('info', sprintf('Account #%d created', $a['id']));
-	Radix::redirect('/contact/view?c=' . $C['id']);
+	Radix::redirect('/account/edit?' . http_build_query(array(
+		'id' => $a['id'],
+		'r' => '/contact/view?c=' . $C['id']
+	)));
 
 	break;
 
