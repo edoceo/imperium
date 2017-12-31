@@ -45,32 +45,18 @@ ul.dropdown-menu {
 	/* border: 1px outset #000; */
 	display: none;
 	left: 0;
+	margin: 0;
+	padding: 0;
 	min-width: 15em;
 	position: absolute;
 	top: 98%;
 	z-index: 20;
 }
-/*
-li.dropdown-hook {
-	font-weight: 700;
-	margin: 0;
-	padding: 0;
-	position: relative;
-
-	a {
-		display: block;
-		font-size: 120%;
-		padding: 0.125em 0.5em;
-		text-decoration: none;
-		white-space: nowrap;
-	}
-
-	a:hover {
-		background: @high_bg;
-		color: @body_bg;
-	}
+ul.dropdown-menu a {
+	display: block;
+	padding: 0.125em 0.5em;
+	white-space: nowrap;
 }
-*/
 </style>
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">

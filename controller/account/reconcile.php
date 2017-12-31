@@ -26,7 +26,6 @@ case 'upload': // Read the Uploaded Data
 
 	if ($_FILES['file']['error']==0) {
 		$this->Account = new Account($_POST['account_id']);
-		$_ENV['title'] = array('Account','Reconcile', $this->Account['full_name'], 'Preview');
 		// Read File
 		$arg = array(
 			'kind' => $_POST['format'],
