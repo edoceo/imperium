@@ -7,6 +7,7 @@
 namespace Edoceo\Imperium;
 
 use Edoceo\Radix;
+use Edoceo\Radix\Layout;
 use Edoceo\Radix\HTML\Form;
 
 $_ENV['title'] = array(
@@ -26,7 +27,7 @@ $dr_sum = 0;
 ob_start();
 
 ?>
-<table class="table">
+<table class="table table-hover">
 <thead>
 	<tr>
 	<th>Date</th>
@@ -92,6 +93,7 @@ foreach ($this->LedgerEntryList as $le)
     //}
 
     echo '<td class="r">' . number_format($runbal, 2) . '</td>';
+    echo '<td><button class="btn btn-sm join-entry" data-id="' . $le['account_journal_id'] . '"><i class="fa fa-compress"></i></button></td>';
     echo '</tr>';
 
 }
@@ -183,3 +185,51 @@ echo $html_table;
 echo Radix::block('account-period-arrow', $this->date_alpha);
 
 echo '</div>';
+
+ob_start();
+?>
+<script>
+$(function() {
+
+	var join_entry_list = [];
+
+	$('.join-entry').on('click', function() {
+
+		$(this).addClass('btn-warning');
+
+		var lei = $(this).data('id');
+		join_entry_list.push(lei);
+
+		// Add this one
+		if (join_entry_list.length >= 2) {
+
+			debugger;
+
+			// Merge to a Journal Entry somehow?
+
+			var tx0 = join_entry_list[0];
+			var tx1 = join_entry_list[1];
+
+			var arg = {
+				a: 'join-entry',
+				join: join_entry_list,
+			}
+
+			window.location = '<?= Radix::link('/account/transaction') ?>?id=' + tx0 + '&join-txn=' + tx1;
+
+			//$.post('<?= Radix::link('/account/ajax') ?>', arg, function(res, ret) {
+			//	if (res.id) {
+			//		window.location = '<?= Radix::link('/account/transaction') ?>?id=' + res.id;
+			//	}
+			//});
+            //
+			//join_entry_list = [];
+			//$('.join-entry').removeClass('btn-warning');
+		}
+
+	});
+});
+</script>
+<?php
+$code = ob_get_clean();
+Layout::addScript($code);

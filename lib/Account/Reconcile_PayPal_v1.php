@@ -1,7 +1,10 @@
 <?php
 /**
 	PayPal Imports
-	Type 1 is from the Activity Download here: https://business.paypal.com/merchantdata/dlog
+	Type 1 is from the Activity Download here:
+	The Fields are customizible, and the defaults change frequently.
+	https://business.paypal.com/merchantdata/reportHome
+	https://business.paypal.com/merchantdata/dlog
 */
 
 namespace Edoceo\Imperium;
@@ -12,7 +15,6 @@ class Account_Reconcile_PayPal_v1
 {
 	public static function parse($file)
 	{
-
 		$ret = array();
 
 		if (!is_file($file)) {
@@ -31,40 +33,30 @@ class Account_Reconcile_PayPal_v1
 		if ('efbbbf' == $bom) {
 			// It's a UTF-8
 		} else {
-			fseek($fh, 0);
+			// Rewind
+			fseek($fh, 0, SEEK_SET);
 		}
 
-		$map = array(
-			'Date',
-			'Type',
-			'TimeZone',
-			'Name',
-			'Type',
-			'Status',
-			'Currency',
-			'Gross',
-			'Fee',
-			'Net',
-			'From_Email',
-			'Rcpt_Email',
-			'Transaction',
-			'Status_Address',
-			'Item_Name',
-			'Item_Code',
-		);
+		$buf = fread($fh, 128);
+		fseek($fh, -128, SEEK_CUR);
 
-		while ($csv = fgetcsv($fh, 4096, ',')) {
+		$c_t = substr_count($buf, "\t");
+		$c_c = substr_count($buf, ',');
+		if (($c_c >= 1) && ($c_t == 0)) {
+			$sep = ',';
+		} elseif (($c_c == 0) && ($c_t >= 1)) {
+			$sep = "\t";
+		} else {
+			throw new Exception('ARP#049: Cannot Discover Delimiter');
+		}
 
-			// Skip first Row if Header
-			if ($csv[0] == 'Date') {
-				continue;
-			}
-			if ($csv[1] == 'Time') {
-				continue;
-			}
-			if ($csv[3] == 'Name') {
-				continue;
-			}
+		$map = fgetcsv($fh, 4096, $sep);
+		//$map = array();
+		//foreach ($row as $i => $k) {
+		//	$map[$k] = $i;
+		//}
+
+		while ($csv = fgetcsv($fh, 4096, $sep)) {
 
 			// Ledger Entry for Paypal Deposit (Gross)
 			if (count($csv) < 11) {
@@ -74,9 +66,10 @@ class Account_Reconcile_PayPal_v1
 			$csv = array_slice($csv, 0, count($map));
 			$csv = array_combine($map, $csv);
 
-			$csv['Gross'] = floatval(preg_replace('/[^\d\.\-]/',null,$csv['Gross']));
-			$csv['Fee'] = floatval(preg_replace('/[^\d\.\-]/',null,$csv['Fee']));
-			$csv['Net'] = floatval(preg_replace('/[^\d\.\-]/',null,$csv['Net']));
+			$csv['Gross'] = floatval(preg_replace('/[^\d\.\-]/',null, $csv['Gross']));
+			$csv['Fee'] = floatval(preg_replace('/[^\d\.\-]/',null, $csv['Fee']));
+			$csv['Net'] = floatval(preg_replace('/[^\d\.\-]/',null, $csv['Net']));
+			$csv['Sales Tax'] = floatval(preg_replace('/[^\d\.\-]/', null, $csv['Sales Tax']));
 
 			// Radix::dump($csv);
 
@@ -90,113 +83,110 @@ class Account_Reconcile_PayPal_v1
 				continue;
 			}
 
-			$le = new \stdClass();
-			$le->date = $csv['Date'];
-			$le->note = trim(sprintf('%s #%s: %s <%s> - %s #%s',
-				$csv['Type'],
-				$csv['Transaction'],
-				$csv['Name'],
-				$csv['From_Email'],
-				$csv['Item_Name'],
-				$csv['Item_Code']
-			));
-			$le->amount = floatval($csv['Gross']);
-			$le->account_id = null;
+			$je = array(
+				'date' => $csv['Date'],
+				'note' => trim(sprintf('%s #%s: %s <%s> - %s #%s',
+					$csv['Type'],
+					$csv['Transaction ID'],
+					$csv['Name'],
+					$csv['From Email Address'],
+					$csv['Item Title'],
+					$csv['Item ID']
+				)),
+				'ledger_entry_list' => array(),
+			);
+
+			$le0 = array(
+				'account_id' => null,
+				'amount' => floatval($csv['Gross']),
+			);
 
 			switch (trim($csv['Type'])) {
 			//case 'eBay Payment Received':
 			//case 'Payment Received':
 			//case 'Shopping Cart Payment Received':
+			case 'Express Checkout Payment':
 			case 'General Payment':
+			case 'Mass Pay Payment':
+			case 'Order':
 			case 'Subscription Payment':
+			case 'Reversal of General Account Hold':
 			case 'Website Payment':
 
-				if ($le->amount > 0) {
+				if ($le0['amount'] > 0) {
 
 					// Someone Paying Me
 					// Ledger Entry for Paypal Deposit
-					$le->dr = $le->amount;
-					$ret[] = $le;
+					$le0['dr'] = $le0['amount'];
+					$je['ledger_entry_list'][] = $le0;
 
-					// Ledger Entry for Paypal Fee
-					$le2 = new \stdClass();
-					$le2->date = $csv['Date'];
-					$le2->amount = $csv['Fee'];
-					// $le2->account_id = 78; // Expense: PayPal Fees
-					$le2->note = 'Fee for Transaction #' . $csv['Transaction'];
-					$le2->cr = abs($le2->amount);
-					$ret[] = $le2;
+					// If a Fee is Charged, it's a Negative Number
+					if ($csv['Fee'] < 0) {
+						// Ledger Entry for Paypal Fee
+						$le2 = array(
+							'cr' => abs($csv['Fee']),
+							'amount' => $csv['Fee'],
+							'note' => 'Fee for Transaction #' . $csv['Transaction ID'],
+						);
+						// $le2->account_id = 78; // Expense: PayPal Fees
+						$je['ledger_entry_list'][] = $le2;
+					}
+
+					if ($csv['Sales Tax']) {
+
+						// Ledger Entry for Sales Tax
+						$le3 = array(
+							'cr' => abs($csv['Sales Tax']),
+							'amount' => $csv['Sales Tax'],
+							'note' => 'Sales Tax Liability #' . $csv['Transaction ID'],
+						);
+						$je['ledger_entry_list'][] = $le3;
+					}
 
 				} else {
 
 					// Im Paying Someone
 					// Ledger Entry for Paypal Deposit
-					$le->cr = abs($le->amount);
-					//Radix::dump($csv);
-					$ret[] = $le;
+					$le0 = array(
+						'cr' => abs($le0['amount']),
+					);
+					$je['ledger_entry_list'][] = $le0;
 
 				}
 
 				break;
-
-			// Money Leaves PayPal to Expense
-			//case 'eBay Payment Sent':
-			case 'Express Checkout Payment':
-			//case 'Payment Sent':
-			//case 'Shopping Cart Payment Sent':
-			//case 'Web Accept Payment Sent':
-
-				// Credits
-				if ($le->amount < 0) {
-					$le->cr = abs($le->amount);
-				} else {
-					$le->dr = abs($le->amount);
-				}
-
-				$ret[] = $le;
-
-				break;
-			//case 'Add Funds from a Bank Account': // Happens before Update to ...
-			//case 'Order': // Requested Money From Us, Paid on *Sent
-			//case 'Pending Balance Payment':
-			//	continue 2; // Ignore
-			//	break;
 
 			//case 'Refund':
 			case 'Payment Refund':
 
-				$le->cr = abs($le->amount);
-				$ret[] = $le;
+				$le0['cr'] = abs($le0['amount']);
+				$je['ledger_entry_list'][] = $le0;
 
-				// Ledger Entry for Paypal Fee
-				$le2 = new \stdClass();
-				$le2->date = $csv['Date'];
-				$le2->amount = $csv['Fee'];
-				// $le2->account_id = 78; // Expense: PayPal Fees
-				$le2->note = 'Fee Reversal Transaction #' . $csv['Transaction'];
-				$le2->dr = abs($le2->amount);
-				$ret[] = $le2;
-
+				// Fee Refund
+				if ($csv['Fee'] < 0) {
+					// Ledger Entry for Paypal Fee
+					$le2 = array(
+						'dr' => abs($csv['Fee']),
+						'amount' => $csv['Fee'],
+						'note' => sprintf('PayPal #%s - Fee Reversal', $csv['Transaction']),
+					);
+					// $le2->account_id = 78; // Expense: PayPal Fees
+					$je['ledger_entry_list'][] = $le2;
+				}
 
 				break;
 
-			//case 'Update to Add Funds from a Bank Account': // Money Into Paypal from Bank
-			//	// Debit to Checking
-			//	$le->amount = floatval(preg_replace('/[^\d\.\-]/',null,$csv[6]));
-			//	$le->cr = abs($le->amount);
-			//	$le->account_id = 1;
-			//	break;
 			//case 'Withdraw Funds to a Bank Account':
 			case 'General Withdrawal':
-				// Debit to Checking
-				$le->cr = abs($le->amount);
-				$ret[] = $le;
+				// Transfer out of PayPal
+				$le0['cr'] = abs($le0['amount']);
+				$je['note'] = trim(sprintf('%s #%s',
+					$csv['Type'],
+					$csv['Transaction ID']
+				));
+				$je['ledger_entry_list'][] = $le0;
 				break;
-			case 'Reversal of General Account Hold':
-			//	// What to do here?
-			//	echo "Reversal of General Account Hold NOT HANDLED\n";
-				Radix::dump($csv);
-				break;
+
 			default:
 				// print_r($csv);
 				//throw new \Exception("Cannot Handle Type: '{$csv[4]}'");
@@ -205,6 +195,7 @@ class Account_Reconcile_PayPal_v1
 
 			$stat[ $csv['Type'] ]++;
 
+			$ret[] = $je;
 		}
 
 		return $ret;

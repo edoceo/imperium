@@ -16,8 +16,7 @@ class Account_Reconcile
 	public static $format_list = array(
 		'csvwfb' => 'Wells Fargo Comma Seperated',
 		'square' => 'SquareUp Transaction CSV',
-		'paypal' => 'Paypal CSV - Type 1',
-		'paypal-2' => 'Paypal CSV - Type 2',
+		'paypal' => 'Paypal CSV',
 		// 'iq2005' => 'Intuit Quicken 2005 or newer',
 		// 'qb2000' => 'Quickbooks 2000 or newer',
 		// 'mm2002' => 'Microsoft Money 2002 or newer',
@@ -150,12 +149,12 @@ class Account_Reconcile
 		}
 		return $ret;
 	}
-	
+
 	/**
 		Parse Square.com Transactions
 		@todo Need to Make TWO entries
 			  One to Square for the Full Amount #5
-			  One to Payment Processors for Fee 
+			  One to Payment Processors for Fee
 	*/
 	private static function _parseSquare($file)
 	{
@@ -170,7 +169,7 @@ class Account_Reconcile
 			$je->date = strftime('%Y-%m-%d %H:%M:%S',strtotime($csv[0]));
 			$je->note = $csv[21] . '#' . $csv[22] . ' ' . $csv[26];
 			$je->ledger = array();
-			
+
 			// Transaction Amount
 			$le = array();
 			$x = floatval(preg_replace('/[^\d\.]+/',null,$csv[19])); // Is it 13 or 19?
@@ -196,7 +195,7 @@ class Account_Reconcile
 			// = floatval(preg_replace('/[^\d\.]+/',null,$csv[13]));
 			// $je->cr = floatval(preg_replace('/[^\d\.]+/',null,$csv[18]));
 			// $je->amount = ($je->cr);
-			
+
 			$ret[] = $je;
 
 		}
@@ -220,7 +219,7 @@ class Account_Reconcile
 	*/
 	private static function _guessAccount($je)
 	{
-		
+
 		return $je;
 	}
 	/**
@@ -240,5 +239,3 @@ class Account_Reconcile
 		return ($x0 < $x1);
 	}
 }
-
-
