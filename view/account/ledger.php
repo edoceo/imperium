@@ -36,14 +36,16 @@ ob_start();
 	<th>Debit</th>
 	<th>Credit</th>
 	<th>Balance</th>
+	<th></th>
 	</tr>
 </thead>
 
 <tbody>
 
-<tr class="rero">
-<td class="c">-Open-</td><td colspan="4">Opening Balance</td>
-<td class="b r"><?= number_format($this->balanceAlpha, 2) ?></td>
+<tr>
+	<td class="c">-Open-</td><td colspan="4">Opening Balance</td>
+	<td class="b r"><?= number_format($this->balanceAlpha, 2) ?></td>
+	<td></td>
 </tr>
 
 <?php
@@ -56,7 +58,7 @@ foreach ($this->LedgerEntryList as $le)
 		'r' => '/account/ledger?' . http_build_query(array('id' => $this->Account['id'])),
 	));
 
-    echo '<tr class="rero">';
+    echo '<tr>';
 
     echo '<td class="c"><a href="' . Radix::link($link) . '">' . $le['date'] . '</td>';
     echo '<td>' . html($le['note']) . '</td>';
@@ -87,28 +89,33 @@ foreach ($this->LedgerEntryList as $le)
 		$cr_sum += abs($le['amount']);
 		$runbal -= abs($le['amount']);
 	}
-    //if (substr($this->Account['kind'],0,5)=='Asset') {
-    //} else {
-    //    $runbal += $le['amount'];
-    //}
 
     echo '<td class="r">' . number_format($runbal, 2) . '</td>';
-    echo '<td><button class="btn btn-sm join-entry" data-id="' . $le['account_journal_id'] . '"><i class="fa fa-compress"></i></button></td>';
+    echo '<td class="r"><button class="btn btn-sm join-entry" data-id="' . $le['account_journal_id'] . '"><i class="fa fa-compress"></i></button></td>';
     echo '</tr>';
 
 }
+?>
+</tbody>
 
-echo '<tr class="ro">';
-echo '<td class="b" colspan="3">Total:</td>';
-echo '<td class="b r">&curren;' . number_format($dr_sum, 2) . '</td>';
-echo '<td class="b r">&curren;' . number_format($cr_sum, 2) . '</td>';
+<tfoot>
+<tr>
+<td class="b" colspan="3">Total:</td>
+<td class="b r">&curren;<?= number_format($dr_sum, 2) ?></td>
+<td class="b r">&curren;<?= number_format($cr_sum, 2) ?></td>
+<td class="b r">&curren;<?= number_format($runbal, 2) ?></td>
+<?php
 //if (substr($this->Account->kind,0,5)=='Asset') {
 //	echo '<td class="b r">&curren;' . number_format($runbal * -1,2) . '</td>';
 //} else {
-	echo '<td class="b r">&curren;' . number_format($runbal,2) . '</td>';
 //}
-echo '</tr>';
-echo '</table>';
+?>
+</tr>
+</tfoot>
+
+</table>
+
+<?php
 
 $html_table = ob_get_clean();
 
@@ -123,9 +130,9 @@ $html_table = ob_get_clean();
 	<label>Account:</label>
 	<div class="input-group">
 		<?= Form::select('id', $this->Account['id'], $this->AccountList_Select, array('class' => 'form-control')) ?>
-		<span class="input-group-btn">
-			<a class="btn" style="width: 3em;" href="<?= Radix::link('/account/journal?' . http_build_query($_GET)) ?>"><i class="fa fa-list" title="Journal"></i></a>
-			<a class="btn" style="width: 3em;" href="<?= Radix::link('/account/edit?id=' . $this->Account['id']) ?>"><i class="fa fa-edit" title="Edit"></i></a>
+		<span class="input-group-append">
+			<a class="btn btn-outline-primary" href="<?= Radix::link('/account/journal?' . http_build_query($_GET)) ?>"><i class="fa fa-list" title="Journal"></i></a>
+			<a class="btn btn-outline-primary" href="<?= Radix::link('/account/edit?id=' . $this->Account['id']) ?>"><i class="fa fa-edit" title="Edit"></i></a>
 		</span>
 	</div>
 </div>

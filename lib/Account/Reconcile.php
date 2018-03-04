@@ -23,6 +23,15 @@ class Account_Reconcile
 	);
 
 	/**
+		Parse a Number
+	*/
+	private static function _filter_number($x)
+	{
+		$r = floatval(preg_replace('/[^\-\d\.]+/', null, $x));
+		return $r;
+	}
+
+	/**
 		Parse the Data to Accounts
 	*/
 	static function parse($opt)
@@ -34,12 +43,10 @@ class Account_Reconcile
 		switch ($opt['kind']) {
 		case 'csvwfb': // Wells Fargo CSV Format
 			$ret = self::_parseWellsFargo($opt['file']);
+			uasort($ret, array(self,'_sortCallback'));
 			break;
 		case 'paypal':
 			$ret = self::_parsePayPal_v1($opt['file']);
-			break;
-		case 'paypal-2':
-			$ret = self::_parsePayPal_v2($opt['file']);
 			break;
 		case 'qfx': // Quicken 2004 Web Connect
 			//echo "<pre>".htmlspecialchars($buf)."</pre>";
@@ -100,7 +107,6 @@ class Account_Reconcile
 //
 //		}
 //
-//		uasort($ret, array(self,'_sortCallback'));
 
 		return $ret;
 	}
@@ -114,12 +120,6 @@ class Account_Reconcile
 		return Account_Reconcile_PayPal_v1::parse($file);
 	}
 
-	private static function _parsePayPal_v2($file)
-	{
-		require_once(__DIR__ . '/Reconcile_PayPal_v2.php');
-		return Account_Reconcile_PayPal_v2::parse($file);
-	}
-
 	/**
 		Parse WellsFargo CSV to Journal Entry Array
 	*/
@@ -128,26 +128,40 @@ class Account_Reconcile
 		$ret = array();
 		$fh = fopen($file,'r');
 		while ($csv = fgetcsv($fh,4096)) {
-			$je = new \stdClass();
+
 			if (count($csv) < 4) {
 				continue;
 			}
-			$je->date = $csv[0];
-			$je->note = $csv[4];
-			$je->amount = abs(preg_replace('/[^\d\.]+/',null,$csv[1]));
-			if ($csv[1] < 0) {
-				$je->cr = abs($csv[1]);
-			} else {
-				$je->dr = abs($csv[1]);
-			}
+
+			// Journal entry
+			$je = array();
+			$je['date'] = $csv[0];
+			$je['note'] = $csv[4];
+			$je['ledger_entry_list'] = array();
 
 			// Apply Filter Here?
 			$je = self::_filterEntry($je);
 			$je = self::_guessAccount($je);
 
+			// Ledger Entry
+			$le = array(
+				'account_id' => null,
+				'amount' => self::_filter_number($csv[1]),
+			);
+
+			if ($le['amount'] < 0) {
+				$le['cr'] = abs($csv[1]);
+			} else {
+				$le['dr'] = abs($csv[1]);
+			}
+
+			$je['ledger_entry_list'][] = $le;
+
 			$ret[] = $je;
 		}
+
 		return $ret;
+
 	}
 
 	/**
@@ -172,7 +186,7 @@ class Account_Reconcile
 
 			// Transaction Amount
 			$le = array();
-			$x = floatval(preg_replace('/[^\d\.]+/',null,$csv[19])); // Is it 13 or 19?
+			$x = self::_filter_number($csv[19]); // Is it 13 or 19?
 			if ($x < 0) {
 				$le['cr'] = abs($x);
 			} else {
@@ -186,7 +200,7 @@ class Account_Reconcile
 
 			// The Fee Entry
 			// $fee = floatval(preg_replace('/[^\d\.]+/',null,$csv[13]));
-			$fee = floatval(preg_replace('/[^\d\.]+/',null,$csv[18]));
+			$fee = self::_filter_number($csv[18]);
 			$je->ledger[] = array(
 				'note' => 'Fee for Transaction #' . $csv[20],
 				'abs' => abs($fee),
@@ -208,34 +222,34 @@ class Account_Reconcile
 	private static function _filterEntry($je)
 	{
 		// Wells Fargo Noise
-		$je->note = str_replace('CHECK CRD PURCHASE ', null, $je->note);
-		$je->note = preg_replace('/^POS PURCHASE \- /', null, $je->note);
-		$je->note = preg_replace('/^PURCHASE AUTHORIZED ON /', null, $je->note);
+		$je['note'] = str_replace('CHECK CRD PURCHASE ', null, $je['note']);
+		$je['note'] = preg_replace('/^POS PURCHASE \- /', null, $je['note']);
+		$je['note'] = preg_replace('/^PURCHASE AUTHORIZED ON /', null, $je['note']);
 
 		return $je;
 	}
+
 	/**
 		Guess the Opposition Account
 	*/
 	private static function _guessAccount($je)
 	{
-
 		return $je;
 	}
+
 	/**
 		Sorts Journal Entries
 	*/
 	private static function _sortCallback($a,$b)
 	{
 		// Compare by Time (Lowest First)
-		$x0 = strtotime($a->date);
-		$x1 = strtotime($b->date);
+		$x0 = strtotime($a['date']);
+		$x1 = strtotime($b['date']);
 		if ($x0 != $x1) {
 			return ($x0 > $x1);
 		}
+
 		// Compare by Amount (Highest First)
-		$x0 = floatval($a->amount);
-		$x1 = floatval($b->amount);
-		return ($x0 < $x1);
+		return ($a['amount'] < $b['amount']);
 	}
 }

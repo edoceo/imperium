@@ -13,6 +13,19 @@ class AccountJournalEntry extends ImperiumBase
 {
 	protected $_table = 'account_journal';
 
+	function getLedgerEntryList()
+	{
+		$sql = 'SELECT account_ledger.*, account.full_name as account_name';
+		$sql.= ' FROM account_ledger';
+		$sql.= ' JOIN account ON account_ledger.account_id = account.id';
+		$sql.= ' WHERE account_ledger.account_journal_id = ? ';
+		$sql.= ' ORDER BY account_ledger.amount ASC, account.full_code ';
+
+		$res = SQL::fetch_all($sql, array($this->_data['id']));
+		return $res;
+
+	}
+
 	/**
 		Delete Ledger & Journal Entries
 	*/

@@ -15,29 +15,41 @@ $le_i = 0;
 $date_alpha = $date_omega = null;
 
 // View the Pending Transactions
-echo '<table class="table table-hover">';
-echo '<tr>';
-echo '<th>#</th>';
-echo '<th>Date</th>';
-echo '<th>Note</th>';
-echo '<th>Account</th>';
-echo '<th>Debit</th>';
-echo '<th>Credit</th>';
-echo '<th>JE</th>';
-echo '<th>-</th>';
-echo '</tr>';
+?>
 
-echo '<tr>';
-echo '<td><input style="width:1em;"></td>';
-echo '<td><input class="form-control ar-date" id="filter-date" type="text"></td>';
-echo '<td><input class="form-control ar-note" id="filter-note" type="text"></td>';
-echo '<td><input class="form-control" id="update-account" type="text"></td>';
-echo '<td></td>';
-echo '<td></td>';
-echo '<td></td>';
-echo '<td></td>';
-echo '</tr>';
+<style>
+.form-control {
+	transition: none;
+}
+</style>
 
+<table class="table table-hover">
+<thead>
+<tr>
+	<th>#</th>
+	<th>Date</th>
+	<th>Note</th>
+	<th>Account</th>
+	<th>Debit</th>
+	<th>Credit</th>
+	<th>JE</th>
+	<th>-</th>
+</tr>
+
+<tr>
+	<td><input class="form-control"></td>
+	<td><input class="form-control ar-date" id="filter-date" type="text"></td>
+	<td><input class="form-control ar-note" id="filter-note" type="text"></td>
+	<td><input class="form-control" id="update-account" type="text"></td>
+	<td></td>
+	<td></td>
+	<td></td>
+	<td></td>
+</tr>
+</thead>
+
+<tbody>
+<?php
 foreach ($this->JournalEntryList as $je) {
 
 	if (!empty($je['id'])) {
@@ -88,7 +100,7 @@ foreach ($this->JournalEntryList as $je) {
 		}
 		echo '</td>';
 
-		echo '<td>';
+		echo '<td class="r">';
 		echo '<button class="btn btn-sm btn-primary save-entry" data-index="' . $le_i . '" title="Save this Ledger Entry" type="button"><i class="fa fa-save"></i></button>';
 		echo '<button class="btn btn-sm btn-warning join-entry" data-index="' . $le_i . '" title="Merge with another Ledger Entry for Journal" type="button"><i class="fa fa-compress"></i></button>';
 		echo '<button class="btn btn-sm btn-danger drop-entry" data-index="' . $le_i . '" title="Drop" type="button"><i class="fa fa-times"></i></button>';
@@ -103,13 +115,19 @@ foreach ($this->JournalEntryList as $je) {
 
 	$date_omega = $je['date'];
 }
+?>
+</tbody>
 
-// Footer
-echo '<tr>';
-echo '<td colspan="4">Summary: ' . $date_alpha . ' - ' . $date_omega . '</td>';
-echo '<td class="r">' . number_format($dr, 2) . '</td>';
-echo '<td class="r">' . number_format($cr, 2) . '</td>';
-echo '</table>';
+<tfoot>
+<tr>
+	<td colspan="4">Summary: <?= $date_alpha ?> - <?= $date_omega ?></td>
+	<td class="r"><?= number_format($dr, 2) ?></td>
+	<td class="r"><?= number_format($cr, 2) ?></td>
+</tr>
+</tfoot>
+</table>
+
+<?php
 
 // Set Title with Known Count
 $_ENV['title'][] = sprintf('<span id="reconcile-item-size">%d</span> Items', $le_i);
@@ -175,9 +193,9 @@ $(function() {
 
 	// Set all Visible Accounts to this one
 	$('#update-account').autocomplete({
-		delay: 100,
 		source: <?= $account_list_json; ?>,
-		select: function(e, ui) {
+		change: function(e, ui) {
+			debugger;
 			$('.account-name').each(function(i, n) {
 				acChange({ target: n }, ui);
 			});
