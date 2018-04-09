@@ -20,10 +20,12 @@
 use Edoceo\Radix;
 
 // Input Form
-// echo $this->form('AccountStatement',array('action'=>$this->appurl.'/account.statement/cash-flow','class'=>'np'));
+echo '<div class="print-hide">';
 echo '<form>';
 echo Radix::block('account-period-input');
 echo '</form>';
+echo Radix::block('account-period-arrow', $this->date_alpha);
+echo '</div>';
 
 echo '<table class="table">';
 

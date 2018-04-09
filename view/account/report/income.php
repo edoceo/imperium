@@ -8,6 +8,10 @@ use Edoceo\Radix;
 
 $cr_total = $dr_total = 0;
 
+var_dump($this->date_alpha);
+var_dump($this->date_omega);
+
+
 // Input Form
 echo '<div class="np">';
 echo '<form>';

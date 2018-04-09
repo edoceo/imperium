@@ -18,11 +18,6 @@ echo '</form>';
 echo Radix::block('account-period-arrow', $this->date_alpha);
 echo '</div>';
 
-// Year List
-// Quarter List
-// Common Period List
-
-
 switch ($this->Period) {
 case 'm':
 	$_ENV['h1'] = $_ENV['title'] = 'Monthly Balance Sheet for ' . $this->date_alpha_f;
@@ -38,7 +33,7 @@ default:
 	break;
 }
 
-$sql = 'select distinct kind, kind_sort';
+$sql = 'SELECT distinct kind, kind_sort';
 $sql.= ' from account ';
 // $sql.= " where type in ('Asset','Liability') or kind = 'Equity: Owners Capital' ";
 $sql.= ' order by kind_sort, kind';
@@ -63,7 +58,7 @@ foreach ($AccountKindList as $kind) {
 	}
 
 	// Assets
-	echo '<tr><th><h2>' . html($kind['kind']) . '</h2></th>';
+	echo '<tr><th>' . html($kind['kind']) . '</th>';
 	echo '<th class="r">Opening</th>';
 	echo '<th class="r">Closing</th>';
 	echo '<th class="r">Delta</th>';

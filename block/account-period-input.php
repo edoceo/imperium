@@ -13,26 +13,26 @@ namespace Edoceo\Imperium;
 use Edoceo\Radix;
 use Edoceo\Radix\HTML\Form;
 
-echo '<div class="bf c" id="account-period-input">';
+?>
 
-$m = $_GET['m'];
-$y = $_GET['y'];
-$p = $_GET['p'];
+<div class="form-inline" id="account-period-input">
 
-if (!empty($data)) {
-	if (!empty($data['m'])) $m = $data['m'];
-	if (!empty($data['y'])) $y = $data['y'];
-	if (!empty($data['p'])) $p = $data['p'];
-}
+<?php
 echo Form::select('m', $m, Radix::$view->MonthList, array('class' => 'form-control'));
 echo Form::select('y', $y, Radix::$view->YearList, array('class' => 'form-control'));
 echo Form::select('p', $p, Radix::$view->PeriodList, array('class' => 'form-control'));
-echo Form::submit('c', 'View');
+?>
 
-echo '<div class="bf c">';
-echo '<label for="xc">&nbsp;' . Form::checkbox('xc', 'true', ('true'==$_GET['xc'] ? array('checked'=>'checked') : null) ) . '&nbsp;Exclude Closing Transactions</label>';
-echo '&nbsp;';
-echo '<label for="xz">&nbsp;' . Form::checkbox('xz', 'true', ('true'==$_GET['xz'] ? array('checked'=>'checked') : null)) . '&nbsp;Exclude Zero Balance Accounts</label>';
-echo '</div>';
+<div class="form-check form-check-inline">
+  <input class="form-check-input" name="xc" type="checkbox" id="xc" value="true">
+  <label class="form-check-label" for="xc">Exclude Closing Transactions</label>
+</div>
 
-echo '</div>';
+<div class="form-check form-check-inline">
+  <input class="form-check-input" name="xz" type="checkbox" id="xz" value="true">
+  <label class="form-check-label" for="xz">Exclude Zero Balance Accounts</label>
+</div>
+
+<button class="btn btn-outline-secondary" name="c" value="view">View</button>
+
+</div>

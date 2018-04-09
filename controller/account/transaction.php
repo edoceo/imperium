@@ -148,9 +148,16 @@ case 'save-copy':
 		 Session::flash('info', 'Attachment Created');
 	}
 
-	// Commit and Redirect
-	// $this->_d->commit();
+	// If this was a save-join operation, and the original is empty, then drop it.
+	if (!empty($_GET['join-txn'])) {
+		$je1 = new AccountJournalEntry($_GET['join-txn']);
+		$chk = $je1->getLedgerEntryList();
+		if (0 == count($chk)) {
+			$je1->delete();
+		}
+	}
 
+	// Commit and Redirect
 	if ('save-copy' == $_POST['a']) {
 		// $_SESSION['account-transaction'] = $aje;
 		// $_SESSION['account-transaction-list' = array();
@@ -172,35 +179,19 @@ case 'save-copy':
 if ($id) {
 
 	$this->AccountJournalEntry = new AccountJournalEntry($id); //
-	//$this->_d->fetchRow("select * from account_journal where id = $id");
-	//$sql = $this->_d->select();
-	//$sql->from('general_ledger');
-	//$sql->where('account_journal_id = ?', $id);
-	//$sql->order(array('account_full_code','amount'));
-	
-	// $sql = $this->_d->select();
-	// $sql->from(array('al'=>'account_ledger'));
-	// $sql->join(array('a'=>'account'),'al.account_id = a.id',array('a.full_name as account_name'));
-	// $sql->where('al.account_journal_id = ?', $id);
-	// //$sql->order(array('al.amount asc','a.full_code'));
-	// $sql->order(array('al.id asc'));
-	// // $sql = "select * from account_ledger where account_journal_id=$id order by amount"
-	
-	$sql = 'SELECT account_ledger.*, account.full_name as account_name';
-	$sql.= ' FROM account_ledger';
-	$sql.= ' JOIN account ON account_ledger.account_id = account.id';
-	$sql.= ' WHERE account_ledger.account_journal_id = ? ';
-	$sql.= ' ORDER BY account_ledger.amount ASC, account.full_code ';
+	$this->AccountLedgerEntryList = $this->AccountJournalEntry->getLedgerEntryList();
 
-	$this->AccountLedgerEntryList = SQL::fetch_all($sql, array($id)); // $this->_d->fetchAll($sql);
 	$this->FileList = $this->AccountJournalEntry->getFiles();
-// } elseif (isset($this->_s->AccountTransaction)) {
+
 } elseif (!empty($_SESSION['account-transaction'])) {
+
 	$this->AccountJournalEntry = $_SESSION['account-transaction']->AccountJournalEntry;
 	$this->AccountLedgerEntryList = $_SESSION['account-transaction']->AccountLedgerEntryList;
 	// @todo Here on on Save (above)?
 	// unset($_SESSION['account-transaction']);
+
 } else {
+	// Default Two Line Items
 	$this->AccountJournalEntry = new AccountJournalEntry();
 	$this->AccountLedgerEntryList = array();
 	$this->AccountLedgerEntryList[] = new AccountLedgerEntry();
@@ -210,6 +201,19 @@ if ($id) {
 // Correct Missing Date
 if (empty($this->AccountJournalEntry['date'])) {
 	$this->AccountJournalEntry['date'] = isset($_SESSION['account']['date']) ? $_SESSION['account']['date'] : date('Y-m-d');
+}
+
+// Request to Join a Second Transaction to this JE
+if (!empty($_GET['join-txn'])) {
+
+	$je1 = new AccountJournalEntry($_GET['join-txn']);
+
+	$le1_list = $je1->getLedgerEntryList();
+
+	foreach ($le1_list as $x) {
+		$this->AccountLedgerEntryList[] = $x;
+	}
+
 }
 
 // Add Prev / Next Links
