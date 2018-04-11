@@ -17,11 +17,12 @@ use Edoceo\Radix\HTML\Form;
 
 <div class="form-inline" id="account-period-input">
 
-<?php
-echo Form::select('m', $m, Radix::$view->MonthList, array('class' => 'form-control'));
-echo Form::select('y', $y, Radix::$view->YearList, array('class' => 'form-control'));
-echo Form::select('p', $p, Radix::$view->PeriodList, array('class' => 'form-control'));
-?>
+<?= Form::select('m', $_GET['m'], Radix::$view->MonthList, array('class' => 'form-control')) ?>
+
+<?= Form::select('y', $_GET['y'], Radix::$view->YearList, array('class' => 'form-control')) ?>
+
+<?= Form::select('p', $_GET['p'], Radix::$view->PeriodList, array('class' => 'form-control')) ?>
+
 
 <div class="form-check form-check-inline">
   <input class="form-check-input" name="xc" type="checkbox" id="xc" value="true">
@@ -33,6 +34,6 @@ echo Form::select('p', $p, Radix::$view->PeriodList, array('class' => 'form-cont
   <label class="form-check-label" for="xz">Exclude Zero Balance Accounts</label>
 </div>
 
-<button class="btn btn-outline-secondary" name="c" value="view">View</button>
+<button class="btn btn-outline-primary" name="c" value="view">View</button>
 
 </div>

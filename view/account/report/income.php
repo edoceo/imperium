@@ -8,16 +8,16 @@ use Edoceo\Radix;
 
 $cr_total = $dr_total = 0;
 
-var_dump($this->date_alpha);
-var_dump($this->date_omega);
+//var_dump($this->date_alpha);
+//var_dump($this->date_omega);
 
 
 // Input Form
-echo '<div class="np">';
+echo '<div class="d-print-none">';
 echo '<form>';
 echo Radix::block('account-period-input');
 echo '</form>';
-echo Radix::block('account-period-arrow', $this->date_alpha);
+//echo Radix::block('account-period-arrow', $this->date_alpha);
 echo '</div>';
 
 // Revenues

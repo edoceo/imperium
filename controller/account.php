@@ -47,8 +47,8 @@ case 'q':
 	$this->date_omega_ts = mktime(0,0,0,$this->Month+2 , 1,$this->Year);
 	break;
 case 'y':
-	$this->date_alpha_ts = mktime(0,0,0,$this->Month,1,$this->Year);
-	$this->date_omega_ts = mktime(0,0,0,$this->Month+11,1,$this->Year);
+	$this->date_alpha_ts = mktime(0,0,0, $this->Month, 1, $this->Year);
+	$this->date_omega_ts = mktime(0,0,0, $this->Month + 12, 0, $this->Year);
 	break;
 case 'r': // Range
 
@@ -77,6 +77,7 @@ $_SESSION['account-view']['period'] = $this->Period;
 $_SESSION['account-view']['date_alpha'] = $this->date_alpha_ts;
 $_SESSION['account-view']['date_omega'] = $this->date_omega_ts;
 
+// Re-Assign back to GET
 $_GET['p'] = $this->Period;
 $_GET['m'] = $this->Month;
 $_GET['y'] = $this->Year;

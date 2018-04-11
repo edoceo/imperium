@@ -61,15 +61,20 @@ $d0->add(new \DateInterval('P1Y'));
 $d_next_y0 = $d0->format('Y-m-1');
 $d_next_y1 = $d0->format('Y-m-t');
 
-echo '<div class="row" style="border:1px solid #333;">';
+echo '<div class="row">';
 
 //echo '<div class="c"><a href="?' . http_build_query(array('id' => $_GET['id'], 'd0' => $d_back_y0, 'd1' => $d_back_y1)) . '" title="Back to First of Year"><i class="fa fa-arrow-left"></i><i class="fa fa-arrow-left"></i><i class="fa fa-arrow-left"></i></a></div>';
 //echo '<div class="c"><a href="?' . http_build_query(array('id' => $_GET['id'], 'p' => 'q', 'd0' => $back_q0, 'd1' => $back_q1)) . '" title="Back to First of Quarter"><i class="fa fa-arrow-left"></i>' . $back_q0_f . '<i class="fa fa-arrow-left"></i></a></div>';
-echo '<div class="col c"><a class="btn btn-sm btn-outline-secondary" href="?' . http_build_query(array('id' => $_GET['id'], 'p' => 'm', 'd0' => $d_back_m0, 'd1' => $d_back_m1)) . '" title="Back to Previous Month"><i class="fa fa-arrow-left"></i></a></div>';
+echo '<div class="col-md-6 c">';
+echo '<a class="btn btn-outline-secondary" href="?' . http_build_query(array('id' => $_GET['id'], 'p' => 'm', 'd0' => $d_back_m0, 'd1' => $d_back_m1)) . '" title="Back to Previous Month"><i class="fa fa-arrow-left"></i></a>';
+echo '</div>';
 
 //echo "D:?; M:$m0; Q:$q0";
 
-echo '<div class="col c"><a class="btn btn-sm btn-outline-secondary" href="?' . http_build_query(array('id' => $_GET['id'], 'p' => 'm', 'd0' => $d_next_m0, 'd1' => $d_next_m1)) . '" title="Advance to Next Month"><i class="fa fa-arrow-right"></i></a></div>';
+echo '<div class="col-md-6 c">';
+echo '<a class="btn btn-outline-secondary" href="?' . http_build_query(array('id' => $_GET['id'], 'p' => 'm', 'd0' => $d_next_m0, 'd1' => $d_next_m1)) . '" title="Advance to Next Month"><i class="fa fa-arrow-right"></i></a>';
+echo '</div>';
+
 //echo '<div class="c"><a href="?' . http_build_query(array('id' => $_GET['id'], 'p' => 'q', 'd0' => $next_q0, 'd1' => $next_q1)) . '" title="Advance to Next Quarter"><i class="fa fa-arrow-right"></i>' . $next_q0_f . '<i class="fa fa-arrow-right"></i></a></div>';
 //echo '<div class="c"><a href="?' . http_build_query(array('id' => $_GET['id'], 'd0' => $d_next_y0, 'd1' => $d_next_y1)) . '" title="Advance to Next Year"><i class="fa fa-arrow-right"></i><i class="fa fa-arrow-right"></i><i class="fa fa-arrow-right"></i></a></div>';
 

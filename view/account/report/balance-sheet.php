@@ -11,11 +11,11 @@ use Edoceo\Radix;
 use Edoceo\Radix\DB\SQL;
 
 // Input Form
-echo '<div class="print-hide">';
+echo '<div class="d-print-none">';
 echo '<form>';
 echo Radix::block('account-period-input');
 echo '</form>';
-echo Radix::block('account-period-arrow', $this->date_alpha);
+//echo Radix::block('account-period-arrow', $this->date_alpha);
 echo '</div>';
 
 switch ($this->Period) {
@@ -65,8 +65,10 @@ foreach ($AccountKindList as $kind) {
 	echo '</tr>';
 
 	// $this->AssetAccountList = $AssetAccountList;
-	$bal = 0; // $sum;
-	// $sum = 0;
+	$bal0 = 0;
+	$bal1 = 0;
+	$balD = 0; // $sum;
+
 	foreach ($AccountList as $item) {
 
 		$A = new Account($item);
@@ -77,12 +79,15 @@ foreach ($AccountKindList as $kind) {
 		switch ($kind['kind']) {
 		case 'Asset':
 		case 'Asset: Bank':
+		case 'Expense':
 			$b0 = $b0 * -1;
 			$b1 = $b1 * -1;
 			break;
 		}
 
-		$bal += $item['balance'];
+		$bal0 += $b0;
+		$bal1 += $b1;
+		$balD += $item['balance'];
 
 		$arg = array(
 			'id' => $item['id'],
@@ -96,8 +101,6 @@ foreach ($AccountKindList as $kind) {
 		echo '<td style="text-indent:2em;"><a href="'. $uri . '">' . $item['full_name'] . '</a></td>';
 		// echo '<td class="r">' . number_format($item['balance'], 2) . '</td>';
 
-
-
 		echo '<td class="r">' . number_format($b0, 2) . '</td>';
 		echo '<td class="r">' . number_format($b1, 2) . '</td>';
 
@@ -108,8 +111,10 @@ foreach ($AccountKindList as $kind) {
 	}
 
 	echo '<tr class="ro">';
-	echo '<td class="b" colspan="2">Total ' . $kind['kind'] . ':</td>';
-	echo '<td class="r"><span class="du" style="font-weight:bold;">' . number_format($bal, 2) . '</span></td>';
+	echo '<td class="b">Total ' . $kind['kind'] . ':</td>';
+	echo '<td class="r">' . number_format($bal0, 2) . '</td>';
+	echo '<td class="r">' . number_format($bal1, 2) . '</td>';
+	echo '<td class="r"><span class="du" style="font-weight:bold;">' . number_format($balD, 2) . '</span></td>';
 	echo '</tr>';
 	echo '<tr><td>&nbsp;</td></tr>';
 
