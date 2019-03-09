@@ -29,7 +29,6 @@ $x_kind = null;
 // echo '</div>';
 
 echo '<div class="container">';
-echo '<p><strong>Cash</strong> basis, reports for money collected when B&amp;O</p>';
 //echo '<p>Accounts for Period: ' . $this->date_alpha . ' - ' . $this->date_omega . '</p>';
 echo '<table class="table table-hover">';
 
@@ -58,8 +57,8 @@ foreach ($this->AccountList as $item) {
     // echo '<td class="r"><a href="' . Radix::link('/account/ledger?id=' . $item['id']) . '">' . $img_al . '</td>';
 
     echo '<td class="r">';
-    echo ' <a href="' . Radix::link('/account/journal?id=' . $item['id']) . '"><i class="fa fa-align-left"></i></a>';
-    echo ' <a href="' . Radix::link('/account/edit?id=' . $item['id']) . '"><i class="fa fa-check-square-o"></i></a>';
+    echo ' <a class="btn btn-sm btn-outline-secondary" href="' . Radix::link('/account/journal?id=' . $item['id']) . '"><i class="fa fa-align-left"></i></a>';
+    echo ' <a class="btn btn-sm btn-outline-secondary" href="' . Radix::link('/account/edit?id=' . $item['id']) . '"><i class="fa fa-check-square-o"></i></a>';
     echo '</td>';
 
     echo '</tr>';

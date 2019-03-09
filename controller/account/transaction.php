@@ -48,6 +48,8 @@ case 'delete':
 case 'save':
 case 'save-copy':
 
+	SQL::query('BEGIN');
+
 	$adp = AccountPeriod::findByDate($_POST['date']);
 	if ($adp->isClosed()) {
 		Session::flash('fail', 'Account Period is closed');
@@ -62,8 +64,6 @@ case 'save-copy':
 	if (empty($aje['id'])) {
 		$_SESSION['account']['date'] = $_POST['date'];
 	}
-
-	// $this->_d->beginTransaction();
 
 	$aje = new AccountJournalEntry($id);
 	$aje['auth_user_id'] = $_SESSION['uid'];
@@ -91,20 +91,22 @@ case 'save-copy':
 	} else {
 		Session::flash('info', 'Account Journal Entry #' . $aje['id'] . ' created');
 	}
+	
+	Radix::dump($_POST);
 
 	// Save Ledger Entries
 	foreach ($_POST as $k=>$v) {
 
 		// Trigger process only when matchin this
-		if (!preg_match('/^(\d+)_id$/',$k,$m)) {
+		if (!preg_match('/^(\d+)_id$/', $k, $m)) {
 			continue; // ignore others
 		}
 
 		$i = $m[1];
 
 		// Debit or Credit
-		$dr = floatval( preg_replace('/[^\d\.]+/',null,$_POST["{$i}_dr"]));
-		$cr = floatval( preg_replace('/[^\d\.]+/',null,$_POST["{$i}_cr"]));
+		$dr = floatval( preg_replace('/[^\d\.]+/', null, $_POST["{$i}_dr"]));
+		$cr = floatval( preg_replace('/[^\d\.]+/', null, $_POST["{$i}_cr"]));
 
 		$id = intval($_POST["{$i}_id"]);
 		$ale = new AccountLedgerEntry($id);
@@ -122,6 +124,8 @@ case 'save-copy':
 		//$ale['link'] = sprintf('%s:%d', $_POST["{$i}_link_to"], $_POST["{$i}_link_id"]);
 		// Save Ledger Entry
 		$ale->save();
+
+		Radix::dump($ale);
 
 		// $_SESSION['account-transaction-list'][] = $ale;
 		// Save Ledger Entry to Wizard
@@ -166,13 +170,18 @@ case 'save-copy':
 		Radix::redirect('/account/transaction');
 	}
 
+
+	SQL::query('COMMIT');
+
 	// Redirect Back
-	$ret = '/account/ledger';
+	$ret = null; // '/account/ledger';
 	if (!empty($_SESSION['return-path'])) {
 		$ret = $_SESSION['return-path'];
 		unset($_SESSION['return-path']);
 	}
+
 	Radix::redirect($ret);
+
 	break;
 }
 

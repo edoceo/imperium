@@ -43,7 +43,7 @@ class Account_Reconcile
 		switch ($opt['kind']) {
 		case 'csvwfb': // Wells Fargo CSV Format
 			$ret = self::_parseWellsFargo($opt['file']);
-			uasort($ret, array(self,'_sortCallback'));
+			uasort($ret, array('Edoceo\Imperium\Account_Reconcile', '_sortCallback'));
 			break;
 		case 'paypal':
 			$ret = self::_parsePayPal_v1($opt['file']);

@@ -26,16 +26,50 @@ $dr_sum = 0;
 $runbal = $this->balanceAlpha;
 $prev_b = 0;
 
-echo '<form method="get">';
-echo '<div style="display:flex; flex-wrap:wrap; font-size:120%; vertical-align:middle; margin:0.25em;">';
-echo '<div style="flex:1 1 auto;">';
-echo Form::select('id', $this->Account['id'], $this->AccountList_Select);
-echo '</div>';
-echo '<div style="flex:1 1 auto;">' . Form::date('d0', $this->date_alpha, array('size'=>12)) . '</div>';
-echo '<div style="flex:1 1 auto;">' . Form::date('d1', $this->date_omega, array('size'=>12)) . '</div>';
-echo '<div style="flex:1 1 auto;"><input name="c" type="submit" value="View"> <input name="c" type="submit" value="Post"></div>';
-echo '</div>';
-echo '</form>';
+//echo '<form method="get">';
+//echo '<div style="display:flex; flex-wrap:wrap; font-size:120%; vertical-align:middle; margin:0.25em;">';
+//echo '<div style="flex:1 1 auto;">';
+//echo Form::select('id', $this->Account['id'], $this->AccountList_Select);
+//echo '</div>';
+//echo '<div style="flex:1 1 auto;">' . Form::date('d0', $this->date_alpha, array('size'=>12)) . '</div>';
+//echo '<div style="flex:1 1 auto;">' . Form::date('d1', $this->date_omega, array('size'=>12)) . '</div>';
+//echo '<div style="flex:1 1 auto;"><input name="c" type="submit" value="View"> <input name="c" type="submit" value="Post"></div>';
+//echo '</div>';
+//echo '</form>';
+
+?>
+
+<div class="container">
+<div class="row">
+<div class="col-md-6">
+<div class="form-group">
+	<label>Account:</label>
+	<div class="input-group">
+		<?= Form::select('id', $this->Account['id'], $this->AccountList_Select, array('class' => 'form-control')) ?>
+		<span class="input-group-append">
+			<a class="btn btn-outline-primary" href="<?= Radix::link('/account/journal?' . http_build_query($_GET)) ?>"><i class="fa fa-list" title="Journal"></i></a>
+			<a class="btn btn-outline-primary" href="<?= Radix::link('/account/edit?id=' . $this->Account['id']) ?>"><i class="fa fa-edit" title="Edit"></i></a>
+		</span>
+	</div>
+</div>
+</div>
+
+<div class="col-md-3">
+<div class="form-group">
+	<label>From:</label>
+	<?= Form::date('d0',$this->date_alpha, array('class' => 'form-control')) ?>
+</div>
+</div>
+<div class="col-md-3">
+<div class="form-group">
+	<label>To:</label>
+	<?= Form::date('d1',$this->date_omega, array('class' => 'form-control')) ?>
+</div>
+</div>
+</div> <!-- /.row -->
+</div>
+
+<?php
 
 echo Radix::block('account-period-arrow', $this->date_alpha);
 
@@ -59,34 +93,12 @@ table#account-journal-main {
 	margin-top: 1em;
 	position: relative;
 }
-table#account-journal-main thead th {
-	background: transparent;
-	padding: 0.25em;
-}
-table#account-journal-main thead tr {
-	background: #ccc;
-	border: 1px solid #666;
-	font-weight: bold;
-}
 table#account-journal-main thead tr.open {
 	background: #aaa;
 }
 
-table#account-journal-main tbody tr.je {
-	border-top: 1px solid #333;
-	border-left: 1px solid #333;
-	border-right: 1px solid #333;
-	background: #eee;
-}
 table#account-journal-main tbody tr.je td {
 	font-weight: bold;
-}
-table#account-journal-main tbody tr.le {
-	border-left: 1px solid #333;
-	border-right: 1px solid #333;
-}
-table#account-journal-main tbody tr.le td {
-	border: none;
 }
 table#account-journal-main tbody tr.le td.crdr {
 	/* border-bottom: 1px solid #aaa; */
@@ -94,14 +106,10 @@ table#account-journal-main tbody tr.le td.crdr {
 	text-align: right;
 	width: 8em;
 }
-table#account-journal-main tfoot td {
-	background: #aaa;
-	font-weight: bold;
-}
 </style>
 
-<table id="account-journal-main">
-<thead>
+<table class="table table-sm table-bordered" id="account-journal-main">
+<thead class="thead-dark">
 	<tr>
 	<th>TXN/Code</th>
 	<th>Date</th>

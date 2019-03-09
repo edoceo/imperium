@@ -17,13 +17,7 @@ $date_alpha = $date_omega = null;
 // View the Pending Transactions
 ?>
 
-<style>
-.form-control {
-	transition: none;
-}
-</style>
-
-<table class="table table-hover">
+<table class="table table-sm table-hover">
 <thead>
 <tr>
 	<th>#</th>
@@ -37,7 +31,7 @@ $date_alpha = $date_omega = null;
 </tr>
 
 <tr>
-	<td><input class="form-control"></td>
+	<td></td>
 	<td><input class="form-control ar-date" id="filter-date" type="text"></td>
 	<td><input class="form-control ar-note" id="filter-note" type="text"></td>
 	<td><input class="form-control" id="update-account" type="text"></td>

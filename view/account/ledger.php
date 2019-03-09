@@ -122,7 +122,6 @@ $html_table = ob_get_clean();
 // Output Begins
 ?>
 <form method="get">
-<div class="container">
 
 <div class="row">
 <div class="col-md-6">
@@ -159,12 +158,9 @@ $html_table = ob_get_clean();
 </div>
 </div> <!-- /.row -->
 
-</div> <!-- /.container -->
 </form>
 
 <?php
-
-echo '<div class="container-fluid">';
 
 echo Radix::block('account-period-arrow', $this->date_alpha);
 
@@ -190,8 +186,6 @@ echo '</div>'; // /.row
 echo $html_table;
 
 echo Radix::block('account-period-arrow', $this->date_alpha);
-
-echo '</div>';
 
 ob_start();
 ?>
