@@ -22,7 +22,7 @@ $paid_total = 0;
 $date_skip_list = array('Paid','Void');
 
 // Include Paginator Stuffs?
-echo '<table>';
+echo '<table class="table table-sm">';
 if (isset($paginator))
 {
 ?>

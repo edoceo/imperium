@@ -24,7 +24,7 @@ $bill_total = $open_total = 0;
 // @todo Remove this shitty hack!
 $cols = array('star','id','date','status','kind','contact','note','bill_amount','open_amount');
 
-echo '<table>';
+echo '<table class="table table-sm">';
 // List each Invoice Item
 foreach ($data['list'] as $item) {
 

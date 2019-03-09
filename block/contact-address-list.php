@@ -14,7 +14,7 @@ namespace Edoceo\Imperium;
 
 use Edoceo\Radix;
 
-echo '<table>';
+echo '<table class="table table-sm">';
 
 foreach ($data['list'] as $item) {
 

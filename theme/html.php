@@ -57,7 +57,9 @@ if (!empty($x)) {
 
 
 // Core of Page
+echo '<div class="container-fluid">';
 echo $this->body;
+echo '</div>';
 
 ?>
 

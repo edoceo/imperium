@@ -12,7 +12,7 @@ namespace Edoceo\Imperium;
 
 use Edoceo\Radix;
 
-echo '<table>';
+echo '<table class="table table-sm">';
 echo '<tr>';
 echo '<th>Name</th>';
 echo '<th>Phone</th>';
