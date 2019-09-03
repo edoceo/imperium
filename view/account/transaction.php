@@ -3,7 +3,7 @@
 	Account Journal Entry View
 
 	Draws the form necessary to input a multi-account journal entry
-	
+
 	https://en.wikipedia.org/wiki/Double-entry_bookkeeping_system#Customer_ledger_cards
 	http://www.double-entry-bookkeeping.com/sales/revenue-received-in-advance/
 	http://accounting-simplified.com/accrued-income.html
@@ -16,7 +16,7 @@
 	https://support.waveapps.com/entries/108008253-How-to-record-a-payment-on-an-invoice
 
 	https://www.freshbooks.com/support/journal-entries-an-overview-for-your-accountant#tocspecific
-	
+
 	https://www.freshbooks.com/support/how-does-freshbooks-calculate-accounts-receivable
 */
 
@@ -52,7 +52,7 @@ if (count($this->jump_list)) {
             $list[] = '<span class="hi">#' . $x['id'] . '</span>';
         } elseif ($x['id'] < $this->AccountJournalEntry['id'] ) {
             $list[] = '<a href="' . $this->link('/account/transaction?id=' . $x['id']) . '">&laquo; #' . $x['id'] . '</a>';
-        } else { 
+        } else {
             $list[] = '<a href="' . $this->link('/account/transaction?id=' . $x['id']) . '">#' . $x['id'] . ' &raquo;</a>';
         }
     }
@@ -66,13 +66,19 @@ if (count($this->jump_list)) {
 
 <form enctype="multipart/form-data" method="post">
 <div class="row">
-<div class="col-md-6">
+<div class="col-md-3">
 	<label>Date:</label>
 	<input class="form-control" id="account-transaction-date" name="date" type="date" value="<?= html($this->AccountJournalEntry['date']) ?>">
 </div>
 <div class="col-md-6">
 	<label>Kind:</label>
 	<?= Form::select('kind', $this->AccountJournalEntry['kind'], array('N'=>'Normal','A'=>'Adjusting','C'=>'Closing'), array('class' => 'form-control')) ?>
+</div>
+<div class="col-md-3">
+	<label>Flag:</label>
+	<div>
+	<label><input accesskey="a" <?= (($this->AccountJournalEntry['flag'] & 1) ? ' checked' : null) ?> name="flag[]" style="vertical-align:middle;" type="checkbox" value="1">Audited</label>
+	</div>
 </div>
 </div>
 
@@ -81,15 +87,9 @@ if (count($this->jump_list)) {
 	<label>Note:</label>
 	<?= Form::text('note', $this->AccountJournalEntry['note'],array('autocomplete'=>'off', 'class'=>'form-control')) ?>
 </div>
-<div class="col-md-2">
-	<label>Flag:</label>
-	<div>
-	<label><input accesskey="a" <?= (($this->AccountJournalEntry['flag'] & 1) ? ' checked' : null) ?> name="flag[]" style="vertical-align:middle;" type="checkbox" value="1">Audited</label>
-	</div>
-</div>
 </div>
 
-<table class="table" id="JournalEntry">
+<table class="table table-sm mt-2" id="JournalEntry">
 <thead>
 	<tr><th>Account</th><th>Note</th><th>Debit</th><th>Credit</th><th></th></tr>
 </thead>
@@ -116,13 +116,16 @@ foreach ($this->AccountLedgerEntryList as $i=>$item) {
 
 	echo '<tr>';
 	echo '<td>';
+	echo '<div class="input-group">';
 	// Ledger Entry ID, Account ID and Account Name
+	echo Form::text($i.'_account_name', $item['account_name'],array('class'=>'form-control account-name'));
+	echo '<div class="input-group-append">';
+		echo '<div class="input-group-text account-id-v" id="' . $i . '_account_id_v">' . $item['account_id']. '</div>';
+		echo '<a class="btn btn-outline-secondary account-link" href="' . Radix::link('/account/ledger?id=' . $item['account_id']) . '" id="' . $i . '-account-link"><i class="fa fa-external-link"></i></a>';
+	echo '</div>';
+	echo '</div>';
 	echo Form::hidden($i.'_id', $item['id']);
 	echo Form::hidden($i.'_account_id', $item['account_id'],array('class'=>'account-id'));
-	echo Form::text($i.'_account_name', $item['account_name'],array('class'=>'form-control account-name'));
-
-	echo ' <small class="account-id-v" id="' . $i . '_account_id_v"></small>';
-	echo ' <small><a class="account-link" href="' . Radix::link('/account/ledger?id=' . $item['account_id']) . '" id="' . $i . '-account-link"><i class="fa fa-external-link"></a></small>';
 	echo '</td>';
 
 	// Link to Object
@@ -156,7 +159,7 @@ echo '</table>';
 echo Radix::block('file-list', $this->FileList);
 
 // Buttons & Hiddden
-echo '<div class="bf">';
+echo '<div class="form-inline">';
 echo Form::hidden('id',$this->AccountJournalEntry['id']);
 echo '<button class="btn btn-primary" accesskey="s" class="good" name="a" type="submit" value="save">Save</button>';
 echo '<button class="btn btn-primary" name="a" type="submit" value="save-copy">Save & Copy</button>';
@@ -171,14 +174,16 @@ if (empty($this->AccountJournalEntry['id'])) {
 if ($this->AccountJournalEntry['id']) {
 	echo '<input class="btn btn-danger" name="a" type="submit" value="Delete">';
 }
-echo '</div>';
 
 // File
-echo '<table>';
-echo '<tr><td class="l">Attach:</td><td><input name="file" type="file">&nbsp;' . $this->FileMax . '</td></tr>';
-echo '</table>';
+echo '<div class="input-group">';
+echo '<div class="custom-file">';
+echo '<input class="custom-file-input" name="file" type="file" id="attach-file">';
+echo sprintf('<label class="custom-file-label" for="attach-file">Choose File (%s max)</label>', $this->FileMax);
+echo '</div>';
+echo '</div>';
 
-// @todo Email Notify Field Here?
+echo '</div>';
 
 echo '</form>';
 

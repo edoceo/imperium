@@ -53,6 +53,14 @@ class Contact extends ImperiumBase
 		//	 }
 		// }
 
+		$this->_data['contact'] = trim($this->_data['contact']);
+		$this->_data['company'] = trim($this->_data['company']);
+
+		// If Only a Company Name force the object to a Company
+		if (!empty($this->_data['company']) && empty($this->_data['contact'])) {
+			$this->_data['kind'] = 'Company';
+		}
+
 		// Normalise Name
 		switch ($this->_data['kind']) {
 		case 'Company':
@@ -64,11 +72,12 @@ class Contact extends ImperiumBase
 			// } else {
 			//	 $this->name = $this->contact;
 			// }
-			$this->_data['name'] = trim($this->_data['company']);
+			$this->_data['name'] = $this->_data['company'];
 			if (empty($this->_data['name'])) {
 				$this->_data['name'] = $this->_data['contact'];
 			}
 			break;
+		case 'Contact':
 		case 'Person':
 		default:
 			if ( (!empty($this->_data['company'])) && (!empty($this->_data['contact'])) ) {
@@ -81,7 +90,7 @@ class Contact extends ImperiumBase
 			break;
 		}
 		$this->_data['name'] = trim($this->_data['name']);
-		$this->_data['email'] = strtolower($this->_data['email']);
+		$this->_data['email'] = strtolower(trim($this->_data['email']));
 		// $this->_data['sound_code'] = metaphone($this->_data['name']);
 		$this->_data['url'] = Filter::uri($this->_data['url']);
 		$this->_data['ats'] = date('Y-m-d H:i:s');
