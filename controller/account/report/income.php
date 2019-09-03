@@ -34,7 +34,6 @@ $sql.= " order by a.full_code,a.code ";
 //echo "<p>$sql</p>";
 
 $this->RevenueAccountList = SQL::fetch_all($sql);
-Session::flash('fail', SQL::lastError());
 
 // Expenses
 $sql = " select a.id as account_id,a.code as account_code, a.full_code, a.name as full_name,sum(b.amount) as balance from ";
@@ -47,4 +46,3 @@ $sql.= " group by a.id,a.full_code,a.code,a.name ";
 $sql.= " order by a.full_code,a.code ";
 //echo "<p>$sql</p>";
 $this->ExpenseAccountList = SQL::fetch_all($sql);
-Session::flash('fail', SQL::lastError());

@@ -82,7 +82,6 @@ $arg = array(
 ///Radix::dump($sql);
 
 $res = SQL::fetch_all($sql, $arg);
-//echo SQL::lastError();
 
 $this->JournalEntryList = $res;
 

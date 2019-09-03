@@ -106,4 +106,3 @@ $sql->limitPage($this->view->Paginator->page,$this->view->Paginator->limit);
 */
 
 $this->ContactList = SQL::fetch_all($sql, $arg);
-Session::flash('fail', SQL::lastError());

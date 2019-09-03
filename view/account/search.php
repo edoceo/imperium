@@ -39,7 +39,6 @@ default:
 $sql.= ' ORDER BY date DESC, kind DESC, account_journal_id, amount ';
 
 $res = SQL::fetch_all($sql, $arg);
-Session::flash('fail', SQL::lastError());
 if (empty($res) || (0 == count($res))) {
 	Session::flash('info', 'No Matching Transactions');
 	return(0);

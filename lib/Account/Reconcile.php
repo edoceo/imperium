@@ -97,7 +97,6 @@ class Account_Reconcile
 //			//Radix::dump($sql);
 //			//Radix::dump($arg);
 //
-//			$err = SQL::lastError();
 //			if (!empty($err)) {
 //				die("err:$err");
 //			}

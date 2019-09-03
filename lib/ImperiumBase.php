@@ -147,7 +147,6 @@ class ImperiumBase implements \ArrayAccess
 			$this->_data['id'] = SQL::insert($this->_table, $rec);
 			if (intval($this->_data['id'])==0) {
 				Radix::dump($this);
-				Radix::dump(SQL::lastError());
 				Radix::trace('Unexpected error saving: ' . get_class($this));
 			}
 			// if ($this->_diff) Base_Diff::diff($this);

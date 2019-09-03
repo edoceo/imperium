@@ -158,7 +158,6 @@ Radix::dump($sql);
 Radix::dump($arg);
 
 $res = SQL::fetch_all($sql, $arg);
-Radix::dump(SQL::lastError());
 
 // Radix::dump($res);
 foreach ($res as $rec) {

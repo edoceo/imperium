@@ -171,7 +171,7 @@ class Invoice extends ImperiumBase
 	function getTransactions()
 	{
 		// Transaction
-		if (intval($this->id)==0) {
+		if (intval($this->_data['id'])==0) {
 			return null;
 		}
 
@@ -182,9 +182,9 @@ class Invoice extends ImperiumBase
 		// KIND needs to be A/R + Asset //
 		$sql.= ' WHERE ';
 		// $sql.= " a.kind = 'Asset: Accounts Receivable' AND ";
-		$sql.= sprintf(' al.link_to = %d AND al.link_id = %d',self::getObjectType($this),$this->id);
+		// $sql.= sprintf(' al.link_to = %d AND al.link_id = %d', self::getObjectType($this), $this->_data['id']);
+		$sql.= sprintf(' al.link_to = 300 AND al.link_id = %d', $this->_data['id']);
 		$sql.= ' ORDER BY aj.date ASC, al.amount DESC';
-
 		$res = SQL::fetch_all($sql);
 		return $res;
 	}
@@ -226,7 +226,6 @@ class Invoice extends ImperiumBase
 		// $sql.= ', paid_amount =
 		$sql.= ' WHERE id = ? ';
 		SQL::query($sql, array($id, $id, $id, $id));
-		// die(SQL::lastError());
 
 		// $r = array();
 		// $r['sub_total'] = floatval($d->fetchOne("select sum( quantity * rate ) as sub_total from invoice_item where invoice_id={$id}"));

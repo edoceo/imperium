@@ -35,7 +35,6 @@ case 'create-account':
 	$C['account_id'] = $a['id'];
 	$C->save();
 
-	Session::flash('fail', SQL::lastError());
 	Session::flash('info', sprintf('Account #%d created', $a['id']));
 	Radix::redirect('/account/edit?' . http_build_query(array(
 		'id' => $a['id'],
