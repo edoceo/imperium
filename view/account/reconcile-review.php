@@ -135,8 +135,13 @@ ob_start();
 function acChange(e, ui)
 {
 	var c = parseInt($(e.target).data('index'), 10) || 0;
-	$('#account_id-' + c).val(ui.item.id);
-	$('#account_name-' + c).val(ui.item.value);
+	if (ui.item) {
+		$('#account_id-' + c).val(ui.item.id);
+		$('#account_name-' + c).val(ui.item.value);
+	} else {
+		$('#account_id-' + c).val('');
+		$('#account_name-' + c).val('');
+	}
 }
 
 function acFocus(e, ui)
@@ -189,7 +194,6 @@ $(function() {
 	$('#update-account').autocomplete({
 		source: <?= $account_list_json; ?>,
 		change: function(e, ui) {
-			debugger;
 			$('.account-name').each(function(i, n) {
 				acChange({ target: n }, ui);
 			});

@@ -59,7 +59,7 @@ ul.dropdown-menu a {
 }
 </style>
 
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
 
 <a class="navbar-brand" href="<?= Radix::link('/') ?>" title="Home"><i class="fa fa-home"></i></a>
 

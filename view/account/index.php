@@ -58,7 +58,7 @@ foreach ($this->AccountList as $item) {
 
     echo '<td class="r">';
     echo ' <a class="btn btn-sm btn-outline-secondary" href="' . Radix::link('/account/journal?id=' . $item['id']) . '"><i class="fa fa-align-left"></i></a>';
-    echo ' <a class="btn btn-sm btn-outline-secondary" href="' . Radix::link('/account/edit?id=' . $item['id']) . '"><i class="fa fa-check-square-o"></i></a>';
+    echo ' <a class="btn btn-sm btn-outline-secondary" href="' . Radix::link('/account/edit?id=' . $item['id']) . '"><i class="far fa-check-square"></i></a>';
     echo '</td>';
 
     echo '</tr>';
