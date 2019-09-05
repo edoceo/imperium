@@ -27,7 +27,7 @@ $dr_sum = 0;
 ob_start();
 
 ?>
-<table class="table table-hover">
+<table class="table table-striped table-hover">
 <thead>
 	<tr>
 	<th>Date</th>

@@ -74,9 +74,9 @@ class Account_Reconcile_PayPal_v1
 			// Radix::dump($csv);
 
 			// Only Process Completed Transactions
-			if ($csv['Status'] == 'Pending') {
-				continue;
-			}
+			// if ($csv['Status'] == 'Pending') {
+			// 	continue;
+			// }
 
 			// Only Transactions with Fees Count
 			if ( (empty($csv['Gross'])) && (empty($csv['Fee'])) ) {
@@ -140,7 +140,7 @@ class Account_Reconcile_PayPal_v1
 							'amount' => $csv['Sales Tax'],
 							'note' => 'Sales Tax Liability #' . $csv['Transaction ID'],
 						);
-						$je['ledger_entry_list'][] = $le3;
+						// $je['ledger_entry_list'][] = $le3;
 					}
 
 				} else {
@@ -163,7 +163,7 @@ class Account_Reconcile_PayPal_v1
 				$je['ledger_entry_list'][] = $le0;
 
 				// Fee Refund
-				if ($csv['Fee'] < 0) {
+				if ($csv['Fee'] != 0) {
 					// Ledger Entry for Paypal Fee
 					$le2 = array(
 						'dr' => abs($csv['Fee']),
@@ -187,8 +187,55 @@ class Account_Reconcile_PayPal_v1
 				$je['ledger_entry_list'][] = $le0;
 				break;
 
+			case 'Hold on Balance for Dispute Investigation':
+				// var_dump($csv);
+				$je['note'] = trim(sprintf('%s #%s <%s>',
+					$csv['Type'],
+					$csv['Transaction ID'],
+					$csv['To Email Address'],
+				));
+				$le0['cr'] = abs($le0['amount']);
+
+				$je['ledger_entry_list'][] = $le0;
+
+				break;
+
+			case 'Cancellation of Hold for Dispute Resolution':
+				// var_dump($csv);
+				$le0['dr'] = abs($le0['amount']);
+				$je['note'] = trim(sprintf('%s #%s <%s>',
+					$csv['Type'],
+					$csv['Transaction ID'],
+					$csv['From Email Address'],
+				));
+				$je['ledger_entry_list'][] = $le0;
+
+				break;
+
+			case 'Chargeback':
+
+				$le0['cr'] = abs($le0['amount']);
+				$je['note'] = trim(sprintf('%s #%s for #%s',
+					$csv['Type'],
+					$csv['Transaction ID'],
+					$csv['Reference Txn ID'],
+				));
+				$je['ledger_entry_list'][] = $le0;
+
+				break;
+
+			case 'Chargeback Fee':
+				// var_dump($csv);
+				$le0['cr'] = abs($le0['amount']);
+				$je['note'] = trim(sprintf('%s #%s for #%s',
+					$csv['Type'],
+					$csv['Transaction ID'],
+					$csv['Reference Txn ID'],
+				));
+				$je['ledger_entry_list'][] = $le0;
+				break;
 			default:
-				// print_r($csv);
+				var_dump($csv);
 				//throw new \Exception("Cannot Handle Type: '{$csv[4]}'");
 				echo "Cannot Handle Type: '{$csv['Type']}'<br>";
 			}

@@ -73,15 +73,15 @@ foreach ($this->JournalEntryList as $je) {
 
 		if (!empty($le['dr'])) {
 			$dr += floatval($le['dr']);
-			echo '<td class="r">' . Form::number(sprintf('je%ddr',$le_i), sprintf('%0.2f', $le['dr']), array('class' => 'form-control', 'step'=>0.01)) . '</td>';
+			echo '<td class="r">' . Form::number(sprintf('je%ddr',$le_i), sprintf('%0.2f', $le['dr']), array('class' => 'form-control money', 'step'=>0.01)) . '</td>';
 			echo '<td>&nbsp;</td>';
 		} elseif (!empty($le['cr'])) {
 			$cr += floatval($le['cr']);
 			echo '<td>&nbsp;</td>';
-			echo '<td class="r">' . Form::number(sprintf('je%dcr',$le_i), sprintf('%0.2f', $le['cr']), array('class' => 'form-control', 'step'=>0.01)) . '</td>';
+			echo '<td class="r">' . Form::number(sprintf('je%dcr',$le_i), sprintf('%0.2f', $le['cr']), array('class' => 'form-control money', 'step'=>0.01)) . '</td>';
 		} else {
-			echo '<td class="r">' . Form::number(sprintf('je%ddr',$le_i), sprintf('%0.2f', $le['dr']), array('class' => 'form-control', 'step'=>0.01)) . '</td>';
-			echo '<td class="r">' . Form::number(sprintf('je%dcr',$le_i), sprintf('%0.2f', $le['cr']), array('class' => 'form-control', 'step'=>0.01)) . '</td>';
+			echo '<td class="r">' . Form::number(sprintf('je%ddr',$le_i), sprintf('%0.2f', $le['dr']), array('class' => 'form-control money', 'step'=>0.01)) . '</td>';
+			echo '<td class="r">' . Form::number(sprintf('je%dcr',$le_i), sprintf('%0.2f', $le['cr']), array('class' => 'form-control money', 'step'=>0.01)) . '</td>';
 		}
 
 		// Lookup / Found?
@@ -225,6 +225,9 @@ $(function() {
 	$('.drop-entry').on('click', function(e) {
 		var jei = $(this).data('index');
 		$('#journal-entry-index-' + jei).remove();
+
+		$('#reconcile-item-size').html($('.reconcile-item').length);
+
 	});
 
 	$('.save-entry').on('click', function(e) {
@@ -264,12 +267,8 @@ $(function() {
 				// Remove Row
 				$('#journal-entry-index-' + jei).remove();
 
-				// Decrement Counter
-				var size = parseInt( $('#reconcile-item-size').html() ) || 0;
-				if (size > 1) {
-					size--;
-					$('#reconcile-item-size').html(size)
-				}
+				// Update Counter
+				$('#reconcile-item-size').html($('.reconcile-item').length);
 
 				break;
 			default:

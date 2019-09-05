@@ -10,13 +10,16 @@ use Edoceo\Radix\Layout;
 use Edoceo\Radix\HTML\Form;
 use Edoceo\Radix\DB\SQL;
 
-require_once(APP_ROOT . '/lib/Account/Reconcile.php');
-
-$_ENV['title'] = array('Account', 'Reconcile');
-
 if (empty($_ENV['mode'])) {
 	$_ENV['mode'] = 'load';
 }
+
+$_ENV['title'] = array('Account', 'Reconcile');
+
+
+$this->FileYes = ini_get('file_uploads');
+$this->FileMax = ImperiumView::niceSize( ini_get('upload_max_filesize') );
+
 
 // Build list of Accounts
 $account_list_json = array();
@@ -77,8 +80,12 @@ case 'view':
 <tr>
 	<td class="l">File:</td>
 	<td>
-		<input name="file" type="file">
-		<span class="s">(p:<?= ini_get('post_max_size') . '/u:' . ini_get('upload_max_filesize') ?>)</span>
+		<input class="form-control" name="file" type="file" id="attach-file">
+		<!-- <div class="custom-file">
+
+		<label class="custom-file-label" for="attach-file">Choose File (<?= $this->FileMax ?> max)</label>
+		</div> -->
+		<!-- <span class="s">(p:<?= ini_get('post_max_size') . '/u:' . ini_get('upload_max_filesize') ?>)</span> -->
 	</td>
 </tr>
 </table>
