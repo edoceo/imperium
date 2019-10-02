@@ -37,11 +37,12 @@ $account_list_json = array();
 foreach ($this->AccountList as $i=>$a) {
 	$account_list_json[] = array(
 		'id' => $a['id'],
-		// 'label' => $a['full_name'],
+		'type' => $a['kind'],
 		'value' => $a['full_name'],
 	);
 };
 $account_list_json = json_encode($account_list_json);
+
 
 // @note duplicated on invoice/view.phtml
 if (count($this->jump_list)) {
@@ -103,6 +104,8 @@ foreach ($this->AccountList as $item) {
 
 foreach ($this->AccountLedgerEntryList as $i=>$item) {
 
+	$A1 = new Account($item['account_id']);
+
 	if ($item['amount'] < 0) {
 		$item['debit_amount'] = abs($item['amount']);
 		$item['credit_amount'] = null;
@@ -114,7 +117,11 @@ foreach ($this->AccountLedgerEntryList as $i=>$item) {
 		$item['credit_amount'] = null;
 	}
 
-	echo '<tr>';
+	echo '<tr';
+	echo ' class="ledger-line-item"';
+	echo sprintf(' data-account-id="%d"', $A1['id']);
+	echo sprintf(' data-account-type="%s"', html($A1['kind']));
+	echo '>';
 	echo '<td>';
 	echo '<div class="input-group">';
 	// Ledger Entry ID, Account ID and Account Name
@@ -139,10 +146,10 @@ foreach ($this->AccountLedgerEntryList as $i=>$item) {
 
 	// Display Both
 	// Debit
-	echo "<td class='r'>" . Form::number($i.'_dr', $item['debit_amount'], array('class' => 'form-control', 'style' => 'display:initial')) . "</td>";
+	echo "<td class='r'>" . Form::number($i.'_dr', $item['debit_amount'], array('class' => 'form-control ledger-dr')) . "</td>";
 
 	// Credit
-	echo "<td class='r'>" . Form::number($i.'_cr', $item['credit_amount'], array('class' => 'form-control', 'style' => 'display:initial')) . "</td>";
+	echo "<td class='r'>" . Form::number($i.'_cr', $item['credit_amount'], array('class' => 'form-control ledger-cr')) . "</td>";
 
 	echo '<td class="r"><button class="btn btn-danger drop-ledger-entry" data-id="' . $item['id'] . '" type="button"><i class="fa fa-ban"></i></button></td>';
 	echo '</tr>';
@@ -214,9 +221,33 @@ var updateMagic = true;
 function acChangeSelect(event,ui)
 {
     var c = parseInt(this.name);
+
+	var old_id = $('#' + c + '_account_id').val();
+	var new_id = ui.item.id;
+
 	$('#' + c + '_account_id').val(ui.item.id);
 	$('#' + c + '_account_id_v').html(ui.item.id);
 	$('#' + c + '_account_name').val(ui.item.value);
+
+	// If assigning a new account, and the new account is a 'Sub: Client'
+	// Then, copy the revenue account value
+	if (old_id != new_id) {
+		// If i'm getting assigned as a sub-client ledger
+		if ('Sub: Customer' == ui.item.type) {
+			// Find the Revenue Account
+			var le0 = $('.ledger-line-item[data-account-type="Revenue"]');
+			if (1 == le0.length) {
+				var cr = parseFloat(le0.find('.ledger-cr').val(), 10) || 0;
+				var dr = parseFloat(le0.find('.ledger-dr').val(), 10) || 0;
+				if (cr > 0) {
+					$('#' + c + '_cr').val(cr);
+				} else if (dr > 0) {
+					$('#' + c + '_dr').val(dr);
+				}
+			}
+		}
+	}
+
 }
 
 function acInit()
@@ -248,7 +279,7 @@ function addLedgerEntryLine()
     // Account Cell
 	var x = $(t.rows[1].cells[0]).clone(true);
 
-	x.find('input[type=hidden]').attr({
+	x.find('input').attr({
 		id: c + '_id',
 		name: c + '_id',
 		value: '',
@@ -283,7 +314,7 @@ function addLedgerEntryLine()
     // Debit Cell
     var x = $(t.rows[c-1].cells[2]).clone(true);
     x.find('input').attr({
-		id: c + '_cr',
+		id: c + '_dr',
 		name: c + '_dr',
 		value: ''
 	});
@@ -309,17 +340,25 @@ function addLedgerEntryLine()
 
 function updateJournalEntryBalance()
 {
-    var cr = 0;
-    var dr = 0;
+	var cr = 0;
+	var dr = 0;
 
-    $(':input').each(function(i) {
-        var v = parseFloat(this.value.replace(/[^\d\.]+/g,'')) || 0;
-        if (this.name.indexOf('_dr') > 0) {
-          dr += v;
-        } else if (this.name.indexOf('_cr') > 0) {
-          cr += v;
-        }
-    });
+	$(':input').each(function(i) {
+
+		var v = this.value.replace(/[^\d\.]+/g,'');
+		v = parseFloat(v, 10) || 0;
+
+		var at0 = $(this).closest('tr').data('account-type');
+		if (('Sub: Client' == at0) || ('Sub: Vendor' == at0) || ('Sub: Customer' == at0)) {
+			// Ignore
+		} else {
+			if (this.name.indexOf('_dr') > 0) {
+				dr += v;
+			} else if (this.name.indexOf('_cr') > 0) {
+				cr += v;
+			}
+		}
+	});
 
     cr = cr.toFixed(2);
     dr = dr.toFixed(2);

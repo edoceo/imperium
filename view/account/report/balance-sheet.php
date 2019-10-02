@@ -74,6 +74,7 @@ foreach ($AccountKindList as $kind) {
 		$A = new Account($item);
 
 		$b0 = $A->balanceBefore($this->date_alpha);
+		// $b0 = $A->balanceSpan($this->date_alpha - '1 year', $this->date_alpha);
 		$b1 = $A->balanceAt($this->date_omega);
 
 		switch ($kind['kind']) {
