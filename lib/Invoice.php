@@ -1,7 +1,6 @@
 <?php
 /**
-	@file
-	@brief Invoice Model
+	Invoice Model
 
 	A Bill to Send to a Contact
 
@@ -172,7 +171,7 @@ class Invoice extends ImperiumBase
 	{
 		// Transaction
 		if (intval($this->_data['id'])==0) {
-			return null;
+			return array();
 		}
 
 		$sql = 'SELECT al.id,al.account_id,al.amount,aj.id as account_journal_id,aj.date,aj.note,a.name as account_name ';
@@ -186,6 +185,7 @@ class Invoice extends ImperiumBase
 		$sql.= sprintf(' al.link_to = 300 AND al.link_id = %d', $this->_data['id']);
 		$sql.= ' ORDER BY aj.date ASC, al.amount DESC';
 		$res = SQL::fetch_all($sql);
+
 		return $res;
 	}
 
@@ -218,7 +218,7 @@ class Invoice extends ImperiumBase
 	private function _updateBalance()
 	{
 		$id = intval($this->_data['id']);
-		
+
 		$sql = 'UPDATE invoice SET';
 		$sql.= ' sub_total = ( SELECT SUM ( quantity * rate * (1 + tax_rate)) FROM invoice_item WHERE invoice_id = ?)';;
 		$sql.= ', tax_total = ( SELECT SUM ( quantity * rate * tax_rate) FROM invoice_item WHERE invoice_id = ?)';

@@ -27,15 +27,15 @@ $dr_sum = 0;
 ob_start();
 
 ?>
-<table class="table table-striped table-hover">
-<thead>
+<table class="table table-sm table-striped table-hover">
+<thead class="thead-dark">
 	<tr>
 	<th>Date</th>
 	<th>Account/Note</th>
 	<th>Entry #</th>
-	<th>Debit</th>
-	<th>Credit</th>
-	<th>Balance</th>
+	<th class="r">Debit</th>
+	<th class="r">Credit</th>
+	<th class="r">Balance</th>
 	<th></th>
 	</tr>
 </thead>
@@ -60,7 +60,7 @@ foreach ($this->LedgerEntryList as $le)
 
     echo '<tr>';
 
-    echo '<td class="c"><a href="' . Radix::link($link) . '">' . $le['date'] . '</td>';
+    echo '<td class="c"><a href="' . Radix::link($link) . '">' . $le['account_ledger_date'] . '</td>';
     echo '<td>' . html($le['note']) . '</td>';
     echo sprintf('<td class="c"%s>#%s%s</td>',
     	($le['flag'] == 0 ? ' style="background:#e00;"' : null),
@@ -165,21 +165,24 @@ $html_table = ob_get_clean();
 echo Radix::block('account-period-arrow', $this->date_alpha);
 
 echo '<div class="row">';
-echo '<div class="col-md-3">';
+echo '<div class="col">';
 	echo '<h2 class="c">Opening: ' . number_format($this->Account->balanceBefore($this->date_alpha), 2) . '</h2>';
 echo '</div>';
 
-echo '<div class="col-md-3">';
+echo '<div class="col">';
 	echo '<h2 class="c">Debits: ' . number_format($dr_sum, 2) . '</h2>';
 echo '</div>';
 
-echo '<div class="col-md-3">';
+echo '<div class="col">';
 	echo '<h2 class="c">Credits: ' . number_format($cr_sum, 2) . '</h2>';
 echo '</div>';
 
+echo '<div class="col">';
+	echo '<h2 class="c">Delta:: ' . number_format($dr_sum - $cr_sum, 2) . '</h2>';
+echo '</div>';
 
-echo '<div class="col-md-3">';
-echo '<h2 class="c">Closing: ' . number_format($this->Account->balanceAt($this->date_omega), 2) . '</h2>';
+echo '<div class="col">';
+	echo '<h2 class="c">Closing: ' . number_format($this->Account->balanceAt($this->date_omega), 2) . '</h2>';
 echo '</div>';
 echo '</div>'; // /.row
 

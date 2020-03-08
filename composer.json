@@ -2,12 +2,6 @@
 	"name": "edoceo/imperium",
 	"description": "CRM/Accounting",
 	"license": "MIT",
-	"repositories": [
-		{
-			"type": "pear",
-			"url": "https://pear.php.net"
-		}
-	],
 	"minimum-stability": "dev",
 	"require": {
 		"pear/net_smtp": "1.8.1",
@@ -15,7 +9,7 @@
 		"erusev/parsedown": "1.7.3",
 		"giggsey/libphonenumber-for-php": "8.10.16",
 		"google/apiclient": "2.0.3",
-		"tecnickcom/tcpdf": "6.2.26"
+		"tecnickcom/tcpdf": "6.3.2"
 	},
 	"require-dev": {
 		"phpunit/phpunit": "8.3.4"
