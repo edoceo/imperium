@@ -183,7 +183,7 @@ class Account extends ImperiumBase
 		$arg = array($this->_data['id']);
 
 		if (!empty($date)) {
-			$sql.= ' AND date <= ? ';
+			$sql.= ' AND account_ledger_date <= ? ';
 			$arg[] = $date;
 		}
 
@@ -208,7 +208,7 @@ class Account extends ImperiumBase
 	function balanceBefore($date, $ex_close=false)
 	{
 		$sql = 'SELECT sum(amount) AS balance FROM general_ledger';
-		$sql.= ' WHERE account_id = ? AND date < ?';
+		$sql.= ' WHERE account_id = ? AND account_ledger_date < ?';
 		$arg = array(
 			$this->_data['id'],
 			$date,
@@ -235,7 +235,7 @@ class Account extends ImperiumBase
 		$sql = 'SELECT sum(amount) AS balance_span FROM general_ledger ';
 		$sql.= ' WHERE account_id = ?';
 		$arg[] = intval($this->_data['id']);
-		$sql.= ' AND (date >= ? AND date <= ? )';
+		$sql.= ' AND (account_ledger_date >= ? AND account_ledger_date <= ? )';
 		$arg[] = $date_alpha;
 		$arg[] = $date_omega;
 
@@ -253,13 +253,13 @@ class Account extends ImperiumBase
 	}
 
 	/**
-		
+
 	*/
 	function creditTotal($a_ts, $z_ts, $with_closing=true)
 	{
 		$sql = "SELECT sum(amount) AS credit_sum FROM general_ledger ";
 		$sql.= ' WHERE account_id = ? ';
-		$sql.= ' AND (date >= ? and date <= ? ) ';
+		$sql.= ' AND (account_ledger_date >= ? and account_ledger_date <= ? ) ';
 		$sql.= ' AND amount > 0 ';
 		$arg = array(
 			$this->_data['id'],
@@ -277,7 +277,7 @@ class Account extends ImperiumBase
 	{
 		$sql = "SELECT sum(amount) AS debit_sum from general_ledger ";
 		$sql.= ' WHERE account_id = ?';
-		$sql.= ' AND (date >= ? and date <= ? )';
+		$sql.= ' AND (account_ledger_date >= ? and account_ledger_date <= ? )';
 		$sql.= ' AND amount < 0';
 		$arg = array(
 			$this->_data['id'],
@@ -291,7 +291,7 @@ class Account extends ImperiumBase
 	/**
 		Account findPeriod($date)
 		Returns the Period ID for a Specific Date
-	
+
 		@param $date is the date to find the period for
 		@param $fmt is the return format id|range|
 	*/

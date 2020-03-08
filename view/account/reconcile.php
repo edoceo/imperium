@@ -136,7 +136,7 @@ $res = SQL::fetch_all($sql);
 $sql = 'SELECT count(id) FROM account_journal WHERE flag = 0';
 $max = SQL::fetch_one($sql);
 
-$sql = 'SELECT * FROM general_ledger WHERE flag = 0 ORDER BY date, abs(amount), amount LIMIT 10';
+$sql = 'SELECT account_journal_id, flag, date, note, amount FROM general_ledger WHERE flag = 0 ORDER BY date, abs(amount), amount LIMIT 100';
 $res = SQL::fetch_all($sql);
 ?>
 
@@ -153,6 +153,7 @@ $res = SQL::fetch_all($sql);
 			<tr>
 				<td><a href="<?= Radix::link('/account/transaction') ?>?id=<?= $rec['account_journal_id'] ?>"><?= $rec['account_journal_id'] ?></a></td>
 				<td><?= $rec['date'] ?></td>
+				<td><?= $rec['note'] ?></td>
 				<td class="r">
 					<?= $rec['amount'] ?>
 				</td>

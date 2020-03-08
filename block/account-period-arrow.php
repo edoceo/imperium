@@ -1,7 +1,7 @@
 <?php
 /**
-	Account Period Back & Next from Now
-*/
+ * Account Period Back & Next from Now
+ */
 
 // Make a Back & Next
 $d0 = new \DateTime($data);
@@ -41,8 +41,8 @@ $next_q0_f = sprintf('%04dq%d', $q->format('Y'), floor($q->format('m') / 3) + 1)
 $q->add(new \DateInterval('P3M'));
 $next_q1 = $q->format('Y-m-t');
 
-//$d_back_y0 = $d0->format('Y-01-01');
-//$d_back_y1 = $d0->format('Y-12-31');
+// $d_back_y0 = $d0->format('Y-01-01');
+// $d_back_y1 = $d0->format('Y-12-31');
 
 // $d0m->format('Y-m-1'), 'd1' => $d0m->format('Y-m-t')
 
@@ -62,10 +62,9 @@ $d_next_y0 = $d0->format('Y-m-1');
 $d_next_y1 = $d0->format('Y-m-t');
 
 echo '<div class="row">';
-
-//echo '<div class="c"><a href="?' . http_build_query(array('id' => $_GET['id'], 'd0' => $d_back_y0, 'd1' => $d_back_y1)) . '" title="Back to First of Year"><i class="fa fa-arrow-left"></i><i class="fa fa-arrow-left"></i><i class="fa fa-arrow-left"></i></a></div>';
-//echo '<div class="c"><a href="?' . http_build_query(array('id' => $_GET['id'], 'p' => 'q', 'd0' => $back_q0, 'd1' => $back_q1)) . '" title="Back to First of Quarter"><i class="fa fa-arrow-left"></i>' . $back_q0_f . '<i class="fa fa-arrow-left"></i></a></div>';
 echo '<div class="col-md-6 c">';
+// echo '<a class="btn btn-outline-secondary" href="?' . http_build_query(array('id' => $_GET['id'], 'd0' => $d_back_y0, 'd1' => $d_back_y1)) . '" title="Back to First of Year"><i class="fa fa-arrow-left"></i><i class="fa fa-arrow-left"></i><i class="fa fa-arrow-left"></i></a></div>';
+//echo '<div class="c"><a href="?' . http_build_query(array('id' => $_GET['id'], 'p' => 'q', 'd0' => $back_q0, 'd1' => $back_q1)) . '" title="Back to First of Quarter"><i class="fa fa-arrow-left"></i>' . $back_q0_f . '<i class="fa fa-arrow-left"></i></a></div>';
 echo '<a class="btn btn-outline-secondary" href="?' . http_build_query(array('id' => $_GET['id'], 'p' => 'm', 'd0' => $d_back_m0, 'd1' => $d_back_m1)) . '" title="Back to Previous Month"><i class="fa fa-arrow-left"></i></a>';
 echo '</div>';
 

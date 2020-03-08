@@ -109,6 +109,7 @@ class Account_Reconcile_PayPal_v1
 			case 'General Payment':
 			case 'Mass Pay Payment':
 			case 'Order':
+			case 'PreApproved Payment Bill User Payment':
 			case 'Subscription Payment':
 			case 'Reversal of General Account Hold':
 			case 'Website Payment':
@@ -151,7 +152,7 @@ class Account_Reconcile_PayPal_v1
 						'cr' => abs($le0['amount']),
 					);
 					$je['ledger_entry_list'][] = $le0;
-
+					var_dump($je);
 				}
 
 				break;
@@ -177,6 +178,7 @@ class Account_Reconcile_PayPal_v1
 				break;
 
 			//case 'Withdraw Funds to a Bank Account':
+			case 'Auto-sweep':
 			case 'General Withdrawal':
 				// Transfer out of PayPal
 				$le0['cr'] = abs($le0['amount']);

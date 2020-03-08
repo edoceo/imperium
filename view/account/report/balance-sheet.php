@@ -20,22 +20,17 @@ echo '</div>';
 
 switch ($this->Period) {
 case 'm':
-	$_ENV['h1'] = $_ENV['title'] = 'Monthly Balance Sheet for ' . $this->date_alpha_f;
-	break;
-case 'q':
-	$_ENV['h1'] = $_ENV['title'] = 'Quarterly Balance Sheet: ' . $this->date_alpha_f . ' to ' . $this->date_omega_f;
-	break;
-case 'y':
-	$_ENV['h1'] = $_ENV['title'] = 'Yearly Balance Sheet: ' . $this->date_alpha_f . ' to ' . $this->date_omega_f;
+	$_ENV['h1'] = $_ENV['title'] = 'Balance Sheet: ' . $this->date_alpha_f;
 	break;
 default:
-	$_ENV['h1'] = $_ENV['title'] = 'Balance Sheet from ' . $this->date_alpha_f . ' to ' . $this->date_omega_f;
+	$_ENV['h1'] = $_ENV['title'] = 'Balance Sheet: ' . $this->date_alpha_f . ' to ' . $this->date_omega_f;
 	break;
 }
 
 $sql = 'SELECT distinct kind, kind_sort';
 $sql.= ' from account ';
 // $sql.= " where type in ('Asset','Liability') or kind = 'Equity: Owners Capital' ";
+$sql.= " WHERE kind NOT IN ('Sub: Client', 'Sub: Vendor')";
 $sql.= ' order by kind_sort, kind';
 $AccountKindList = SQL::fetch_all($sql);
 $AccountBalanceList = array();
@@ -43,7 +38,6 @@ $AccountBalanceList = array();
 echo '<table class="table">';
 foreach ($AccountKindList as $kind) {
 
-	// Assets
 	$sql = 'select a.id,a.type,a.full_code,a.full_name, sum(b.amount) as balance';
 	$sql.= ' from account a join account_ledger b on a.id=b.account_id';
 	$sql.= ' join account_journal c on b.account_journal_id=c.id ';
@@ -184,7 +178,6 @@ foreach ($set as $item) {
 //$this->set('equity_sum',$sum);
 $this->EquityAccountList = $list;
 $this->EquityAccountBalance = $sum;
-
 
 
 // Input Form

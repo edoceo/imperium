@@ -1,8 +1,7 @@
 <?php
 /**
-	@file
-	@brief View an Account Ledger
-*/
+ * View an Account Ledger
+ */
 
 namespace Edoceo\Imperium;
 
@@ -56,8 +55,8 @@ if (empty($this->Account['id'])) {
 
 	// Show General Ledger (All Accounts!)
 
-	$where = " (date>='{$this->date_alpha}' and date<='{$this->date_omega}') ";
-	$order = " date,kind, account_journal_id, amount asc ";
+	$where = " (account_ledger_date>='{$this->date_alpha}' and account_ledger_date<='{$this->date_omega}') ";
+	$order = " account_ledger_date,kind, account_journal_id, amount asc ";
 
 	$this->dr_total = SQL::fetch_one("select sum(amount) from general_ledger where amount < 0 and $where");
 	$this->cr_total = SQL::fetch_one("select sum(amount) from general_ledger where amount > 0 and $where");
@@ -69,14 +68,14 @@ if (empty($this->Account['id'])) {
 	// Show this specific Account
 	$_SESSION['account-id'] = $this->Account['id'];
 
-	$where = " (account_id = ? OR account_parent_id = ?) AND (date >= ? AND date <= ?) ";
+	$where = " (account_id = ? OR account_parent_id = ?) AND (account_ledger_date >= ? AND account_ledger_date <= ?) ";
 	$param = array(
 		$this->Account['id'],
 		$this->Account['id'],
 		$this->date_alpha,
 		$this->date_omega,
 	);
-	$order = " date,kind desc,amount asc ";
+	$order = " account_ledger_date, account_type desc, amount asc ";
 
 	//$this->AccountLedger = $data;
 	$this->dr_total = abs($this->Account->debitTotal($this->date_alpha,$this->date_omega));
