@@ -19,17 +19,15 @@ if (is_array($_ENV['title'])) {
 	$_ENV['title'] = implode(' &raquo; ',$_ENV['title']);
 }
 
-echo "<!DOCTYPE html>\n<html lang=\"en\">\n";
-echo '<head>';
-echo '<meta charset="utf-8">';
-echo '<meta name="viewport" content="initial-scale=1, user-scalable=yes">';
-echo '<meta name="HandheldFriendly" content="True">';
-echo '<meta name="MobileOptimized" content="320">';
-echo '<meta name="apple-mobile-web-app-capable" content="yes">'; // Install to Home Screen on iOS
-echo '<meta name="mobile-web-app-capable" content="yes">'; // Android to Home Screen
-echo '<meta name="theme-color" content="#212121">'; // Android Browser Titlebar Background
 ?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
 <meta name="viewport" content="initial-scale=1, user-scalable=yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#212121">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.2/css/all.min.css" integrity="sha256-zmfNZmXoNWBMemUOo1XUGFfc0ihGGLYdgtJS3KCr/l0=" crossorigin="anonymous" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css" integrity="sha256-rByPlHULObEjJ6XQxW/flG2r+22R5dKiAoef+aXWfik=" crossorigin="anonymous" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha256-YLGeXaapI0/5IgZopewRJcFXomhRMlYYjugPLSyNjTY=" crossorigin="anonymous" />
