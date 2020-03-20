@@ -15,7 +15,6 @@ class App
 		// App Defaults
 		$_ENV = parse_ini_file(APP_ROOT . '/etc/boot.ini',true);
 		$_ENV = array_change_key_case($_ENV);
-		// Radix::dump($_ENV);
 
 		// Merge Local
 		$x = APP_ROOT . '/etc/host.ini';
@@ -23,9 +22,7 @@ class App
 			$x = parse_ini_file($x,true);
 			$x = array_change_key_case($x);
 			$_ENV = array_merge_recursive($_ENV,$x);
-			// Zend_Debug::dump($_ENV);
 		}
-		// Radix::dump($_ENV);
 
 		// Merge Enviroment
 		if ($x = getenv('IMPERIUM_CONFIG')) {
@@ -36,7 +33,6 @@ class App
 				$_ENV = array_merge_recursive($_ENV,$x);
 			}
 		}
-		// Radix::dump($_ENV);
 
 		// Reduce to Singular Values
 		foreach ($_ENV as $k0=>$opt) {
@@ -46,7 +42,6 @@ class App
 				}
 			}
 		}
-		// Radix::dump($_ENV);
 
 		ini_set('date.timezone',$_ENV['application']['zone']);
 		date_default_timezone_set($_ENV['application']['zone']);

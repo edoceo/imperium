@@ -104,4 +104,4 @@ case 'save':
 	Radix::redirect('/contact/view?c=' . $C['id']);
 }
 
-// Radix::dump($_POST);
+// var_dump($_POST);

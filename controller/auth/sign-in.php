@@ -31,7 +31,6 @@ case 'sign in':
 		Radix::redirect();
 	}
 
-	// Radix::dump($res);
 	$_SESSION['uid'] = $res['id'];
 
 	acl::permit('/index');
@@ -64,10 +63,10 @@ case 'sign in':
 // $ss = Zend_Registry::get('session');
 
 // $this->view->title = 'Login';
-// 
+//
 // $req = $this->getRequest();
 // if ($req->isPost()) {
-// 
+//
 // 	$auth = Zend_Auth::getInstance();
 // 	$res = $auth->authenticate( new App_Auth($req->getPost('username'),$req->getPost('password')) );
 // 	if ($res->isValid()) {

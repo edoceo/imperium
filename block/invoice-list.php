@@ -41,7 +41,7 @@ if (isset($paginator))
 // List Items
 foreach ($data['list'] as $x) {
 
-	//Radix::dump($x);
+	//var_dump($x);
     // $item = new Invoice($x);
     $item = $x;
 

@@ -48,17 +48,17 @@ class Base extends \TCPDF
 	const FONT_FIXED = 'courier';
 	const FONT_SANS  = 'helvetica';
 
-	//const LH_10 = .175;
-	//const LH_12 = .200;
-	//const LH_14 = .225;
-	//const LH_16 = .250;
+	const LH_10 = .175;
+	const LH_12 = .200;
+	const LH_14 = .225;
+	const LH_16 = .250;
 
 	// const FONT_H = 1/72;
 
 	//const FULL_WIDTH = 7.50;
 
 	//public $_pt;
-    //
+
 	//private $_logo_file;
 	//private $_recv_address;
 	//private $_send_address;
@@ -227,7 +227,8 @@ class Base extends \TCPDF
 
 
 		// Blue Line
-		$this->setDrawColor(0x33,0x66,0x99);
+		$c = explode(',', $_ENV['pdf']['line_color']);
+		$this->setDrawColorArray($c);
 		$this->setLineWidth(1/32);
 		$this->line(0.5, 2, 8, 2);
 

@@ -45,11 +45,11 @@ $this->balanceOmega = $this->Account->balanceAt($this->date_omega);
 // 	$this->date_omega,
 // );
 // $order = " date,kind desc,amount asc ";
-// 
+//
 // //$this->AccountLedger = $data;
 // // $this->dr_total = abs($this->Account->debitTotal($this->date_alpha,$this->date_omega));
 // // $this->cr_total = abs($this->Account->creditTotal($this->date_alpha,$this->date_omega));
-// 
+//
 // $sql = "SELECT * FROM general_ledger WHERE $where ORDER BY $order";
 // $res = SQL::fetch_all($sql, $param);
 
@@ -79,10 +79,6 @@ $arg = array(
 	$this->date_omega,
 );
 
-///Radix::dump($sql);
-
 $res = SQL::fetch_all($sql, $arg);
 
 $this->JournalEntryList = $res;
-
-// Radix::dump($res);

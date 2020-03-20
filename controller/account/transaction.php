@@ -92,7 +92,7 @@ case 'save-copy':
 		Session::flash('info', 'Account Journal Entry #' . $aje['id'] . ' created');
 	}
 	
-	Radix::dump($_POST);
+	var_dump($_POST);
 
 	// Save Ledger Entries
 	foreach ($_POST as $k=>$v) {
@@ -125,7 +125,7 @@ case 'save-copy':
 		// Save Ledger Entry
 		$ale->save();
 
-		Radix::dump($ale);
+		var_dump($ale);
 
 		// $_SESSION['account-transaction-list'][] = $ale;
 		// Save Ledger Entry to Wizard
