@@ -31,7 +31,6 @@ $i = 0;
 foreach ($data['list'] as $item) {
 
     //$i++;
-    //Zend_Debug::dump($i);
     // $item = new Base_Note($x);
     if (empty($item['name'])) {
         $item['name'] = '- Untitled -';

@@ -46,10 +46,10 @@ case 'validate':
 	$http->setHeaders('Accept','application/xml');
 	$http->setHeaders('User-Agent','Edoceo Imperium Google GeoCoder 0.2');
 	$page = $http->request();
-	//Zend_Debug::dump($page);
+	//var_dump($page);
 	// Parse Response
 	$xml = simplexml_load_string($page->getBody());
-	//Zend_Debug::dump($xml->asXML());
+	//var_dump($xml->asXML());
 	if (intval($xml->Response->Status->code) == 200) {
 	// Success - Parse Address
 	$ad = $xml->Response->Placemark->AddressDetails->Country;
@@ -73,6 +73,6 @@ case 'validate':
 	}
 	$ss->msg = 'Contact Address #' . $ca->kind . ' was validated &amp; Saved';
 	$ca->save();
-	//Zend_Debug::dump($ca);
+
 	break;
 }

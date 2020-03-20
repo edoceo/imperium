@@ -147,7 +147,6 @@ if (!empty($this->Invoice['id'])) {
 }
 
 // Invoice Items
-// $base = Zend_Controller_Front::getInstance()->getBaseUrl();
 $item_total = 0;
 $item_tax_total = 0;
 //$link = Radix::link('/invoice/item');

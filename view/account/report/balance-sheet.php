@@ -131,7 +131,6 @@ $sql.= "where a.kind like 'Asset%' and c.date >= '{$this->date_alpha}' and c.dat
 $sql.= "group by a.id,a.full_code,a.full_name ";
 $sql.= "order by a.full_code,a.full_name ";
 $AssetAccountList = $db->fetchAll($sql);
-//Zend_Debug::dump($rs);
 
 // Liabilities
 $sql = "select a.id,a.full_name,a.full_code,sum(b.amount) as balance ";

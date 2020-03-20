@@ -67,10 +67,10 @@ class Base_File extends ImperiumBase
 		static $tab;
 		if (empty($tab)) $tab = parse_ini_file(APP_ROOT . '/etc/mime.ini',true);
 
-		// Zend_Debug::dump($mime_all);
 		foreach (array($mime_all,"$mime_maj/*",'*/*') as $x) {
 			if (!empty($tab[$x])) return $tab[$x];
 		}
+
 		return null;
 	}
 
