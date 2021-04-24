@@ -158,7 +158,7 @@ foreach ($this->JournalEntryList as $je) {
 				$runbal -= abs($le['amount']);
 			}
 		} else {
-			$x = $le['full_name'];
+			$x = $le['account_full_name'];
 			if (empty($Journal_Entry_Stat[ $x ])) {
 				$Journal_Entry_Stat[$x] = $le['amount'];
 			} else {
@@ -169,11 +169,11 @@ foreach ($this->JournalEntryList as $je) {
 		echo '<tr class="le">';
 
 		if ($this->Account['id'] == $le['account_id']) {
-			echo '<td colspan="3">' . html($le['full_name']) . '</td>';
+			echo '<td colspan="3">' . html($le['account_full_name']) . '</td>';
 		} else {
 			echo '<td colspan="3" style="text-indent:3em;">';
 			echo '<a href="' . Radix::link('/account/journal?id=' . $le['account_id']) . '">';
-			echo html($le['full_name']);
+			echo html($le['account_full_name']);
 			echo '</a>';
 			echo '</td>';
 		}

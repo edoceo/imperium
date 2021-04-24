@@ -81,6 +81,7 @@ case 'save': // Save the Uploaded Transactions
 
 		// Debit Side
 		$dr = new AccountLedgerEntry();
+		$dr['date'] = $je['date'];
 		$dr['auth_user_id'] = $_SESSION['uid'];
 		$dr['account_journal_id'] = $je['id'];
 		// $dr->account_id = $_POST[sprintf('je%daccount_id')]; // $req->getPost($i . '_account_id');
@@ -92,6 +93,7 @@ case 'save': // Save the Uploaded Transactions
 
 		// Credit Side
 		$cr = new AccountLedgerEntry();
+		$cr['date'] = $je['date'];
 		$cr['auth_user_id'] = $_SESSION['uid'];
 		$cr['account_journal_id'] = $je['id'];
 		// $cr->account_id = $req->getPost($i . '_account_id');
