@@ -43,8 +43,8 @@ case 'm':
 	break;
 case 'q':
 	// @note this may or may not be an accurate way to find the Quarter
-	$this->date_alpha_ts = mktime(0,0,0,$this->Month, 1, $this->Year);
-	$this->date_omega_ts = mktime(0,0,0,$this->Month+2 , 1,$this->Year);
+	$this->date_alpha_ts = mktime(0, 0, 0, $this->Month, 1, $this->Year);
+	$this->date_omega_ts = mktime(23, 59, 59, $this->Month + 3 , 1, $this->Year);
 	break;
 case 'y':
 	$this->date_alpha_ts = mktime(0,0,0, $this->Month, 1, $this->Year);
@@ -85,7 +85,7 @@ $_GET['y'] = $this->Year;
 // Build other View Data (Month, Year, Period)
 $this->MonthList = array();
 for ($i=1;$i<=12;$i++) {
-	$this->MonthList[$i] = sprintf('%02d',$i) . ' ' . strftime('%B',mktime(0,0,0,$i));
+	$this->MonthList[$i] = strftime('%m %B', mktime(0, 0, 0, $i));
 }
 
 $this->YearList = array();

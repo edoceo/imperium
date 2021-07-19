@@ -51,6 +51,10 @@ case 'save-copy':
 	SQL::query('BEGIN');
 
 	$adp = AccountPeriod::findByDate($_POST['date']);
+	if (empty($adp)) {
+		Session::flash('fail', 'Account Period does not exist, please create one');
+		Radix::redirect();
+	}
 	if ($adp->isClosed()) {
 		Session::flash('fail', 'Account Period is closed');
 		Radix::redirect();
@@ -91,8 +95,6 @@ case 'save-copy':
 	} else {
 		Session::flash('info', 'Account Journal Entry #' . $aje['id'] . ' created');
 	}
-	
-	var_dump($_POST);
 
 	// Save Ledger Entries
 	foreach ($_POST as $k=>$v) {
@@ -113,6 +115,7 @@ case 'save-copy':
 		$ale['auth_user_id'] = $_SESSION['uid'];
 		$ale['account_id'] = intval($_POST["{$i}_account_id"]);
 		$ale['account_journal_id'] = $aje['id'];
+		$ale['date'] = $aje['date'];
 		$ale['amount'] = ($dr > $cr) ? abs($dr) * -1 : abs($cr);
 
 		// Skip Empty
@@ -124,8 +127,6 @@ case 'save-copy':
 		//$ale['link'] = sprintf('%s:%d', $_POST["{$i}_link_to"], $_POST["{$i}_link_id"]);
 		// Save Ledger Entry
 		$ale->save();
-
-		var_dump($ale);
 
 		// $_SESSION['account-transaction-list'][] = $ale;
 		// Save Ledger Entry to Wizard
