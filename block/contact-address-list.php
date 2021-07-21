@@ -24,7 +24,7 @@ foreach ($data['list'] as $item) {
 	echo '<td><a href="' . $link . '">' . html($item['kind']) . '</a></td>';
 	echo '<td><a href="' . $link . '">' . $item->__toString() . '</a></td>';
 	echo '<td><a class="fancybox-media" href="http://maps.google.com/maps?q=' . urlencode($item->__toString()) . '">';
-	echo img('/tango/24x24/actions/system-search.png','Map');
+	echo '<i class="fas fa-search"></i> Map';
 	echo '</a></td>';
 	echo '</tr>';
 

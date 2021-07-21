@@ -36,7 +36,7 @@ foreach ($data['list'] as $item) {
     echo '<td><a href="' . Radix::link('/workorder/view?w=' . $item['id']) . '">#' . $item['id'] . '</td>';
     // Printable Link
     if (in_array('print', $cols)) {
-		echo '<td><a href="' . Radix::link('/workorder/pdf?w=' . $item['id']) . '">' . img('/tango/22x22/devices/printer.png','Get PDF') . '</a></td>';
+		echo '<td><a href="' . Radix::link('/workorder/pdf?w=' . $item['id']) . '"><i class="fas fa-print"></i> Print</a></td>';
 	}
 
     if ( (in_array('date',$cols)) && (isset($item['date'])) ) {

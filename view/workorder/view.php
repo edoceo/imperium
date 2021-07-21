@@ -147,7 +147,7 @@ if (!empty($this->WorkOrder['id'])) {
 
     echo '<h2 id="woi-list">Work Order Items ';
     echo '<a accesskey="n" class="ajax-edit" data-name="woi-edit" href="' . $url . '">';
-    echo img('/tango/24x24/actions/list-add.png','Add Item');
+    echo '<i class="fas fa-plus-square"></i> Add Item';
     echo '</a>';
     echo '</h2>';
     echo '<div id="woi-edit"></div>';

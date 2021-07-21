@@ -153,7 +153,7 @@ $item_tax_total = 0;
 
 echo '<h2><i class="fa fa-list"></i> Invoice Items ';
 echo '<span class="s">[ <a class="fancybox fancybox.ajax" href="' . Radix::link('/invoice/item?i=' . $this->Invoice['id']) . '">';
-echo img('/tango/24x24/actions/list-add.png','Add Item');
+echo '<i class="fas fa-plus-square"></i> Add Item';
 echo '</a> ]</span>';
 echo '</h2>';
 

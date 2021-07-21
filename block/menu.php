@@ -13,12 +13,12 @@
     @todo Make this much smarter, link to something with
 */
 
-// echo '<li><a href="' . Radix::link('/task/edit">' . img('/silk/1.3/note_add.png','Add Task') . ' Task</a></li>';
-// echo '<li><a href="' . Radix::link('/alert/edit">' . img('/silk/1.3/bell_add.png','New Alert') . ' New Alert</a></li>';
-// echo '<li><a class="fancybox fancybox.ajax" href="' . Radix::link('/timer/edit') . '">' . img('/tango/24x24/actions/appointment-new.png','New Timer') . ' New Timer</a></li>';
-// echo '<li><a href="' . Radix::link('/calendar') . '">' . img('/tango/24x24/apps/system-file-manager.png','Calendar') . ' Calendar</a></li>';
+// echo '<li><a href="' . Radix::link('/task/edit">' . '<i class="fas fa-plus-square"></i> Add Task') . ' Task</a></li>';
+// echo '<li><a href="' . Radix::link('/alert/edit">' . '<i class="fas fa-plus-square"></i> New Alert') . ' New Alert</a></li>';
+// echo '<li><a class="fancybox fancybox.ajax" href="' . Radix::link('/timer/edit') . '"><i class="far fa-clock"></i> New Timer</a></li>';
+// echo '<li><a href="' . Radix::link('/calendar') . '"> Calendar</a></li>';
 // echo '<li><a href="' . Radix::link('/manual/'') . ' . $this->controller . '/' . $this->action . '"><img alt="Annotated Users Manual" src="' . Radix::link('/img/silk/help.png" /> Manual</a></li>';
-// echo '<li><a href="' . Radix::link('/contact/export') . '">' . img('/silk/1.3/lorry.png','Export').' Export</a></li>';
+// echo '<li><a href="' . Radix::link('/contact/export') . '">Export</a></li>';
 
 namespace Edoceo\Imperium;
 
@@ -109,8 +109,8 @@ ul.dropdown-menu a {
 		echo '<li><a href="' . Radix::link('/contact/view?c=' . $_ENV['contact']['id']) . '"><i class="fa fa-user"></i> ' . $_ENV['contact']['name'] . '</a></li>';
 		echo '<li><hr /></li>';
 		echo '<li><a href="' . Radix::link('/contact/channel?a=create&amp;c=' . $_ENV['contact']['id']) . '"><i class="fa fa-plus"></i> Add Channel</a></li>';
-		// echo '<li><a href="' . Radix::link('/task/edit/link/' . $this->Contact->link() . '">' . img('/silk/1.3/note_add.png','Add Task') . ' Add Task</a></li>';
-		// echo '<li><a href="' . Radix::link('/history/edit/link/' . $this->Contact->link() . '">' . img('/silk/1.3/note_add.png','Add Note') . ' Add History</a></li>';
+		// echo '<li><a href="' . Radix::link('/task/edit/link/' . $this->Contact->link() . '"><i class="far fa-plus-square"></i> Add Task</a></li>';
+		// echo '<li><a href="' . Radix::link('/history/edit/link/' . $this->Contact->link() . '"><i class="far fa-plus-square"></i> Add History</a></li>';
 		//$menu[] = array('/timer/edit',$html->image('clock_add.png').' Clean');
 		//$menu[] = array('/timer/edit',$html->image('clock_add.png').' Search');
 		//$menu[] = array('/timer/edit',$html->image('clock_add.png').' Lists');
@@ -140,14 +140,14 @@ ul.dropdown-menu a {
         // Add Item
         echo '<li><a class="ajax-edit" data-name="woi-edit" href="' . Radix::link('/workorder/item?w=' . $this->WorkOrder->id) . '"><i class="fa fa-plus-square"></i> Add Item</a></li>';
 
-        //$menu1[] = array('/service_orders/post_payment',img('/silk/1.3/money_add.png').' Post Payment');
-        //$menu1[] = array('/workorder/invoice',img('/silk/1.3/layout_link.png','Build Invoice').' Build Invoice');
+        //$menu1[] = array('/service_orders/post_payment','<i class="fas fa-money-check-alt"></i> Post Payment');
+        //$menu1[] = array('/workorder/invoice', '<i class="fas fa-file-invoice-dollar"></i> Build Invoice');
 
         echo '<li><hr /></li>';
-        // $menu1[] = array("javascript:\$('#EmailSend').submit();",img('/silk/1.3/email_go.png','Send Email').' Send');
+        // $menu1[] = array("javascript:\$('#EmailSend').submit();", '<i class="fas fa-share-square"></i> Send');
         echo '<li><a href="' . Radix::link('/workorder/pdf?w=' . $_ENV['workorder']['id']) . '"><i class="fa fa-file-pdf-o"></i> Printable</a></li>';
 
-        //$menu1[] = array('/service_orders/history',img('/silk/1.3/folder_page.png').' History');
+        //$menu1[] = array('/service_orders/history', '<i class="fas fa-history"></i> History');
         echo '<li><hr /></li>';
     }
 
@@ -158,8 +158,8 @@ ul.dropdown-menu a {
     }
 
     echo '<li><a href="' . Radix::link('/workorder/report') . '"><i class="fa fa-bar-chart"></i> Reports</a></li>';
-    // echo '<li><a href="' . Radix::link('/workorder/index/project' . img('/silk/1.3/table_lightning.png','List Projects') . ' Projects</a></li>';
-    //$menu[] = array('/service_orders/index/project',img('/silk/1.3/table_lightning.png','List Projects').' Projects');
+    // echo '<li><a href="' . Radix::link('/workorder/index/project' . '<i class="far fa-list-alt"></i> Projects</a></li>';
+    //$menu[] = array('/service_orders/index/project', '<i class="far fa-list-alt"></i> Projects');
 	?>
 	</ul>
 </li>
@@ -181,9 +181,9 @@ ul.dropdown-menu a {
     } else {
         echo '<li><a href="' . Radix::link('/invoice/new') . '"><i class="fa fa-plus-square"></i> Create</a></li>';
     }
-    // echo '<li><a href="' . Radix::link('/invoice/filter/active') . '">' , img('/silk/1.3/money_add.png','Active').' Active</a></li>';
-    // echo '<li><a href="' . Radix::link('/invoice/filter/past_due') . '">' , img('/silk/1.3/money_add.png','Past Due').' Past Due</a></li>';
-    // echo '<li><a href="' . Radix::link('/invoice/filter/paid') . '">' , img('/silk/1.3/money_add.png','Paid').' Paid</a></li>';
+    // echo '<li><a href="' . Radix::link('/invoice/filter/active') . '">' , '<i class="fas fa-money-check-alt"></i> Active').' Active</a></li>';
+    // echo '<li><a href="' . Radix::link('/invoice/filter/past_due') . '">' , '<i class="fas fa-money-check-alt"></i> Past Due').' Past Due</a></li>';
+    // echo '<li><a href="' . Radix::link('/invoice/filter/paid') . '">' , '<i class="fas fa-money-check-alt"></i> Paid').' Paid</a></li>';
     echo '<li><a href="' . Radix::link('/invoice/report') . '"><i class="fa fa-bar-chart"></i> Reports</a></li>';
 	?>
 	</ul>
@@ -237,7 +237,7 @@ ul.dropdown-menu a {
 //    }
 //}
 //if (count($list)) {
-//    echo '<li><a href="#"><span>' . img('/tango/24x24/categories/preferences-system.png') . ' Plugins</span></a>';
+//    echo '<li><a href="#"><i class="fas fa-cogs"></i> Plugins</a>';
 //    echo '<ul>' . implode('',$list) . '</ul>';
 //    echo '</li>';
 //}

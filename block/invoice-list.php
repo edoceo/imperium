@@ -52,7 +52,7 @@ foreach ($data['list'] as $x) {
     // ID
     echo '<td><a href="' . Radix::link('/invoice/view?i=' . $item['id']) . '">#' . $item['id'] . '</a></td>';
     // Printable Link
-    // echo '<td><a href="' . Radix::link('/invoice/pdf?i=' . $item['id']) . '">' . img('/tango/22x22/devices/printer.png','Get PDF') . '</a></td>';
+    echo '<td><a href="' . Radix::link('/invoice/pdf?i=' . $item['id']) . '"><i class="fas fa-print"></i> Print</a></td>';
 
     echo '<td>' . $item['status'] . '</td>';
 
