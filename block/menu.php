@@ -60,16 +60,21 @@ ul.dropdown-menu a {
 </style>
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+<div class="container-fluid">
 
 <a class="navbar-brand" href="<?= Radix::link('/') ?>" title="Home"><i class="fas fa-home"></i></a>
 
-<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+<button class="navbar-toggler" type="button"
+	aria-controls="menu0" aria-expanded="false" aria-label="Toggle navigation"
+	data-bs-toggle="collapse"
+	data-bs-target="#menu0"
+	>
 	<span class="navbar-toggler-icon"></span>
 </button>
 
-<div class="collapse navbar-collapse" id="navbarSupportedContent">
+<div class="collapse navbar-collapse" id="menu0">
 
-<ul class="navbar-nav">
+<ul class="navbar-nav me-auto">
 <li class="nav-item">
 <!--
 	<ul>
@@ -94,7 +99,6 @@ ul.dropdown-menu a {
 	echo '<li><hr /></li>';
 	echo '<li><a href="' . Radix::link('/settings') . '"><i class="far fa-cogs"></i> Settings</a></li>';
 	echo '<li><hr /></li>';
-	echo '<li><a href="' . Radix::link('/auth/sign-out') . '"><i class="fas fa-sign-out-alt"></i> Sign Out</a></li>';
 	?>
 	</ul>
 -->
@@ -245,10 +249,20 @@ ul.dropdown-menu a {
 ?>
 </ul>
 
-<form class="form-inline" action="<?= Radix::link('/search') ?>" method="get">
-	<input class="form-control mr-sm-2" id="q" name="q" placeholder="Search" type="text" value="" aria-label="Search">
-    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+<div class="mx-2">
+<form action="<?= Radix::link('/search') ?>" autocomplete="off" method="get">
+	<div class="input-group input-group-sm">
+		<input autocomplete="off" autofocus class="form-control" id="q" name="q" placeholder="Search" type="text" value="" aria-label="Search">
+		<button class="btn btn-outline-success" type="submit">Search</button>
+	</div>
 </form>
+</div>
+
+<ul class="navbar-nav">
+	<li><a class="nav-link" href="<?= Radix::link('/auth/sign-out') ?>"><i class="fas fa-sign-out-alt"></i></a></li>
+</ul>
 
 </div> <!-- /.collapse .navbar-collapse -->
+
+</div>
 </nav>
