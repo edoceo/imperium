@@ -46,10 +46,10 @@ case 'validate':
 	$http->setHeaders('Accept','application/xml');
 	$http->setHeaders('User-Agent','Edoceo Imperium Google GeoCoder 0.2');
 	$page = $http->request();
-	//var_dump($page);
+
 	// Parse Response
 	$xml = simplexml_load_string($page->getBody());
-	//var_dump($xml->asXML());
+
 	if (intval($xml->Response->Status->code) == 200) {
 	// Success - Parse Address
 	$ad = $xml->Response->Placemark->AddressDetails->Country;

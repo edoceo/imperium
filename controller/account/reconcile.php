@@ -56,7 +56,9 @@ case 'save': // Save the Uploaded Transactions
 
 	$_ENV['upload_account_id'] = $_SESSION['reconcile_upload_id'];
 
-	Radix::dump($_POST);
+	var_dump($_POST);
+
+	__exit_text('Not Handled', 501);
 	return(0);
 
 	$c = ceil(count($_POST) / 4);
@@ -131,8 +133,6 @@ case 'save-one': // Save the Uploaded Transactions
 	header('Content-Type: application/json');
 
 	$_ENV['upload_account_id'] = $_SESSION['reconcile_upload_id'];
-
-	// Radix::dump($_POST);
 
 	if (!empty($_POST['id'])) {
 		header('HTTP/1.1 400 Bad Request', true, 400);

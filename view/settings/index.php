@@ -93,12 +93,21 @@ echo '</ul>';
 
 <?php
 
-// echo '<h2>Imperium Session</h2>';
-// Radix::dump($_SESSION);
-// 
-// echo '<h2>Imperium Config</h2>';
-// Radix::dump($_ENV);
-// 
-// echo '<h2>Imperium Server</h2>';
-// Radix::dump($_SERVER);
-// 
+if ('dump' == $_GET['_dump']) {
+
+	echo '<h2>Imperium Session</h2>';
+	echo '<pre>';
+	var_dump($_SESSION);
+	echo '</pre>';
+
+	echo '<h2>Imperium Environment</h2>';
+	echo '<pre>';
+	var_dump($_ENV);
+	echo '</pre>';
+
+	echo '<h2>Imperium Server</h2>';
+	echo '<pre>';
+	var_dump($_SERVER);
+	echo '</pre>';
+
+}

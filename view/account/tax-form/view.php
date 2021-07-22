@@ -17,8 +17,6 @@ echo radix::block('account-period-input');
 echo '</div>';
 echo '</form>';
 
-// radix::dump($this->LineList);
-
 echo '<table>';
 
 foreach ($this->LineList as $item) {
@@ -35,5 +33,3 @@ foreach ($this->LineList as $item) {
 	}
 }
 echo '</table>';
-
-// radix::dump($this);

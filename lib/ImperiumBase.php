@@ -146,10 +146,8 @@ class ImperiumBase implements \ArrayAccess
 		} else {
 			$this->_data['id'] = SQL::insert($this->_table, $rec);
 			if (intval($this->_data['id'])==0) {
-				Radix::dump($this);
 				Radix::trace('Unexpected error saving: ' . get_class($this));
 			}
-			// if ($this->_diff) Base_Diff::diff($this);
 		}
 	}
 
@@ -412,4 +410,3 @@ class ImperiumBase implements \ArrayAccess
 	*/
 	public function offsetUnset($k) { unset($this->_data[$k]); }
 }
-

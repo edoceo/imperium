@@ -71,8 +71,6 @@ class Account_Reconcile_PayPal_v1
 			$csv['Net'] = floatval(preg_replace('/[^\d\.\-]/',null, $csv['Net']));
 			$csv['Sales Tax'] = floatval(preg_replace('/[^\d\.\-]/', null, $csv['Sales Tax']));
 
-			// Radix::dump($csv);
-
 			// Only Process Completed Transactions
 			// if ($csv['Status'] == 'Pending') {
 			// 	continue;

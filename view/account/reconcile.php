@@ -164,6 +164,5 @@ $res = SQL::fetch_all($sql);
 		</table>
 	<?php
 	}
-	//var_dump($res);
 	?>
 </div>

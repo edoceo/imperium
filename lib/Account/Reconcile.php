@@ -94,14 +94,10 @@ class Account_Reconcile
 //			$arg = array($ret[$i]->date, $ret[$i]->date, $opt['account_id'], abs($ret[$i]->amount));
 //
 //			$ret[$i]->id = SQL::fetch_one($sql, $arg);
-//			//Radix::dump($sql);
-//			//Radix::dump($arg);
 //
 //			if (!empty($err)) {
 //				die("err:$err");
 //			}
-//			//Radix::dump($err);
-//			//Radix::dump($ret[$i]);
 //			//exit;
 //
 //		}

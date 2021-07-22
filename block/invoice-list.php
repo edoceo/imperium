@@ -41,7 +41,6 @@ if (isset($paginator))
 // List Items
 foreach ($data['list'] as $x) {
 
-	//var_dump($x);
     // $item = new Invoice($x);
     $item = $x;
 

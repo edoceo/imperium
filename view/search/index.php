@@ -154,12 +154,8 @@ if (preg_match('/[_%]/', $q)) {
 	$sql = str_replace('#op#', '=', $sql);
 }
 
-Radix::dump($sql);
-Radix::dump($arg);
-
 $res = SQL::fetch_all($sql, $arg);
 
-// Radix::dump($res);
 foreach ($res as $rec) {
 	$idx++;
 	echo '<dt><a href="' . Radix::link('/contact/view?c=' . $rec['id']) . '">Contact: ' . $rec['name'] . '</a></dt>';

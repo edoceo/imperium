@@ -117,8 +117,6 @@ foreach ($AccountKindList as $kind) {
 }
 echo '</table>';
 
-//Radix::dump($AccountBalanceList);
-
 return(0);
 
 

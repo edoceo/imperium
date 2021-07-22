@@ -43,11 +43,7 @@ function _contact_import()
 		}
 	}
 
-	// Radix::dump($col_map);
-	// Radix::dump($col_max);
-	// Radix::dump($row_max);
-	// exit;
-
+	// Spin Each Row
 	for ($row_idx=0; $row_idx<=$row_max; $row_idx++) {
 
 		$C = new Contact();
@@ -128,11 +124,8 @@ function _contact_import()
 			$C['kind'] = 'company';
 		}
 
-		// Radix::dump($val_set);
 		// Check Existing?
 		// $chk = Contact::find($C['contact']);
-
-		Radix::dump($C);
 
 		SQL::query('begin');
 		$C->save();
@@ -140,19 +133,16 @@ function _contact_import()
 		$AH['address'] = trim($AH['address']);
 		if (!empty($AH['address'])) {
 			$AH['contact_id'] = $C['id'];
-			Radix::dump($AH);
 			$AH->save();
 		}
 		$AM['address'] = trim($AM['address']);
 		if (!empty($AM['address'])) {
 			$AM['contact_id'] = $C['id'];
-			Radix::dump($AM);
 			$AM->save();
 		}
 		$AW['address'] = trim($AW['address']);
 		if (!empty($AW['address'])) {
 			$AW['contact_id'] = $C['id'];
-			Radix::dump($AW);
 			$AW->save();
 		}
 
@@ -164,9 +154,4 @@ function _contact_import()
 	Session::flash('info', sprintf('Imported %d Contacts', count($new_list)));
 	Radix::redirect('/contact');
 
-	// Radix::dump($C);
-	// Radix::dump($AH);
-	// Radix::dump($AM);
-	// Radix::dump($AW);
-	// Radix::dump($_POST);
 }

@@ -150,7 +150,7 @@ case 'view':
 	$this->WorkOrderItem = $woi;
 
 	break;
-	
+
 default:
-	Radix::dump($_POST);
+	__exit_text('Unhandled Request [CWI-155]', 400);
 }

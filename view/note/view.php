@@ -30,5 +30,3 @@ echo Form::hidden('link', $this->Note['link']);
 echo '<input class="exec" name="a" type="submit" value="Edit">';
 echo '</div>';
 echo '</form>';
-
-Radix::dump($this->Note);

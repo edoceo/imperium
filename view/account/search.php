@@ -83,5 +83,3 @@ foreach ($res as $rec) {
 
 }
 echo '</table>';
-
-// Radix::dump($rec);

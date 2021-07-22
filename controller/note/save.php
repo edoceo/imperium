@@ -8,8 +8,6 @@ namespace Edoceo\Imperium;
 use Edoceo\Radix;
 use Edoceo\Radix\Session;
 
-// var_dump($_POST);
-
 $n = new Base_Note(intval($_POST['id']));
 if (empty($n['auth_user_id'])) {
 	$n['auth_user_id'] = $_SESSION['uid'];

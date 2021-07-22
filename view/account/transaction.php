@@ -201,8 +201,6 @@ $args = array(
 );
 echo Radix::block('diff-list',$args);
 
-// Radix::dump($this->AccountJournalEntry);
-
 ?>
 
 <p>

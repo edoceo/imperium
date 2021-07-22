@@ -233,7 +233,6 @@ foreach ($this->JournalEntryList as $je) {
 <table>
 <?php
 asort($Journal_Entry_Stat);
-// Radix::dump($Journal_Entry_Stat)
 foreach ($Journal_Entry_Stat as $a => $v) {
 	echo '<tr>';
 	echo '<td>' . html($a) . '</td>';
@@ -249,8 +248,3 @@ foreach ($Journal_Entry_Stat as $a => $v) {
 ?>
 </table>
 </section>
-
-<?php
-
-// echo Radix::dump($res);
-// Radix::dump($Journal_Entry_Stat);

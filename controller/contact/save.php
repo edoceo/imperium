@@ -103,5 +103,3 @@ case 'save':
 	Session::flash('info', "Contact #{$C['id']} saved");
 	Radix::redirect('/contact/view?c=' . $C['id']);
 }
-
-// var_dump($_POST);

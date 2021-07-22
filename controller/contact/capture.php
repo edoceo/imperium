@@ -24,13 +24,11 @@ $this->Contact = $c;
 switch ($_POST['a']) {
 case 'save':
 
-	// Radix::dump($_POST);
-
 	$image = trim($_POST['image-data']);
 
 	if ('data:image/jpeg;base64,' == substr($image, 0, 23)) {
 		$b64 = substr($image, 22);
-		// Radix::dump($b64);
+
 		$jpg_data = base64_decode($b64);
 		$dir = sprintf('%s/webroot/img/content/contact/%u', APP_ROOT, $this->Contact['id']);
 		if (!is_dir($dir)) {
@@ -45,7 +43,7 @@ case 'save':
 
 	if ('data:image/png;base64,' == substr($image, 0, 22)) {
 		$b64 = substr($image, 22);
-		Radix::dump($b64);
+
 		$png_data = base64_decode($b64);
 		$dir = sprintf('%s/webroot/img/content/contact/%u', APP_ROOT, $this->Contact['id']);
 		if (!is_dir($dir)) {

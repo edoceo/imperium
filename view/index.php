@@ -25,7 +25,6 @@ foreach ($list as $name) {
         echo sprintf('<h2>%d %s</h2>',count($info['list']),$name);
         echo Radix::block($info['view'],array('list'=>$info['list'],'opts'=>array('head'=>true)));
         echo '</div>';
-        // Radix::dump($info);
     }
 }
 
@@ -35,7 +34,8 @@ $sql.= ' JOIN contact ON contact_event.contact_id = contact.id';
 // $sql.= ' WHERE flag = 0';
 $sql.= ' ORDER BY contact_event.xts DESC';
 $sql.= ' LIMIT 20';
-$res = SQL::fetch_all($sql);
+//$res = SQL::fetch_all($sql);
+$res = [];
 foreach ($res as $rec) {
 	echo '<p>';
 	echo '<a href="' . Radix::link('/contact/view?c=' . $rec['contact_id']) . '">' . html($rec['contact_name']) . '</a>';
@@ -45,5 +45,4 @@ foreach ($res as $rec) {
 	echo html($rec['note']);
 	echo '</p>';
 	echo '<p>Due: ' . strftime('%Y-%m-%d %H:%M', $rec['xts']) . '</p>';
-	// Radix::dump($rec);
 }

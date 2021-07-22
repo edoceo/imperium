@@ -54,6 +54,3 @@ $(function() {
 	});
 });
 </script>
-
-<?php
-Radix::dump($this->Contact);

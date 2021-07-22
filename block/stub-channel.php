@@ -18,7 +18,6 @@ if (empty($data)) {
 if (is_array($data)) {
 	// OK
 } elseif (is_object($data)) {
-	// var_dump($data);
 	if (!($data instanceof ContactChannel)) {
 		echo "Invalid Parameter to stub-channel (" . print_r($data) . ')';
 		return(0);
