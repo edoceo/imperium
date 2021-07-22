@@ -163,11 +163,13 @@ case 'save-one': // Save the Uploaded Transactions
 	$dr = new AccountLedgerEntry();
 	$dr['auth_user_id'] = $_SESSION['uid'];
 	$dr['account_journal_id'] = $je['id'];
+	$dr['date'] = $je['date'];
 
 	// Credit Side
 	$cr = new AccountLedgerEntry();
 	$cr['auth_user_id'] = $_SESSION['uid'];
 	$cr['account_journal_id'] = $je['id'];
+	$cr['date'] = $je['date'];
 
 	if (!empty($_POST['cr'])) {
 
