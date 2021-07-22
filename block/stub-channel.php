@@ -44,13 +44,13 @@ if (is_array($data)) {
 $icon = null;
 switch ($data['kind']) {
 case ContactChannel::EMAIL:
-	$icon = '<i class="fa fa-envelope-o"></i>';
+	$icon = '<i class="far fa-envelope"></i>';
 	break;
 case ContactChannel::FAX:
-	$icon = '<i class="fa fa-fax"></i>';
+	$icon = '<i class="fas fa-fax"></i>';
 	break;
 case ContactChannel::PHONE:
-	$icon = '<i class="fa fa-phone"></i>';
+	$icon = '<i class="fas fa-phone-square"></i>';
 	break;
 default:
 	$icon = '#' . $data['kind'];

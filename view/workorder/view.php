@@ -45,7 +45,7 @@ if (empty($this->Contact['id'])) {
     echo '</td>';
 } else {
     echo '<td class="l">Contact:</td><td><a href="' . Radix::link("/contact/view?c={$this->Contact['id']}") . '">' . html($this->Contact['name']) . '</a>';
-    echo '<br /><i class="fa fa-phone"></i> ' . html($this->Contact['phone']) . '</td>';
+    echo '<br /><i class="fas fa-phone"></i> ' . html($this->Contact['phone']) . '</td>';
 }
 // Date
 echo '<td class="l">Date:</td><td>' . Form::date('date',$this->WorkOrder['date']) . '</td>';
@@ -147,7 +147,7 @@ if (!empty($this->WorkOrder['id'])) {
 
     echo '<h2 id="woi-list">Work Order Items ';
     echo '<a accesskey="n" class="ajax-edit" data-name="woi-edit" href="' . $url . '">';
-    echo '<i class="fas fa-plus-square"></i> Add Item';
+    echo '<i class="far fa-plus-square"></i> Add Item';
     echo '</a>';
     echo '</h2>';
     echo '<div id="woi-edit"></div>';

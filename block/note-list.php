@@ -12,7 +12,7 @@ use Edoceo\Radix;
 
 echo '<h2>';
 echo '<a href="' . $data['page'] . '" onclick="$(\'#note-edit\').load(\'' . $data['page'] . '\'); return false;">';
-echo '<i class="fa fa-file-text-o"></i>';
+echo '<i class="far fa-file-alt"></i>';
 echo ' Notes</a>';
 // echo ' <a onclick="$(\'#note-list\').toggle(); return false;">View</a> ';
 // echo ' <a onclick="$(\'#note-edit\').load(\'' . $this->page . '\').focus(); return false;" href="' . $this->page . '">';
@@ -42,10 +42,10 @@ foreach ($data['list'] as $item) {
     echo '<p>';
     switch ($item['kind']) {
     case 'Conversation':
-    	echo '<i class="fa fa-file-text"></i> ';
+    	echo '<i class="far fa-comments"></i> ';
     	break;
     case 'Note':
-    	echo '<i class="fa fa-file-text-o"></i> ';
+    	echo '<i class="far fa-sticky-note"></i> ';
     	break;
     }
 

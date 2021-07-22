@@ -47,8 +47,8 @@ $prev_b = 0;
 	<div class="input-group">
 		<?= Form::select('id', $this->Account['id'], $this->AccountList_Select, array('class' => 'form-control')) ?>
 		<span class="input-group-append">
-			<a class="btn btn-outline-primary" href="<?= Radix::link('/account/journal?' . http_build_query($_GET)) ?>"><i class="fa fa-list" title="Journal"></i></a>
-			<a class="btn btn-outline-primary" href="<?= Radix::link('/account/edit?id=' . $this->Account['id']) ?>"><i class="fa fa-edit" title="Edit"></i></a>
+			<a class="btn btn-outline-primary" href="<?= Radix::link('/account/journal?' . http_build_query($_GET)) ?>"><i class="fas fa-list" title="Journal"></i></a>
+			<a class="btn btn-outline-primary" href="<?= Radix::link('/account/edit?id=' . $this->Account['id']) ?>"><i class="fas fa-edit" title="Edit"></i></a>
 		</span>
 	</div>
 </div>
@@ -73,8 +73,8 @@ $prev_b = 0;
 
 echo Radix::block('account-period-arrow', $this->date_alpha);
 
-// echo ' <a href="' . Radix::link('/account/ledger?' . http_build_query($_GET)) . '"><i class="fa fa-bar-chart">L</i></a>';
-// echo ' <a href="' . Radix::link('/account/journal?' . http_build_query($_GET)) . '"><i class="fa fa-">J</i></a>';
+// echo ' <a href="' . Radix::link('/account/ledger?' . http_build_query($_GET)) . '"><code>L</code></a>';
+// echo ' <a href="' . Radix::link('/account/journal?' . http_build_query($_GET)) . '"><code>J</code></a>';
 
 echo '<div style="display:flex; flex-wrap:wrap;">';
 echo '<div style="flex: 1 1 auto;">';

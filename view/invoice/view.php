@@ -151,9 +151,9 @@ $item_total = 0;
 $item_tax_total = 0;
 //$link = Radix::link('/invoice/item');
 
-echo '<h2><i class="fa fa-list"></i> Invoice Items ';
+echo '<h2><i class="fas fa-list"></i> Invoice Items ';
 echo '<span class="s">[ <a class="fancybox fancybox.ajax" href="' . Radix::link('/invoice/item?i=' . $this->Invoice['id']) . '">';
-echo '<i class="fas fa-plus-square"></i> Add Item';
+echo '<i class="far fa-plus-square"></i> Add Item';
 echo '</a> ]</span>';
 echo '</h2>';
 
@@ -198,7 +198,7 @@ if ( count($this->InvoiceTransactionList) > 0) {
 
     $sum = 0;
 
-    echo '<h2 style="clear:both;"><i class="fa fa-money"></i> Transactions</h2>';
+    echo '<h2 style="clear:both;"><i class="fas fa-money-check-alt"></i> Transactions</h2>';
     echo '<table>';
     echo '<tr><th>Date</th><th>Account / Note</th><th>Debit</th><th>Credit</th></tr>';
 

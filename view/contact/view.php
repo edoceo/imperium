@@ -1,6 +1,5 @@
 <?php
 /**
-    @file
     @brief Contact View Shows the Contact, Company or Vendors information
 */
 
@@ -11,12 +10,10 @@ use Edoceo\Radix\Filter;
 use Edoceo\Radix\HTML\Form;
 
 if (!empty($this->Contact['id'])) {
-	App::addMRU('/contact/view?c=' . $this->Contact['id'], '<i class="fa fa-user"></i> ' . html($this->Contact['name']));
+	App::addMRU('/contact/view?c=' . $this->Contact['id'], '<i class="far fa-user"></i> ' . html($this->Contact['name']));
 }
 
 ?>
-
-<div class="container-fluid">
 
 <form action="<?= Radix::link('/contact/save?c=' . $this->Contact['id']) ?>" autocomplete="off" method="post">
 
@@ -35,7 +32,7 @@ if (!empty($this->Contact['id'])) {
 		<?php
 		if (!empty($this->Contact['parent_id'])) {
 			echo '<span class="input-group-addon">';
-			echo '<a href="' . Radix::link('/contact/view?c=' . $this->Contact['parent_id']) . '"><i class="fa fa-bolt"></i></a>';
+			echo '<a href="' . Radix::link('/contact/view?c=' . $this->Contact['parent_id']) . '"><i class="fas fa-bolt"></i></a>';
 			echo '</span>';
 		}
 		?>
@@ -134,17 +131,17 @@ if (!empty($this->ContactChannelList)) {
 echo '<div class="form-actions">';
 echo Form::hidden('id',$this->Contact['id']);
 echo '<button class="btn btn-primary" name="a" type="submit" value="save">Save</button>';
-// echo '<button class="exec" id="exec-contact-ping" type="button" value="ping">Ping</button>';
-// echo '<button class="exec" name="a" type="submit" value="capture">Photo</button>';
 echo '<button class="btn btn-danger" name="a" type="submit" value="delete">Delete</button>';
-// echo '<a class="button" href="' . Radix::link('/contact/merge?' . http_build_query(array('c' => $this->Contact['id']))) . '">Merge</a>';
+// echo '<button class="btn" id="exec-contact-ping" type="button" value="ping">Ping</button>';
+// echo '<button class="btn" name="a" type="submit" value="capture">Photo</button>';
+echo '<button class="btn btn-danger" name="a" type="submit" value="delete">Delete</button>';
+// echo '<a class="btn" href="' . Radix::link('/contact/merge?' . http_build_query(array('c' => $this->Contact['id']))) . '">Merge</a>';
 echo '</div>';
 
 ?>
 
 </form>
 
-</div> <!-- /.container-fluid -->
 
 <script>
 $(function() {
@@ -247,7 +244,7 @@ if ($this->Contact['id'] == 0) {
 // Sub Addresses
 echo '<div class="container-fluid">';
 
-echo '<h2 id="ContactAddressHead"><a href="' . Radix::link('/contact/address?' . http_build_query(array('a' => 'make', 'c' => $this->Contact['id']))) . '"><i class="fa fa-home"></i> Addresses</a></h2>';
+echo '<h2 id="ContactAddressHead"><a href="' . Radix::link('/contact/address?' . http_build_query(array('a' => 'make', 'c' => $this->Contact['id']))) . '"><i class="far fa-address-card"></i> Addresses</a></h2>';
 if ($this->ContactAddressList) {
     echo "<div id='ContactAddressList'>";
     echo Radix::block('contact-address-list', array('list'=>$this->ContactAddressList));
@@ -264,7 +261,7 @@ if (empty($this->Contact['parent_id'])) {
     );
     $url = Radix::link('/contact/new?parent=' . $this->Contact['id']); // ($x,'default',true);
 
-    echo '<h2 id="sub-contacts"><a href="' . $url . '"><i class="fa fa-users"></i> Sub-Contacts</a></h2>';
+    echo '<h2 id="sub-contacts"><a href="' . $url . '"><i class="fas fa-users"></i> Sub-Contacts</a></h2>';
 
     if (count($this->ContactList)) {
         echo '<table>';
@@ -313,7 +310,7 @@ echo '</div>';
 
 // Work Orders
 echo '<div class="container-fluid">';
-echo '<h2><a href="' . Radix::link('/workorder/new?c=' . $this->Contact['id']) . '"><i class="fa fa-clock-o"></i> Work Orders</a></h2>';
+echo '<h2><a href="' . Radix::link('/workorder/new?c=' . $this->Contact['id']) . '"><i class="far fa-clock"></i> Work Orders</a></h2>';
 if ($this->WorkOrderList) {
     echo Radix::block('workorder-list',array('list'=>$this->WorkOrderList));
 }
@@ -321,7 +318,7 @@ echo '</div>';
 
 // Invoices
 echo '<div class="container-fluid">';
-echo '<h2><a href="' . Radix::link('/invoice/new?c=' . $this->Contact['id']) . '"><i class="fa fa-list"></i> Invoices</a></h2>';
+echo '<h2><a href="' . Radix::link('/invoice/new?c=' . $this->Contact['id']) . '"><i class="fas fa-file-invoice-dollar"></i> Invoices</a></h2>';
 if ($this->InvoiceList) {
     echo Radix::block('invoice-list', array('list'=>$this->InvoiceList));
 }

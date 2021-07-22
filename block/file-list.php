@@ -21,7 +21,7 @@ echo '<h2>Files';
 // echo ' <span class="s">[';
 // echo ' <a onclick="$(\'#note-list\').toggle(); return false;">View</a> ';
 // echo ' <a onclick="$(\'#note-edit\').load(\'' . $this->page . '\').focus(); return false;" href="' . $this->page . '">';
-// echo '<i class="fas fa-plus-square"></i> Add Note';
+// echo '<i class="far fa-plus-square"></i> Add Note';
 // echo '</a> ';
 // echo ']</span>';
 echo '</h2>';

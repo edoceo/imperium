@@ -26,14 +26,14 @@ foreach ($data['list'] as $item) {
 	echo '<a href="' . Radix::link('/contact/view?c=' . $item['id']) . '">';
 	switch (strtolower($item['kind'])) {
 	case 'company':
-		echo '<i class="fa fa-building"></i> ';
+		echo '<i class="fas fa-building"></i> ';
 		break;
 	case 'vendor':
-		echo '<i class="fa fa-truck"></i> ';
+		echo '<i class="fas fa-truck"></i> ';
 		break;
 	case 'person':
 	default:
-		echo '<i class="fa fa-user"></i> ';
+		echo '<i class="fas fa-user"></i> ';
 	}
 	echo html($item['name']);
 	echo '</a>';

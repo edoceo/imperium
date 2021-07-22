@@ -91,7 +91,7 @@ foreach ($this->LedgerEntryList as $le)
 	}
 
     echo '<td class="r">' . number_format($runbal, 2) . '</td>';
-    echo '<td class="r"><button class="btn btn-sm join-entry" data-id="' . $le['account_journal_id'] . '"><i class="fa fa-compress"></i></button></td>';
+    echo '<td class="r"><button class="btn btn-sm join-entry" data-id="' . $le['account_journal_id'] . '"><i class="fas fa-compress-arrows-alt"></i></button></td>';
     echo '</tr>';
 
 }
@@ -130,8 +130,8 @@ $html_table = ob_get_clean();
 	<div class="input-group">
 		<?= Form::select('id', $this->Account['id'], $this->AccountList_Select, array('class' => 'form-control')) ?>
 		<span class="input-group-append">
-			<a class="btn btn-outline-primary" href="<?= Radix::link('/account/journal?' . http_build_query($_GET)) ?>"><i class="fa fa-list" title="Journal"></i></a>
-			<a class="btn btn-outline-primary" href="<?= Radix::link('/account/edit?id=' . $this->Account['id']) ?>"><i class="fa fa-edit" title="Edit"></i></a>
+			<a class="btn btn-outline-primary" href="<?= Radix::link('/account/journal?' . http_build_query($_GET)) ?>"><i class="fas fa-list" title="Journal"></i></a>
+			<a class="btn btn-outline-primary" href="<?= Radix::link('/account/edit?id=' . $this->Account['id']) ?>"><i class="fas fa-edit" title="Edit"></i></a>
 		</span>
 	</div>
 </div>

@@ -151,7 +151,7 @@ foreach ($this->AccountLedgerEntryList as $i=>$item) {
 	// Credit
 	echo "<td class='r'>" . Form::number($i.'_cr', $item['credit_amount'], array('class' => 'form-control ledger-cr')) . "</td>";
 
-	echo '<td class="r"><button class="btn btn-danger drop-ledger-entry" data-id="' . $item['id'] . '" type="button"><i class="fa fa-ban"></i></button></td>';
+	echo '<td class="r"><button class="btn btn-danger drop-ledger-entry" data-id="' . $item['id'] . '" type="button"><i class="fas fa-ban"></i></button></td>';
 	echo '</tr>';
 }
 

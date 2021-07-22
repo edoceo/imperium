@@ -95,9 +95,9 @@ foreach ($this->JournalEntryList as $je) {
 		echo '</td>';
 
 		echo '<td class="r">';
-		echo '<button class="btn btn-sm btn-primary save-entry" data-index="' . $le_i . '" title="Save this Ledger Entry" type="button"><i class="fa fa-save"></i></button>';
-		echo '<button class="btn btn-sm btn-warning join-entry" data-index="' . $le_i . '" title="Merge with another Ledger Entry for Journal" type="button"><i class="fa fa-compress"></i></button>';
-		echo '<button class="btn btn-sm btn-danger drop-entry" data-index="' . $le_i . '" title="Drop" type="button"><i class="fa fa-times"></i></button>';
+		echo '<button class="btn btn-sm btn-primary save-entry" data-index="' . $le_i . '" title="Save this Ledger Entry" type="button"><i class="far fa-save"></i></button>';
+		echo '<button class="btn btn-sm btn-warning join-entry" data-index="' . $le_i . '" title="Merge with another Ledger Entry for Journal" type="button"><i class="fas fa-compress-arrows-alt"></i></button>';
+		echo '<button class="btn btn-sm btn-danger drop-entry" data-index="' . $le_i . '" title="Drop" type="button"><i class="fas fa-times"></i></button>';
 		echo '</td>';
 
 		echo '</tr>';
