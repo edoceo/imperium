@@ -1,7 +1,7 @@
 <?php
 /**
-	Main Account Page
-*/
+ * Main Account Page
+ */
 
 use Edoceo\Radix\DB\SQL;
 

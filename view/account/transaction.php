@@ -126,10 +126,8 @@ foreach ($this->AccountLedgerEntryList as $i=>$item) {
 	echo '<div class="input-group">';
 	// Ledger Entry ID, Account ID and Account Name
 	echo Form::text($i.'_account_name', $item['account_name'],array('class'=>'form-control account-name'));
-	echo '<div class="input-group-append">';
-		echo '<div class="input-group-text account-id-v" id="' . $i . '_account_id_v">' . $item['account_id']. '</div>';
-		echo '<a class="btn btn-outline-secondary account-link" href="' . Radix::link('/account/ledger?id=' . $item['account_id']) . '" id="' . $i . '-account-link"><i class="fas fa-external-link-alt"></i></a>';
-	echo '</div>';
+	echo '<div class="input-group-text account-id-v" id="' . $i . '_account_id_v">' . $item['account_id']. '</div>';
+	echo '<a class="btn btn-outline-secondary account-link" href="' . Radix::link('/account/ledger?id=' . $item['account_id']) . '" id="' . $i . '-account-link"><i class="fas fa-external-link-alt"></i></a>';
 	echo '</div>';
 	echo Form::hidden($i.'_id', $item['id']);
 	echo Form::hidden($i.'_account_id', $item['account_id'],array('class'=>'account-id'));

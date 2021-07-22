@@ -10,6 +10,16 @@ namespace Edoceo\Imperium;
 use Edoceo\Radix;
 use Edoceo\Radix\DB\SQL;
 
+switch ($this->Period) {
+	case 'm':
+		$_ENV['h1'] = $_ENV['title'] = 'Balance Sheet: ' . $this->date_alpha_f;
+		break;
+	default:
+		$_ENV['h1'] = $_ENV['title'] = 'Balance Sheet: ' . $this->date_alpha_f . ' to ' . $this->date_omega_f;
+		break;
+}
+
+
 // Input Form
 echo '<div class="d-print-none">';
 echo '<form>';
@@ -17,15 +27,6 @@ echo Radix::block('account-period-input');
 echo '</form>';
 //echo Radix::block('account-period-arrow', $this->date_alpha);
 echo '</div>';
-
-switch ($this->Period) {
-case 'm':
-	$_ENV['h1'] = $_ENV['title'] = 'Balance Sheet: ' . $this->date_alpha_f;
-	break;
-default:
-	$_ENV['h1'] = $_ENV['title'] = 'Balance Sheet: ' . $this->date_alpha_f . ' to ' . $this->date_omega_f;
-	break;
-}
 
 $sql = 'SELECT distinct kind, kind_sort';
 $sql.= ' from account ';

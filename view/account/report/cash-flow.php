@@ -10,12 +10,14 @@
 
 	@package Edoceo Imperium
 	@todo Bring this up to date with Zend Framework, has cruft from Imperium v600
-	
+
 	Account Statement Cash Flow Action
 	Produces a Cash Flow Statement
 	@todo this one has the most hacks, needs to be brought up from PHP -> Cake -> Zend models
 
 */
+
+namespace Edoceo\Imperium;
 
 use Edoceo\Radix;
 
