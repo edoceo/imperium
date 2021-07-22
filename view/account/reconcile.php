@@ -103,7 +103,7 @@ case 'view':
 $sql = 'SELECT count(distinct(account_journal_id)) FROM general_ledger WHERE account_id = 29';
 $max = SQL::fetch_one($sql);
 
-$sql = 'SELECT * FROM general_ledger WHERE account_id = 29 ORDER BY date LIMIT 10';
+$sql = 'SELECT * FROM general_ledger WHERE account_id = 29 ORDER BY account_journal_date LIMIT 10';
 $res = SQL::fetch_all($sql);
 ?>
 	<h2>Reconcile :: Pending <small>(<?= $max ?>)</small></h2>
@@ -117,7 +117,7 @@ $res = SQL::fetch_all($sql);
 		?>
 			<tr>
 				<td><a href="<?= Radix::link('/account/transaction') ?>?id=<?= $rec['account_journal_id'] ?>"><?= $rec['account_journal_id'] ?></a></td>
-				<td><?= $rec['date'] ?></td>
+				<td><?= $rec['account_journal_date'] ?></td>
 				<td class="r">
 					<?= $rec['amount'] ?>
 				</td>
@@ -136,7 +136,7 @@ $res = SQL::fetch_all($sql);
 $sql = 'SELECT count(id) FROM account_journal WHERE flag = 0';
 $max = SQL::fetch_one($sql);
 
-$sql = 'SELECT account_journal_id, flag, date, note, amount FROM general_ledger WHERE flag = 0 ORDER BY date, abs(amount), amount LIMIT 100';
+$sql = 'SELECT account_journal_id, flag, account_journal_date, note, amount FROM general_ledger WHERE flag = 0 ORDER BY account_journal_date, abs(amount), amount LIMIT 100';
 $res = SQL::fetch_all($sql);
 ?>
 
@@ -152,7 +152,7 @@ $res = SQL::fetch_all($sql);
 		?>
 			<tr>
 				<td><a href="<?= Radix::link('/account/transaction') ?>?id=<?= $rec['account_journal_id'] ?>"><?= $rec['account_journal_id'] ?></a></td>
-				<td><?= $rec['date'] ?></td>
+				<td><?= $rec['account_journal_date'] ?></td>
 				<td><?= $rec['note'] ?></td>
 				<td class="r">
 					<?= $rec['amount'] ?>
