@@ -154,7 +154,7 @@ $html_table = ob_get_clean();
 <div class="row">
 <div class="col-md-4">
 	<button class="btn btn-primary" name="c" type="submit" value="view">View</button>
-	<button class="btn btn-outline-secondary" name="c" type="submit" value="post">Post</button>
+	<button accesskey="p" class="btn btn-outline-secondary" name="c" type="submit" value="post">Post</button>
 </div>
 </div> <!-- /.row -->
 
