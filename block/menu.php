@@ -259,7 +259,7 @@ ul.dropdown-menu a {
 </div>
 
 <ul class="navbar-nav">
-	<li><a class="nav-link" href="<?= Radix::link('/auth/sign-out') ?>"><i class="fas fa-sign-out-alt"></i></a></li>
+	<li><a class="nav-link" href="<?= Radix::link('/auth/shut') ?>"><i class="fas fa-sign-out-alt"></i></a></li>
 </ul>
 
 </div> <!-- /.collapse .navbar-collapse -->

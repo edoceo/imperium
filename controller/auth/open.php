@@ -12,9 +12,9 @@ use Edoceo\Radix\DB\SQL;
 switch (strtolower($_POST['a'])) {
 case 'sign in':
 
-	if (!acl::may('/auth/sign-in', 'POST')) {
+	if (!acl::may('/auth/open', 'POST')) {
 		Session::flash('fail', 'Access Denied');
-		Radix::redirect('/auth/sign-in');
+		Radix::redirect('/auth/open');
 	}
 
 	$sql = 'SELECT * FROM auth_user WHERE username = ? ';

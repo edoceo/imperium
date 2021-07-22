@@ -69,9 +69,9 @@ if (!empty($x)) {
 // radix_acl::permit('null','/auth/*');
 if (empty($_SESSION['uid'])) {
 	unset($_SESSION['_acl']);
-	ACL::permit('/auth/sign-in');
-	ACL::permit('/auth/sign-in', 'POST');
-	ACL::permit('/auth/sign-out');
+	ACL::permit('/auth/open');
+	ACL::permit('/auth/open', 'POST');
+	ACL::permit('/auth/shut');
 	ACL::permit('/hook/*');
 }
 
@@ -108,7 +108,7 @@ if (!acl::may(Radix::$path)) {
 			}
 		}
 		Session::flash('fail', 'Identity Required');
-		Radix::redirect('/auth/sign-in');
+		Radix::redirect('/auth/open');
 	}
 
 	Session::flash('fail', 'Access Denied to ' . Radix::$path);
