@@ -56,7 +56,7 @@ if (empty($this->Account['id'])) {
 	// Show General Ledger (All Accounts!)
 
 	$where = " (account_ledger_date>='{$this->date_alpha}' and account_ledger_date<='{$this->date_omega}') ";
-	$order = " account_ledger_date, kind, account_journal_id, amount asc ";
+	$order = " account_ledger_date, account_type, account_journal_id, amount asc ";
 
 	$this->dr_total = SQL::fetch_one("select sum(amount) from general_ledger where amount < 0 and $where");
 	$this->cr_total = SQL::fetch_one("select sum(amount) from general_ledger where amount > 0 and $where");
@@ -82,6 +82,8 @@ if (empty($this->Account['id'])) {
 	$this->cr_total = abs($this->Account->creditTotal($this->date_alpha,$this->date_omega));
 
 }
+
+session_write_close();
 
 if (strlen($_GET['link'])) {
 	throw new Exception('@deprecated');

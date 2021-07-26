@@ -31,10 +31,8 @@ case 'no hawk':
 case 'copy':
 
 	// Copy Invoice
-	$I_Copy = new Invoice();
-	foreach (array('contact_id','requester','kind','status','base_rate','base_unit','bill_address_id','ship_address_id','note') as $x) {
-		$I_Copy[$x] = $Invoice[$x];
-	}
+	$I_Copy = clone $Invoice;
+	unset($I_Copy['id']);
 	$I_Copy->setFlag(Invoice::FLAG_OPEN);
 	$I_Copy->save();
 

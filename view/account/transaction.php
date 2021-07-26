@@ -65,7 +65,7 @@ if (count($this->jump_list)) {
 
 <div class="container-fluid">
 
-<form enctype="multipart/form-data" method="post">
+<form autocomplete="off" enctype="multipart/form-data" method="post">
 <div class="row">
 <div class="col-md-3">
 	<label>Date:</label>
@@ -84,7 +84,7 @@ if (count($this->jump_list)) {
 </div>
 
 <div class="row">
-<div class="col-md-10">
+<div class="col-md-9">
 	<label>Note:</label>
 	<?= Form::text('note', $this->AccountJournalEntry['note'],array('autocomplete'=>'off', 'class'=>'form-control')) ?>
 </div>
@@ -96,12 +96,6 @@ if (count($this->jump_list)) {
 </thead>
 <tbody>
 <?php
-
-$AccountList = array();
-foreach ($this->AccountList as $item) {
-	$AccountList[$item->id] = $item->full_name;
-}
-
 foreach ($this->AccountLedgerEntryList as $i=>$item) {
 
 	$A1 = new Account($item['account_id']);
@@ -229,7 +223,7 @@ function acChangeSelect(event,ui)
 	// Then, copy the revenue account value
 	if (old_id != new_id) {
 		// If i'm getting assigned as a sub-client ledger
-		if ('Sub: Customer' == ui.item.type) {
+		if ('Sub: Client' == ui.item.type) {
 			// Find the Revenue Account
 			var le0 = $('.ledger-line-item[data-account-type="Revenue"]');
 			if (1 == le0.length) {
@@ -345,7 +339,7 @@ function updateJournalEntryBalance()
 		v = parseFloat(v, 10) || 0;
 
 		var at0 = $(this).closest('tr').data('account-type');
-		if (('Sub: Client' == at0) || ('Sub: Vendor' == at0) || ('Sub: Customer' == at0)) {
+		if (('Sub: Client' == at0) || ('Sub: Vendor' == at0)) {
 			// Ignore
 		} else {
 			if (this.name.indexOf('_dr') > 0) {

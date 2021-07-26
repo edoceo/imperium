@@ -93,10 +93,6 @@ table#account-journal-main {
 	margin-top: 1em;
 	position: relative;
 }
-table#account-journal-main thead tr.open {
-	background: #aaa;
-}
-
 table#account-journal-main tbody tr.je td {
 	font-weight: bold;
 }
@@ -109,19 +105,19 @@ table#account-journal-main tbody tr.le td.crdr {
 </style>
 
 <table class="table table-sm table-bordered" id="account-journal-main">
-<thead class="thead-dark">
+<thead class="table-dark">
 	<tr>
-	<th>TXN/Code</th>
-	<th>Date</th>
-	<th>Account/Note</th>
-	<th>Debit</th>
-	<th>Credit</th>
-	<th>Balance</th>
+		<th>TXN/Code</th>
+		<th>Date</th>
+		<th>Account/Note</th>
+		<th>Debit</th>
+		<th>Credit</th>
+		<th>Balance</th>
 	</tr>
-	<tr class="open">
-	<th class="c">-Open-</th>
-	<th colspan="4"></th>
-	<th class="b r"><?= number_format($this->balanceAlpha, 2) ?></th>
+	<tr class="table-secondary">
+		<th class="c">-Open-</th>
+		<th colspan="4"></th>
+		<th class="b r"><?= number_format($this->balanceAlpha, 2) ?></th>
 	</tr>
 </thead>
 
@@ -167,11 +163,11 @@ foreach ($this->JournalEntryList as $je) {
 		}
 
 		echo '<tr class="le">';
-
+		echo '<td></td>';
 		if ($this->Account['id'] == $le['account_id']) {
-			echo '<td colspan="3">' . html($le['account_full_name']) . '</td>';
+			echo '<td colspan="2">' . html($le['account_full_name']) . '</td>';
 		} else {
-			echo '<td colspan="3" style="text-indent:3em;">';
+			echo '<td colspan="2" style="text-indent:2em;">';
 			echo '<a href="' . Radix::link('/account/journal?id=' . $le['account_id']) . '">';
 			echo html($le['account_full_name']);
 			echo '</a>';
@@ -196,9 +192,9 @@ foreach ($this->JournalEntryList as $je) {
 ?>
 
 	<tr class="je">
-	<td class="c"<?= ($je['flag'] == 0 ? ' style="background:#e00;"' : null) ?>><a href="<?= Radix::link('/account/transaction?id=' . $je['id']) ?>"><?= sprintf('#%s%s', $je['kind'], $je['id']) ?></a></td>
 	<td class="c"><?= html($d->format('m/d')) ?></td>
-	<td colspan="3"><?= html($je['note']) ?></td>
+	<td><?= html($je['note']) ?></td>
+	<td class="c"<?= ($je['flag'] == 0 ? ' style="color:#f00; font-weight:bold;"' : null) ?>><a href="<?= Radix::link('/account/transaction?id=' . $je['id']) ?>"><?= sprintf('#%s%s', $je['kind'], $je['id']) ?></a></td>
 	<?php
 	//if ($runbal > $prev_b) {
 		echo '<td class="r">' . number_format($runbal, 2) . '</td>';
@@ -218,7 +214,7 @@ foreach ($this->JournalEntryList as $je) {
 </tbody>
 <tfoot>
 	<tr>
-	<td colspan="3">Sum</td>
+	<td colspan="3">Totals</td>
 	<td class="r"><?= number_format($dr_sum, 2) ?></td>
 	<td class="r"><?= number_format($cr_sum, 2) ?></td>
 	<td class="r"><?= number_format($runbal, 2) ?></td>

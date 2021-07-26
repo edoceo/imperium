@@ -28,26 +28,23 @@ ob_start();
 
 ?>
 <table class="table table-sm table-striped table-hover">
-<thead class="thead-dark">
+<thead class="table-dark">
 	<tr>
-	<th>Date</th>
-	<th>Account/Note</th>
-	<th>Entry #</th>
-	<th class="r">Debit</th>
-	<th class="r">Credit</th>
-	<th class="r">Balance</th>
-	<th></th>
+		<th>Date</th>
+		<th>Account/Note</th>
+		<th>Entry #</th>
+		<th class="r">Debit</th>
+		<th class="r">Credit</th>
+		<th class="r">Balance</th>
+		<th></th>
+	</tr>
+	<tr class="table-secondary">
+		<td class="c">-Open-</td><td colspan="4">Opening Balance</td>
+		<td class="b r"><?= number_format($this->balanceAlpha, 2) ?></td>
+		<td></td>
 	</tr>
 </thead>
-
 <tbody>
-
-<tr>
-	<td class="c">-Open-</td><td colspan="4">Opening Balance</td>
-	<td class="b r"><?= number_format($this->balanceAlpha, 2) ?></td>
-	<td></td>
-</tr>
-
 <?php
 foreach ($this->LedgerEntryList as $le)
 {
@@ -62,10 +59,11 @@ foreach ($this->LedgerEntryList as $le)
 
     echo '<td class="c"><a href="' . Radix::link($link) . '">' . $le['account_ledger_date'] . '</td>';
     echo '<td>' . html($le['note']) . '</td>';
-    echo sprintf('<td class="c"%s>#%s%s</td>',
-    	($le['flag'] == 0 ? ' style="background:#e00;"' : null),
-    	$le['kind'],
-    	$le['account_journal_id']);
+	printf('<td class="c"%s>#%s%s</td>'
+		, ($le['flag'] == 0 ? ' style="color:#f00; font-weight:bold;"' : null)
+		, $le['account_journal_type']
+		, $le['account_journal_id']
+	);
 
     // Object Link
     //if (!empty($le['link_to'])) {
@@ -105,7 +103,7 @@ foreach ($this->LedgerEntryList as $le)
 <td class="b r">&curren;<?= number_format($cr_sum, 2) ?></td>
 <td class="b r">&curren;<?= number_format($runbal, 2) ?></td>
 <?php
-//if (substr($this->Account->kind,0,5)=='Asset') {
+//if (substr($this->Account->account_type,0,5)=='Asset') {
 //	echo '<td class="b r">&curren;' . number_format($runbal * -1,2) . '</td>';
 //} else {
 //}
