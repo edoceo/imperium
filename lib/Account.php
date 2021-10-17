@@ -53,18 +53,13 @@ class Account extends ImperiumBase
 		'Liability: Long Term' => 'Liability: Long Term',
 		'Liability: Other' => 'Liability: Other',
 		'Revenue' => 'Revenue',
-		'Revenue: Invoices' => 'Revenue: Invoices',
-		'Revenue: Misc' => 'Revenue: Misc',
 		'Expense' => 'Expense',
-		'Expense: Cost of Goods Sold' => 'Expense: Cost of Goods Sold',
-		'Expense: Misc' => 'Expense: Misc',
 		'Equity' => 'Equity',
 		'Equity: Owners Capital' => 'Equity: Owners Capital',
 		'Equity: Owners Drawing' => 'Equity: Owners Drawing',
 		'Sub' => 'Sub Ledgers',
 		'Sub: Client' => 'Client Ledgers',
 		'Sub: Vendor' => 'Vendor Ledgers',
-		// 'Sub: Asset' => 'Fixed Asset Ledgers',
 	);
 
 	/**
@@ -137,6 +132,20 @@ class Account extends ImperiumBase
 			$this->_data['full_name'] = $this->_data['full_code'] . ' - ';
 		}
 		$this->_data['full_name'].= $this->_data['kind'] . ':' . $this->_data['name'];
+
+		/*
+		$k = strtok($this->_data['kind'], ':');
+		switch ($k) {
+			case 'Asset':
+				$this->_data['kind_sort'] = 10;
+				break;
+			case 'Expense':
+				$this->_data['kind_sort'] = 30;
+				break;
+			default:
+				$this->_data['kind_sort'] = 300;
+		}
+		*/
 
 		$ret = parent::save();
 
