@@ -20,9 +20,8 @@ error_reporting( (E_ALL | E_STRICT) ^ E_NOTICE );
 
 $path = array();
 $path[] = dirname(__FILE__) . '/lib';
-# $path[] = '/opt/edoceo/lib/radix';
 $path[] = get_include_path();
-set_include_path(implode(PATH_SEPARATOR,$path));
+set_include_path(implode(PATH_SEPARATOR, $path));
 
 define('APP_ROOT', dirname(__FILE__));
 define('APP_NAME', 'Edoceo Imperium');
@@ -63,35 +62,24 @@ require_once('PDF/Invoice.php');
 // Load Application Config
 App::load_config();
 
-// Zend Locale
-// $locale  = new Zend_Locale('en');
-// Zend_Locale::setDefault('en_US');
-// Zend_Registry::set('Zend_Locale', new Zend_Locale('en_US'));
-
-// Date Options
-// Zend_Date::setOptions(array('extend_month' => false,'format_type'=>'iso'));
-
-// Zend Database
-//$x = $_ENV['database'];
-//unset($x['adapter']);
-//$x = Zend_Db::factory($_ENV['database']['adapter'],$x);
-//$x->setFetchMode(Zend_Db::FETCH_OBJ);
-//// set client_encoding='utf-8';
-//Zend_Registry::set('db',$x);
-//Zend_Db_Table_Abstract::setDefaultAdapter($x);
+// Database
 SQL::init("pgsql:host={$_ENV['database']['hostname']};dbname={$_ENV['database']['database']}",$_ENV['database']['username'],$_ENV['database']['password']);
-// App::$db = new radix_db_sql();
+
+function _dbc()
+{
+	static $dbc;
+}
 
 /**
     Internal Hax0r Functions
 */
 function html($x)
 {
-    return htmlspecialchars($x,ENT_QUOTES,'UTF-8',false);
+    return htmlspecialchars($x, ENT_QUOTES, 'UTF-8', false);
 }
 
 // @deprecated
-function img($img,$alt=null)
+function img($img, $alt=null)
 {
     $src = !empty($_SERVER['HTTPS']) ? 'https:' : 'http:';
     $src.= '//gcdn.org/' . ltrim($img,'/');
