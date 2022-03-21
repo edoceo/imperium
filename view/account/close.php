@@ -16,8 +16,6 @@ $income_summary_account_id = 57;
 
 $sql = 'SELECT * FROM account_period';
 $res = SQL::fetch_all($sql);
-//var_dump($res);
-
 
 // @todo To determine if a period is closed we need
 // a closing entry in revenue
@@ -54,7 +52,7 @@ echo '<table>';
 echo '<tr><th>Account</th><th>Close</th><th>Debit</th><th>Credit</th></tr>';
 
 $sql = "select a.id,a.code,a.kind,a.full_code,a.name,a.full_name,c.kind,sum(b.amount) as balance, ";
-$sql.= " CASE c.kind WHEN 'N' THEN 1 WHEN 'A' THEN 2 WHEN 'C' then 3 end as kind_sort "; 
+$sql.= " CASE c.kind WHEN 'N' THEN 1 WHEN 'A' THEN 2 WHEN 'C' then 3 end as kind_sort ";
 $sql.= "from account a join account_ledger b on a.id=b.account_id join account_journal c on b.account_journal_id=c.id ";
 $sql.= " where (substring(a.kind from 1 for 7) = 'Revenue' ) ";
 $sql.= " and c.date >= '{$this->date_alpha}' and c.date <= '{$this->date_omega}' ";
