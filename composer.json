@@ -3,12 +3,18 @@
 	"description": "CRM/Accounting",
 	"license": "MIT",
 	"minimum-stability": "dev",
+	"autoload": {
+		"exclude-from-classmap": [
+			"vendor/erusev/parsedown-extra/test"
+		]
+	},
 	"require": {
 		"pear/net_smtp": "1.8.1",
+		"edoceo/lowline": "dev-master",
 		"edoceo/radix": "dev-master",
-		"erusev/parsedown": "1.7.3",
-		"giggsey/libphonenumber-for-php": "8.10.16",
-		"google/apiclient": "2.0.3",
+		"erusev/parsedown-extra": "0.8.1",
+		"giggsey/libphonenumber-for-php": "8.13.7",
+		"google/apiclient": "2.15.0",
 		"tecnickcom/tcpdf": "6.3.2"
 	},
 	"require-dev": {
