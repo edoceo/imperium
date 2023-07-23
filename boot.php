@@ -2,7 +2,6 @@
 /**
  * Imperium Bootstrap
 
-    @deprecated ReturnTo => ReturnPath
     @deprecated ReturnGood => ReturnPath ? ret=1
     @deprecated ReturnFail => ReturnPath ? ret=0
     @deprecated $this->link

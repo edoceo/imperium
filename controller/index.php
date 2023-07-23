@@ -1,7 +1,7 @@
 <?php
 /**
 	@file
-	@brief 
+	@brief
 */
 
 namespace Edoceo\Imperium;
@@ -63,6 +63,5 @@ $this->paginate = array(
 );
 */
 // unset($this->SearchTerm);
-// $this->_s->ReturnTo = '/';
 
 $_ENV['data'] = $data;

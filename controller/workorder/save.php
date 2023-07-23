@@ -68,7 +68,6 @@ case 'send':
 	// $this->_s->EmailComposeMessage->body.= '  ' . $this->_c->Company->name . "\n\n";
 	// $this->_s->EmailComposeMessage->body.= 'PS: The linked files are in Adobe PDF format. You must have Acrobat Reader (or other compatible software) installed to view these documents.';
 
-	// $this->_s->ReturnTo = sprintf('/workorder/view/id/%d?sent=true',$wo->id);
 	$this->_s->ReturnGood = sprintf('/workorder/view?w=%d?sent=good',$wo->id);
 	$this->_s->ReturnFail = sprintf('/workorder/view?w=%d?sent=fail',$wo->id);
 	Radix::redirect('/email/compose');
