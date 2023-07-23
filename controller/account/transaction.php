@@ -1,7 +1,7 @@
 <?php
 /**
-	Show and Save Transactions
-*/
+ * Show and Save Transactions
+ */
 
 namespace Edoceo\Imperium;
 
@@ -193,11 +193,35 @@ if ($id) {
 
 	$this->FileList = $this->AccountJournalEntry->getFiles();
 
-} elseif (!empty($_SESSION['account-transaction'])) {
+} elseif ( ! empty($_GET['tt'])) {
+
+	$tt = sodium_base642bin($_GET['tt'], SODIUM_BASE64_VARIANT_URLSAFE_NO_PADDING);
+	$tt = json_decode($tt, true);
+
+	var_dump($tt);
+
+	$je = new AccountJournalEntry();
+	$je['kind'] = $tt['je']['kind'];
+	$je['date'] = $tt['je']['date'];
+	$je['note'] = $tt['je']['note'];
+	$this->AccountJournalEntry = $je;
+
+	$this->AccountLedgerEntryList = [];
+	foreach ($tt['le'] as $le0) {
+		$le1 = new AccountLedgerEntry();
+		$le1['account_id'] = $le0['account_id'];
+		$le1['account_name'] = $le0['account_name'];
+		$le1['amount'] = $le0['amount'];
+		$this->AccountLedgerEntryList[] = $le1;
+	}
+
+} elseif ( ! empty($_SESSION['account-transaction'])) {
+
+	Session::flash('warn', 'Account Transaction Session Passing is @deprecated');
 
 	$this->AccountJournalEntry = $_SESSION['account-transaction']->AccountJournalEntry;
 	$this->AccountLedgerEntryList = $_SESSION['account-transaction']->AccountLedgerEntryList;
-	// @todo Here on on Save (above)?
+
 	// unset($_SESSION['account-transaction']);
 
 } else {
