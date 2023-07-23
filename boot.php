@@ -1,7 +1,6 @@
 <?php
 /**
-    @file
-    @brief Bootstraps the Imperium Application
+ * Imperium Bootstrap
 
     @deprecated ReturnTo => ReturnPath
     @deprecated ReturnGood => ReturnPath ? ret=1

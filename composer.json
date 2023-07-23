@@ -6,18 +6,21 @@
 	"autoload": {
 		"exclude-from-classmap": [
 			"vendor/erusev/parsedown-extra/test"
-		]
+		],
+		"psr-4": {
+			"Edoceo\\Imperium\\": "./lib"
+		}
 	},
 	"require": {
 		"pear/net_smtp": "1.8.1",
 		"edoceo/lowline": "dev-master",
 		"edoceo/radix": "dev-master",
 		"erusev/parsedown-extra": "0.8.1",
-		"giggsey/libphonenumber-for-php": "8.13.7",
+		"giggsey/libphonenumber-for-php": "8.13.17",
 		"google/apiclient": "2.15.0",
-		"tecnickcom/tcpdf": "6.3.2"
+		"tecnickcom/tcpdf": "6.6.2"
 	},
 	"require-dev": {
-		"phpunit/phpunit": "8.3.4"
+		"phpunit/phpunit": "9.6.9"
 	}
 }
