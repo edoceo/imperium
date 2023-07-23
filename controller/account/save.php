@@ -1,7 +1,7 @@
 <?php
 /**
-
-*/
+ *
+ */
 
 use Edoceo\Radix;
 use Edoceo\Radix\Session;
@@ -11,6 +11,16 @@ use Edoceo\Imperium\Account;
 $a = new Account($_POST['id']);
 
 switch (strtolower($_POST['a'])) {
+case 'account-archive':
+
+	$a['stat'] = 410;
+	$a->save();
+
+	Session::flash('info', 'Account Archived');
+	Radix::redirect();
+
+	break;
+
 case 'delete':
 	$a->delete();
 	Session::flash('info', "Account #{$a['id']} deleted");;

@@ -1,7 +1,7 @@
 <?php
 /**
-	Account Edit
-*/
+ * Account Edit
+ */
 
 namespace Edoceo\Imperium;
 
@@ -10,6 +10,8 @@ use Edoceo\Radix\DB\SQL;
 use Edoceo\Radix\HTML\Form;
 
 $this->Account = new Account($_GET['id']);
+
+$_ENV['title'] = sprintf('Account :: Edit :: %s', $this->Account['name']);
 
 // Parent Account
 $Account_Parent_list = array(0 => '- None -');
@@ -88,6 +90,7 @@ foreach ($res as $x) {
 	<?= Form::hidden('r', $_GET['r']) ?>
 	<?= Form::hidden('id', $this->Account['id']) ?>
 	<button accesskey="s" class="btn btn-primary" name="a" type="submit" value="Save">Save</button>
+	<button class="btn btn-secondary" name="a" type="submit" value="account-archive">Archive</button>
 	<button class="btn btn-danger" name="a" type="submit" value="Delete">Delete</button>
 </div>
 
