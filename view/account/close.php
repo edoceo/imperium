@@ -1,21 +1,48 @@
 <?php
 /**
-	Account Close Period View
-	Wizard for Closing a Period
-*/
+ * Account Close Period View
+ *
+ * Wizard for Closing a Period
+ */
 
 namespace Edoceo\Imperium;
 
 use Edoceo\Radix;
+use Edoceo\Radix\Session;
 use Edoceo\Radix\DB\SQL;
 use Edoceo\Radix\HTML\Form;
 
 $_ENV['h1'] = $_ENV['title'] = array('Accounting', 'Period', 'Close', $this->date_alpha . ' to ' . $this->date_omega);
 
-$income_summary_account_id = 57;
+$this->Account = new Account($_GET['account_id']);
 
-$sql = 'SELECT * FROM account_period';
-$res = SQL::fetch_all($sql);
+// Check Account Period
+$chk_lo = SQL::fetch_row('SELECT * FROM account_period WHERE :d0 >= date_alpha AND :d0 <= date_omega', [ ':d0' => $this->date_alpha ]);
+switch ($chk_lo['status_id']) {
+	case 100:
+		// Period Active
+		break;
+	case 200:
+		// Period Closed
+		Session::flash('fail', sprintf('Cannot Operate on "%s"; Period Closed', $this->date_alpha));
+	default:
+		Session::flash('fail', sprintf('Cannot Operate on "%s"; Period Unknown', $this->date_alpha));
+		break;
+}
+
+$chk_hi = SQL::fetch_row('SELECT * FROM account_period WHERE :d0 >= date_alpha AND :d0 <= date_omega', [ ':d0' => $this->date_omega ]);
+switch ($chk_hi['status_id']) {
+	case 100:
+		// Period Active
+		break;
+	case 200:
+		// Period Closed
+		Session::flash('fail', sprintf('Cannot Operate on "%s"; Period Closed', $this->date_omega));
+		break;
+	default:
+		Session::flash('fail', sprintf('Cannot Operate on "%s"; Period Unknown', $this->date_omega));
+		break;
+}
 
 // @todo To determine if a period is closed we need
 // a closing entry in revenue
@@ -35,28 +62,28 @@ $res = SQL::fetch_all($sql);
 // exit;
 
 echo '<form method="get">';
-echo '<div style="margin:0.5em 0 0.5em 0">';
-echo '<div style="display:flex;">';
-echo '<div style="flex:1 1 auto;">' . Form::select('id', $this->Account['id'], $this->AccountList_Select) . '</div>';
-echo '<div style="flex:1 1 auto;">' . Form::date('d0', $this->date_alpha, array('size'=>12)) . '</div>';
-echo '<div style="flex:1 1 auto;">' . Form::date('d1', $this->date_omega, array('size'=>12)) . '</div>';
-echo '<div style="flex:1 1 auto;"><input name="c" type="submit" value="View"></div>';
-echo '<div style="flex:1 1 auto;"><input name="c" type="submit" value="Post"></div>';
-echo '</div>';
+echo '<div class="d-flex">';
+echo '<div class="me-2"><h2>Closing Period:</h2></div>';
+echo '<div class="me-2">' . Form::date('d0', $this->date_alpha, [ 'class' => 'form-control', 'style' => 'width: 14em;' ]) . '</div>';
+echo '<div class="me-2">' . Form::date('d1', $this->date_omega, [ 'class' => 'form-control', 'style' => 'width: 14em;' ]) . '</div>';
+echo '<div class="me-2">' . Form::select('account_id', $this->Account['id'], $this->AccountList_Select, [ 'class' => 'form-control'] ) . '</div>';
+echo '<div class="me-2"><button class="btn btn-primary" name="c" type="submit" value="view">View</button></div>';
 echo '</div>';
 echo '</form>';
 
 // Has Revenue Been Closed (zero balance)?
-echo '<h2>Closing Revenue</h2>';
-echo '<table>';
-echo '<tr><th>Account</th><th>Close</th><th>Debit</th><th>Credit</th></tr>';
+echo '<h2>Revenue Accounts</h2>';
+echo '<table class="table">';
+echo '<thead>';
+echo '<tr><th>Account</th><th>Close</th><th class="r">Debit</th><th class="r">Credit</th></tr>';
+echo '</thead>';
 
+// Revenue Query
 $sql = "select a.id,a.code,a.kind,a.full_code,a.name,a.full_name,c.kind,sum(b.amount) as balance, ";
 $sql.= " CASE c.kind WHEN 'N' THEN 1 WHEN 'A' THEN 2 WHEN 'C' then 3 end as kind_sort ";
 $sql.= "from account a join account_ledger b on a.id=b.account_id join account_journal c on b.account_journal_id=c.id ";
 $sql.= " where (substring(a.kind from 1 for 7) = 'Revenue' ) ";
 $sql.= " and c.date >= '{$this->date_alpha}' and c.date <= '{$this->date_omega}' ";
-// $sql.= " and c.kind = 'C' ";
 $sql.= "group by a.id,a.code,a.kind,a.full_code,a.name,a.full_name,c.kind ";
 $sql.= "order by a.full_code,a.code,a.full_name,kind_sort ";
 $this->Close_Revenue_List = SQL::fetch_all($sql);
@@ -89,16 +116,14 @@ if ($rv_total == 0) {
 	echo '<th class="r">' . number_format($rv_total_c,2) . '</th>';
 	echo '</tr>';
 } else {
-	// echo '<tr><th colspan="4">Revenues not Closed</th></tr>';
-	// Has Not
 
 	// New Transaction Holder
-	$at = new \stdClass();
-	$at->AccountJournalEntry = new AccountJournalEntry();
-	$at->AccountJournalEntry['kind'] = 'C';
-	$at->AccountJournalEntry['date'] = $this->date_omega;
-	$at->AccountJournalEntry['note'] = 'Closing Revenues to Income Summary';
-	$at->AccountLedgerEntryList = array();
+	$at = [];
+	$at['je'] = [];
+	$at['je']['kind'] = 'C';
+	$at['je']['date'] = $this->date_omega;
+	$at['je']['note'] = 'Closing Revenues to Income Summary';
+	$at['le'] = [];
 
 	// Find List of Accounts to Close
 	$sql = "select a.id,a.code,a.kind,a.full_code,a.name,a.full_name,sum(b.amount) as balance ";
@@ -110,41 +135,34 @@ if ($rv_total == 0) {
 	$sql.= "order by a.full_code,a.code,a.full_name ";
 	$res = SQL::fetch_all($sql);
 	foreach ($res as $a) {
-		$ale = new AccountLedgerEntry();
-		$ale['account_id'] = $a['id'];
-		$ale['account_name'] = $a['full_name'];
-		$ale['amount'] = $a['balance'] * -1;
-		$at->AccountLedgerEntryList[] = $ale;
+		// $ale = new AccountLedgerEntry();
+		$le = [];
+		$le['account_id'] = $a['id'];
+		$le['account_name'] = $a['full_name'];
+		$le['amount'] = $a['balance'] * -1;
+		$at['le'][] = $le;
 	}
 
 	// Close to Income Summary (Credit)
-	$a = new Account(57);
-	$ale = new AccountLedgerEntry();
-	$ale['account_id'] = $a['id'];
-	$ale['account_name'] = $a['full_name'];
-	$ale['amount'] = $rv_total_n;
-	$at->AccountLedgerEntryList[] = $ale;
+	$le = []; // new AccountLedgerEntry();
+	$le['account_id'] = $this->Account['id'];
+	$le['account_name'] = $this->Account['full_name'];
+	$le['amount'] = $rv_total_n;
+	$at['le'][] = $le;
 
-	$_SESSION['account-transaction'] = $at;
-	$_SESSION['return-path'] = '/account/close'; // $s->ReturnGood
-	//$s->ReturnTo = '/account/close';
+	_close_account_button($at, $rv_total_n, $rv_total_c);
 
-	echo '<tr class="fail">';
-	echo '<td colspan="2"><a href="' . Radix::link('/account/transaction') . '">Close these Accounts</a></td>';
-	echo '<td class="r">' . number_format($rv_total_n,2) . '</td>';
-	echo '<td class="r">' . number_format($rv_total_c,2) . '</td>';
-	echo '</tr>';
-	echo '</table>';
-
-	return(0);
 }
 echo '</table>';
 
 // Has Expense Been Closed?
 echo '<h2>Expense Accounts</h2>';
-echo '<table>';
-echo '<tr><th class="l" colspan="4">Expense Accounts</th></tr>';
+echo '<table class="table">';
+echo '<thead>';
+echo '<tr><th>Expense Accounts</th><th>Close</th><th class="r">Debit</th><th class="r">Credit</th></tr>';
+echo '</thead>';
 
+// Expense Query
 $sql = "select a.id,a.code,a.kind,a.full_code,a.name,a.full_name,c.kind,sum(b.amount) as balance, ";
 $sql.= " CASE c.kind WHEN 'N' THEN 1 WHEN 'A' THEN 2 WHEN 'C' then 3 end as kind_sort ";
 $sql.= "from account a join account_ledger b on a.id=b.account_id join account_journal c on b.account_journal_id=c.id ";
@@ -154,6 +172,8 @@ $sql.= " and c.date >= '{$this->date_alpha}' and c.date <= '{$this->date_omega}'
 $sql.= "group by a.id,a.code,a.kind,a.full_code,a.name,a.full_name,c.kind ";
 $sql.= "order by a.full_code,a.code,a.full_name,c.kind desc ";
 $this->Close_Expense_List = SQL::fetch_all($sql);
+
+// $sql.= " and c.kind != 'C' ";
 
 $ex_total = 0;
 $ex_total_n = 0;
@@ -186,22 +206,22 @@ if ($ex_total == 0) {
 	// Has Not Been Properly Close
 	// @todo try to find the closing transaction(s)
 	// New Transaction Holder
-	$at = new \stdClass();
-	$at->AccountJournalEntry = new AccountJournalEntry();
-	$at->AccountJournalEntry['kind'] = 'C';
-	$at->AccountJournalEntry['date'] = $this->date_omega;
-	$at->AccountJournalEntry['note'] = 'Closing Expenses to Income Summary';
-	$at->AccountLedgerEntryList = array();
+	$at = [];
+	$at['je'] = [];
+	$at['je']['kind'] = 'C';
+	$at['je']['date'] = $this->date_omega;
+	$at['je']['note'] = 'Closing Expenses to Income Summary';
+	$at['le'] = [];
 
 	// Close to Income Summary (Debit)
-	$a = new Account(57);
-	$ale = new AccountLedgerEntry();
-	$ale['account_id'] = $a['id'];
-	$ale['account_name'] = $a['full_name'];
-	$ale['amount'] = $ex_total;
-	$at->AccountLedgerEntryList[] = $ale;
+	$le = [];
+	$le['account_id'] = $this->Account['id'];
+	$le['account_name'] = $this->Account['full_name'];
+	$le['amount'] = $ex_total;
+	$at['le'][] = $le;
 
 	// Find List of Accounts to Close
+	// Duplicate to query above, just filtering the type 'C'
 	$sql = "select a.id,a.code,a.kind,a.full_code,a.name,a.full_name,c.kind,sum(b.amount) as balance ";
 	$sql.= "from account a join account_ledger b on a.id=b.account_id join account_journal c on b.account_journal_id=c.id ";
 	$sql.= " where (substring(a.kind from 1 for 7) = 'Expense' ) ";
@@ -211,41 +231,43 @@ if ($ex_total == 0) {
 	$sql.= "order by a.full_code,a.code,a.full_name,c.kind desc ";
 	$res = SQL::fetch_all($sql);
 	foreach ($res as $a) {
-		$ale = new AccountLedgerEntry();
-		$ale['account_id'] = $a['id'];
-		$ale['account_name'] = $a['full_name'];
-		$ale['amount'] = $a['balance'] * -1;
-		$at->AccountLedgerEntryList[] = $ale;
+		$le = [];
+		$le['account_id'] = $a['id'];
+		$le['account_name'] = $a['full_name'];
+		$le['amount'] = $a['balance'] * -1;
+		$at['le'][] = $le;
 	}
-	$_SESSION['account-transaction'] = $at;
-	$_SESSION['return-path'] = '/account/close'; // $s->ReturnGood
 
-	echo '<tr class="fail">';
-	echo '<td colspan="2"><a href="' . $this->link('/account/transaction') . '">Close these Accounts</a></td>';
-	echo '<td class="r">' . number_format($ex_total_n,2) . '</td>';
-	echo '<td class="r">' . number_format($ex_total_c,2) . '</td>';
-	echo '</tr>';
+	_close_account_button($at, $ex_total_n, $ex_total_c);
+
 	echo '</table>';
 
 	return(0);
 }
 echo '</table>';
 
-echo '<h2>Income Summary</h2>';
-echo '<table>';
-
 // Debit Income Summary and Credit Owners Capital
-echo '<tr><th class="l" colspan="4">Close Income Summary to Owners Capital</th></tr>';
-$is_total = 0;
 $sql = "select a.id,a.code,a.kind,a.full_code,a.name,a.full_name,c.kind,sum(b.amount) as balance, ";
 $sql.= " CASE c.kind WHEN 'N' THEN 1 WHEN 'A' THEN 2 WHEN 'C' then 3 end as kind_sort ";
 $sql.= "from account a join account_ledger b on a.id=b.account_id join account_journal c on b.account_journal_id=c.id ";
 $sql.= " where ( a.id = 57 ) ";
 $sql.= " and c.date >= '{$this->date_alpha}' and c.date <= '{$this->date_omega}' ";
-// $sql.= " and c.kind = 'C' ";
+$sql.= " and c.kind = 'C' ";
 $sql.= "group by a.id,a.code,a.kind,a.full_code,a.name,a.full_name,c.kind ";
 $sql.= "order by a.full_code,a.code,a.full_name,c.kind desc ";
 $Income_Summary_List = SQL::fetch_all($sql);
+
+$incsum_cr = 0;
+$incsum_dr = 0;
+$incsum_total = 0;
+
+echo '<h2>Income Summary</h2>';
+echo '<table class="table">';
+echo '<thead>';
+echo '<tr><th colspan="4">Close Income Summary to Owners Capital</th></tr>';
+echo '<tr><th>Account</th><th>Close</th><th class="r">Debit</th><th class="r">Credit</th></tr>';
+echo '</thead>';
+
 if (count($Income_Summary_List)) {
 
 	foreach ($Income_Summary_List as $line) {
@@ -258,67 +280,46 @@ if (count($Income_Summary_List)) {
 
 		echo Radix::block('account-close-line', $data);
 
-		// print_r($item);
-		// echo "<tr class='rero'>";
-		// echo '<td><strong>' . $item->full_code . '</strong>&mdash;<a href="' . $this->link('/account/ledger/id=' . $item->id) . '">' . $item->name . '</a></td>';
-		// echo '<td class="c">' . $item->kind . '</td>';
-		// echo '<td>&nbsp;</td>';
-		// echo '<td class="r">' . number_format($item->balance,2) . '</td>';
-		// echo '</tr>';
-
-		$is_total += $line['balance'];
+		$incsum_total += $line['balance'];
 
 	}
 	// Is Closed?
 	// Closed is With Transactions and Zero Balance
-	if ($is_total == 0) {
+	if ($incsum_total == 0) {
 		echo '<tr><th colspan="3">Income Closed</th><th class="r">0.00</th></tr>';
 	} else {
 		// New Transaction Holder
-		if (empty($s->AccountTransaction)) {
-			$at = new \stdClass();
-			$at->AccountJournalEntry = new AccountJournalEntry();
-			$at->AccountJournalEntry['kind'] = 'C';
-			$at->AccountJournalEntry['date'] = $this->date_omega;
-			$at->AccountJournalEntry['note'] = 'Close Income Summary to Owners Capital';
-			$at->AccountLedgerEntryList = array();
+		$at = [];
+		$at['je'] = [];
+		$at['je']['kind'] = 'C';
+		$at['je']['date'] = $this->date_omega;
+		$at['je']['note'] = 'Close Income Summary to Owners Capital';
+		$at['le'] = [];
 
-			// Close Income Summary (Dr) to Owners Capital (Cr)
-			$a = new Account(57);
-			$ale = new AccountLedgerEntry();
-			$ale['account_id'] = $a['id'];
-			$ale['account_name'] = $a['full_name'];
-			$ale['amount'] = ($is_total * -1);
-			$at->AccountLedgerEntryList[] = $ale;
-			// To Owners Capital
-			$a = new Account(6);
-			$ale = new AccountLedgerEntry();
-			$ale['account_id'] = $a['id'];
-			$ale['account_name'] = $a['full_name'];
-			$ale['amount'] = $is_total;
-			$at->AccountLedgerEntryList[] = $ale;
+		// Close Income Summary (Dr) to Owners Capital (Cr)
+		$le = [];
+		$le['account_id'] = $this->Account['id'];
+		$le['account_name'] = $this->Account['full_name'];
+		$le['amount'] = ($incsum_total * -1);
+		$at['le'][] = $le;
 
-			$_SESSION['account-transaction'] = $at;
-			$_SESSION['return-path'] = '/account/close';
+		// To Owners Capital
+		// $a = new Account(6);
+		$le = [];
+		// $le['account_id'] = $a['id'];
+		// $le['account_name'] = $a['full_name'];
+		$le['amount'] = $incsum_total;
+		$at['le'][] = $le;
 
-			echo '<tr class="fail">';
-			echo '<td colspan="2"><a href="' . $this->link('/account/transaction') . '">Close these Accounts</a></td>';
-			echo '<td class="r">' . number_format($ex_total_n,2) . '</td>';
-			echo '<td class="r">' . number_format($ex_total_c,2) . '</td>';
-			echo '</tr>';
-			echo '</table>';
+		_close_account_button($at, $incsum_total, $incsum_total);
 
-			return(0);
-
-		}
 	}
 } else {
-	echo '<tr><th colspan="3">Pending</th><th class="r">' . number_format($is_total,2) . '</th></tr>';
+	echo '<tr><th colspan="3">Pending</th><th class="r">' . number_format($incsum_total,2) . '</th></tr>';
 }
-echo '<tr><td colspan="4">&nbsp;</td></tr>';
+echo '</table>';
 
 // Credit Owners Capital and Debit Owners Drawing
-echo '<tr><th colspan="4">Close Drawing to Capital</th></tr>';
 $od_total = 0;
 $od_total_c = 0;
 $od_total_n = 0;
@@ -330,6 +331,10 @@ $sql.= " and c.date >= '{$this->date_alpha}' and c.date <= '{$this->date_omega}'
 $sql.= "group by a.id,a.code,a.kind,a.full_code,a.name,a.full_name,c.kind ";
 $sql.= "order by a.full_code,a.code,a.full_name,c.kind desc ";
 $Close_Drawing_List = SQL::fetch_all($sql);
+
+echo '<h2>Drawings to Capital</h2>';
+echo '<table class="table">';
+echo '<tr><th colspan="4">Close Drawing to Capital</th></tr>';
 if (count($Close_Drawing_List)) {
 
 	foreach ($Close_Drawing_List as $line) {
@@ -365,42 +370,39 @@ if ($od_total_c == 0) {
 
 	// New Transaction Holder
 	if (empty($s->AccountTransaction)) {
-		$at = new \stdClass();
-		$at->AccountJournalEntry = new AccountJournalEntry();
-		$at->AccountJournalEntry->kind = 'C';
-		$at->AccountJournalEntry->date = $this->date_omega;
-		$at->AccountJournalEntry->note = 'Close Owners Drawing to Owners Capital';
-		$at->AccountLedgerEntryList = array();
+
+		$at = [];
+		$at['je'] = [];
+		$at['je']['kind'] = 'C';
+		$at['je']['date'] = $this->date_omega;
+		$at['je']['note'] = 'Close Owners Drawing to Owners Capital';
+		$at['le'] = [];
 
 		// Debit Owners Capital
 		$a = new Account(6);
-		$ale = new AccountLedgerEntry();
-		$ale->account_id = $a->id;
-		$ale->account_name = $a->full_name;
-		$ale->amount = $od_total_n;
-		$at->AccountLedgerEntryList[] = $ale;
+		$le = [];
+		$le['account_id'] = $a['id'];
+		$le['account_name'] = $a['full_name'];
+		$le['amount'] = $od_total_n;
+		$at['le'][] = $le;
 
 		// Credit Owners Drawing
 		$a = new Account(7);
-		$ale = new AccountLedgerEntry();
-		$ale->account_id = $a->id;
-		$ale->account_name = $a->full_name;
-		$ale->amount = $od_total_n * -1;
-		$at->AccountLedgerEntryList[] = $ale;
+		$le = [];
+		$le['account_id'] = $a['id'];
+		$le['account_name'] = $a['full_name'];
+		$le['amount'] = $od_total_n * -1;
+		$at['le'][] = $le;
 
-		echo '<tr>';
-		echo '<td class="fail" colspan="4"><a href="' . $this->link('/account/transaction') . '">Close these Accounts</a></td>';
-		echo '</tr>';
+		_close_account_button($at, $od_total_n, $od_total_n);
 
-		$s->AccountTransaction = $at;
-		$s->ReturnGood = '/account/close';
-		$s->ReturnTo = '/account/close';
 	}
+
 } else {
 	echo '<tr><th colspan="3">Income &amp; Capital Closed</th><th class="r">0.00</th></tr>';
 }
 
-echo '<tr class="rero">';
+echo '<tr>';
 echo '<td><strong>Period Totals</strong></td>';
 echo '<td>&nbsp;</td>';
 echo '<td class="b r">' . number_format($ex_total_n *-1 ,2 ) . '</td>';
@@ -419,12 +421,12 @@ if ($pl_total >= 0) {
 
 echo '</table>';
 
-if ( ($rv_total == 0) && ($ex_total == 0) && ($is_total == 0) && ($od_total == 0) ) {
-// if ( ($ex_total + $rv_total + $is_total + $od_total) == 0) {
+if ( ($rv_total == 0) && ($ex_total == 0) && ($incsum_total == 0) && ($od_total == 0) ) {
+// if ( ($ex_total + $rv_total + $incsum_total + $od_total) == 0) {
 	echo '<p class="info">This Period is Closed</p>';
-	return(0);
+	// return(0);
 } else {
-	echo "<p>( ($rv_total == 0) && ($ex_total == 0) && ($is_total == 0) && ($od_total == 0) )</p>";
+	echo "<p>( ($rv_total == 0) && ($ex_total == 0) && ($incsum_total == 0) && ($od_total == 0) )</p>";
 }
 
 // Helper Notes
@@ -441,12 +443,37 @@ echo "DR Revenue accounts for balance and CR Income Summary for $rv_total_n\n";
 // Close Expenses to Income Summary
 echo "DR Income Summary for $ex_total_n and CR each of the Expense accounts for their balance\n";
 // Close Income Summary to Owners Capital
-if ($is_total>0) {
+if ($incsum_total > 0) {
   echo "DR Income Summary for ".number_format($pl_total*-1,2)." and CR Owners Capital for ".number_format($pl_total,2)."\n";
 } else {
-  echo "CR Income Summary for $is_total and DR Capital (Loss)\n";
+  echo "CR Income Summary for $incsum_total and DR Capital (Loss)\n";
 }
 if ($od_total != 0) {
   echo "DR Owners Capital ".number_format($od_total,2)." and CR Owners Drawing for ".number_format($od_total*-1,2)."\n";
 }
 echo '</pre>';
+
+
+/**
+ * Close Account Button Helper
+ */
+function _close_account_button($tt, $dr, $cr)
+{
+	if ( ! is_string($tt)) {
+		$tt = sodium_bin2base64(json_encode($tt), SODIUM_BASE64_VARIANT_URLSAFE_NO_PADDING);
+	}
+
+	$link = sprintf('%s?%s', Radix::link('/account/transaction'), http_build_query([
+		'tt'=> $tt,
+		'r' => Radix::link('/account/close'),
+	]));
+
+	echo '<tfoot>';
+	echo '<tr>';
+	echo '<td colspan="2"><a class="btn btn-primary" href="' . $link . '">Close these Accounts</a></td>';
+	echo '<td class="r">' . number_format($dr,2) . '</td>';
+	echo '<td class="r">' . number_format($cr,2) . '</td>';
+	echo '</tr>';
+	echo '</tfoot>';
+
+}
