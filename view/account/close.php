@@ -75,7 +75,7 @@ echo '</form>';
 echo '<h2>Revenue Accounts</h2>';
 echo '<table class="table">';
 echo '<thead>';
-echo '<tr><th>Account</th><th>Close</th><th class="r">Debit</th><th class="r">Credit</th></tr>';
+echo '<tr><th>Account</th><th class="c">Close</th><th class="r">Debit</th><th class="r">Credit</th></tr>';
 echo '</thead>';
 
 // Revenue Query
@@ -100,7 +100,7 @@ if (count($this->Close_Revenue_List)) {
 			'date_alpha' => $this->date_alpha,
 			'date_omega' => $this->date_omega
 		);
-		echo Radix::block('account-close-line', $data);
+		_close_account_line($data);
 
 		if ($line['kind'] == 'C') {
 			$rv_total_c += $line['balance'];
@@ -159,7 +159,7 @@ echo '</table>';
 echo '<h2>Expense Accounts</h2>';
 echo '<table class="table">';
 echo '<thead>';
-echo '<tr><th>Expense Accounts</th><th>Close</th><th class="r">Debit</th><th class="r">Credit</th></tr>';
+echo '<tr><th>Expense Accounts</th><th class="c">Close</th><th class="r">Debit</th><th class="r">Credit</th></tr>';
 echo '</thead>';
 
 // Expense Query
@@ -186,7 +186,7 @@ if (count($this->Close_Expense_List)) {
 			'date_alpha' => $this->date_alpha,
 			'date_omega' => $this->date_omega
 		);
-		echo Radix::block('account-close-line', $data);
+		_close_account_line($data);
 
 		if ($item['kind'] == 'C') {
 			$ex_total_c += $line['balance'];
@@ -240,9 +240,9 @@ if ($ex_total == 0) {
 
 	_close_account_button($at, $ex_total_n, $ex_total_c);
 
-	echo '</table>';
+	// echo '</table>';
 
-	return(0);
+	// return(0);
 }
 echo '</table>';
 
@@ -265,7 +265,7 @@ echo '<h2>Income Summary</h2>';
 echo '<table class="table">';
 echo '<thead>';
 echo '<tr><th colspan="4">Close Income Summary to Owners Capital</th></tr>';
-echo '<tr><th>Account</th><th>Close</th><th class="r">Debit</th><th class="r">Credit</th></tr>';
+echo '<tr><th>Account</th><th class="c">Close</th><th class="r">Debit</th><th class="r">Credit</th></tr>';
 echo '</thead>';
 
 if (count($Income_Summary_List)) {
@@ -278,7 +278,7 @@ if (count($Income_Summary_List)) {
 			'date_omega' => $this->date_omega
 		);
 
-		echo Radix::block('account-close-line', $data);
+		_close_account_line($data);
 
 		$incsum_total += $line['balance'];
 
@@ -353,7 +353,7 @@ if (count($Close_Drawing_List)) {
 			'date_omega' => $this->date_omega
 		);
 
-		echo Radix::block('account-close-line', $data);
+		_close_account_line($data);
 
 		if ($line['kind'] == 'C') {
 			$od_total_c += $line['balance'];
@@ -476,4 +476,47 @@ function _close_account_button($tt, $dr, $cr)
 	echo '</tr>';
 	echo '</tfoot>';
 
+}
+
+/**
+ *
+ */
+function _close_account_line($data)
+{
+	$line = $data['line'];
+
+	$link = Radix::link('/account/ledger?' . http_build_query(array(
+		'id' => $line['id'],
+		'd0' => $data['date_alpha'],
+		'd1' => $data['date_omega'],
+	)));
+
+	echo '<tr>';
+	echo '<td><strong>' . $line['full_code'] . '</strong>&mdash;<a href="' . $link . '">' . $line['name'] . '</a></td>';
+
+	// Kind?
+	echo '<td class="c">';
+	switch ($line['kind']) {
+	case 'A':
+		echo 'Adjusting';
+		break;
+	case 'C':
+		echo 'Closing';
+		break;
+	case 'N':
+		echo 'Normal';
+		break;
+	}
+	echo '</td>';
+
+	// Credit or Debit
+	if ($line['balance'] > 0) {
+		echo '<td class="r">' . number_format($line['balance'] * -1,2) . '</td>'; // cr
+		echo '<td>&nbsp;</td>'; // dr
+	} else {
+		echo '<td>&nbsp;</td>'; // cr
+		echo '<td class="r">' . number_format($line['balance'] * -1,2) . '</td>'; // dr
+	}
+
+	echo '</tr>';
 }
