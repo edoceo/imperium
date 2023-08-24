@@ -1,7 +1,7 @@
 <?php
 /**
-	Master Controller for Account
-*/
+ * Master Controller for Account
+ */
 
 namespace Edoceo\Imperium;
 
@@ -44,7 +44,7 @@ case 'm':
 case 'q':
 	// @note this may or may not be an accurate way to find the Quarter
 	$this->date_alpha_ts = mktime(0, 0, 0, $this->Month, 1, $this->Year);
-	$this->date_omega_ts = mktime(23, 59, 59, $this->Month + 3 , 1, $this->Year);
+	$this->date_omega_ts = mktime(23, 59, 59, $this->Month + 3 , 0, $this->Year);
 	break;
 case 'y':
 	$this->date_alpha_ts = mktime(0,0,0, $this->Month, 1, $this->Year);
