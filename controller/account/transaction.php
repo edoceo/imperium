@@ -115,7 +115,7 @@ case 'save-copy':
 		$ale['auth_user_id'] = $_SESSION['uid'];
 		$ale['account_id'] = intval($_POST["{$i}_account_id"]);
 		$ale['account_journal_id'] = $aje['id'];
-		$ale['date'] = $aje['date'];
+		$ale['date'] = $_POST["{$i}_date"] ?: $aje['date'];
 		$ale['amount'] = ($dr > $cr) ? abs($dr) * -1 : abs($cr);
 
 		// Skip Empty
@@ -176,9 +176,8 @@ case 'save-copy':
 
 	// Redirect Back
 	$ret = null; // '/account/ledger';
-	if (!empty($_SESSION['return-path'])) {
-		$ret = $_SESSION['return-path'];
-		unset($_SESSION['return-path']);
+	if ( ! empty($_GET['r'])) {
+		$ret = $_GET['r'];
 	}
 
 	Radix::redirect($ret);

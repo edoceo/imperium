@@ -92,7 +92,14 @@ if (count($this->jump_list)) {
 
 <table class="table table-sm mt-2" id="JournalEntry">
 <thead>
-	<tr><th>Account</th><th>Note</th><th>Debit</th><th>Credit</th><th></th></tr>
+	<tr>
+		<th>Account</th>
+		<th>Date</th>
+		<th>Note</th>
+		<th>Debit</th>
+		<th>Credit</th>
+		<th></th>
+	</tr>
 </thead>
 <tbody>
 <?php
@@ -116,15 +123,24 @@ foreach ($this->AccountLedgerEntryList as $i=>$item) {
 	echo sprintf(' data-account-id="%d"', $A1['id']);
 	echo sprintf(' data-account-type="%s"', html($A1['kind']));
 	echo '>';
+
+	// Ledger Entry ID, Account ID and Account Name
 	echo '<td>';
 	echo '<div class="input-group">';
-	// Ledger Entry ID, Account ID and Account Name
 	echo Form::text($i.'_account_name', $item['account_name'],array('class'=>'form-control account-name'));
 	echo '<div class="input-group-text account-id-v" id="' . $i . '_account_id_v">' . $item['account_id']. '</div>';
 	echo '<a class="btn btn-outline-secondary account-link" href="' . Radix::link('/account/ledger?id=' . $item['account_id']) . '" id="' . $i . '-account-link"><i class="fas fa-external-link-alt"></i></a>';
 	echo '</div>';
 	echo Form::hidden($i.'_id', $item['id']);
 	echo Form::hidden($i.'_account_id', $item['account_id'],array('class'=>'account-id'));
+	echo '</td>';
+
+	// Ledger Date
+	echo '<td>';
+	echo sprintf('<input class="form-control" name="%d_date" style="max-width: 10em;" type="date" value="%s">'
+		, $i
+		, $item['date']
+	);
 	echo '</td>';
 
 	// Link to Object
