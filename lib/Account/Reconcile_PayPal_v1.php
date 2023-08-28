@@ -66,15 +66,19 @@ class Account_Reconcile_PayPal_v1
 			$csv = array_slice($csv, 0, count($map));
 			$csv = array_combine($map, $csv);
 
+			$csv['Type'] = trim($csv['Type']);
+			$csv['Status'] = strtoupper($csv['Status']);
 			$csv['Gross'] = floatval(preg_replace('/[^\d\.\-]/',null, $csv['Gross']));
 			$csv['Fee'] = floatval(preg_replace('/[^\d\.\-]/',null, $csv['Fee']));
 			$csv['Net'] = floatval(preg_replace('/[^\d\.\-]/',null, $csv['Net']));
 			$csv['Sales Tax'] = floatval(preg_replace('/[^\d\.\-]/', null, $csv['Sales Tax']));
 
 			// Only Process Completed Transactions
-			// if ($csv['Status'] == 'Pending') {
-			// 	continue;
-			// }
+			switch ($csv['Status']) {
+				case 'Denied':
+				case 'Pending':
+					continue 2;
+			}
 
 			// Only Transactions with Fees Count
 			if ( (empty($csv['Gross'])) && (empty($csv['Fee'])) ) {
@@ -99,23 +103,27 @@ class Account_Reconcile_PayPal_v1
 				'amount' => floatval($csv['Gross']),
 			);
 
-			switch (trim($csv['Type'])) {
+			$st = sprintf('%s/%s', $csv['Status'], $csv['Type']);
+			switch ($st) {
 			//case 'eBay Payment Received':
 			//case 'Payment Received':
 			//case 'Shopping Cart Payment Received':
-			case 'Express Checkout Payment':
-			case 'General Payment':
-			case 'Mass Pay Payment':
-			case 'Order':
-			case 'PreApproved Payment Bill User Payment':
-			case 'Subscription Payment':
-			case 'Reversal of General Account Hold':
-			case 'Website Payment':
+			case 'COMPLETED/Bank Deposit to PP Account':
+			case 'COMPLETED/Donation Payment':
+			case 'COMPLETED/Express Checkout Payment':
+			case 'COMPLETED/General Authorization':
+			case 'COMPLETED/General Payment':
+			case 'COMPLETED/Mass Pay Payment':
+			case 'COMPLETED/Order':
+			case 'COMPLETED/PreApproved Payment Bill User Payment':
+			case 'COMPLETED/Subscription Payment':
+			case 'COMPLETED/Reversal of General Account Hold':
+			case 'COMPLETED/Website Payment':
 
 				if ($le0['amount'] > 0) {
 
-					// Someone Paying Me
-					// Ledger Entry for Paypal Deposit
+					// Incoming Money
+					// Ledger Entry for Paypal Debit
 					$le0['dr'] = $le0['amount'];
 					$je['ledger_entry_list'][] = $le0;
 
@@ -144,19 +152,18 @@ class Account_Reconcile_PayPal_v1
 
 				} else {
 
-					// Im Paying Someone
-					// Ledger Entry for Paypal Deposit
+					// Outgoing
+					// Ledger Entry for Paypal Credit
 					$le0 = array(
 						'cr' => abs($le0['amount']),
 					);
 					$je['ledger_entry_list'][] = $le0;
-					var_dump($je);
 				}
 
 				break;
 
 			//case 'Refund':
-			case 'Payment Refund':
+			case 'COMPLETED/Payment Refund':
 
 				$le0['cr'] = abs($le0['amount']);
 				$je['ledger_entry_list'][] = $le0;
@@ -175,9 +182,19 @@ class Account_Reconcile_PayPal_v1
 
 				break;
 
+			case 'COMPLETED/Chargeback Reversal':
+				$le0['dr'] = abs($le0['amount']);
+				$je['ledger_entry_list'][] = $le0;
+				break;
+			case 'COMPLETED/Dispute Fee':
+				$le0['cr'] = abs($le0['amount']);
+				$je['ledger_entry_list'][] = $le0;
+				break;
+
 			//case 'Withdraw Funds to a Bank Account':
-			case 'Auto-sweep':
-			case 'General Withdrawal':
+			case 'COMPLETED/Auto-sweep':
+			case 'COMPLETED/General Withdrawal':
+			// case 'General Withdrawal/Pending': // Ignore
 				// Transfer out of PayPal
 				$le0['cr'] = abs($le0['amount']);
 				$je['note'] = trim(sprintf('%s #%s',
@@ -187,7 +204,7 @@ class Account_Reconcile_PayPal_v1
 				$je['ledger_entry_list'][] = $le0;
 				break;
 
-			case 'Hold on Balance for Dispute Investigation':
+			case 'COMPLETED/Hold on Balance for Dispute Investigation':
 				// var_dump($csv);
 				$je['note'] = trim(sprintf('%s #%s <%s>',
 					$csv['Type'],
@@ -200,7 +217,7 @@ class Account_Reconcile_PayPal_v1
 
 				break;
 
-			case 'Cancellation of Hold for Dispute Resolution':
+			case 'COMPLETED/Cancellation of Hold for Dispute Resolution':
 				// var_dump($csv);
 				$le0['dr'] = abs($le0['amount']);
 				$je['note'] = trim(sprintf('%s #%s <%s>',
@@ -212,7 +229,7 @@ class Account_Reconcile_PayPal_v1
 
 				break;
 
-			case 'Chargeback':
+			case 'COMPLETED/Chargeback':
 
 				$le0['cr'] = abs($le0['amount']);
 				$je['note'] = trim(sprintf('%s #%s for #%s',
@@ -224,7 +241,7 @@ class Account_Reconcile_PayPal_v1
 
 				break;
 
-			case 'Chargeback Fee':
+			case 'COMPLETED/Chargeback Fee':
 				// var_dump($csv);
 				$le0['cr'] = abs($le0['amount']);
 				$je['note'] = trim(sprintf('%s #%s for #%s',
@@ -234,15 +251,19 @@ class Account_Reconcile_PayPal_v1
 				));
 				$je['ledger_entry_list'][] = $le0;
 				break;
+			case 'PAID/Invoice Sent':
+				// Ignore
+				break;
 			default:
 				var_dump($csv);
 				//throw new \Exception("Cannot Handle Type: '{$csv[4]}'");
 				echo "Cannot Handle Type: '{$csv['Type']}'<br>";
 			}
 
-			$stat[ $csv['Type'] ]++;
+			if (!empty($je['ledger_entry_list'])) {
+				$ret[] = $je;
+			}
 
-			$ret[] = $je;
 		}
 
 		return $ret;
