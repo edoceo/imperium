@@ -125,7 +125,7 @@ if (count($this->jump_list)) {
 <div class="col-md-6">
 	<h2 class="c">Paid Total: <?php
 	if ($this->Invoice['paid_amount'] < $this->Invoice['bill_amount']) {
-		echo '<span style="color:#f00;">' . number_format($this->Invoice['paid_amount'], 2) . '</span>';
+		echo '<span class="text-danger">' . number_format($this->Invoice['paid_amount'], 2) . '</span>';
 	} else {
 		echo number_format($this->Invoice['paid_amount'], 2);
 	}
@@ -139,10 +139,10 @@ if (count($this->jump_list)) {
 <?php
 // Hawk Monitoring?
 if ($this->Invoice->hasFlag(Invoice::FLAG_HAWK)) {
-	echo '<input name="a" type="submit" value="No Hawk">';
+	echo '<button class="btn btn-warning" name="a" type="submit" value="No Hawk">No Hawk</button>';
 } else {
 	if ($this->Invoice->canHawk()) {
-		echo '<input class="btn btn-secondary" name="a" type="submit" value="Hawk">';
+		echo '<button class="btn btn-secondary" name="a" type="submit" value="Hawk">Hawk</button>';
 	}
 }
 
@@ -156,10 +156,10 @@ if (!empty($_ENV['invoice.workflow'])) {
 				switch ($x) {
 				case 'Delete':
 				case 'Void':
-					echo '<input class="btn btn-danger" name="a" type="submit" value="' . $x . '">';
+					printf('<button class="btn btn-danger" name="a" type="submit" value="%s">%s</button>', $x, $x);
 					break;
 				default:
-					echo '<input class="btn btn-secondary" name="a" type="submit" value="' . $x . '">';
+					printf('<button class="btn btn-secondary" name="a" type="submit" value="%s">%s</button>', $x, $x);
 				}
 			}
 		}
@@ -168,7 +168,6 @@ if (!empty($_ENV['invoice.workflow'])) {
 ?>
 </div>
 </form>
-
 
 <?php
 // Invoice Notes
