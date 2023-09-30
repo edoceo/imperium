@@ -1,8 +1,9 @@
 <?php
 /**
-	@file
-	@brief Application Static Class
-*/
+ * Application Static Class
+ *
+ *
+ */
 
 namespace Edoceo\Imperium;
 
@@ -12,6 +13,9 @@ class App
 
 	static function load_config()
 	{
+		$cfg = require_once(APP_ROOT . '/etc/config.php');
+		// var_dump($cfg); exit;
+
 		// App Defaults
 		$_ENV = parse_ini_file(APP_ROOT . '/etc/boot.ini',true);
 		$_ENV = array_change_key_case($_ENV);
@@ -22,16 +26,6 @@ class App
 			$x = parse_ini_file($x,true);
 			$x = array_change_key_case($x);
 			$_ENV = array_merge_recursive($_ENV,$x);
-		}
-
-		// Merge Enviroment
-		if ($x = getenv('IMPERIUM_CONFIG')) {
-			$x = APP_ROOT . '/etc/' . $x . '.ini';
-			if ( (is_file($x)) && (is_readable($x)) ) {
-				$x = parse_ini_file($x,true);
-				$x = array_change_key_case($x);
-				$_ENV = array_merge_recursive($_ENV,$x);
-			}
 		}
 
 		// Reduce to Singular Values
