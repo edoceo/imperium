@@ -37,6 +37,10 @@ class Account extends ImperiumBase
 	const SAVINGS   = 0x00000020;
 	const MARKET	= 0x00000040;
 
+	const STAT_LIVE = 200;
+
+	const STAT_DEAD = 410;
+
 	/**
 		Imperium Variables
 	*/
@@ -63,8 +67,8 @@ class Account extends ImperiumBase
 	);
 
 	/**
-		Account Delete
-	*/
+	 * Account Delete
+	 */
 	function delete()
 	{
 		// Remove Ledger Entries
@@ -85,7 +89,8 @@ class Account extends ImperiumBase
 	}
 
 	/**
-	*/
+	 *
+	 */
 	function save()
 	{
 		if (empty($this->_data['code'])) {
