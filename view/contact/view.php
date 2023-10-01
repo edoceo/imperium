@@ -264,9 +264,9 @@ if (empty($this->Contact['parent_id'])) {
     echo '<h2 id="sub-contacts"><a href="' . $url . '"><i class="fas fa-users"></i> Sub-Contacts</a></h2>';
 
     if (count($this->ContactList)) {
-        echo '<table>';
+        echo '<table class="table">';
         foreach ($this->ContactList as $item) {
-            echo '<tr class="rero">';
+            echo '<tr>';
             echo '<td><a href="' . Radix::link('/contact/view?c=' . $item['id']) . '">' . html($item['name']) . '</a></td>';
             // echo '<td>' . Radix::block('stub-channel', array('data'=>$item['phone'])) . '</td>';
             // echo '<td>' . Radix::block('stub-channel', array('data'=>$item['email'])) . '</td>';

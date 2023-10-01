@@ -15,7 +15,7 @@ $mime = Base_File::mimeInfo($this->File['kind']);
 
 echo '<form action="' . radix::link('/file/save') . '" enctype="multipart/form-data" id="note-edit-form" method="post">';
 
-echo '<table>';
+echo '<table class="table">';
 echo '<tr><td class="l">File:</td><td>' . html($this->File['name']) . '</td></tr>';
 echo '<tr><td class="l">Type:</td><td>' . img($mime['icon'],'File') . '&nbsp;' . $mime['name'] . '</td></tr>';
 echo '<tr><td class="l">Size:</td><td>' . ImperiumView::niceSize($this->File['size']) . '</td></tr>';

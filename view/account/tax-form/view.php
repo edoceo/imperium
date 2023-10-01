@@ -17,7 +17,7 @@ echo radix::block('account-period-input');
 echo '</div>';
 echo '</form>';
 
-echo '<table>';
+echo '<table class="table">';
 
 foreach ($this->LineList as $item) {
 	// Skip Zero Balance

@@ -20,7 +20,7 @@ $opts = array('class' => 'form-control');
 <div class="row">
 <div class="col-md-6">
 <?php
-echo "<table>";
+echo '<table class="table">';
 echo "<tr><td class='b r'>Kind:</td><td>$kind_input</td></tr>";
 echo "<tr><td class='b r'>Recipient:</td><td>".Form::text('rcpt',$this->ContactAddress['rcpt'], $opts)."</td></tr>";
 echo "<tr><td class='b r'>Address</td><td>".Form::textarea('address',$this->ContactAddress['address'], $opts)."</td></tr>";

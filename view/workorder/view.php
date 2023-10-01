@@ -35,7 +35,7 @@ if (count($this->jump_list)) {
 echo '<form action="' . Radix::link('/workorder/save?w=' . $this->WorkOrder['id']) . '" method="post">';
 
 //echo star($this->WorkOrder['star'] ? $this->WorkOrder['star'] : 'star_' );
-echo '<table>';
+echo '<table class="table">';
 
 // Contact & Date Row
 echo '<tr>';
@@ -112,7 +112,7 @@ echo '</form>';
 //     echo $this->partial('../elements/contact-list.phtml',array('list'=>$list));
 // }
 // echo '<form action="" method="post">';
-// echo '<table><tr>';
+// echo '<table class="table"><tr>';
 // echo '<td class="l">Contact</td><td><input id="add_contact_name" name="contact" type="text"></td>';
 // echo '<td><input id="add_contact_id" name="add_contact_id" type="hidden" value=""><input name="c" type="submit" value="Add"></td>';
 // echo '</tr></table>';
@@ -162,7 +162,7 @@ if (count($this->WorkOrderItemList) > 0) {
     $x_kind = null;
     $x_status = null;
 
-    echo '<table>';
+    echo '<table class="table">';
     // echo '<tr><th>Quantity</th><th>Name</th><th>Rate</th><th>Status</th><th>Subtotal</th></tr>';
     // @todo Need to track Invoice Totals
     foreach ($this->WorkOrderItemList as $woi) {
@@ -190,7 +190,7 @@ if (count($this->WorkOrderItemList) > 0) {
         // $name = (isset($woi->date) ? date('m/d/y ',strtotime($woi->date)) : null) . $woi->name;
         $link = '<a class="ajax-edit" data-name="woi-edit" href="' . Radix::link('/workorder/item?id=' . $woi['id']) . '">%s</a>';
 
-        echo '<tr class="rero">';
+        echo '<tr>';
 
         // Date
         echo '<td>';

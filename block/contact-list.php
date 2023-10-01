@@ -12,15 +12,17 @@ namespace Edoceo\Imperium;
 
 use Edoceo\Radix;
 
-echo '<table class="table table-sm">';
+echo '<table class="table table-sm table-striped">';
+echo '<thead class="table-dark">';
 echo '<tr>';
 echo '<th>Name</th>';
 echo '<th>Phone</th>';
 echo '<th>Email</th>';
 echo '</tr>';
+echo '</thead>';
 
 foreach ($data['list'] as $item) {
-	echo '<tr class="rero ' . $item['kind'] . '">';
+	echo '<tr class="' . $item['kind'] . '">';
 	// Show Contact, if none show Name
 	echo '<td>';
 	echo '<a href="' . Radix::link('/contact/view?c=' . $item['id']) . '">';

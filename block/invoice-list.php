@@ -22,10 +22,11 @@ $paid_total = 0;
 $date_skip_list = array('Paid','Void');
 
 // Include Paginator Stuffs?
-echo '<table class="table table-sm">';
+echo '<table class="table table-sm table-striped">';
 if (isset($paginator))
 {
 ?>
+<thead class="table-dark">
 <tr>
 <th><?php echo $paginator->sort('ID', 'id');?></th>
 <th><?php echo $paginator->sort('Date', 'date');?></th>
@@ -35,6 +36,7 @@ if (isset($paginator))
 <th><?php echo $paginator->sort('Paid', 'paid_amount');?></th>
 <th><?php echo $paginator->sort('Due', 'due_diff');?></th>
 </tr>
+</thead>
 <?php
 }
 
@@ -44,7 +46,7 @@ foreach ($data['list'] as $x) {
     // $item = new Invoice($x);
     $item = $x;
 
-    echo '<tr class="rero ' . strtolower($item['status']) . '">';
+    echo '<tr class="' . strtolower($item['status']) . '">';
 
     // Star
     echo '<td>' . star($item['star']) . '</td>';

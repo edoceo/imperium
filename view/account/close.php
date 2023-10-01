@@ -340,7 +340,7 @@ if (count($Close_Drawing_List)) {
 	foreach ($Close_Drawing_List as $line) {
 
 		// print_r($item);
-		// echo "<tr class='rero'>";
+		// echo "<tr>";
 		// echo '<td><strong>' . $item['full_code'] . '</strong>&mdash;<a href="' . Radix::link('/account/ledger?id=' . $item->id) . '">' . $item->name . '</a></td>';
 		// echo '<td class="c">' . $item['kind'] . '</td>';
 		// echo '<td>&nbsp;</td>';
@@ -412,10 +412,10 @@ echo '</tr>';
 $pl_total = $rv_total_n + $ex_total_n;
 
 if ($pl_total >= 0) {
-	echo "<tr class='rero'>";
+	echo "<tr>";
 	echo "<td colspan='3'><strong>Period Profit</strong></td><td class='b r'>&curren;".number_format($pl_total,2)."</td></tr>";
 } else {
-	echo "<tr class='rero'>";
+	echo "<tr>";
 	echo "<td colspan='2'><strong>Period Loss</strong></td><td class='b r'>&curren;".number_format($pl_total,2)."</td></tr>";
 }
 

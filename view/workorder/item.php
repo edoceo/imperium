@@ -21,7 +21,7 @@ if (empty($this->WorkOrderItem)) {
 }
 
 echo '<form action="'. Radix::link('/workorder/item?' . http_build_query(array('id'=>$this->WorkOrderItem['id']))) . '" id="workorder-item-form" method="post">';
-echo '<table>';
+echo '<table class="table">';
 
 // Name
 echo '<tr><td class="l">Name:</td><td colspan="5">'  . Form::text('name',$this->WorkOrderItem['name']) . '</td></tr>';

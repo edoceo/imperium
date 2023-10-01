@@ -24,11 +24,11 @@ $bill_total = $open_total = 0;
 // @todo Remove this shitty hack!
 $cols = array('star','id','date','status','kind','contact','note','bill_amount','open_amount');
 
-echo '<table class="table table-sm">';
+echo '<table class="table table-sm table-striped">';
 // List each Invoice Item
 foreach ($data['list'] as $item) {
 
-    echo '<tr class="rero ' . strtolower($item['status']) . ' ' . strtolower($item['kind']) . '">';
+    echo '<tr class="' . strtolower($item['status']) . ' ' . strtolower($item['kind']) . '">';
 
     // Star
     echo '<td>' . star($item['star']) . '</td>';

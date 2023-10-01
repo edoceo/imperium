@@ -10,7 +10,7 @@ use Edoceo\Radix;
 use Edoceo\Radix\HTML\Form;
 
 echo '<form action="' . Radix::link('/note/save') . '" id="note-edit-form" method="post">';
-echo '<table>';
+echo '<table class="table">';
 echo '<tr>';
 // Name
 // echo "<td class='b r'>Name:</td><td>" . $this->formText('name',$this->Note->name,array('style'=>'width: 100%')) . '</td>';

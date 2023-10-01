@@ -14,13 +14,13 @@ namespace Edoceo\Imperium;
 
 use Edoceo\Radix;
 
-echo '<table class="table table-sm">';
+echo '<table class="table table-sm table-striped">';
 
 foreach ($data['list'] as $item) {
 
 	$link = Radix::link('/contact/address?id=' . $item['id']);
 
-	echo '<tr class="rero">';
+	echo '<tr>';
 	echo '<td><a href="' . $link . '">' . html($item['kind']) . '</a></td>';
 	echo '<td><a href="' . $link . '">' . $item->__toString() . '</a></td>';
 	echo '<td><a class="fancybox-media" href="http://maps.google.com/maps?q=' . urlencode($item->__toString()) . '">';

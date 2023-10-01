@@ -12,7 +12,7 @@
 
 echo '<form action="' . radix::link('/email/send') . '" enctype="" method="post">';
 
-echo '<table>';
+echo '<table class="table">';
 //if (!empty($this->EmailMessage->RecipientList)) {
 //  echo '<tr><td class="b r">To:</td><td>' . $this->formSelect('to_s',$this->EmailMessage->to,array('style'=>'width: 50%;'),$this->EmailMessage->RecipientList) . '</td></tr>';
 //  $this->EmailMessage->to = null;
@@ -38,11 +38,11 @@ echo '</form>';
 <script type="text/javascript">
 $(function() {
     $("#rcpt").autocomplete({
-        focus: function(e,ui) { 
+        focus: function(e,ui) {
             this.value = ui.item.email;
             return false;
         },
-        select: function(e,ui) { 
+        select: function(e,ui) {
             this.value = ui.item.email;
             return false;
         },

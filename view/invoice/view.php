@@ -207,7 +207,7 @@ if ((isset($this->InvoiceItemList)) && (is_array($this->InvoiceItemList)) && (co
 			$item_tax_total+= round($item_subtotal * $ivi['tax_rate'],2);
 		}
 
-		echo '<tr class="rero">';
+		echo '<tr>';
 		echo '<td class="b"><a class="fancybox fancybox.ajax" href="' . Radix::link('/invoice/item?id=' . $ivi['id']) . '">' .$ivi['name'] . '</a></td>';
 		echo '<td class="c b">' .number_format($ivi['quantity'],2) . '</td>';
 		echo '<td class="r">' . number_format($ivi['rate'],2) . '/' . $ivi['unit'] . '</td>';

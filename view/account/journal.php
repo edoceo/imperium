@@ -226,7 +226,7 @@ foreach ($this->JournalEntryList as $je) {
 
 <section>
 <h2>Offset Summary</h2>
-<table>
+<table class="table">
 <?php
 asort($Journal_Entry_Stat);
 foreach ($Journal_Entry_Stat as $a => $v) {

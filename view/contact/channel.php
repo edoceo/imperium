@@ -18,7 +18,7 @@ echo '<div>';
 echo Form::hidden('contact_id', $this->ContactChannel['contact_id']);
 echo '</div>';
 
-echo '<table>';
+echo '<table class="table">';
 echo "<tr><td class='b r'>Kind:</td><td>" . Form::select('kind', $this->ContactChannel['kind'], ContactChannel::$kind_list) . '</td></tr>';
 echo "<tr><td class='b r'>Name:</td><td>" . Form::text('name', $this->ContactChannel['name']) . '</td></tr>';
 echo "<tr><td class='b r'>Data:</td><td>" . Form::text('data', $this->ContactChannel['data']) . '</td></tr>';

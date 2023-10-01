@@ -44,10 +44,10 @@ if (empty($res) || (0 == count($res))) {
 	return(0);
 }
 
-echo '<table>';
+echo '<table class="table">';
 foreach ($res as $rec) {
 
-	echo '<tr class="rero">';
+	echo '<tr>';
 	if ($rec['account_journal_id'] != $account_journal_id_x) {
 		// Date
 		echo '<td class="c"><a href="' . Radix::link('/account/transaction?id=' . $rec['account_journal_id']) . '">' . date('m/d/y', strtotime($rec['date'])) . '</a></td>';

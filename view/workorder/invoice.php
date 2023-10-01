@@ -19,7 +19,7 @@ echo Form::hidden('id',$this->WorkOrder['id']);
 //echo $this->formHidden('contact_id',$this->WorkOrder->contact_id);
 echo '</div>';
 
-echo '<table>';
+echo '<table class="table">';
 // Contact & Phone
 echo '<tr>';
 echo '<td class="b r">Contact:</td><td><a href="' . Radix::link('/contact/view?c=' . $this->Contact['id']) . '">' . html($this->Contact['name']) . '</a></td>';
@@ -49,7 +49,7 @@ $bill_quantity = 0;
 $x_kind = null;
 $x_status = null;
 
-echo '<table>';
+echo '<table class="table">';
 //echo '<caption>Work order items captoin</caption>';
 echo '<tr><th colspan="3">Quantity</th><th>Kind</th><th>Name</th><th>Rate</th><th>Tax</th><th>Subtotal</th></tr>';
 // @todo Need to track Invoice Totals
@@ -70,7 +70,7 @@ foreach ($this->WorkOrderItemList as $woi) {
 
     $name = html((isset($woi['date']) ? date('m/d/y ',strtotime($woi['date'])).'&nbsp;' : null) . $woi['name']);
 
-    echo '<tr class="rero">';
+    echo '<tr>';
     echo '<td>' . Form::checkbox('woi_id[]', $woi['id'],array('checked'=>'checked')) . '</td>';
     echo '<td>' . Form::text('woi_q_' . $woi['id'], $woi['a_quantity'], array('style'=>'width:3em')) . '</td>';
     echo '<td>' . Form::text('woi_status_' . $woi['id'], $woi['status']) . '</td>';
@@ -89,10 +89,10 @@ foreach ($this->WorkOrderItemList as $woi) {
     // Build Sums
     $full_total += ($woi->a_quantity * $woi->a_rate);
     $full_quantity += $woi->a_quantity;
-    
+
     $bill_total += ($woi->a_quantity * $woi->a_rate);
     $bill_quantity += $woi->a_quantity;
-    
+
     $x_kind = $woi->kind;
     $x_status = $woi->status;
 
@@ -126,4 +126,3 @@ function drawSummaryRow($q,$t,$name='Sub Total')
 		echo '</tr>';
 	}
 }
-

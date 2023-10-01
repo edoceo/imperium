@@ -28,14 +28,16 @@ echo '</h2>';
 echo '<div id="file-edit"></div>';
 echo '<div id="file-list">';
 
-echo '<table>';
+echo '<table class="table table-sm table-striped">';
+echo '<thead class="table-dark">';
 echo '<tr><th>Icon</th><th>Name</th><th>Type</th><th>Size</th><th>&nbsp;</th></tr>';
+echo '</thead>';
 
 foreach ($data as $f) {
 
     $mime = Base_File::mimeInfo($f['kind']);
 
-    echo '<tr class="rero">';
+    echo '<tr>';
     echo '<td>' . img($mime['icon'], $mime['note']) . '</td>';
     echo '<td><a href="' . Radix::link('/file/view?id=' . $f['id']) . '">' . html($f['name']) . '</a></td>';
     echo '<td class="r">' . html($mime['name']) . '</td>';
