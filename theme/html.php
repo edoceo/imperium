@@ -26,9 +26,9 @@ if (is_array($_ENV['title'])) {
 <meta charset="utf-8">
 <meta name="viewport" content="initial-scale=1, user-scalable=yes">
 <meta name="theme-color" content="#336699">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css" integrity="sha256-rByPlHULObEjJ6XQxW/flG2r+22R5dKiAoef+aXWfik=" crossorigin="anonymous" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/css/bootstrap.min.css" integrity="sha512-GQGU0fMMi238uA+a/bdWJfpUGKUkBdgfFdgBm72SUQ6BeyWjoY/ton0tEjH+OSH9iP4Dfh+7HM0I9f5eR0L/4w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link rel="stylesheet" href="/vendor/fontawesome/all.min.css">
+<link rel="stylesheet" href="/vendor/jquery-ui/jquery-ui.min.css">
+<link rel="stylesheet" href="/vendor/bootstrap/bootstrap.min.css">
 <?php
 echo '<link href="' . Radix::link('/css/app.css') . '" rel="stylesheet">';
 //echo '<link href="' . Radix::link('/img/imperium-icon.ico') . '" rel="shortcut icon">';
@@ -65,9 +65,9 @@ echo '</main>';
 	<a href="https://edoceo.com/imperium">Imperium</a> &#169; 2001-2021 <a href="https://edoceo.com/">Edoceo, Inc</a>
 </footer>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js" integrity="sha256-KM512VNnjElC30ehFwehXjx1YCHPiQkOPmqnrWtpccM=" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/js/bootstrap.bundle.min.js" integrity="sha512-pax4MlgXjHEPfCwcJLQhigY7+N8rt6bVvWLFyUMuxShv170X53TRzGPmPkZmGBhk+jikR8WBM4yl7A9WMHHqvg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="/vendor/jquery/jquery.min.js"></script>
+<script src="/vendor/jquery-ui/jquery-ui.min.js"></script>
+<script src="/vendor/bootstrap/bootstrap.bundle.min.js"></script>
 <?= Layout::getScript() ?>
 </body>
 </html>
