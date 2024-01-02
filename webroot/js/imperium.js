@@ -79,6 +79,7 @@ $(function() {
 			// $(document).scrollTop(o.top - 16);
 		});
 		e.preventDefault();
+		return false;
 	});
 
 	// Zooms the text as you mouse-over
