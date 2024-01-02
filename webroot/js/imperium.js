@@ -74,7 +74,6 @@ $(function() {
 		// var o = $(this).parent().offset();
 		var t = $(this).data('name');
 		$('#' + t).load(this.href,function(res,txt,xhr) {
-			$('#' + t).addClass('edit-show');
 			// $(document).animate({ scrollTop: o.top},'slow');
 			// $(document).scrollTop(o.top - 16);
 		});
