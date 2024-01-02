@@ -1,18 +1,21 @@
 <?php
 /**
-    Work Order View
-
-    Displays the main details of the Work Order and allows Edit
-
-    @copyright    2008 Edoceo, Inc
-    @package    edoceo-imperium
-    @link       http://imperium.edoceo.com
-    @since      File available since Release 1013
-*/
+ * Work Order View
+ *
+ * SPDX-License-Identifier: GPL-3.0-only
+ *
+ * Displays the main details of the Work Order and allows Edit
+ *
+ * @copyright  2008 Edoceo, Inc
+ * @package    edoceo-imperium
+ * @link       http://imperium.edoceo.com
+ * @since      File available since Release 1013
+ */
 
 namespace Edoceo\Imperium;
 
 use Edoceo\Radix;
+use Edoceo\Radix\Layout;
 use Edoceo\Radix\HTML\Form;
 
 // Jump List
@@ -34,56 +37,74 @@ if (count($this->jump_list)) {
 
 echo '<form action="' . Radix::link('/workorder/save?w=' . $this->WorkOrder['id']) . '" method="post">';
 
+?>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="input-group mb-2">
+            <div class="input-group-text">Contact:</div>
+            <?php
+            if (empty($this->Contact['id'])) {
+                echo '<input class="form-control" id="contact_name" name="contact_name" type="text">';
+            } else {
+                echo '<input class="form-control" readonly value="' . __h($this->Contact['name']) . '">';
+                // echo '<br /><i class="fas fa-phone"></i> ' . html($this->Contact['phone']) . '</td>';
+            }
+            ?>
+            <a class="btn btn-outline-secondary" href="/contact/view?c=<?= $this->Contact['id'] ?>">X</a>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="input-group mb-2">
+            <div class="input-group-text">Requester:</div>
+            <?= Form::text('requester', $this->WorkOrder['requester'], [ 'class' => 'form-control' ]) ?>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-3">
+        <div class="input-group mb-2">
+            <div class="input-group-text">Date:</div>
+            <?= Form::date('date', $this->WorkOrder['date'], [ 'class' => 'form-control'] ) ?>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="input-group mb-2">
+            <div class="input-group-text">Rate:</div>
+            <?= Form::number('base_rate',$this->WorkOrder['base_rate'], [ 'class'=>'form-control rate' ]); ?>
+            <?= Form::select('base_unit', $this->WorkOrder['base_unit'], Base_Unit::getList(), [ 'class'=>'form-control rate' ]) ?>
+        </div>
+    </div>
+    <div class="col-md-3 mb-2">
+        <?= Form::select('kind', $this->WorkOrder['kind'], $this->KindList, [ 'class' => 'form-control']) ?>
+    </div>
+    <div class="col-md-3">
+        <div class="input-group mb-2">
+            <div class="input-group-text">Status:</div>
+            <input class="form-control" readonly value="<?= $this->WorkOrder['status'] ?>">
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-m-12 mb-2">
+        <textarea class="form-control" name="note"><?= __h($this->WorkOrder['note']) ?></textarea>
+    </div>
+</div>
+
+<div class="col-md-6">Bill Total: <span class=""><?= number_format($this->WorkOrder['bill_amount'], 2) ?></div>
+<div class="col-md-6">Open Total: <span class="text-danger"><?= number_format($this->WorkOrder['open_amount'], 2) ?></div>
+
+<?php
+
 //echo star($this->WorkOrder['star'] ? $this->WorkOrder['star'] : 'star_' );
-echo '<table class="table">';
-
-// Contact & Date Row
-echo '<tr>';
-if (empty($this->Contact['id'])) {
-    echo '<td class="l">Contact:</td>';
-    echo '<td><input id="contact_name" name="contact_name" type="text" />';
-    echo '</td>';
-} else {
-    echo '<td class="l">Contact:</td><td><a href="' . Radix::link("/contact/view?c={$this->Contact['id']}") . '">' . html($this->Contact['name']) . '</a>';
-    echo '<br /><i class="fas fa-phone"></i> ' . html($this->Contact['phone']) . '</td>';
-}
-// Date
-echo '<td class="l">Date:</td><td>' . Form::date('date',$this->WorkOrder['date']) . '</td>';
-echo '</tr>';
-
-// Requester & Kind
-echo '<tr>';
-echo '<td class="l">Requester:</td>';
-echo '<td>';
-echo Form::text('requester', $this->WorkOrder['requester']);
-echo '</td>';
-// Kind
-echo '<td class="l">Kind:</td><td>' . Form::select('kind', $this->WorkOrder['kind'], $this->KindList) . '</td>';
-echo '</tr>';
-
-// Rate & Units & Status
-echo '<tr>';
-$r = Form::number('base_rate',$this->WorkOrder['base_rate'],array('class'=>'rate'));
-$u = Form::select('base_unit', $this->WorkOrder['base_unit'], Base_Unit::getList());
-echo "<td class='l'>Base Rate:</td><td class='nw'>$r/$u</td>";
-// Status
-echo '<td class="l">Status:</td><td>' . $this->WorkOrder['status'] . '</td>';
-echo '</tr>';
-
-// Note
-echo '<tr><td class="l">Note:</td><td colspan="3"><textarea name="note">' . html($this->WorkOrder['note']). '</textarea></td></tr>';
-// echo "<tr><td class='b r'>Hours Total:</td><td colspan='3' style='color: #f00; font-weight: 700; text-align: right;'>".number_format($this->data['WorkOrder']['bill_amount'],2)."</td></tr>";
-// echo "<tr><td class='b r'>Parts Total:</td><td colspan='3' style='color: #f00; font-weight: 700; text-align: right;'>".number_format($this->data['WorkOrder']['bill_amount'],2)."</td></tr>";
-// Open Total
-echo "<tr><td class='l'>Bill Total:</td><td colspan='2' style='font-weight: 700;'>".number_format($this->WorkOrder['bill_amount'],2)."</td></tr>";
-echo "<tr><td class='l'>Open Total:</td><td colspan='2' style='color: #f00; font-weight: 700;'>".number_format($this->WorkOrder['open_amount'],2)."</td></tr>";
-echo '</table>';
 
 // Hidden Fields & Buttons
 echo '<div class="cmd">';
 echo Form::hidden('id',$this->WorkOrder['id']);
 echo Form::hidden('contact_id',$this->WorkOrder['contact_id']);
-echo '<button class="good" name="a" type="submit" value="save">Save</button>';
+echo '<button class="btn btn-primary me-2" name="a" type="submit" value="save">Save</button>';
 
 if (!empty($_ENV['workorder.workflow'])) {
     $list = array();
@@ -94,10 +115,10 @@ if (!empty($_ENV['workorder.workflow'])) {
             	switch ($x) {
             	case 'Delete':
             	case 'Void':
-            		echo '<input class="fail" name="a" type="submit" value="' . trim($x) . '" />';
+            		echo '<input class="btn btn-danger me-2" name="a" type="submit" value="' . trim($x) . '" />';
             		break;
             	default:
-					echo '<input class="exec" name="a" type="submit" value="' . trim($x) . '" />';
+					echo '<input class="btn btn-secondary me-2" name="a" type="submit" value="' . trim($x) . '" />';
 				}
             }
         }
@@ -269,14 +290,21 @@ if (count($this->WorkOrderItemList) > 0) {
 
 ?>
 
+<?php
+ob_start();
+?>
 <script>
 $(function() {
 	WorkOrder.initForm();
 });
 </script>
-
 <?php
+Layout::addScript(ob_get_clean());
 
+
+/**
+ *
+ */
 function drawSummaryRow($e_size,$e_cost,$a_size,$a_cost,$name='Sub Total')
 {
     echo '<tr>';
