@@ -1,6 +1,8 @@
 <?php
 /**
  * Imperium Bootstrap
+ *
+ * SPDX-License-Identifier: GPL-3.0-only
 
     @deprecated ReturnGood => ReturnPath ? ret=1
     @deprecated ReturnFail => ReturnPath ? ret=0
@@ -23,13 +25,6 @@ set_include_path(implode(PATH_SEPARATOR, $path));
 
 define('APP_ROOT', dirname(__FILE__));
 define('APP_NAME', 'Edoceo Imperium');
-
-// require_once('Radix.php');
-// Radix::autoload();
-// require_once('lib/ACL.php');
-// require_once('Radix/Filter.php');
-// require_once('Radix/Format.php');
-// require_once('lib/Session.php');
 
 require_once('App.php');
 require_once('App_Mail.php');
