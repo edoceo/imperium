@@ -1,14 +1,16 @@
 <?php
 /**
-    Work Order Items View
-
-    Shows details about a Work Order Item
-
-    @copyright  2008 Edoceo, Inc
-    @package    edoceo-imperium
-    @link       http://imperium.edoceo.com
-    @since      File available since Release 1013
-*/
+ * Work Order Items View
+ *
+ * SPDX-License-Identifier: GPL-3.0-only
+ *
+ * Shows details about a Work Order Item
+ *
+ * @copyright  2008 Edoceo, Inc
+ * @package    edoceo-imperium
+ * @link       http://imperium.edoceo.com
+ * @since      File available since Release 1013
+ */
 
 namespace Edoceo\Imperium;
 
@@ -21,34 +23,104 @@ if (empty($this->WorkOrderItem)) {
 }
 
 echo '<form action="'. Radix::link('/workorder/item?' . http_build_query(array('id'=>$this->WorkOrderItem['id']))) . '" id="workorder-item-form" method="post">';
+?>
+
+<div class="row">
+<div class="col-md-12">
+	<div class="input-group mb-2">
+		<div class="input-group-text">Name:</div>
+		<input autofocus class="form-control" name="name" value="<?= __h($this->WorkOrderItem['name']) ?>">
+	</div>
+</div>
+</div>
+
+<div class="input-group mb-2">
+	<div class="input-group-text">Note:</div>
+	<textarea class="form-control" name="note"><?= __h($this->WorkOrderItem['note']) ?></textarea>
+</div>
+
+<div class="row">
+	<div class="col-md-4">
+		<div class="input-group mb-2">
+			<div class="input-group-text">Date:</div>
+			<input class="form-control" name="date" type="date" value="<?= __h($this->WorkOrderItem['date']) ?>">
+		</div>
+	</div>
+	<div class="col-md-4">
+		<div class="input-group mb-2">
+			<div class="input-group-text">Start:</div>
+			<input class="form-control" name="time_alpha" type="time" value="<?= __h($this->WorkOrderItem['time_alpha']) ?>">
+		</div>
+	</div>
+	<div class="col-md-4">
+		<div class="input-group mb-2">
+			<div class="input-group-text">Finish:</div>
+			<input class="form-control" name="time_omega" type="time" value="<?= __h($this->WorkOrderItem['time_omega']) ?>">
+		</div>
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-md-3">
+		<div class="input-group mb-2">
+			<div class="input-group-text">Expect</div>
+			<?= Form::number('e_quantity', $this->WorkOrderItem['e_quantity'], [ 'class' => 'form-control', 'placeholder' => 'Quantity' ]); ?>
+		</div>
+	</div>
+	<div class="col-md-6">
+		<div class="input-group mb-2">
+			<div class="input-group-text">@</div>
+			<?= Form::number('e_rate', $this->WorkOrderItem['e_rate'], [ 'class' => 'form-control']) ?>
+			<?= Form::select('e_unit', $this->WorkOrderItem['e_unit'], Base_Unit::getList(), [ 'class' => 'form-control']) ?>
+		</div>
+	</div>
+        <div class="col-md-3">
+                <div class="input-group mb-2">
+                        <div class="input-group-text">Tax:</div>
+			<?= Form::number('e_tax_rate', tax_rate_format($this->WorkOrderItem['e_tax_rate']), [ 'class' => 'form-control']) ?>
+		</div>
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-md-3">
+		<div class="input-group mb-2">
+			<div class="input-group-text">Actual:</div>
+			<?= Form::number('a_quantity', $this->WorkOrderItem['a_quantity'], [ 'class' => 'form-control']) ?>
+		</div>
+	</div>
+	<div class="col-md-6">
+		<div class="input-group mb-2">
+			<div class="input-group-text">@</div>
+			<?= Form::number('a_rate', $this->WorkOrderItem['a_rate'], [ 'class' => 'form-control']) ?>
+			<?= Form::select('a_unit', $this->WorkOrderItem['a_unit'], Base_Unit::getList(), [ 'class' => 'form-control']) ?>
+		</div>
+	</div>
+	<div class="col-md-3">
+		<div class="input-group mb-2">
+			<div class="input-group-text">Tax:</div>
+			<?= Form::number('a_tax_rate',tax_rate_format($this->WorkOrderItem['a_tax_rate']), [ 'class' => 'form-control']) ?>
+		</div>
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-md-6">
+		<div class="input-group mb-2">
+			<div class="input-group-text">Type:</div>
+			<?= Form::select('kind', $this->WorkOrderItem['kind'], WorkOrderItem::$kind_list, [ 'class' => 'form-control']) ?>
+		</div>
+	</div>
+	<div class="col-md-6">
+		<div class="input-group mb-2">
+			<div class="input-group-text" title="The Status of this Item, Completed Items will be Billed when creating an Invoice">Status</div>
+			<?= Form::select('status',$this->WorkOrderItem['status'], $this->ItemStatusList, [ 'class' => 'form-control' ]) ?>
+		</div>
+	</div>
+</div>
+
+<?php
 echo '<table class="table">';
-
-// Name
-echo '<tr><td class="l">Name:</td><td colspan="5">'  . Form::text('name',$this->WorkOrderItem['name']) . '</td></tr>';
-
-// Details
-echo '<tr><td class="l">Note:</td><td colspan="5">' . Form::textarea('note', $this->WorkOrderItem['note']) . '</td></tr>';
-
-echo '<tr>';
-echo '<td class="l">Kind:</td><td>' . Form::select('kind', $this->WorkOrderItem['kind'], WorkOrderItem::$kind_list) . '</td>';
-echo '<td class="l">Date:</td><td>' . Form::date('date', $this->WorkOrderItem['date'], array('id'=>'woi_date')) . '</td>';
-echo '<td>' . Form::time('time_alpha',$this->WorkOrderItem['time_alpha']) . '</td>';
-echo '<td>' . Form::time('time_omega',$this->WorkOrderItem['time_omega']) . '</td>';
-echo '</tr>';
-
-// Estimate: Quantity, Rate, Unit, Tax
-$q = Form::number('e_quantity',$this->WorkOrderItem['e_quantity']);
-$r = Form::number('e_rate',$this->WorkOrderItem['e_rate']);
-$u = Form::select('e_unit', $this->WorkOrderItem['e_unit'], Base_Unit::getList());
-$t = Form::number('e_tax_rate',tax_rate_format($this->WorkOrderItem['e_tax_rate']));
-echo "<tr><td class='l'>Estimate:</td><td>$q</td><td><strong>@</strong>$r</td><td><strong>per</strong>&nbsp;$u<td class='b r'>Tax Rate:</td><td>$t&nbsp;%</td></tr>";
-
-// Cost: Quantity, Rate, Unit, Tax
-$q = Form::number('a_quantity',$this->WorkOrderItem['a_quantity']);
-$r = Form::number('a_rate',$this->WorkOrderItem['a_rate']);
-$u = Form::select('a_unit', $this->WorkOrderItem['a_unit'], Base_Unit::getList());
-$t = Form::number('a_tax_rate',tax_rate_format($this->WorkOrderItem['a_tax_rate']));
-echo "<tr><td class='l'>Actual:</td><td>$q</td><td><strong>@</strong>$r</td><td><strong>per</strong>&nbsp;$u<td class='b r'>Tax Rate:</td><td>$t&nbsp;%</td></tr>";
 
 // Notify
 echo '<tr><td class="l">';
@@ -56,22 +128,13 @@ echo '<span title="Input an email address here and a notification email will be 
 echo '<td colspan="5">' . Form::text('notify', $this->WorkOrderItem['notify']) . '</td>';
 echo '</tr>';
 
-echo "<tr>";
-echo "<td class='l'><span title='The Status of this Item, Completed Items will be Billed when creating an Invoice'>Status:</span></td>";
-echo '<td colspan="3">';
-// echo '<input name="status" type="text" value="' . $this->WorkOrderItem['status'] . '">';
-echo Form::select('status',$this->WorkOrderItem['status'], $this->ItemStatusList);
-echo '</td>';
-echo '</tr>';
-
 echo "</table>";
 
 echo '<div class="cmd">';
 echo '<input name="workorder_id" type="hidden" value="' . $this->WorkOrder['id'] . '">';
-// echo $this->formSubmit('c','Save');
-echo '<button class="good" id="workorder-item-exec-save" name="a" type="submit" value="save">Save</button>';
+echo '<button class="btn btn-primary me-2 good" id="workorder-item-exec-save" name="a" type="submit" value="save">Save</button>';
 if (!empty($this->WorkOrderItem['id'])) {
-    echo '<button class="fail" name="a" type="submit" value="delete">Delete</button>';
+    echo '<button class="btn btn-danger fail" name="a" type="submit" value="delete">Delete</button>';
 }
 echo '</div>';
 
@@ -88,12 +151,12 @@ echo Radix::block('diff-list', $args);
 <script>
 $(function() {
 
-	$('#name').focus();
 	$('#notify').autocomplete({
 		source:'/imperium/contact/ajax',
 		change:function(event, ui) { if (ui.item) {  $("#notify").val(ui.item.id); $("#notify").val(ui.item.contact); } }
 	});
 
+	// When the times change update the Actual Quantity
 	$('#time_alpha, #time_omega').on('change',function() {
 
 		var m = null;
