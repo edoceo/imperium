@@ -1,7 +1,9 @@
 <?php
 /**
-	Render the Invoice as a PDF
-*/
+ * Render the Invoice as a PDF
+ *
+ * SPDX-License-Identifier: GPL-3.0-only
+ */
 
 namespace Edoceo\Imperium;
 

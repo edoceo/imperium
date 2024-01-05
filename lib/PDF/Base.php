@@ -189,7 +189,7 @@ class Base extends \TCPDF
 
 		// Send Address
 		// $this->setFont(self::FONT_SANS, 'B', 12);
-		$y = 0.75;
+		$y = 0.5;
 		$this->setXY(0.5, $y);
 		$this->cell(3, 3/16, $_ENV['company']['name']);
 		$y += (3 / 16);
@@ -205,19 +205,19 @@ class Base extends \TCPDF
 		$this->setXY(0.5, $y);
 		$this->cell(3, 3/16, $_ENV['company']['phone']);
 
+		// Document Title
+		$this->setFont(self::FONT_SANS, 'B', 16);
+		$this->setXY(0.5, 1.5);
+		$this->cell(2, 4/16, $this->_title);
+
 		// Date
 		// $this->setColor(0x33, 0x33, 0x33);
 		// $this->setFont(self::FONT_SANS, '', 12);
 
 		$t = 'Date: ' . date('d M Y', $this->_time);
+		$this->setFont(self::FONT_SANS, '', 12);
 		$this->setXY(6, 1.5);
 		$this->cell(2, 1/4, $t, null, null, 'R');
-
-		// Document Title
-		$this->setFont(self::FONT_SANS, 'B', 16);
-		$this->setXY(3.5, 1.5);
-		$this->cell(2, 4/16, $this->_title);
-
 
 		// Blue Line
 		$c = explode(',', $_ENV['pdf']['line_color']);

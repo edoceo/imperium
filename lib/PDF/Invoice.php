@@ -37,10 +37,10 @@ class Invoice extends Base
 
 		// Bill Address
 		$this->setFont('', '', 12);
-		$this->setXY(0.5, 2.5);
+		$this->setXY(0.5, 2.25);
 		$this->cell(0.75, 3/16, 'Bill To:');
 
-		$this->setXY(4.25, 2.5);
+		$this->setXY(4.25, 2.25);
 		$this->cell(0.75, 3/16, 'Ship To:');
 
 		$this->setXY(0.5, 3);
@@ -48,10 +48,10 @@ class Invoice extends Base
 
 		// Data
 		$this->setFont('', 'B', 12);
-		$this->setXY(1.25, 2.5);
+		$this->setXY(1.25, 2.25);
 		$this->cell(3, 3/16, $co['company']);
 
-		$this->setXY(5.00, 2.5);
+		$this->setXY(5.00, 2.25);
 		$this->cell(3, 3/16, $co['company']);
 
 		// @todo Somethign about New-Lines
