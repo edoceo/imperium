@@ -138,23 +138,6 @@ ul.dropdown-menu a {
 	<a class="nav-link" href="<?= Radix::link('/workorder') ?>"><i class="fas fa-clipboard-list"></i> Work Orders</a>
 	<ul class="dropdown-menu">
 	<?php
-	if (!empty($_ENV['workorder']['id'])) {
-		echo '<li><a href="' . Radix::link('/workorder/view?w=' . $_ENV['workorder']['id']) . '">&laquo; Work Order #' . $this->WorkOrder->id . '</a></li>';
-
-        // Add Item
-        echo '<li><a class="ajax-edit" data-name="woi-edit" href="' . Radix::link('/workorder/item?w=' . $this->WorkOrder->id) . '"><i class="far fa-plus-square"></i> Add Item</a></li>';
-
-        //$menu1[] = array('/service_orders/post_payment','<i class="fas fa-money-check-alt"></i> Post Payment');
-        //$menu1[] = array('/workorder/invoice', '<i class="fas fa-file-invoice-dollar"></i> Build Invoice');
-
-        echo '<li><hr /></li>';
-        // $menu1[] = array("javascript:\$('#EmailSend').submit();", '<i class="fas fa-share-square"></i> Send');
-        echo '<li><a href="' . Radix::link('/workorder/pdf?w=' . $_ENV['workorder']['id']) . '"><i class="fas fa-print"></i> Printable</a></li>';
-
-        //$menu1[] = array('/service_orders/history', '<i class="fas fa-history"></i> History');
-        echo '<li><hr /></li>';
-    }
-
     if ($_ENV['contact']['id']) {
         echo '<li><a href="' . Radix::link('/workorder/new?c=' . $_ENV['contact']['id']) . '"><i class="far fa-plus-square"></i> Create</a></li>';
     } else {

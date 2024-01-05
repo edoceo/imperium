@@ -51,7 +51,7 @@ echo '<form action="' . Radix::link('/workorder/save?w=' . $this->WorkOrder['id'
                 // echo '<br /><i class="fas fa-phone"></i> ' . html($this->Contact['phone']) . '</td>';
             }
             ?>
-            <a class="btn btn-outline-secondary" href="/contact/view?c=<?= $this->Contact['id'] ?>">X</a>
+            <a class="btn btn-outline-secondary" href="/contact/view?c=<?= $this->Contact['id'] ?>"><i class="fa-regular fa-user"></i></a>
         </div>
     </div>
     <div class="col-md-6">
@@ -104,7 +104,22 @@ echo '<form action="' . Radix::link('/workorder/save?w=' . $this->WorkOrder['id'
 echo '<div class="cmd">';
 echo Form::hidden('id',$this->WorkOrder['id']);
 echo Form::hidden('contact_id',$this->WorkOrder['contact_id']);
-echo '<button class="btn btn-primary me-2" name="a" type="submit" value="save">Save</button>';
+echo '<button class="btn btn-primary me-2" name="a" type="submit" value="save">Save <i class="fa-regular fa-floppy-disk"></i></button>';
+echo '<a class="btn btn-primary me-2" href="' . Radix::link(sprintf('/workorder/pdf?w=%s', $this->WorkOrder['id'])) . '" >Print <i class="fa-solid fa-print"></i></a>';
+
+    // echo '<li><a href="' . Radix::link('/workorder/view?w=' . $_ENV['workorder']['id']) . '">&laquo; Work Order #' . $this->WorkOrder->id . '</a></li>';
+
+    // Add Item
+    // echo '<li><a class="ajax-edit" data-name="woi-edit" href="' . Radix::link('/workorder/item?w=' . $this->WorkOrder->id) . '"><i class="far fa-plus-square"></i> Add Item</a></li>';
+
+    //$menu1[] = array('/service_orders/post_payment','<i class="fas fa-money-check-alt"></i> Post Payment');
+    //$menu1[] = array('/workorder/invoice', '<i class="fas fa-file-invoice-dollar"></i> Build Invoice');
+
+    // echo '<li><hr /></li>';
+    // $menu1[] = array("javascript:\$('#EmailSend').submit();", '<i class="fas fa-share-square"></i> Send');
+
+    //$menu1[] = array('/service_orders/history', '<i class="fas fa-history"></i> History');
+
 
 if (!empty($_ENV['workorder.workflow'])) {
     $list = array();
