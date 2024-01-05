@@ -34,7 +34,6 @@ class Invoice extends Base
 		//$font_hb = Zend_Pdf_Font::fontWithName(Zend_Pdf_Font::FONT_HELVETICA_BOLD);
 
 		$this->addPage();
-		$this->MyHeader();
 
 		// Bill Address
 		$this->setFont('', '', 12);
@@ -266,8 +265,8 @@ class Invoice extends Base
 		} else {
 			//$this->SetFont('Arial','B',12);
 			//$this->SetTextColor(255,0,0);
-			//$this->Cell(1,PDFDocument::PDF_LH_12,'Paid in Full','BRT',null,'R');
-			$this->Cell(1,PDFDocument::PDF_LH_12,'$'.number_format($this->_invoice->bill_amount - $this->_invoice->paid_amount,2),'BRT',null,'R');
+			//$this->Cell(1, self::LH_12,'Paid in Full','BRT',null,'R');
+			$this->Cell(1, self::LH_12,'$'.number_format($this->_invoice->bill_amount - $this->_invoice->paid_amount,2),'BRT',null,'R');
 		}
 	}
 }

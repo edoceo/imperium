@@ -78,25 +78,18 @@ class Base extends \TCPDF
 		// set document information
 		$this->setAuthor(APP_NAME);
 		$this->setCreator(APP_NAME);
-		// $this->properties['Producer'] = 'Edoceo Imperium';
-		// $this->setKeywords($this->name);
-		//$pdf->properties['Keywords'] = 'Edoceo Imperium';
-		//$pdf->properties['CreationDate']
-		//$pdf->properties['ModDate'];
-		//$pdf->properties['Trapped']
 
 		// set margins
 		$this->setMargins(0, 0, 0, true);
 		$this->setHeaderFont(array(self::FONT_SANS, '', 12));
 		$this->setHeaderMargin(0);
-		$this->setPrintHeader(false);
+		$this->setPrintHeader(true);
 
 		$this->setFooterMargin(0);
-		//$this->setPrintFooter(false);
+		$this->setPrintFooter(true);
 
 		// set auto page breaks
 		$this->setAutoPageBreak(true, 1/2);
-		//
 
 		// set image scale factor
 		$this->setImageScale(0);
@@ -111,7 +104,7 @@ class Base extends \TCPDF
 		//$this->addPage();
 
 	}
-	
+
 	function setTime($t)
 	{
 		$this->_time = $t;
@@ -177,9 +170,9 @@ class Base extends \TCPDF
 	//}
 
 	/**
-		TCPDF Header Implementation
-	*/
-	function MyHeader()
+	 * Common Header Implementation
+	 */
+	function Header()
 	{
 		// Logo
 		$logo_file = sprintf('%s/webroot/img/logo.png', APP_ROOT);
