@@ -26,7 +26,7 @@ if (is_array($_ENV['title'])) {
 <meta charset="utf-8">
 <meta name="viewport" content="initial-scale=1, user-scalable=yes">
 <meta name="theme-color" content="#336699">
-<link rel="stylesheet" href="/vendor/fontawesome/all.min.css">
+<link rel="stylesheet" href="/vendor/fontawesome/css/all.min.css">
 <link rel="stylesheet" href="/vendor/jquery-ui/jquery-ui.min.css">
 <link rel="stylesheet" href="/vendor/bootstrap/bootstrap.min.css">
 <?php
@@ -62,12 +62,13 @@ echo '</main>';
 ?>
 
 <footer>
-	<a href="https://edoceo.com/imperium">Imperium</a> &#169; 2001-2021 <a href="https://edoceo.com/">Edoceo, Inc</a>
+	<a href="https://edoceo.com/imperium">Imperium</a> &#169; 2001-2023 <a href="https://edoceo.com/">Edoceo, Inc</a>
 </footer>
 
 <script src="/vendor/jquery/jquery.min.js"></script>
 <script src="/vendor/jquery-ui/jquery-ui.min.js"></script>
 <script src="/vendor/bootstrap/bootstrap.bundle.min.js"></script>
+<script src="/js/imperium.js"></script>
 <?= Layout::getScript() ?>
 </body>
 </html>
