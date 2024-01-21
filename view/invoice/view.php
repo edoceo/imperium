@@ -50,27 +50,23 @@ if (count($this->jump_list)) {
 
 <div class="row">
 <div class="col-md-6">
-	<div class="form-group">
-		<label>Contact:</label>
+	<div class="input-group mb-2">
+		<div class="input-group-text">Contact:</div>
 		<?php
 		// Contact
 		if (empty($this->Contact['id'])) {
 			echo '<input class="form-control" id="contact_name" name="contact_name" type="text">';
 		} else {
-			echo '<div class="input-group">';
-			echo '<input class="form-control" readonly type="text" value="' . html($this->Contact['name']) . '">';
-			echo '<span class="input-group-addon">';
-			echo '<a href="' . Radix::link('/contact/view?c='.$this->Contact['id']) . '"><i class="fa fa-link"></i></a>';
-			echo '</span>';
-			echo '</div>';
+			echo '<input class="form-control" readonly value="' . __h($this->Contact['name']) . '">';
+			printf('<a class="btn btn-outline-secondary" href="/contact/view?c=%s"><i class="fa-regular fa-user"></i></a>', $this->Contact['id']);
 		}
 		?>
 	</div>
 </div>
 
 <div class="col-md-3">
-	<div class="form-group">
-		<label>Date:</label>
+	<div class="input-group mb-2">
+		<label class="input-group-text">Date:</label>
 		<?php
 		echo Form::date('date',$this->Invoice['date'], array('class' => 'form-control', 'id'=>'iv_date'));
 		if ($this->Invoice['due_diff'] < 0) {
@@ -85,8 +81,8 @@ if (count($this->jump_list)) {
 </div>
 
 <div class="col-md-3">
-	<div class="form-group">
-		<label>Status:</label>
+	<div class="input-group mb-2">
+		<label class="input-group-text">Status:</label>
 		<?= Form::select('status', $this->Invoice['status'], $this->StatusList, array('class' => 'form-control')) ?>
 	</div>
 </div>
@@ -95,14 +91,14 @@ if (count($this->jump_list)) {
 
 <div class="row">
 <div class="col-md-6">
-	<div class="form-group">
-		<label>Bill To:</label>
+	<div class="input-group mb-2">
+		<label class="input-group-text">Bill To:</label>
 		<?= Form::select('bill_address_id', $this->Invoice['bill_address_id'], $contact_address_list, array('class' => 'form-control')) ?>
 	</div>
 </div>
 <div class="col-md-6">
-	<div class="form-group">
-		<label>Ship To:</label>
+	<div class="input-group mb-2">
+		<label class="input-group-text">Ship To:</label>
 		<?= Form::select('ship_address_id', $this->Invoice['ship_address_id'], $contact_address_list, array('class' => 'form-control')) ?>
 	</div>
 
@@ -111,8 +107,8 @@ if (count($this->jump_list)) {
 
 <div class="row">
 <div class="col-md-12">
-	<div class="form-group">
-		<label>Notes:</label>
+	<div class="input-group mb-2">
+		<label class="input-group-text">Notes:</label>
 		<?= Form::textarea('note',$this->Invoice['note'],array('class' => 'form-control', 'style'=>'height:3em;')) ?>
 	</div>
 </div>
@@ -139,10 +135,10 @@ if (count($this->jump_list)) {
 <?php
 // Hawk Monitoring?
 if ($this->Invoice->hasFlag(Invoice::FLAG_HAWK)) {
-	echo '<button class="btn btn-warning" name="a" type="submit" value="No Hawk">No Hawk</button>';
+	echo '<button class="btn btn-warning" name="a" type="submit" value="No Hawk">No Hawk</button> ';
 } else {
 	if ($this->Invoice->canHawk()) {
-		echo '<button class="btn btn-secondary" name="a" type="submit" value="Hawk">Hawk</button>';
+		echo '<button class="btn btn-secondary" name="a" type="submit" value="Hawk">Hawk</button> ';
 	}
 }
 
@@ -156,10 +152,10 @@ if (!empty($_ENV['invoice.workflow'])) {
 				switch ($x) {
 				case 'Delete':
 				case 'Void':
-					printf('<button class="btn btn-danger" name="a" type="submit" value="%s">%s</button>', $x, $x);
+					printf('<button class="btn btn-danger" name="a" type="submit" value="%s">%s</button> ', $x, $x);
 					break;
 				default:
-					printf('<button class="btn btn-secondary" name="a" type="submit" value="%s">%s</button>', $x, $x);
+					printf('<button class="btn btn-secondary" name="a" type="submit" value="%s">%s</button> ', $x, $x);
 				}
 			}
 		}
@@ -198,32 +194,36 @@ if ((isset($this->InvoiceItemList)) && (is_array($this->InvoiceItemList)) && (co
 
 	echo '<div id="item-list">';
 	echo '<table class="table">';
-	echo '<tr><th>Description</th><th>Quantity</th><th>Rate</th><th>Cost</th><th>Tax</th></tr>';
-	// <th>Tax</th>
+	echo '<thead class="table-dark">';
+	echo '<tr><th>Description</th><th class="r">Quantity</th><th class="r">Rate</th><th class="r">Tax</th><th class="r">Cost</th></tr>';
+	echo '</thead>';
+	echo '<tbody>';
 	foreach ($this->InvoiceItemList as $ivi) {
+
 		$item_subtotal = $ivi['rate'] * $ivi['quantity'];
 		$item_total += $item_subtotal;
-		if ($ivi['tax_rate'] > 0) {
-			$item_tax_total+= round($item_subtotal * $ivi['tax_rate'],2);
-		}
 
 		echo '<tr>';
 		echo '<td class="b"><a class="fancybox fancybox.ajax" href="' . Radix::link('/invoice/item?id=' . $ivi['id']) . '">' .$ivi['name'] . '</a></td>';
 		echo '<td class="c b">' .number_format($ivi['quantity'],2) . '</td>';
 		echo '<td class="r">' . number_format($ivi['rate'],2) . '/' . $ivi['unit'] . '</td>';
-		echo '<td class="r">' . number_format($item_subtotal, 2) . '</td>';
 		if ($ivi['tax_rate'] > 0) {
+			$item_tax_total += round($item_subtotal * $ivi['tax_rate'],2);
 			echo '<td class="r"><sup>' . tax_rate_format($ivi['tax_rate']) . '</sup></td>';
 		} else {
-			echo '<td class="r">&mdash;</td><td></td>';
+			echo '<td class="r">&mdash;</td>';
 		}
+		echo '<td class="r">' . number_format($item_subtotal, 2) . '</td>';
 		echo '</tr>';
 	}
-	echo '<tr><td class="b" colspan="3">Sub-Total:</td><td class="l">' . number_format($item_total,2) . '</td></tr>';
-	echo '<tr><td class="b" colspan="3">Tax Total:</td><td class="l">' . number_format($item_tax_total,2) . '</td></tr>';
-	echo '<tr><td class="b" colspan="3">Bill Total:</td><td class="l">&curren;' . number_format($item_total + $item_tax_total, 2) . '</td></tr>';
-	echo '<tr><td class="b" colspan="3">Paid Total:</td><td class="l">&curren;' . number_format($this->Invoice['paid_amount'], 2) . '</td></tr>';
-	echo '<tr><td class="b" colspan="3">Balance:</td><td class="l" style="color: #f00;">&curren;' . number_format($item_total + $item_tax_total - $this->Invoice['paid_amount'], 2) . '</td></tr>';
+	echo '</tbody>';
+	echo '<tfoot>';
+	echo '<tr><td class="b" colspan="4">Sub-Total:</td><td class="l">' . number_format($item_total,2) . '</td></tr>';
+	echo '<tr><td class="b" colspan="4">Tax Total:</td><td class="l">' . number_format($item_tax_total,2) . '</td></tr>';
+	echo '<tr><td class="b" colspan="4">Bill Total:</td><td class="l">&curren;' . number_format($item_total + $item_tax_total, 2) . '</td></tr>';
+	echo '<tr><td class="b" colspan="4">Paid Total:</td><td class="l">&curren;' . number_format($this->Invoice['paid_amount'], 2) . '</td></tr>';
+	echo '<tr><td class="b" colspan="4">Balance:</td><td class="l" style="color: #f00;">&curren;' . number_format($item_total + $item_tax_total - $this->Invoice['paid_amount'], 2) . '</td></tr>';
+	echo '</tfoot>';
 	echo '</table>';
 	echo '</div>';
 }
