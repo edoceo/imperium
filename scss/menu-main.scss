@@ -1,0 +1,67 @@
+/**
+	The Main Menu
+*/
+
+@use 'root';
+
+header div#menu {
+	display: flex;
+}
+
+header nav {
+
+	flex: 1 1 auto;
+
+	ul {
+
+		background: root.$menu_bg;
+		color: #ccc;
+		display: flex;
+		flex-wrap: wrap;
+		line-height: 1.25;
+		list-style-type: none;
+		margin: 0;
+		padding: 0;
+
+		li {
+			font-weight: 700;
+			margin: 0;
+			padding: 0;
+			position: relative;
+
+			a {
+				display: block;
+				font-size: 120%;
+				padding: 0.125em 0.5em;
+				text-decoration: none;
+				white-space: nowrap;
+			}
+
+			a:hover {
+				background: root.$high_bg;
+				color: root.$body_bg;
+			}
+		}
+
+		li:active > ul,
+		li:focus > ul,
+		li:hover > ul {
+			display: block;
+		}
+
+	}
+
+	/**
+		Sub Menus
+	*/
+	ul ul {
+		/* border: 1px outset #000; */
+		display: none;
+		left: 0;
+		min-width: 15em;
+		position: absolute;
+		top: 98%;
+		z-index: 20;
+	}
+
+}

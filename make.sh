@@ -14,10 +14,11 @@ APP_ROOT=$(dirname "$BIN_SELF")
 
 f=$(readlink -f "$0")
 d=$(dirname "$f")
-
 cd "$d"
 
-case "$1" in
+action="${1:-}"
+
+case "$action" in
 #
 # Clean up the junk
 clean)
@@ -25,87 +26,25 @@ clean)
 	rm -frv ./node_modules
 	rm -frv ./webroot/lib
 
-	rm -fv ./webroot/css/app.less webroot/css/app.css webroot/css/app.css.gz
-	rm -fv ./webroot/css/vendor.less webroot/css/vendor.css webroot/css/vendor.css.gz
+	rm -fv ./webroot/css/app.css*
 	rm -fv ./webroot/js/app.js webroot/js/app.js.gz
 	rm -fv ./webroot/js/vendor.js webroot/js/vendor.js.gz
-
-	rm -frv ./webroot/css/vendor/
-	rm -frv ./webroot/js/vendor/
 
 	;;
 
 #
-# Build the App and Vendor CSS
+# Build the App CSS
 css)
 
-	# App CSS
-	rm -fr \
-		./webroot/css/app.css \
-		./webroot/css/app.css.gz \
-		./webroot/css/app.less \
-		./webroot/css/vendor.css \
-		./webroot/css/vendor.css.gz
-
-	#
-	# Individual CSS files (dev)
-	for s in webroot/css/*.less
-	do
-		o=${s%%.less}.css
-		./node_modules/.bin/lessc --strict-units=on "$s" > "$o"
-	done
-
-	#
-	# Application CSS File
-	cat \
-		./webroot/css/base.less \
-		./webroot/css/menu-main.less \
-		./webroot/css/flash-alert.less \
-		./webroot/css/jump-list.less \
-		> ./webroot/css/app.less
-
-	./node_modules/.bin/lessc \
-		--strict-units=on \
-		./webroot/css/app.less \
-		> ./webroot/css/app.css
-
-	#pack_css ./webroot/css/app.less
-	#./node_modules/.bin/postcss --use=cssnano
+	./node_modules/.bin/sass \
+		--no-quiet \
+		--style=compressed \
+		--verbose \
+		scss/_.scss \
+		webroot/css/app.css
 
 	#_gzip ./webroot/css/app.css
 	gzip --force --keep ./webroot/css/app.css
-
-	#./node_modules/.bin/postcss --use autoprefixer --use cssnano webroot/css/app.css > webroot/css/app.css.post
-	#mv webroot/css/app.css.post webroot/css/app.css
-
-	#./node_modules/.bin/postcss --use autoprefixer --use cssnano webroot/css/pos.css > webroot/css/pos.css.post
-	#mv webroot/css/pos.css.post webroot/css/pos.css
-
-	#
-	# Vendor CSS
-	# @todo font-awesome.css is the biggest bloat at 35k; pure.css is the second at 31k
-	# curl -qs http://meyerweb.com/eric/tools/css/reset/reset.css > webroot/css/vendor/reset.css
-
-	css_pure="./webroot/lib/pure/pure.css ./webroot/lib/pure/grids-responsive.css"
-
-	cat \
-		./webroot/lib/font-awesome/css/font-awesome.css \
-		./webroot/lib/jquery-ui/themes/base/core.css \
-		./webroot/lib/jquery-ui/themes/base/autocomplete.css \
-		./webroot/lib/jquery-ui/themes/base/menu.css \
-		./webroot/lib/jquery-ui/themes/base/theme.css \
-		> webroot/css/vendor.css
-
-	sed -i 's/\.\.\/fonts/\/lib\/font-awesome\/fonts/g' ./webroot/css/vendor.css
-
-	./node_modules/.bin/postcss \
-		--use autoprefixer \
-		--use cssnano \
-		./webroot/css/vendor.css > ./webroot/css/vendor.tmp
-
-	mv webroot/css/vendor.tmp webroot/css/vendor.css
-
-	gzip --force --keep ./webroot/css/vendor.css
 
 	;;
 

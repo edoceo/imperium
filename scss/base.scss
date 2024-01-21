@@ -1,19 +1,12 @@
 /**
-	Use `lessc --strict-imports --strict-math=on --strict-units=no --compresss --clean-css`
-	@see http://www.w3.org/TR/CSS2/cascade.html#specificity
-	:mode=css:
-*/
+ *
+ */
 
-@body_bg: #fcfcfc;
-
-@high_bg: #377D9F;
-
-@menu_bg: #333;
-@menu_fg: #ddd;
+@use 'root';
 
 *[accesskey]:hover:after {
-    content:' [Alt+' attr(accesskey) ']';
-    font-size:80%;
+	content:' [Alt+' attr(accesskey) ']';
+	font-size:80%;
 }
 
 a {
@@ -22,11 +15,11 @@ a {
 
 /* Reset Everything */
 a:hover {
-	color: @high_bg;
+	color: root.$high_bg;
 	cursor: pointer;
 }
 body {
-	background: @body_bg;
+	background: root.$body_bg;
 	font-family: sans-serif;
 	font-size: 100%;
 }
@@ -37,24 +30,25 @@ code {
 }
 
 footer {
-    background: @menu_bg;
-    color: @menu_fg;
-    font-size: 90%;
-    font-weight: 700;
-    padding: 2em;
-    text-align: center;
-    width: 100%;
+	background: root.$menu_bg;
+	color: root.$menu_fg;
+	font-size: 90%;
+	font-weight: 700;
+	padding: 2em;
+	text-align: center;
+	width: 100%;
 }
 
 footer a {
 	text-decoration:none;
 }
 footer a:hover {
-	color:@body_bg;
+	color: root.$body_bg;
 }
 h1 {
 	background: #369;
 	color: #f9f9f9;
+	padding: 0 0.50rem;
 	text-align: left;
 }
 h2 {
@@ -95,7 +89,7 @@ td.l {
 td.bill,
 td.paid
 {
-    text-align:right;
+	text-align:right;
 }
 tr.ro {
 	background-color: #ccc;
@@ -172,49 +166,49 @@ div.cmd {
 
 tr.hawk td
 {
-    background-color:#fcc;
-    border-bottom:2px solid #f00;
+	background-color:#fcc;
+	border-bottom:2px solid #f00;
 }
 tr.active td
 {
-    font-weight:700;
+	font-weight:700;
 }
 tr.active td.paid,
 tr.sent td.paid
 {
-    color:#f00;
+	color:#f00;
 }
 
 tr.sent td
 {
-    font-weight:400;
-    font-style:italic;
+	font-weight:400;
+	font-style:italic;
 }
 
 tr.void td
 {
-    font-weight:400;
+	font-weight:400;
 }
 
 tr.active.single td:first-child
 {
-    background:#de1296;
+	background:#de1296;
 }
 tr.project td
 {
-    background:#ebe98a;
+	background:#ebe98a;
 }
 tr.monthly td
 {
-    background:#0ee676;
+	background:#0ee676;
 }
 tr.quarterly td
 {
-    background:#6d9ee3;
+	background:#6d9ee3;
 }
 tr.yearly td
 {
-    background:#0e2be6;
+	background:#0e2be6;
 }
 
 #JournalEntry .account-id {
@@ -259,26 +253,26 @@ select {
 
 
 @media print {
-    * {
-    	font-size:10pt;
+	* {
+		font-size:10pt;
 		margin:0;
 		padding:0;
 	}
-    body {
-    	background-color: #fff;
+	body {
+		background-color: #fff;
 		font-size:10pt;
 		width: 100%;
 	}
-    #foot {
+	#foot {
 		display: none;
 		visibility: hidden;
 	}
-    .np {
-    	display: none;
+	.np {
+		display: none;
 		visibility: hidden;
 	}
 	.print-hide {
-    	display: none;
+		display: none;
 		visibility: hidden;
 	}
 }
