@@ -8,7 +8,7 @@
 namespace Edoceo\Imperium;
 
 use Edoceo\Radix;
-use Edoceo\Radix\Filter;
+use Edoceo\Radix\Layout;
 use Edoceo\Radix\HTML\Form;
 
 if (!empty($this->Contact['id'])) {
@@ -21,15 +21,14 @@ if (!empty($this->Contact['id'])) {
 
 <div class="row">
 <div class="col-md-6">
-	<div class="form-group">
-		<label>Contact:</label>
+	<div class="input-group mb-2">
+		<label class="input-group-text">Contact:</label>
 		<?= Form::text('contact',$this->Contact['contact'], array('class' => 'form-control')) ?>
 	</div>
 </div>
 <div class="col-md-6">
-	<div class="form-group">
-		<label>Company:</label>
-		<div class="input-group">
+	<div class="input-group mb-2">
+		<label class="input-group-text">Company:</label>
 		<?= Form::text('company',$this->Contact['company'], array('class' => 'form-control'))?>
 		<?php
 		if (!empty($this->Contact['parent_id'])) {
@@ -38,23 +37,21 @@ if (!empty($this->Contact['id'])) {
 			echo '</span>';
 		}
 		?>
-		</div>
-		<?= Form::hidden('parent_id', $this->Contact['parent_id']) ?>
 	</div>
 </div>
 </div>
 
 <div class="row">
 <div class="col-md-6">
-	<div class="form-group">
-		<label>Phone:</label>
+	<div class="input-group mb-2">
+		<label class="input-group-text">Phone:</label>
 		<?= Form::text('phone', $this->Contact['phone'], array('class' => 'form-control'))?>
 	</div>
 </div>
 
 <div class="col-md-6">
-	<div class="form-group">
-		<label><?=( strlen($this->Contact['email']) ? '<a href="mailto:' . $this->Contact['email'] . '">Email:</a>' : 'Email:' ) ?></label>
+	<div class="input-group mb-2">
+		<label class="input-group-text"><?=( strlen($this->Contact['email']) ? '<a href="mailto:' . $this->Contact['email'] . '">Email:</a>' : 'Email:' ) ?></label>
 		<?= Form::text('email', $this->Contact['email'], array('class' => 'form-control'))?>
 	</div>
 </div>
@@ -62,26 +59,26 @@ if (!empty($this->Contact['id'])) {
 
 <div class="row">
 <div class="col-md-5">
-	<div class="form-group">
-		<label><?=( strlen($this->Contact['url']) ? '<a href="' . $this->Contact['url'] . '" target="_blank">Web-Site</a>:' : 'Web-Site:' ) ?></label>
+	<div class="input-group mb-2">
+		<label class="input-group-text"><?=( strlen($this->Contact['url']) ? '<a href="' . $this->Contact['url'] . '" target="_blank">Web-Site</a>:' : 'Web-Site:' ) ?></label>
 		<?= Form::text('url', $this->Contact['url'], array('class' => 'form-control')) ?>
 	</div>
 </div>
 <div class="col-md-3">
-	<div class="form-group">
-		<label>Tags:</label>
+	<div class="input-group mb-2">
+		<label class="input-group-text">Tags:</label>
 		<?= Form::text('tags', $this->Contact['tags'], array('class' => 'form-control')) ?>
 	</div>
 </div>
 <div class="col-md-2">
-	<div class="form-group">
-		<label>Kind</label>
+	<div class="input-group mb-2">
+		<label class="input-group-text">Kind</label>
 		<?= Form::select('kind', $this->Contact['kind'], $this->KindList, array('class' => 'form-control')) ?>
 	</div>
 </div>
 <div class="col-md-2">
-	<div class="form-group">
-		<label>Status:</label>
+	<div class="input-group mb-2">
+		<label class="input-group-text">Status:</label>
 		<?= Form::select('status', $this->Contact['status'], $this->StatusList, array('class' => 'form-control')) ?>
 	</div>
 </div>
@@ -129,22 +126,24 @@ if (!empty($this->ContactChannelList)) {
 
 // Google Contact Detail
 // echo '<tr><td class="l">Google:</td><td colspan="3"><div id="contact-google-area"><input id="contact-google-view" type="button" value="View" ></div></td></tr>';
-
-echo '<div class="form-actions">';
-echo Form::hidden('id',$this->Contact['id']);
-echo '<button class="btn btn-primary" name="a" type="submit" value="save">Save</button>';
-echo '<button class="btn btn-danger" name="a" type="submit" value="delete">Delete</button>';
-// echo '<button class="btn" id="exec-contact-ping" type="button" value="ping">Ping</button>';
-// echo '<button class="btn" name="a" type="submit" value="capture">Photo</button>';
-echo '<button class="btn btn-danger" name="a" type="submit" value="delete">Delete</button>';
-// echo '<a class="btn" href="' . Radix::link('/contact/merge?' . http_build_query(array('c' => $this->Contact['id']))) . '">Merge</a>';
-echo '</div>';
-
 ?>
+
+<div class="form-actions">
+	<?= Form::hidden('id',$this->Contact['id']) ?>
+	<?= Form::hidden('parent_id', $this->Contact['parent_id']) ?>
+	<button class="btn btn-primary" name="a" type="submit" value="save">Save</button>
+	<button class="btn btn-danger" name="a" type="submit" value="delete">Delete</button>
+	<!-- <button class="btn" id="exec-contact-ping" type="button" value="ping">Ping</button> -->
+	<!-- <button class="btn" name="a" type="submit" value="capture">Photo</button>'; -->
+	<button class="btn btn-danger" name="a" type="submit" value="delete">Delete</button>
+	<!-- <a class="btn" href="' . Radix::link('/contact/merge?' . http_build_query(array('c' => $this->Contact['id']))) . '">Merge</a> -->
+</div>
 
 </form>
 
-
+<?php
+ob_start();
+?>
 <script>
 $(function() {
 
@@ -238,13 +237,16 @@ $(function() {
 });
 </script>
 <?php
+$code = ob_get_clean();
+Layout::addScript($code);
+
 
 if ($this->Contact['id'] == 0) {
     return(0);
 }
 
 // Sub Addresses
-echo '<div class="container-fluid">';
+echo '<section>';
 
 echo '<h2 id="ContactAddressHead"><a href="' . Radix::link('/contact/address?' . http_build_query(array('a' => 'make', 'c' => $this->Contact['id']))) . '"><i class="far fa-address-card"></i> Addresses</a></h2>';
 if ($this->ContactAddressList) {
@@ -252,51 +254,18 @@ if ($this->ContactAddressList) {
     echo Radix::block('contact-address-list', array('list'=>$this->ContactAddressList));
     echo "</div>";
 }
+echo '</section>';
 
 // Sub Contacts
-if (empty($this->Contact['parent_id'])) {
-
-    $x = array(
-        'controller' => 'contact',
-        'action' => 'create',
-        'parent' => $this->Contact['id'],
-    );
-    $url = Radix::link('/contact/new?parent=' . $this->Contact['id']); // ($x,'default',true);
-
-    echo '<h2 id="sub-contacts"><a href="' . $url . '"><i class="fas fa-users"></i> Sub-Contacts</a></h2>';
-
-    if (count($this->ContactList)) {
-        echo '<table class="table">';
-        foreach ($this->ContactList as $item) {
-            echo '<tr>';
-            echo '<td><a href="' . Radix::link('/contact/view?c=' . $item['id']) . '">' . html($item['name']) . '</a></td>';
-            // echo '<td>' . Radix::block('stub-channel', array('data'=>$item['phone'])) . '</td>';
-            // echo '<td>' . Radix::block('stub-channel', array('data'=>$item['email'])) . '</td>';
-            echo '<td>' . html($item['phone']) . '</td>';
-            echo '<td>' . html($item['email']) . '</td>';
-            echo '</tr>';
-        }
-        echo '</table>';
-    }
-}
-echo '</div>';
-
-// Event History
-//$arg = array(
-//    'list' => $this->ContactNoteList,
-//    'page' => Radix::link('/note/edit?c=' . $this->Contact['id']),
-//);
-//echo Radix::block('note-list',$arg);
+require_once(__DIR__ . '/view-contact-family.php');
 
 // Notes
-$arg = array(
+echo '<section>';
+echo Radix::block('note-list', [
     'list' => $this->ContactNoteList,
     'page' => Radix::link('/note/edit?c=' . $this->Contact['id']),
-);
-
-echo '<div class="container-fluid">';
-echo Radix::block('note-list',$arg);
-echo '</div>';
+]);
+echo '</section>';
 
 // Files
 // Old way of Parameters
@@ -306,47 +275,35 @@ echo '</div>';
 //     'page' => $url,
 // );
 
-echo '<div class="container-fluid">';
+echo '<section class="mb-2">';
 echo Radix::block('file-list', $this->ContactFileList);
-echo '</div>';
+echo '</section>';
 
-// Work Orders
-echo '<div class="container-fluid">';
-echo '<h2><a href="' . Radix::link('/workorder/new?c=' . $this->Contact['id']) . '"><i class="far fa-clock"></i> Work Orders</a></h2>';
+?>
+<section class="mb-2">
+<div class="d-flex justify-content-between">
+	<div><h2><i class="far fa-clock"></i> Work Orders</h2></div>
+	<div><a class="btn btn-secondary" href="<?= Radix::link('/workorder/new?c=' . $this->Contact['id']) ?>"><i class="far fa-plus-square"></i></a></div>
+</div>
+<?php
 if ($this->WorkOrderList) {
     echo Radix::block('workorder-list',array('list'=>$this->WorkOrderList));
 }
-echo '</div>';
+?>
+</section>
 
-// Invoices
-echo '<div class="container-fluid">';
-echo '<h2><a href="' . Radix::link('/invoice/new?c=' . $this->Contact['id']) . '"><i class="fas fa-file-invoice-dollar"></i> Invoices</a></h2>';
+<section class="mb-2">
+<div class="d-flex justify-content-between">
+	<div><h2><i class="fas fa-file-invoice-dollar"></i> Invoices</a></h2></div>
+	<div><a class="btn btn-secondary" href="<?= Radix::link('/invoice/new?c=' . $this->Contact['id']) ?>"><i class="far fa-plus-square"></i></a></div>
+</div>
+<?php
 if ($this->InvoiceList) {
     echo Radix::block('invoice-list', array('list'=>$this->InvoiceList));
 }
-echo '</div>';
+echo '</section>';
 
-// Accounts
-echo '<div class="container-fluid">';
-echo '<h2>Accounts: </h2>';
-if (empty($this->Account['id'])) {
-?>
-	<form action="<?= Radix::link('/contact/save?c=' . $this->Contact['id']) ?>" autocomplete="off" method="post">
-	<div>
-	<p>Receiveable: <button class="btn btn-secondary" name="a" title="Create new Account for this Contact" style="margin:4px;" type="submit" value="create-account">Create</button>
-	</div>
-	</form>
-<?php
-} else {
-	echo '<a href="' . Radix::link('/account/ledger?' . http_build_query(array('id' => $this->Account['id']))) . '">Account</a>:';
-	echo '<span style="font-size: 22px; line-height: 32px;">';
-	echo '$' . number_format($this->Account['balance'],2);
-	// echo '<input id="account" style="width:20em;" type="text" value="' . $this->Account['full_name'] . '">';
-	// echo '<input id="account_id" name="account_id" type="hidden" value="' . $this->Account['id'] . '">';
-	echo '</span>';
-}
-echo '</div>';
-
+require_once(__DIR__ . '/view-account.php');
 
 // History
 $x = array(
@@ -354,17 +311,3 @@ $x = array(
     'list' => $this->Contact->getHistory(),
 );
 echo Radix::block('diff-list',$x);
-
-?>
-
-<script type='text/javascript'>
-$('#account').autocomplete({
-    source: "<?= Radix::link('/account/ajax?a=account'); ?>",
-    change: function(event, ui) {
-        if (ui.item) {
-            $('#account').val(ui.item.label);
-            $('#account_id').val(ui.item.id);
-        }
-    }
-});
-</script>
