@@ -77,9 +77,9 @@ echo '</div>';
 echo '<div class="cmd">';
 echo Form::hidden('id',$this->Note['id']);
 echo Form::hidden('link',$this->Note['link']);
-echo '<input class="good" name="a" type="submit" value="Save">';
+echo '<button class="btn btn-primary" name="a" type="submit" value="Save">Save</button>';
 if (!empty($this->Note['id'])) {
-    echo '<input class="fail" name="a" type="submit" value="Delete">';
+    echo '<button class="btn btn-danger" name="a" type="submit" value="Delete">Delete</button>';
 }
 echo '</div>';
 

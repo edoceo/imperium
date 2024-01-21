@@ -176,9 +176,8 @@ echo Radix::block('file-list', $this->FileList);
 // Buttons & Hiddden
 echo '<div class="form-inline">';
 echo Form::hidden('id',$this->AccountJournalEntry['id']);
-echo '<button class="btn btn-primary" accesskey="s" class="good" name="a" type="submit" value="save">Save</button>';
+echo '<button class="btn btn-primary" accesskey="s" name="a" type="submit" value="save">Save</button>';
 echo '<button class="btn btn-primary" name="a" type="submit" value="save-copy">Save & Copy</button>';
-// echo '<input class="good" accesskey="s" name="a" type="submit" value="Save">';
 // echo Form::submit('c','Apply');
 // echo Form::button('a', 'Save');
 echo '<button class="btn" accesskey="n" class="info" onclick="addLedgerEntryLine();" type="button">Add Line</button>';

@@ -27,6 +27,6 @@ echo '<form action="' . Radix::link('/note/save') . '" id="note-edit-form" metho
 echo '<div class="cmd">';
 echo Form::hidden('id', $this->Note['id']);
 echo Form::hidden('link', $this->Note['link']);
-echo '<input class="exec" name="a" type="submit" value="Edit">';
+echo '<input class="btn btn-secondary" name="a" type="submit" value="Edit">';
 echo '</div>';
 echo '</form>';

@@ -18,8 +18,8 @@ use Edoceo\Radix;
 use Edoceo\Radix\HTML\Form;
 
 if (empty($this->WorkOrderItem)) {
-    echo '<p class="fail">Failed to load a Work Order Item</p>';
-    return;
+	echo '<p class="fail">Failed to load a Work Order Item</p>';
+	return;
 }
 
 echo '<form action="'. Radix::link('/workorder/item?' . http_build_query(array('id'=>$this->WorkOrderItem['id']))) . '" id="workorder-item-form" method="post">';
@@ -132,9 +132,9 @@ echo "</table>";
 
 echo '<div class="cmd">';
 echo '<input name="workorder_id" type="hidden" value="' . $this->WorkOrder['id'] . '">';
-echo '<button class="btn btn-primary me-2 good" id="workorder-item-exec-save" name="a" type="submit" value="save">Save</button>';
+echo '<button class="btn btn-primary me-2" id="workorder-item-exec-save" name="a" type="submit" value="save">Save</button>';
 if (!empty($this->WorkOrderItem['id'])) {
-    echo '<button class="btn btn-danger fail" name="a" type="submit" value="delete">Delete</button>';
+    echo '<button class="btn btn-danger" name="a" type="submit" value="delete">Delete</button>';
 }
 echo '</div>';
 

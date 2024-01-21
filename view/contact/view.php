@@ -1,7 +1,9 @@
 <?php
 /**
-    @brief Contact View Shows the Contact, Company or Vendors information
-*/
+ * Contact View Shows the Contact, Company or Vendors information
+ *
+ * SPDX-License-Identifier: GPL-3.0-only
+ */
 
 namespace Edoceo\Imperium;
 
@@ -331,7 +333,7 @@ if (empty($this->Account['id'])) {
 ?>
 	<form action="<?= Radix::link('/contact/save?c=' . $this->Contact['id']) ?>" autocomplete="off" method="post">
 	<div>
-	<p>Receiveable: <button class="exec" name="a" title="Create new Account for this Contact" style="margin:4px;" type="submit" value="create-account">Create</button>
+	<p>Receiveable: <button class="btn btn-secondary" name="a" title="Create new Account for this Contact" style="margin:4px;" type="submit" value="create-account">Create</button>
 	</div>
 	</form>
 <?php
