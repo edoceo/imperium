@@ -49,20 +49,6 @@ css)
 	;;
 
 #
-# Install the Dependencies
-deps)
-
-	#npm install jscpd
-	#npm install postcss-cli autoprefixer cssnano
-	#npm install bower
-
-	npm update
-	./node_modules/.bin/bower --allow-root update
-	cd ./webroot/lib/jquery-ui && npm update && grunt concat
-
-	;;
-
-#
 # Install
 install)
 
