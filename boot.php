@@ -71,17 +71,6 @@ function html($x)
     return htmlspecialchars($x, ENT_QUOTES, 'UTF-8', false);
 }
 
-// @deprecated
-function img($img, $alt=null)
-{
-    $src = !empty($_SERVER['HTTPS']) ? 'https:' : 'http:';
-    $src.= '//gcdn.org/' . ltrim($img,'/');
-    if (empty($alt)) {
-        $alt = strtok(basename($img),'.');
-    }
-    return '<img alt="' . htmlspecialchars($alt,ENT_QUOTES) . '" src="' . $src . '" />';
-}
-
 function star($star)
 {
     if (empty($star)) return null;

@@ -38,10 +38,10 @@ foreach ($data as $f) {
     $mime = Base_File::mimeInfo($f['kind']);
 
     echo '<tr>';
-    echo '<td>' . img($mime['icon'], $mime['note']) . '</td>';
-    echo '<td><a href="' . Radix::link('/file/view?id=' . $f['id']) . '">' . html($f['name']) . '</a></td>';
-    echo '<td class="r">' . html($mime['name']) . '</td>';
-    echo '<td class="r">' . html( ImperiumView::niceSize($f['size']) ) . '</td>';
+    echo '<td>' . __h($mime['note']) . '</td>';
+    echo '<td><a href="' . Radix::link('/file/view?id=' . $f['id']) . '">' . __h($f['name']) . '</a></td>';
+    echo '<td class="r">' . __h($mime['name']) . '</td>';
+    echo '<td class="r">' . __h( ImperiumView::niceSize($f['size']) ) . '</td>';
     // echo '<td>' . $this->link('/file/render/' . $f->id, '<i class="fas fa-search"></i> Render' ) . '</td>';
     echo '<td><a href="' . Radix::link('/file/download?id=' . $f['id']) . '"><i class="fas fa-save"></i> Download</td>';
     echo '</tr>';

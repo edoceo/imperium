@@ -16,8 +16,8 @@ $mime = Base_File::mimeInfo($this->File['kind']);
 echo '<form action="' . radix::link('/file/save') . '" enctype="multipart/form-data" id="note-edit-form" method="post">';
 
 echo '<table class="table">';
-echo '<tr><td class="l">File:</td><td>' . html($this->File['name']) . '</td></tr>';
-echo '<tr><td class="l">Type:</td><td>' . img($mime['icon'],'File') . '&nbsp;' . $mime['name'] . '</td></tr>';
+echo '<tr><td class="l">File:</td><td>' . __h($this->File['name']) . '</td></tr>';
+echo '<tr><td class="l">Type:</td><td>File ' . __h($mime['name']) . '</td></tr>';
 echo '<tr><td class="l">Size:</td><td>' . ImperiumView::niceSize($this->File['size']) . '</td></tr>';
 
 if (!empty($this->File->link)) {
@@ -47,10 +47,10 @@ echo '</table>';
 echo '<div class="cmd">';
 echo radix_html_form::hidden('id', $this->File['id']);
 echo radix_html_form::hidden('link', $this->File['link']);
-echo '<input name="a" type="submit" value="Upload">';
+echo '<input class="btn btn-primary" name="a" type="submit" value="Upload">';
 if (!empty($this->File['id'])) {
-    echo '<input name="a" type="submit" value="Download">';
-    echo '<input name="a" type="submit" value="Delete">';
+    echo '<input class="btn btn-secondary" name="a" type="submit" value="Download">';
+    echo '<input class="btn btn-secondary" name="a" type="submit" value="Delete">';
 }
 echo '</div>';
 echo '</form>';
