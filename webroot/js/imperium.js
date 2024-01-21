@@ -69,7 +69,6 @@ $(function() {
 	});
 
 	// $('input[type=text], textarea').focus(function(e) { this.select(); }).mouseup(function(e){ e.preventDefault(); });
-	// $('.fancybox').fancybox();
 	$('.ajax-edit').on('click',function(e) {
 		// var o = $(this).parent().offset();
 		var t = $(this).data('name');

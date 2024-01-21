@@ -23,7 +23,7 @@ foreach ($data['list'] as $item) {
 	echo '<tr>';
 	echo '<td><a href="' . $link . '">' . html($item['kind']) . '</a></td>';
 	echo '<td><a href="' . $link . '">' . $item->__toString() . '</a></td>';
-	echo '<td><a class="fancybox-media" href="http://maps.google.com/maps?q=' . urlencode($item->__toString()) . '">';
+	echo '<td><a href="http://maps.google.com/maps?q=' . urlencode($item->__toString()) . '">';
 	echo '<i class="fas fa-search"></i> Map';
 	echo '</a></td>';
 	echo '</tr>';

@@ -15,7 +15,7 @@
 
 // echo '<li><a href="' . Radix::link('/task/edit">' . '<i class="far fa-plus-square"></i> Add Task') . ' Task</a></li>';
 // echo '<li><a href="' . Radix::link('/alert/edit">' . '<i class="far fa-plus-square"></i> New Alert') . ' New Alert</a></li>';
-// echo '<li><a class="fancybox fancybox.ajax" href="' . Radix::link('/timer/edit') . '"><i class="far fa-clock"></i> New Timer</a></li>';
+// echo '<li><a href="' . Radix::link('/timer/edit') . '"><i class="far fa-clock"></i> New Timer</a></li>';
 // echo '<li><a href="' . Radix::link('/calendar') . '"> Calendar</a></li>';
 // echo '<li><a href="' . Radix::link('/manual/'') . ' . $this->controller . '/' . $this->action . '"><img alt="Annotated Users Manual" src="' . Radix::link('/img/silk/help.png" /> Manual</a></li>';
 // echo '<li><a href="' . Radix::link('/contact/export') . '">Export</a></li>';
@@ -88,8 +88,8 @@ ul.dropdown-menu a {
 	// 	echo '<li><hr /></li>';
 	// }
 	?>
-	<li><a class="fancybox fancybox.ajax" href="<?= Radix::link('/note/edit?l=r') ?>"><i class="far fa-plus-square"></i> New Note</a></li>
-	<li><a class="fancybox fancybox.ajax" href="<?= Radix::link('/file/edit?l=r') ?>"><i class="far fa-plus-square"></i> New File</a></li>
+	<li><a href="<?= Radix::link('/note/edit?l=r') ?>"><i class="far fa-plus-square"></i> New Note</a></li>
+	<li><a href="<?= Radix::link('/file/edit?l=r') ?>"><i class="far fa-plus-square"></i> New File</a></li>
 	<li><a href="<?= Radix::link('/timesheet') ?>"><i class="fas fa-tasks"></i> Time Sheet</a></li>
 	<li><hr></li>
 	<?php

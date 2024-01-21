@@ -183,7 +183,7 @@ $item_tax_total = 0;
 //$link = Radix::link('/invoice/item');
 
 echo '<h2><i class="fas fa-list"></i> Invoice Items ';
-echo '<span class="s">[ <a class="fancybox fancybox.ajax" href="' . Radix::link('/invoice/item?i=' . $this->Invoice['id']) . '">';
+echo '<span class="s">[ <a href="' . Radix::link('/invoice/item?i=' . $this->Invoice['id']) . '">';
 echo '<i class="far fa-plus-square"></i> Add Item';
 echo '</a> ]</span>';
 echo '</h2>';
@@ -204,7 +204,7 @@ if ((isset($this->InvoiceItemList)) && (is_array($this->InvoiceItemList)) && (co
 		$item_total += $item_subtotal;
 
 		echo '<tr>';
-		echo '<td class="b"><a class="fancybox fancybox.ajax" href="' . Radix::link('/invoice/item?id=' . $ivi['id']) . '">' .$ivi['name'] . '</a></td>';
+		echo '<td class="b"><a href="' . Radix::link('/invoice/item?id=' . $ivi['id']) . '">' .$ivi['name'] . '</a></td>';
 		echo '<td class="c b">' .number_format($ivi['quantity'],2) . '</td>';
 		echo '<td class="r">' . number_format($ivi['rate'],2) . '/' . $ivi['unit'] . '</td>';
 		if ($ivi['tax_rate'] > 0) {

@@ -52,7 +52,7 @@ foreach ($data['list'] as $item) {
     echo star($item['star']);
 
     // echo '<td class="b"><a onclick="$(\'#note-edit\').load(\'' . $link . '\'); return false;" href="' . $link . '">' .$item->name . '</a></td>';
-    echo '<a class="fancybox fancybox.ajax" href="' . $link . '">' .$item['name'] . '</a>';
+    echo '<a href="' . $link . '">' .$item['name'] . '</a>';
     // echo '<td style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap; width: 80%;">' . substr($item->data,0,32). '</td>';
     // echo "<td class='c'>" . AppHelper::dateNice($date)  . "</td>";
     echo '</p>';
