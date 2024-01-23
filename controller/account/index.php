@@ -20,6 +20,7 @@ $sql = <<<SQL
 SELECT *
 FROM account
 -- WHERE parent_id IS NULL
+WHERE stat = 200
 ORDER BY full_code ASC, code ASC
 SQL;
 
