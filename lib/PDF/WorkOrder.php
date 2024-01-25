@@ -17,8 +17,6 @@ use Edoceo\Imperium\ContactAddress;
 
 class WorkOrder extends Base
 {
-	private $_pdf;
-
 	private $_page_c = 1;
 
 	function setData($wo)
@@ -102,10 +100,6 @@ class WorkOrder extends Base
 	{
 		$woi_list = $wo->getWorkOrderItems();
 
-		//$font = Zend_Pdf_Font::fontWithPath(APP_ROOT . '/var/fonts/Edoceo-MICR.ttf');
-		// $font_h = Zend_Pdf_Font::fontWithName(Zend_Pdf_Font::FONT_HELVETICA);
-		// $font_hb = Zend_Pdf_Font::fontWithName(Zend_Pdf_Font::FONT_HELVETICA_BOLD);
-
 		$this->drawData_line_item_column_header();
 		$y = $this->getY();
 
@@ -162,6 +156,9 @@ class WorkOrder extends Base
 
 	}
 
+	/**
+	 *
+	 */
 	function drawData_line_item_column_header()
 	{
 		$y = $this->getY();
@@ -176,7 +173,14 @@ class WorkOrder extends Base
 		$this->setXY(7.0, $y);
 		$this->cell(1, self::LH_14, 'Quantity', 0, 0, 'R');
 
-		$this->setXY(7.0, $y + self::LH_16);
+		$y += self::LH_16;
+
+		// Blue Line Below
+		$this->setDrawColor(0x33, 0x66, 0x99);
+		$this->setLineWidth(1/32);
+		$this->line(0.5, $y, 8, $y);
+
+		$this->setXY(7.0, $y);
 
 	}
 

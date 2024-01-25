@@ -17,7 +17,7 @@ class Invoice extends Base
 	/**
 		Load the Invoice to this PDF
 	*/
-	function loadInvoice($iv)
+	function setData($iv)
 	{
 		$x = 0;
 		$y = 0;
@@ -28,10 +28,6 @@ class Invoice extends Base
 		$co = new Contact($iv['contact_id']);
 		$ba = new ContactAddress($iv['bill_address_id']);
 		$sa = new ContactAddress($iv['ship_address_id']);
-
-		//$font = Zend_Pdf_Font::fontWithPath(APP_ROOT . '/var/fonts/Edoceo-MICR.ttf');
-		//$font_h = Zend_Pdf_Font::fontWithName(Zend_Pdf_Font::FONT_HELVETICA);
-		//$font_hb = Zend_Pdf_Font::fontWithName(Zend_Pdf_Font::FONT_HELVETICA_BOLD);
 
 		$this->addPage();
 
@@ -71,40 +67,13 @@ class Invoice extends Base
 		//	$y -= 12;
 		//	$this->drawText($sa->address, 352, $y);
 		//}
-
-		//$y -= 12;
-		//$this->setFontSize(12);
-
-		// Column Headers
-		// $this->setFont(null, 'B', 14);
-		// Note
-		$this->setXY(0.5, 3.5);
-		$this->cell(4.5, 4/16, 'Item');
-		// Quantity
-		$this->setXY(5.0, 3.5);
-		$this->cell(1, 4/16, 'Quantity');
-		// Price
-		$this->setXY(6.0, 3.5);
-		$this->cell(1, 4/16, 'Price');
-		// Total
-		$this->setXY(7.0, 3.5);
-		$this->cell(1, 4/16, 'Cost');
-
-		// Blue Line Below
-		$this->setDrawColor(0x33, 0x66, 0x99);
-		$this->setLineWidth(1/32);
-		$this->line(0.5, 3.75, 8, 3.75);
-
-		// Column LInes
-		$this->setLineWidth(1/64);
-		$this->line(5.00, 3.75, 5.00, 9.75);
-		$this->line(6.00, 3.75, 6.00, 9.75);
-		$this->line(7.00, 3.75, 7.00, 9.75);
-		//$this->line(576,$y,576,94);
+		$this->setY(3.25);
+		$this->drawData_line_item_column_header();
 
 		// Items Table
 		$this->setFont('', '', 12);
-		$y = 3.75 + ( 1 / 16 );
+		$y = $this->getY();
+
 		$sub_total = 0;
 		$tax_total = 0;
 		$ivi_list = $iv->getInvoiceItems();
@@ -137,16 +106,23 @@ class Invoice extends Base
 
 			$y += (4/16);
 
-			//if ($y <= 108) {
-			//	$pdf->pages[] = $page;
-			//	$y = 760;
-			//	$page = $this->addPage();
-			//}
+			if ($y >= 9.5) {
+				$this->addPage();
+				$this->setXY(0.5, 2.25);
+				$this->drawData_line_item_column_header();
+				$y = $this->getY();
+			}
 
 			// Add Sums
 			$sub_total += ($ivi['quantity'] * $ivi['rate']);
 			$tax_total += ( ($ivi['quantity'] * $ivi['rate']) * floatval($ivi['tax_rate']) );
 		}
+
+		// Add new page for Billing History
+		$this->addPage();
+		$this->setXY(0.5, 2.25);
+		// $this->drawData_line_item_column_header();
+		$y = $this->getY();
 
 		// Single Line
 		$y += 1/16;
@@ -238,7 +214,7 @@ class Invoice extends Base
 
 		// Balance
 		$this->setXY(0.5, 9);
-		$this->cell(4.5, 1/2, 'Balance:');
+		$this->cell(4.5, self::LH_12, 'Balance:');
 
 //		$y -= 12;
 //		$this->drawText('Balance:',36,$y);
@@ -259,14 +235,56 @@ class Invoice extends Base
 
 		// Footer Summary
 		if ($iv['bill_amount'] ==$iv['paid_amount']) {
-			$this->setXY(7, 9);
+			$this->setXY(7, $y);
 			$this->setTextColor(255, 0, 0);
 			$this->cell(1, 1/2, 'Paid', null, null, 'R');
 		} else {
 			//$this->SetFont('Arial','B',12);
 			//$this->SetTextColor(255,0,0);
 			//$this->Cell(1, self::LH_12,'Paid in Full','BRT',null,'R');
-			$this->Cell(1, self::LH_12,'$'.number_format($this->_invoice->bill_amount - $this->_invoice->paid_amount,2),'BRT',null,'R');
+			$this->setXY(7, $y);
+			$t = sprintf('$%s', number_format($this->_invoice->bill_amount - $this->_invoice->paid_amount,2));
+			$this->cell(1, self::LH_12, $t, null, null, 'R');
+			// $this->Cell(1, ,,'BRT',null,'R');
 		}
 	}
+
+	/**
+	 *
+	 */
+	function drawData_line_item_column_header()
+	{
+		$y = $this->getY();
+
+		$this->setFont('', 'B', 14);
+
+		// Note
+		$this->setXY(0.5, $y);
+		$this->cell(4.5, self::LH_14, 'Item');
+		// Quantity
+		$this->setXY(5.0, $y);
+		$this->cell(1, self::LH_14, 'Quantity');
+		// Price
+		$this->setXY(6.0, $y);
+		$this->cell(1, self::LH_14, 'Price');
+		// Total
+		$this->setXY(7.0, $y);
+		$this->cell(1, self::LH_14, 'Cost');
+
+		$y += self::LH_16;
+
+		// Blue Line Below
+		$this->setDrawColor(0x33, 0x66, 0x99);
+		$this->setLineWidth(1/32);
+		$this->line(0.5, $y, 8, $y);
+
+		// Column LInes
+		$this->setLineWidth(1/64);
+		$this->line(5.00, $y, 5.00, 9.75);
+		$this->line(6.00, $y, 6.00, 9.75);
+		$this->line(7.00, $y, 7.00, 9.75);
+
+		$this->setXY(7.0, $y);
+	}
+
 }

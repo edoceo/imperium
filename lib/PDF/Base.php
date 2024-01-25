@@ -85,6 +85,7 @@ class Base extends \TCPDF
 		$this->setHeaderMargin(0);
 		$this->setPrintHeader(true);
 
+		$this->setFooterFont(array(self::FONT_SANS, '', 12));
 		$this->setFooterMargin(0);
 		$this->setPrintFooter(true);
 
@@ -208,7 +209,7 @@ class Base extends \TCPDF
 		// Document Title
 		$this->setFont(self::FONT_SANS, 'B', 16);
 		$this->setXY(0.5, 1.5);
-		$this->cell(2, 4/16, $this->_title);
+		$this->cell(2, self::LH_16, $this->_title);
 
 		// Date
 		// $this->setColor(0x33, 0x33, 0x33);
@@ -216,8 +217,8 @@ class Base extends \TCPDF
 
 		$t = 'Date: ' . date('d M Y', $this->_time);
 		$this->setFont(self::FONT_SANS, '', 12);
-		$this->setXY(6, 1.5);
-		$this->cell(2, 1/4, $t, null, null, 'R');
+		$this->setXY(6.5, 1.5);
+		$this->cell(2, self::LH_12, $t);
 
 		// Blue Line
 		$c = explode(',', $_ENV['pdf']['line_color']);
@@ -233,59 +234,17 @@ class Base extends \TCPDF
 
 		// Page
 		// $this->cell('Page: 1', 468, 654 );
+
 	}
 
-  /*
-  function Header()
-  {
-	// Send Address
-	if ($this->_send_address)
+	function footer()
 	{
-	  $this->SetLineWidth(.001);
-	  $this->SetFont('Arial','B',12);
-	  $this->SetXY($this->_pt->from_address_x,$this->_pt->from_address_y); // Starts at 1/2, 5/8 (for printing in window envelope)
-	  $this->MultiCell($this->_pt->from_address_w,self::LH_12,$this->_send_address);
+		// Page Information
+		$t = sprintf('Page: %s/%s', $this->getAliasNumPage(), $this->getAliasNbPages());
+
+		$this->setXY(0.5, 10.5);
+		$this->Cell(1, self::LH_12, $t);
+
 	}
 
-	// Document Title
-	$this->SetFont('Arial','B',16);
-	$this->SetXY(3.5,1.25);
-	$this->Cell(4.5,self::LH_16,$this->_title);
-
-	// Date & Page
-	if ($this->show_pgnr)
-	{
-	  $this->SetFont('Arial','B',12);
-	  $this->SetXY(6.5,1.75);
-	  $this->Cell(1.5,self::LH_12, 'Page: '.$this->pageno().' of {nb}',null,0,'R');
-	}
-
-		// Receive Address
-		// todo: put shipping address right next to this at
-		if (strlen($this->_recv_address)>0)
-		{
-			$this->SetXY($this->_pt->recv_address_x,$this->_pt->recv_address_y);
-			$this->SetFont('Arial','B',12);
-			$this->MultiCell($this->_pt->recv_address_w,self::LH_12,$this->_recv_address);
-		}
-		if (strlen($this->_ship_address)>0)
-		{
-			$this->SetXY(4.5,2.5);
-			$this->SetFont('Arial','B',12);
-			$this->MultiCell(3.5,self::LH_12,$this->_ship_address);
-		}
-	/*
-		if (strlen($this->_note)>0)
-		{
-			// Box for extra stuff, don't know what yet
-			//$this->Rect(4.5,2.25,3.5,1.25);
-			$this->setfont('Arial','',10);
-			$this->setxy(4.5,2.5);
-			$this->multicell(3.5,self::LH_10,$this->_note);
-		}
-	// * /
-	// note: this makes a small mark that shows where to fold
-		$this->setxy(.5,3.75); $this->setlinewidth(.001); $this->line(0,11/3,.125,11/3);
-  }
-  */
 }
