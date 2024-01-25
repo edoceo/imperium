@@ -68,6 +68,7 @@ echo '</main>';
 <script src="/vendor/jquery/jquery.min.js"></script>
 <script src="/vendor/jquery-ui/jquery-ui.min.js"></script>
 <script src="/vendor/bootstrap/bootstrap.bundle.min.js"></script>
+<script src="/vendor/htmx/htmx.min.js"></script>
 <script src="/js/imperium.js"></script>
 <?= Layout::getScript() ?>
 </body>

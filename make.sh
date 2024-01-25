@@ -74,6 +74,11 @@ install)
 	cp node_modules/@fortawesome/fontawesome-free/css/all.min.css webroot/vendor/fontawesome/css/
 	cp node_modules/@fortawesome/fontawesome-free/webfonts/* webroot/vendor/fontawesome/webfonts/
 
+	# htmx
+	mkdir -p webroot/vendor/htmx
+	cp node_modules/htmx.org/dist/htmx.min.js webroot/vendor/htmx/
+
+
 	;;
 
 #
