@@ -11,18 +11,19 @@ use Edoceo\Radix;
 
 Radix::$theme_name = 'pdf';
 
-$iv = [];
-if (!empty($_GET['i'])) {
-	$iv = new Invoice($_GET['i']);
+$obj = [];
+if ( ! empty($_GET['id'])) {
+	$obj = new Invoice($_GET['id']);
+} elseif ( ! empty($_GET['i'])) {
+	$obj = new Invoice($_GET['i']);
 }
 
-if (empty($iv['id'])) {
-	throw new Exception('Invalid Invoice Id',__LINE__);
+if (empty($obj['id'])) {
+	throw new \Exception('Invalid Invoice [VIP-022]');
 }
 
 $pdf = new PDF\Invoice();
-$pdf->loadInvoice($iv);
-
-$pdf->output(sprintf('Invoice-%d.pdf', $iv['id']), 'I');
+$pdf->setData($obj);
+$pdf->output(sprintf('Invoice-%d.pdf', $obj['id']), 'I');
 
 exit(0);

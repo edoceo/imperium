@@ -27,14 +27,3 @@ $pdf->setData($obj);
 $pdf->output(sprintf('WorkOrder-%d.pdf', $obj['id']), 'I');
 
 exit(0);
-
-// LEGACY
-
-// $pdf = new WorkOrderPDF($wo);
-
-// $this->view->file = new stdClass();
-// $this->view->file->name = 'WorkOrder-' . $wo->id . '.pdf';
-// $this->view->file->data = $pdf->render();
-// $this->view->file->size = strlen($this->view->file->data);
-
-// $this->_helper->viewRenderer->setNoRender(); //supress auto renderning
