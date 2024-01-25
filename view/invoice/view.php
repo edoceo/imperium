@@ -15,6 +15,8 @@ namespace Edoceo\Imperium;
 use Edoceo\Radix;
 use Edoceo\Radix\HTML\Form;
 
+use Edoceo\Imperium\UI\Button;
+
 $_ENV['title'] = array('Invoice','#' .$this->Invoice['id']);
 
 App::addMRU(Radix::link('/invoice/view?i=' . $this->Invoice['id']), sprintf('Invoice #%d', $this->Invoice['id']));
@@ -129,9 +131,10 @@ if (count($this->jump_list)) {
 </div>
 </div> <!-- /.row -->
 
-<div class="form-actions">
+<div class="cmd form-actions">
 <?= Form::hidden('contact_id', $this->Invoice['contact_id']) ?>
-<button class="btn btn-primary" name="a" type="submit" value="save"><i class="fa fa-save"></i> Save</button>
+<?= Button::save() ?>
+<?= Button::print(Radix::link(sprintf('/invoice/pdf?i=%s', $this->Invoice['id']))) ?>
 <?php
 // Hawk Monitoring?
 if ($this->Invoice->hasFlag(Invoice::FLAG_HAWK)) {
@@ -167,8 +170,7 @@ if (!empty($_ENV['invoice.workflow'])) {
 
 <?php
 // Invoice Notes
-if (!empty($this->Invoice['id'])) {
-
+if ( ! empty($this->Invoice['id'])) {
 	$url = Radix::link('/note/create?i=' . $this->Invoice['id']);
 	$arg = array(
 		'list' => $this->InvoiceNoteList,
@@ -182,15 +184,21 @@ $item_total = 0;
 $item_tax_total = 0;
 //$link = Radix::link('/invoice/item');
 
-echo '<h2><i class="fas fa-list"></i> Invoice Items ';
-echo '<span class="s">[ <a href="' . Radix::link('/invoice/item?i=' . $this->Invoice['id']) . '">';
-echo '<i class="far fa-plus-square"></i> Add Item';
-echo '</a> ]</span>';
-echo '</h2>';
+?>
+<section class="mt-4">
+<div class="d-flex justify-content-between">
+	<div><h2><i class="fas fa-list"></i> Invoice Items</h2></div>
+	<div>
+		<a accesskey="n" class="btn btn-secondary" href="<?= Radix::link('/invoice/item?i=' . $this->Invoice['id']) ?>">
+			Add Item <i class="far fa-plus-square"></i>
+		</a>
+	</div>
+</div>
 
-// Item Location
+<div id="invoice-item-edit-wrap"></div>
 
-if ((isset($this->InvoiceItemList)) && (is_array($this->InvoiceItemList)) && (count($this->InvoiceItemList) > 0)) {
+<?php
+if (count($this->InvoiceItemList) > 0) {
 
 	echo '<div id="item-list">';
 	echo '<table class="table">';

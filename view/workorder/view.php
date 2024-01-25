@@ -18,6 +18,8 @@ use Edoceo\Radix;
 use Edoceo\Radix\Layout;
 use Edoceo\Radix\HTML\Form;
 
+use Edoceo\Imperium\UI\Button;
+
 // Jump List
 if (count($this->jump_list)) {
     echo '<div class="jump_list">';
@@ -104,8 +106,8 @@ echo '<form action="' . Radix::link('/workorder/save?w=' . $this->WorkOrder['id'
 echo '<div class="cmd">';
 echo Form::hidden('id',$this->WorkOrder['id']);
 echo Form::hidden('contact_id',$this->WorkOrder['contact_id']);
-echo '<button class="btn btn-primary me-2" name="a" type="submit" value="save">Save <i class="fa-regular fa-floppy-disk"></i></button>';
-echo '<a class="btn btn-primary me-2" href="' . Radix::link(sprintf('/workorder/pdf?w=%s', $this->WorkOrder['id'])) . '" >Print <i class="fa-solid fa-print"></i></a>';
+echo Button::save();
+echo Button::print(Radix::link(sprintf('/workorder/pdf?w=%s', $this->WorkOrder['id'])));
 
     // echo '<li><a href="' . Radix::link('/workorder/view?w=' . $_ENV['workorder']['id']) . '">&laquo; Work Order #' . $this->WorkOrder->id . '</a></li>';
 
@@ -178,16 +180,23 @@ if (!empty($this->WorkOrder['id'])) {
 
 // Work Order Items
 if (!empty($this->WorkOrder['id'])) {
+    ?>
 
-    $url = $this->link('/workorder/item?w=' . $this->WorkOrder['id']);
+    <section class="mt-4">
+    <div class="d-flex justify-content-between">
+        <div><h2 id="woi-list">Work Order Items</h2></div>
+        <div>
+            <a accesskey="n" class="btn btn-secondary ajax-edit" data-name="woi-edit" href="<?= Radix::link('/workorder/item?w=' . $this->WorkOrder['id']) ?>">
+                Add Item <i class="far fa-plus-square"></i>
+            </a>
+        </div>
+    </div>
 
-    echo '<h2 id="woi-list">Work Order Items ';
-    echo '<a accesskey="n" class="ajax-edit" data-name="woi-edit" href="' . $url . '">';
-    echo '<i class="far fa-plus-square"></i> Add Item';
-    echo '</a>';
-    echo '</h2>';
-    echo '<div id="woi-edit"></div>';
+    <div id="woi-edit"></div>
 
+    </section>
+
+    <?php
 }
 
 if (count($this->WorkOrderItemList) > 0) {
