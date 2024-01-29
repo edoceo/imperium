@@ -62,9 +62,9 @@ li.dropdown-hook:hover > ul {
 <li class="nav-item dropdown-hook">
 	<a class="nav-link">Tools <i class="fa-solid fa-screwdriver-wrench"></i></a>
 	<ul class="dropdown-menu">
+		<li><a class="dropdown-item" href="<?= Radix::link('/timer') ?>"><i class="far fa-clock"></i> New Timer</a></li>
 		<li><a class="dropdown-item" href="<?= Radix::link('/task/edit') ?>"><i class="far fa-plus-square"></i> Add Task</a></li>
 		<li><a class="dropdown-item" href="<?= Radix::link('/alert/edit') ?>"><i class="far fa-plus-square"></i> New Alert</a></li>
-		<li><a class="dropdown-item" href="<?= Radix::link('/timer/edit') ?>"><i class="far fa-clock"></i> New Timer</a></li>
 		<li><a class="dropdown-item" href="<?= Radix::link('/calendar') ?>"> Calendar</a></li>
 		<li><a class="dropdown-item" href="<?= Radix::link('/note') ?>"><i class="far fa-sticky-note"></i> Notes</a></li>
 		<li><a class="dropdown-item" href="<?= Radix::link('/file') ?>"><i class="far fa-file-alt"></i> Files</a></li>
