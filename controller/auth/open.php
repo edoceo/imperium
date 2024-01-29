@@ -33,18 +33,19 @@ case 'sign in':
 
 	$_SESSION['uid'] = $res['id'];
 
-	acl::permit('/index');
-	acl::permit('/dashboard');
-	acl::permit('/search');
+	acl::permit('/account*');
 	acl::permit('/block*');
+	acl::permit('/contact*');
+	acl::permit('/dashboard');
 	acl::permit('/email*');
 	acl::permit('/file*');
-	acl::permit('/note*');
-	acl::permit('/account*');
-	acl::permit('/contact*');
+	acl::permit('/index');
 	acl::permit('/invoice*');
-	acl::permit('/workorder*');
+	acl::permit('/note*');
+	acl::permit('/search');
 	acl::permit('/settings*');
+	acl::permit('/timer*');
+	acl::permit('/workorder*');
 
 	Session::flash('info', 'Sign In Successful');
 
