@@ -21,10 +21,10 @@ foreach ($list as $name) {
     if (count($info['list']) > 0)
     {
         // echo "<div style='display: table-cell;'>";
-        echo '<div>'; // style='display: table-cell;'>";
-        echo sprintf('<h2>%d %s</h2>',count($info['list']),$name);
+        echo '<section class="mb-4">'; // style='display: table-cell;'>";
+        echo sprintf('<h2>%s :: %d</h2>', $name, count($info['list']));
         echo Radix::block($info['view'],array('list'=>$info['list'],'opts'=>array('head'=>true)));
-        echo '</div>';
+        echo '</section>';
     }
 }
 

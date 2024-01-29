@@ -26,24 +26,28 @@ $sql_woi.= ' JOIN base_enum ON workorder.kind = base_enum.name ';
 $sql_woi.= " WHERE workorder.status = 'Active' AND workorder_item.status = 'Pending' ";
 $sql_woi.= ' ORDER BY base_enum.sort, workorder.status, workorder.date desc, workorder.id DESC';
 
-$data = array(
-	// 'Active Timers' => array(
-	// 	'css' => 'index_pack',
-	// 	'list' => Timer::activeList(),
-	// 	'view' => '../elements/timer-list.phtml'),
-	'Pending Work Order Items' => array(
+$data = [
+	'Active Timers' => [
+		'css' => 'index_pack',
+		'list' => $_SESSION['timer'],
+		'view' => 'timer-list'
+	],
+	'Pending Work Order Items' => [
 		'css' => 'index_pack',
 		'list' => SQL::fetch_all($sql_woi),
-		'view' => 'workorder-list'),
-	'Active Work Orders' => array(
+		'view' => 'workorder-list'
+	],
+	'Active Work Orders' => [
 		'css' => 'index_list',
 		'list' => SQL::fetch_all($sql_w),
-		'view' => 'workorder-list'),
-	'Active Invoices' => array(
+		'view' => 'workorder-list'
+	],
+	'Active Invoices' => [
 		'css' => 'index_list',
 		'list' => SQL::fetch_all("select invoice.*,b.name as contact_name from invoice join contact b on invoice.contact_id=b.id where ((invoice.paid_amount is null or invoice.paid_amount < invoice.bill_amount) and invoice.status in ('Active','Sent','Hawk')) order by invoice.date desc, invoice.id desc"),
-		'view' => 'invoice-list'),
-);
+		'view' => 'invoice-list'
+	],
+];
 /*
 $this->paginate = array(
 'WorkOrder' => array(
