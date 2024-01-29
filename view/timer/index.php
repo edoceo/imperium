@@ -59,7 +59,13 @@ uasort($timer_list, function($a, $b) {
 			</div>
 			<div class="col-md-2">
 				<input name="timer-id" type="hidden" value="<?= __h($t->hash) ?>">
-				<button class="btn btn-warning" name="a" value="timer-stop"><i class="fa-regular fa-circle-stop"></i> Stop</button>
+				<?php
+				if (empty($t->time_omega)) {
+				?>
+					<button class="btn btn-warning" name="a" value="timer-stop"><i class="fa-regular fa-circle-stop"></i> Stop</button>
+				<?php
+				}
+				?>
 				<button class="btn btn-danger" name="a" value="timer-delete"><i class="fa-regular fa-trash-can"></i> Delete</button>
 			</div>
 		</div>

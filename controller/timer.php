@@ -11,6 +11,8 @@
 use Edoceo\Radix;
 use Edoceo\Radix\Session;
 
+unset($_SESSION['timer']['']);
+
 if ('POST' == $_SERVER['REQUEST_METHOD']) {
 
 	switch ($_POST['a']) {
@@ -50,10 +52,12 @@ if ('POST' == $_SERVER['REQUEST_METHOD']) {
 
 		$tid = $_POST['timer-id'];
 		$t = $_SESSION['timer'][$tid];
-		if ( ! empty($t)) {
-			$t->time_omega = new \DateTime();
+		if (empty($t)) {
+			throw new \Exception('Invalid Timer [ICT-056]');
 		}
-		$_SESSION['timer'][$t->id] = $t;
+
+		$t->time_omega = new \DateTime();
+		$_SESSION['timer'][$t->hash] = $t;
 
 		Session::flash('info', 'Timer stopped');
 
