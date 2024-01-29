@@ -8,6 +8,11 @@ use \Edoceo\Radix\HTML;
 
 $_ENV['h1'] = 'Timers';
 
+$timer_list = $_SESSION['timer'];
+uasort($timer_list, function($a, $b) {
+	return ($a->time_alpha > $b->time_alpha);
+});
+
 ?>
 
 <form action="/timer" method="post">
@@ -27,7 +32,7 @@ $_ENV['h1'] = 'Timers';
 <section class="mb=t-4">
 	<h2>Active Timers</h2>
 	<?php
-	foreach ($_SESSION['timer'] as $t) {
+	foreach ($timer_list as $t) {
 
 		$t1 = $t->time_omega;
 		if (empty($t1)) {
