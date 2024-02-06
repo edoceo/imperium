@@ -2,9 +2,11 @@
 /**
  * Timer Controller
  *
- * @copyright	2008 Edoceo, Inc
+ * SPDX-License-Identifier: GPL-3.0-only
+ *
+ * @copyright  2008 Edoceo, Inc
  * @package    edoceo-imperium
- * @link       http://imperium.edoceo.com
+ * @link       https://edoceo.com/imperium
  * @since      File available since Release 1013
  */
 

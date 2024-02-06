@@ -2,6 +2,8 @@
 /**
  * Timer Create View
  * Input for for Creating a Named Timer
+ *
+ * SPDX-License-Identifier: GPL-3.0-only
  */
 
 use \Edoceo\Radix\HTML;
@@ -39,34 +41,36 @@ uasort($timer_list, function($a, $b) {
 			$t1 = new \DateTime();
 		}
 
-	?>
+		$diff = $t->time_alpha->diff($t1);
+
+		?>
+
 		<form action="/timer" method="post">
 		<div class="row">
 			<div class="col-md-4">
+				<input name="timer-id" type="hidden" value="<?= __h($t->hash) ?>">
 				<h3><?= __h($t->name) ?></h3>
 			</div>
 			<div class="col-md-2">
-				<h3><?= __h($t->time_alpha->format(\DateTime::RFC3339)) ?></h3>
+				<?= __h($t->time_alpha->format('D Y-m-d H:i')) ?>
 			</div>
 			<div class="col-md-2">
-				<h3><?= __h($t1->format(\DateTime::RFC3339)) ?></h3>
+				<?= __h($t1->format('D Y-m-d H:i')) ?>
 			</div>
 			<div class="col-md-2">
-				<?php
-				$diff = $t->time_alpha->diff($t1);
-				echo $diff->format('%r %a %H:%I:%S.%F');
-				?>
+				<?= $diff->format('%r %a %H:%I:%S.%F') ?>
 			</div>
-			<div class="col-md-2">
-				<input name="timer-id" type="hidden" value="<?= __h($t->hash) ?>">
-				<?php
-				if (empty($t->time_omega)) {
-				?>
-					<button class="btn btn-warning" name="a" value="timer-stop"><i class="fa-regular fa-circle-stop"></i> Stop</button>
-				<?php
-				}
-				?>
-				<button class="btn btn-danger" name="a" value="timer-delete"><i class="fa-regular fa-trash-can"></i> Delete</button>
+			<div class="col-md-2 text-end">
+				<div class="btn-group">
+					<?php
+					if (empty($t->time_omega)) {
+					?>
+						<button class="btn btn-warning" name="a" value="timer-stop"><i class="fa-regular fa-circle-stop"></i> Stop</button>
+					<?php
+					}
+					?>
+					<button class="btn btn-danger" name="a" value="timer-delete"><i class="fa-regular fa-trash-can"></i> Delete</button>
+				</div>
 			</div>
 		</div>
 		</form>
@@ -74,11 +78,5 @@ uasort($timer_list, function($a, $b) {
 	}
 	?>
 </section>
-
-<pre>
-<?php
-var_dump($_SESSION['timer']);
-?>
-</pre>
 
 </div>
