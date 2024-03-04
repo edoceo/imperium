@@ -2,7 +2,7 @@
 /**
  * Application Static Class
  *
- *
+ * SPDX-License-Identifier: GPL-3.0-only
  */
 
 namespace Edoceo\Imperium;
