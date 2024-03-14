@@ -30,7 +30,7 @@ $this->InvoiceTransactionList = $this->Invoice->getTransactions();
 
 // Add Prev / Next Links
 $this->jump_list = array();
-if (!empty($this->Invoice['id'])) {
+if ( ! empty($this->Invoice['id'])) {
 
 	// Previous Ones
 	$s = sprintf('SELECT id FROM invoice where id < %d order by id desc limit 5',$this->Invoice['id']);
@@ -50,6 +50,3 @@ if (!empty($this->Invoice['id'])) {
 		$this->jump_list[] = array('controller'=>'invoice','action'=>'view','id'=>$x['id']);
 	}
 }
-
-// $this->_s->Invoice = $this->view->Invoice;
-$_SESSION['invoice'] = $this->Invoice;

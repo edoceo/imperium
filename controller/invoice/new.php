@@ -20,4 +20,8 @@ if (!empty($_GET['c'])) {
 	}
 }
 
+$this->jump_list = [];
+$this->InvoiceItemList = [];
+$this->InvoiceTransactionList = [];
+
 Radix::$path = '/invoice/view';
