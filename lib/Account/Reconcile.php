@@ -14,9 +14,11 @@ class Account_Reconcile
 		List of supported formats
 	*/
 	public static $format_list = array(
+		'chase' => 'Chase Credit Cards',
 		'csvwfb' => 'Wells Fargo Comma Seperated',
 		'square' => 'SquareUp Transaction CSV',
 		'paypal' => 'Paypal CSV',
+		'becu' => 'BECU CSV',
 		// 'iq2005' => 'Intuit Quicken 2005 or newer',
 		// 'qb2000' => 'Quickbooks 2000 or newer',
 		// 'mm2002' => 'Microsoft Money 2002 or newer',
@@ -36,11 +38,20 @@ class Account_Reconcile
 	*/
 	static function parse($opt)
 	{
-
 		$ret = array();
 
 		// Read the Line in the Format
 		switch ($opt['kind']) {
+		case 'becu':
+			$imp = new \Edoceo\Imperium\Account\Import\BECU($opt['file'], $_POST['upload_id']);
+			$ret = $imp->parse();
+			uasort($ret, array('Edoceo\Imperium\Account_Reconcile', '_sortCallback'));
+			break;
+		case 'chase':
+			$imp = new \Edoceo\Imperium\Account\Import\Chase($opt['file'], $_POST['upload_id']);
+			$ret = $imp->parse();
+			uasort($ret, array('Edoceo\Imperium\Account_Reconcile', '_sortCallback'));
+			break;
 		case 'csvwfb': // Wells Fargo CSV Format
 			$ret = self::_parseWellsFargo($opt['file']);
 			uasort($ret, array('Edoceo\Imperium\Account_Reconcile', '_sortCallback'));
@@ -79,31 +90,8 @@ class Account_Reconcile
 			break;
 		}
 
-		// Query: Find Matching Entry
-		$sql = 'SELECT account_journal_id, date, amount FROM general_ledger';
-		$sql.= " WHERE (date <= ?::timestamp + '2 days'::interval) AND (date >= ? ::timestamp - '2 days'::interval)";
-		$sql.= ' AND account_id = ?';
-		$sql.= ' AND abs(amount) = ?';
-		$sql.= ' LIMIT 1';
-
-		// Now Spin Each List Item and Discover Existing Journal Entry?
-//		$c = count($ret);
-//
-//		for ($i=0;$i<$c;$i++) {
-//
-//			$arg = array($ret[$i]->date, $ret[$i]->date, $opt['account_id'], abs($ret[$i]->amount));
-//
-//			$ret[$i]->id = SQL::fetch_one($sql, $arg);
-//
-//			if (!empty($err)) {
-//				die("err:$err");
-//			}
-//			//exit;
-//
-//		}
-//
-
 		return $ret;
+
 	}
 
 	/**
