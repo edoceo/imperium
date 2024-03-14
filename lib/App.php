@@ -13,9 +13,6 @@ class App
 
 	static function load_config()
 	{
-		$cfg = require_once(APP_ROOT . '/etc/config.php');
-		// var_dump($cfg); exit;
-
 		// App Defaults
 		$_ENV = parse_ini_file(APP_ROOT . '/etc/boot.ini',true);
 		$_ENV = array_change_key_case($_ENV);
@@ -65,6 +62,36 @@ class App
 			'link' => $l,
 			'html' => $h,
 		);
+
+	}
+
+	/**
+	 *
+	 */
+	static function getConfig(string $key)
+	{
+		static $cfg = null;
+
+		if (empty($cfg)) {
+			$cfg = require_once(APP_ROOT . '/etc/config.php');
+			$cfg = array_change_key_case($cfg, CASE_LOWER);
+		}
+
+		$key_list = explode('/', $key);
+		if (empty($key_list)) {
+			return null;
+		}
+
+		$ret = $cfg;
+
+		foreach ($key_list as $key) {
+			if ( ! isset($ret[$key])) {
+				return null;
+			}
+			$ret = $ret[$key];
+		}
+
+		return $ret;
 
 	}
 
