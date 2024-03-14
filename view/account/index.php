@@ -13,23 +13,7 @@ $_ENV['title'] = 'General Ledger';
 
 $x_kind = null;
 
-//echo '<form action="" class="np" method="get">';
-//echo Radix::block('account-period-input', array(
-//	'm' => $this->Month,
-//	'y' => $this->Year,
-//	'p' => $this->Period,
-//));
-//echo '</form>';
-
-// Search
-// echo '<form action="' . Radix::link('/account/search') . '">';
-// echo '<div>';
-// echo '<input type="text" name="q" value="">';
-// echo '<button value="search">Search</button>';
-// echo '</div>';
-
 echo '<div class="container">';
-//echo '<p>Accounts for Period: ' . $this->date_alpha . ' - ' . $this->date_omega . '</p>';
 echo '<table class="table table-hover">';
 
 foreach ($this->AccountList as $item) {

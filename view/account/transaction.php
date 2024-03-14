@@ -73,7 +73,7 @@ if (count($this->jump_list)) {
 </div>
 <div class="col-md-6">
 	<label>Kind:</label>
-	<?= Form::select('kind', $this->AccountJournalEntry['kind'], array('N'=>'Normal','A'=>'Adjusting','C'=>'Closing'), array('class' => 'form-control')) ?>
+	<?= Form::select('kind', $this->AccountJournalEntry['kind'], array('N'=>'Normal','A'=>'Adjusting','C'=>'Closing'), array('class' => 'form-select')) ?>
 </div>
 <div class="col-md-3">
 	<label>Flag:</label>
