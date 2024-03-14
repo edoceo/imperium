@@ -38,13 +38,13 @@ foreach ($res as $x) {
 <div class="col-md-6">
 	<div class="form-group">
 		<label>Kind:</label>
-		<?= Form::select('kind',$this->Account['kind'], $this->AccountKindList, array('class' => 'form-control')) ?>
+		<?= Form::select('kind',$this->Account['kind'], $this->AccountKindList, array('class' => 'form-select')) ?>
 	</div>
 </div>
 <div class="col-md-6">
 	<div class="form-group">
 		<label>Parent:</label>
-		<?= Form::select('parent_id', $this->Account['parent_id'], $Account_Parent_list, array('class' => 'form-control')) ?>
+		<?= Form::select('parent_id', $this->Account['parent_id'], $Account_Parent_list, array('class' => 'form-select')) ?>
 	</div>
 </div>
 </div>
@@ -80,7 +80,7 @@ foreach ($res as $x) {
 <div class="col-md-4">
 	<div class="form-group">
 		<label>Tax Line:</label>
-		<?= Form::select('account_tax_line_id', $this->Account['account_tax_line_id'], $Account_TaxRec_list, array('class' => 'form-control')) ?>
+		<?= Form::select('account_tax_line_id', $this->Account['account_tax_line_id'], $Account_TaxRec_list, array('class' => 'form-select')) ?>
 	</div>
 </div>
 </div> <!-- /.row -->

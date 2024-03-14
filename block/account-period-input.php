@@ -18,15 +18,15 @@ use Edoceo\Radix\HTML\Form;
 <div class="d-flex justify-content-between flex-wrap" id="account-period-input">
 
 <div>
-	<?= Form::select('m', $_GET['m'], Radix::$view->MonthList, array('class' => 'form-control')) ?>
+	<?= Form::select('m', $_GET['m'], Radix::$view->MonthList, array('class' => 'form-select')) ?>
 </div>
 
 <div>
-	<?= Form::select('y', $_GET['y'], Radix::$view->YearList, array('class' => 'form-control')) ?>
+	<?= Form::select('y', $_GET['y'], Radix::$view->YearList, array('class' => 'form-select')) ?>
 </div>
 
 <div>
-	<?= Form::select('p', $_GET['p'], Radix::$view->PeriodList, array('class' => 'form-control')) ?>
+	<?= Form::select('p', $_GET['p'], Radix::$view->PeriodList, array('class' => 'form-select')) ?>
 </div>
 
 <div class="form-check form-check-inline">

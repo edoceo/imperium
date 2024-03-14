@@ -66,7 +66,7 @@ echo '<div class="d-flex">';
 echo '<div class="me-2"><h2>Closing Period:</h2></div>';
 echo '<div class="me-2">' . Form::date('d0', $this->date_alpha, [ 'class' => 'form-control', 'style' => 'width: 14em;' ]) . '</div>';
 echo '<div class="me-2">' . Form::date('d1', $this->date_omega, [ 'class' => 'form-control', 'style' => 'width: 14em;' ]) . '</div>';
-echo '<div class="me-2">' . Form::select('account_id', $this->Account['id'], $this->AccountList_Select, [ 'class' => 'form-control'] ) . '</div>';
+echo '<div class="me-2">' . Form::select('account_id', $this->Account['id'], $this->AccountList_Select, [ 'class' => 'form-select'] ) . '</div>';
 echo '<div class="me-2"><button class="btn btn-primary" name="c" type="submit" value="view">View</button></div>';
 echo '</div>';
 echo '</form>';

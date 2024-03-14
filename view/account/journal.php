@@ -45,7 +45,7 @@ $prev_b = 0;
 <div class="form-group">
 	<label>Account:</label>
 	<div class="input-group">
-		<?= Form::select('id', $this->Account['id'], $this->AccountList_Select, array('class' => 'form-control')) ?>
+		<?= Form::select('id', $this->Account['id'], $this->AccountList_Select, array('class' => 'form-select')) ?>
 		<span class="input-group-append">
 			<a class="btn btn-outline-primary" href="<?= Radix::link('/account/journal?' . http_build_query($_GET)) ?>"><i class="fas fa-list" title="Journal"></i></a>
 			<a class="btn btn-outline-primary" href="<?= Radix::link('/account/edit?id=' . $this->Account['id']) ?>"><i class="fas fa-edit" title="Edit"></i></a>

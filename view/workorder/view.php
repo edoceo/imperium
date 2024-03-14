@@ -75,11 +75,11 @@ echo '<form action="' . Radix::link('/workorder/save?w=' . $this->WorkOrder['id'
         <div class="input-group mb-2">
             <div class="input-group-text">Rate:</div>
             <?= Form::number('base_rate',$this->WorkOrder['base_rate'], [ 'class'=>'form-control rate' ]); ?>
-            <?= Form::select('base_unit', $this->WorkOrder['base_unit'], Base_Unit::getList(), [ 'class'=>'form-control rate' ]) ?>
+            <?= Form::select('base_unit', $this->WorkOrder['base_unit'], Base_Unit::getList(), [ 'class'=>'form-select rate' ]) ?>
         </div>
     </div>
     <div class="col-md-3 mb-2">
-        <?= Form::select('kind', $this->WorkOrder['kind'], $this->KindList, [ 'class' => 'form-control']) ?>
+        <?= Form::select('kind', $this->WorkOrder['kind'], $this->KindList, [ 'class' => 'form-select']) ?>
     </div>
     <div class="col-md-3">
         <div class="input-group mb-2">

@@ -71,12 +71,12 @@ echo '<form action="'. Radix::link('/workorder/item?' . http_build_query(array('
 		<div class="input-group mb-2">
 			<div class="input-group-text">@</div>
 			<?= Form::number('e_rate', $this->WorkOrderItem['e_rate'], [ 'class' => 'form-control']) ?>
-			<?= Form::select('e_unit', $this->WorkOrderItem['e_unit'], Base_Unit::getList(), [ 'class' => 'form-control']) ?>
+			<?= Form::select('e_unit', $this->WorkOrderItem['e_unit'], Base_Unit::getList(), [ 'class' => 'form-select']) ?>
 		</div>
 	</div>
-        <div class="col-md-3">
-                <div class="input-group mb-2">
-                        <div class="input-group-text">Tax:</div>
+	<div class="col-md-3">
+		<div class="input-group mb-2">
+			<div class="input-group-text">Tax:</div>
 			<?= Form::number('e_tax_rate', tax_rate_format($this->WorkOrderItem['e_tax_rate']), [ 'class' => 'form-control']) ?>
 		</div>
 	</div>
@@ -93,7 +93,7 @@ echo '<form action="'. Radix::link('/workorder/item?' . http_build_query(array('
 		<div class="input-group mb-2">
 			<div class="input-group-text">@</div>
 			<?= Form::number('a_rate', $this->WorkOrderItem['a_rate'], [ 'class' => 'form-control']) ?>
-			<?= Form::select('a_unit', $this->WorkOrderItem['a_unit'], Base_Unit::getList(), [ 'class' => 'form-control']) ?>
+			<?= Form::select('a_unit', $this->WorkOrderItem['a_unit'], Base_Unit::getList(), [ 'class' => 'form-select']) ?>
 		</div>
 	</div>
 	<div class="col-md-3">
@@ -108,13 +108,13 @@ echo '<form action="'. Radix::link('/workorder/item?' . http_build_query(array('
 	<div class="col-md-6">
 		<div class="input-group mb-2">
 			<div class="input-group-text">Type:</div>
-			<?= Form::select('kind', $this->WorkOrderItem['kind'], WorkOrderItem::$kind_list, [ 'class' => 'form-control']) ?>
+			<?= Form::select('kind', $this->WorkOrderItem['kind'], WorkOrderItem::$kind_list, [ 'class' => 'form-select']) ?>
 		</div>
 	</div>
 	<div class="col-md-6">
 		<div class="input-group mb-2">
 			<div class="input-group-text" title="The Status of this Item, Completed Items will be Billed when creating an Invoice">Status</div>
-			<?= Form::select('status',$this->WorkOrderItem['status'], $this->ItemStatusList, [ 'class' => 'form-control' ]) ?>
+			<?= Form::select('status',$this->WorkOrderItem['status'], $this->ItemStatusList, [ 'class' => 'form-select' ]) ?>
 		</div>
 	</div>
 </div>

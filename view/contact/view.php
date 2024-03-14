@@ -73,13 +73,13 @@ if (!empty($this->Contact['id'])) {
 <div class="col-md-2">
 	<div class="input-group mb-2">
 		<label class="input-group-text">Kind</label>
-		<?= Form::select('kind', $this->Contact['kind'], $this->KindList, array('class' => 'form-control')) ?>
+		<?= Form::select('kind', $this->Contact['kind'], $this->KindList, array('class' => 'form-select')) ?>
 	</div>
 </div>
 <div class="col-md-2">
 	<div class="input-group mb-2">
 		<label class="input-group-text">Status:</label>
-		<?= Form::select('status', $this->Contact['status'], $this->StatusList, array('class' => 'form-control')) ?>
+		<?= Form::select('status', $this->Contact['status'], $this->StatusList, array('class' => 'form-select')) ?>
 	</div>
 </div>
 </div> <!-- /.row -->
@@ -247,7 +247,6 @@ if ($this->Contact['id'] == 0) {
 
 // Sub Addresses
 echo '<section>';
-
 echo '<h2 id="ContactAddressHead"><a href="' . Radix::link('/contact/address?' . http_build_query(array('a' => 'make', 'c' => $this->Contact['id']))) . '"><i class="far fa-address-card"></i> Addresses</a></h2>';
 if ($this->ContactAddressList) {
     echo "<div id='ContactAddressList'>";

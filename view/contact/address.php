@@ -10,7 +10,7 @@ use Edoceo\Radix\HTML\Form;
 
 Layout::addScript('<script src="//maps.google.com/maps/api/js?sensor=true" type="text/javascript"></script>');
 
-$kind_input = Form::select('kind', $this->ContactAddress['kind'], ContactAddress::$kind_list, array('class' => 'form-control'));
+$kind_input = Form::select('kind', $this->ContactAddress['kind'], ContactAddress::$kind_list, array('class' => 'form-select'));
 $opts = array('class' => 'form-control');
 
 ?>

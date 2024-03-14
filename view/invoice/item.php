@@ -34,7 +34,7 @@ if (empty($this->InvoiceItem)) {
 <div class="col-md-6">
 	<div class="input-group mb-2">
 		<div class="input-group-text">Kind:</div>
-		<?= Form::select('kind', $this->InvoiceItem['kind'], InvoiceItem::$kind_list, [ 'class' => 'form-control' ]) ?>
+		<?= Form::select('kind', $this->InvoiceItem['kind'], InvoiceItem::$kind_list, [ 'class' => 'form-select' ]) ?>
 	</div>
 </div>
 </div>
@@ -65,7 +65,7 @@ if (empty($this->InvoiceItem)) {
 <div class="col-md-3">
 	<div class="input-group mb-2">
 		<div class="input-group-text">per</div>
-		<?= Form::select('unit', $this->InvoiceItem['unit'], $this->UnitList, [ 'class' => 'form-control']); ?>
+		<?= Form::select('unit', $this->InvoiceItem['unit'], $this->UnitList, [ 'class' => 'form-select']); ?>
 	</div>
 </div>
 <div class="col-md-3">

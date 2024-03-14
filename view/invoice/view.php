@@ -85,7 +85,7 @@ if (count($this->jump_list)) {
 <div class="col-md-3">
 	<div class="input-group mb-2">
 		<label class="input-group-text">Status:</label>
-		<?= Form::select('status', $this->Invoice['status'], $this->StatusList, array('class' => 'form-control')) ?>
+		<?= Form::select('status', $this->Invoice['status'], $this->StatusList, array('class' => 'form-select')) ?>
 	</div>
 </div>
 
@@ -95,13 +95,13 @@ if (count($this->jump_list)) {
 <div class="col-md-6">
 	<div class="input-group mb-2">
 		<label class="input-group-text">Bill To:</label>
-		<?= Form::select('bill_address_id', $this->Invoice['bill_address_id'], $contact_address_list, array('class' => 'form-control')) ?>
+		<?= Form::select('bill_address_id', $this->Invoice['bill_address_id'], $contact_address_list, array('class' => 'form-select')) ?>
 	</div>
 </div>
 <div class="col-md-6">
 	<div class="input-group mb-2">
 		<label class="input-group-text">Ship To:</label>
-		<?= Form::select('ship_address_id', $this->Invoice['ship_address_id'], $contact_address_list, array('class' => 'form-control')) ?>
+		<?= Form::select('ship_address_id', $this->Invoice['ship_address_id'], $contact_address_list, array('class' => 'form-select')) ?>
 	</div>
 
 </div>
