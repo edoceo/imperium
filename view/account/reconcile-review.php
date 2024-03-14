@@ -1,13 +1,14 @@
 <?php
 /**
-	Review the Uploaded Transactions
-*/
+ * Review the Uploaded Transactions
+ *
+ */
 
 use Edoceo\Radix;
 use Edoceo\Radix\Layout;
 use Edoceo\Radix\HTML\Form;
 
-$_ENV['title'] = array('Account', 'Reconcile', $this->Account['full_name'], 'Preview');
+$_ENV['title'] = array('Account', 'Reconcile', $this->Account['full_name'], 'Review');
 
 $cr = 0;
 $dr = 0;
@@ -17,8 +18,12 @@ $date_alpha = $date_omega = null;
 // View the Pending Transactions
 ?>
 
+<h2>Importing to <?= __h($this->Import_Account['name']) ?></h2>
+
+<input id="import_account_id" name="import_account_id" type="hidden" value="<?= $this->Import_Account['id'] ?>">
+
 <table class="table table-sm table-hover">
-<thead>
+<thead class="table-dark">
 <tr>
 	<th>#</th>
 	<th>Date</th>
@@ -50,8 +55,6 @@ foreach ($this->JournalEntryList as $je) {
 		continue;
 	}
 
-	$offset_id = $_ENV['offset_account_id'];
-
 	foreach ($je['ledger_entry_list'] as $le) {
 
 		$le_i++;
@@ -64,10 +67,10 @@ foreach ($this->JournalEntryList as $je) {
 		// echo $this->formText('note',$je->note,array('style'=>'width:25em'));
 		// @todo Determine Side, which depends on the Kind of the Account for which side is which
 
-		// @todo Autocomplete
+		// Offset Account
 		echo '<td>';
-		// echo Form::select(sprintf('je%daccount_id',$le_i), $offset_id, $this->AccountPairList);
-		echo '<input class="account-id" id="' . sprintf('account_id-%d', $le_i) . '" name="' . sprintf('account_id-%d', $le_i) . '" type="hidden" value="">';
+		$k = sprintf('offset_account_id-%d', $le_i);
+		echo '<input class="account-id" id="' . $k . '" name="' . $k . '" type="hidden" value="">';
 		echo '<input class="form-control account-name ui-autocomplete-input ar-note" data-index="' . $le_i . '" id="' . sprintf('account_name-%d', $le_i) . '" name="' . sprintf('account_name-%d', $le_i) . '" type="text" value="" autocomplete="off">';
 		echo '</td>';
 
@@ -95,9 +98,11 @@ foreach ($this->JournalEntryList as $je) {
 		echo '</td>';
 
 		echo '<td class="r">';
+		echo '<div class="btn-group">';
 		echo '<button class="btn btn-sm btn-primary save-entry" data-index="' . $le_i . '" title="Save this Ledger Entry" type="button"><i class="far fa-save"></i></button>';
 		echo '<button class="btn btn-sm btn-warning join-entry" data-index="' . $le_i . '" title="Merge with another Ledger Entry for Journal" type="button"><i class="fas fa-compress-arrows-alt"></i></button>';
 		echo '<button class="btn btn-sm btn-danger drop-entry" data-index="' . $le_i . '" title="Drop" type="button"><i class="fas fa-times"></i></button>';
+		echo '</div>';
 		echo '</td>';
 
 		echo '</tr>';
@@ -136,10 +141,10 @@ function acChange(e, ui)
 {
 	var c = parseInt($(e.target).data('index'), 10) || 0;
 	if (ui.item) {
-		$('#account_id-' + c).val(ui.item.id);
+		$('#offset_account_id-' + c).val(ui.item.id);
 		$('#account_name-' + c).val(ui.item.value);
 	} else {
-		$('#account_id-' + c).val('');
+		$('#offset_account_id-' + c).val('');
 		$('#account_name-' + c).val('');
 	}
 }
@@ -147,21 +152,21 @@ function acChange(e, ui)
 function acFocus(e, ui)
 {
 	var c = parseInt($(e.target).data('index'), 10) || 0;
-	$('#account_id-' + c).val(ui.item.id);
+	$('#offset_account_id-' + c).val(ui.item.id);
 	$('#account_name-' + c).val(ui.item.value);
 }
 
 function acSelect(e, ui)
 {
 	var c = parseInt($(e.target).data('index'), 10) || 0;
-	$('#account_id-' + c).val(ui.item.id);
+	$('#offset_account_id-' + c).val(ui.item.id);
 	$('#account_name-' + c).val(ui.item.value);
 }
 
 function acChangeFocusSelect(e, ui)
 {
 	var c = parseInt($(e.target).data('index'), 10) || 0;
-	$('#account_id-' + c).val(ui.item.id);
+	$('#offset_account_id-' + c).val(ui.item.id);
 	$('#account_name-' + c).val(ui.item.value);
 }
 
@@ -240,21 +245,17 @@ $(function() {
 			}
 		}
 
+		debugger;
+
 		var jei = $(this).data('index');
-
-		var dts = $('#date-' + jei).val();
-		var txt = $('#note-' + jei).val();
-		var off = $('#account_id-' + jei).val();
-		var dr =  $('#je' + jei + 'dr').val();
-		var cr =  $('#je' + jei + 'cr').val();
-
 		var arg = {
 			a: 'save-one',
-			date: dts,
-			note: txt,
-			offset_account_id: off,
-			cr: cr,
-			dr: dr
+			date: $(`#date-${jei}`).val(),
+			note: $(`#note-${jei}`).val(),
+			import_account_id: $('#import_account_id').val(),
+			offset_account_id: $(`#offset_account_id-${jei}`).val(),
+			cr: $('#je' + jei + 'cr').val(),
+			dr: $('#je' + jei + 'dr').val(),
 		};
 
 		$.post('<?= Radix::link('/account/reconcile') ?>', arg, function(res, ret) {
@@ -295,7 +296,7 @@ $(function() {
 			var le0 = {
 				date: $('#date-' + i0).val(),
 				note: $('#note-' + i0).val(),
-				account_id: $('#account_id-' + i0).val(),
+				account_id: $('#offset_account_id-' + i0).val(),
 				cr: $('#je' + i0 + 'cr').val(),
 				dr: $('#je' + i0 + 'dr').val(),
 			};
@@ -303,7 +304,7 @@ $(function() {
 			var le1 = {
 				date: $('#date-' + i1).val(),
 				note: $('#note-' + i1).val(),
-				account_id: $('#account_id-' + i1).val(),
+				account_id: $('#offset_account_id-' + i1).val(),
 				cr: $('#je' + i1 + 'cr').val(),
 				dr: $('#je' + i1 + 'dr').val(),
 			};

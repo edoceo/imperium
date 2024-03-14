@@ -12,8 +12,6 @@ use Edoceo\Radix\DB\SQL;
 // See View
 if ( ($id = intval($_GET['id'])) > 0) {
 	$this->Account = new Account($id);
-} elseif (!empty($_SESSION['reconcile_upload_id'])) {
-	$this->Account = new Account($_SESSION['reconcile_upload_id']);
 } elseif (!empty($_ENV['account']['banking_account_id'])) {
 	$this->Account = new Account($_ENV['account']['banking_account_id']);
 }
@@ -44,17 +42,12 @@ case 'upload': // Read the Uploaded Data
 	$sql.= 'ORDER BY full_code ASC, code ASC';
 	$this->AccountPairList = SQL::fetch_mix($sql);
 
-	$_SESSION['reconcile_upload_id'] = $_POST['upload_id'];
-	$_SESSION['reconcile_offset_id'] = $_POST['offset_id'];
-
-	$_ENV['upload_account_id'] = $_SESSION['reconcile_upload_id'];
-	$_ENV['offset_account_id'] = $_POST['offset_id'];
+	// Account to Reconcile Against
+	$this->Import_Account = new Account($_POST['upload_id']);
 
 	break;
 
 case 'save': // Save the Uploaded Transactions
-
-	$_ENV['upload_account_id'] = $_SESSION['reconcile_upload_id'];
 
 	var_dump($_POST);
 
@@ -108,12 +101,12 @@ case 'save': // Save the Uploaded Transactions
 		if (!empty($_POST[sprintf('je%dcr',$i)])) {
 			// Credit to the Upload Target Account
 			$dr['account_id'] = $_POST[sprintf('je%daccount_id',$i)];
-			$cr['account_id'] = $_ENV['upload_account_id'];
+			$cr['account_id'] = $_POST['import_account_id'];
 			$dr['amount'] = abs(preg_replace('/[^\d\.]+/',null,$_POST[sprintf('je%dcr',$i)])) * -1;
 			$cr['amount'] = abs(preg_replace('/[^\d\.]+/',null,$_POST[sprintf('je%dcr',$i)]));
 		} else {
 			// Debit to the Upload Target Account
-			$dr['account_id'] = $_ENV['upload_account_id'];
+			$dr['account_id'] = $_POST['import_account_id'];;
 			$cr['account_id'] = $_POST[sprintf('je%daccount_id',$i)];
 			$dr['amount'] = abs(preg_replace('/[^\d\.]+/',null,$_POST[sprintf('je%ddr',$i)])) * -1;
 			$cr['amount'] = abs(preg_replace('/[^\d\.]+/',null,$_POST[sprintf('je%ddr',$i)]));
@@ -132,7 +125,8 @@ case 'save-one': // Save the Uploaded Transactions
 
 	header('Content-Type: application/json');
 
-	$_ENV['upload_account_id'] = $_SESSION['reconcile_upload_id'];
+	// REconcile Account
+	$offset_account = $_POST['offset_account_id'];
 
 	if (!empty($_POST['id'])) {
 		header('HTTP/1.1 400 Bad Request', true, 400);
@@ -171,10 +165,10 @@ case 'save-one': // Save the Uploaded Transactions
 	$cr['account_journal_id'] = $je['id'];
 	$cr['date'] = $je['date'];
 
-	if (!empty($_POST['cr'])) {
+	if ( ! empty($_POST['cr'])) {
 
 		// Credit to the Upload Target Account
-		$cr['account_id'] = $_ENV['upload_account_id'];
+		$cr['account_id'] = $_POST['import_account_id'];
 		$cr['amount'] = abs(preg_replace('/[^\d\.]+/',null,$_POST['cr']));
 
 		$dr['account_id'] = $_POST['offset_account_id'];
@@ -186,7 +180,7 @@ case 'save-one': // Save the Uploaded Transactions
 		$cr['account_id'] = $_POST['offset_account_id'];
 		$cr['amount'] = abs(preg_replace('/[^\d\.]+/',null, $_POST['dr']));
 
-		$dr['account_id'] = $_ENV['upload_account_id'];
+		$dr['account_id'] = $_POST['import_account_id'];
 		$dr['amount'] = abs(preg_replace('/[^\d\.]+/',null, $_POST['dr'])) * -1;
 	}
 

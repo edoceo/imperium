@@ -70,12 +70,12 @@ case 'view':
 <table class="table">
 <tr>
 	<td class="l" title="Transactions are being uploaded for this account">Account:</td>
-	<td><?= Form::select('upload_id', $this->Account->id, $this->AccountPairList, array('class' => 'form-control')) ?></td>
+	<td><?= Form::select('upload_id', $this->Account->id, $this->AccountPairList, array('class' => 'form-select')) ?></td>
 </tr>
 <!-- // echo '<tr><td class="l" title="Default off-set account for the transactions, a pending queue for reconciliation">Offset:</td><td>' . Form::select('offset_id', $_ENV['account']['reconcile_offset_id'], $this->AccountPairList)  . '</td></tr> -->
 <tr>
 	<td class="l" title="Which data format is this in?">Format:</td>
-	<td><?= Form::select('format',null,Account_Reconcile::$format_list, array('class' => 'form-control')) ?></td>
+	<td><?= Form::select('format',null,Account_Reconcile::$format_list, array('class' => 'form-select')) ?></td>
 </tr>
 <tr>
 	<td class="l">File:</td>
@@ -100,11 +100,14 @@ case 'view':
 
 <div class="container">
 <?php
-$sql = 'SELECT count(distinct(account_journal_id)) FROM general_ledger WHERE account_id = 29';
-$max = SQL::fetch_one($sql);
+$arg = [
+	':a0' => App::getConfig('account/reconcile-pending')
+];
+$sql = 'SELECT count(distinct(account_journal_id)) FROM general_ledger WHERE account_id = :a0';
+$max = SQL::fetch_one($sql, $arg);
 
-$sql = 'SELECT * FROM general_ledger WHERE account_id = 29 ORDER BY account_journal_date LIMIT 10';
-$res = SQL::fetch_all($sql);
+$sql = 'SELECT * FROM general_ledger WHERE account_id = :a0 ORDER BY account_journal_date LIMIT 10';
+$res = SQL::fetch_all($sql, $arg);
 ?>
 	<h2>Reconcile :: Pending <small>(<?= $max ?>)</small></h2>
 	<p>These records have been stashed pending review</p>
