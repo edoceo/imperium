@@ -220,8 +220,11 @@ class Base extends \TCPDF
 		$this->setXY(6.5, 1.5);
 		$this->cell(2, self::LH_12, $t);
 
-		// Blue Line
-		$c = explode(',', $_ENV['pdf']['line_color']);
+		// Colored Line
+		$c = \App::getConfig('pdf/line_color');
+		if ( ! is_array($c)) {
+			$c = explode(',', $c);
+		}
 		$this->setDrawColorArray($c);
 		$this->setLineWidth(1/32);
 		$this->line(0.5, 2, 8, 2);

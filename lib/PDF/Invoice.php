@@ -84,15 +84,7 @@ class Invoice extends Base
 			// Multi Line Name
 			$this->setXY(0.5, $y);
 			$this->cell(4.5, 3/16, substr(trim($ivi['name']),0,55));
-			/*
-			$lines = explode("\n",wordwrap(stripslashes($ivi->name),55));
-			foreach ($lines as $line) {
-				$dy -= 12;
-				$page->drawText($dy . '-'. $line,36,$dy);
-			}
-			*/
 
-			//$page->drawText($ivi->note,32,$y);
 			$this->setXY(5.0, $y);
 			$this->cell(1, 3/16, sprintf('%.2f',$ivi['quantity']), null, null, 'R');
 
@@ -227,7 +219,7 @@ class Invoice extends Base
 		$this->line(0.5, $y, 8, $y);
 
 		// Footer Text
-//		$text = explode('\n',$_ENV['invoice']['foot_note']); // Split on Literal \n
+//		$text = explode('\n',\App::getConfig('invoice/footer'); // Split on Literal \n
 //		foreach ($text as $line) {
 //			$this->drawText($line,39,$y);
 //			$y -= 10;
