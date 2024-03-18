@@ -173,6 +173,15 @@ echo '</table>';
 // Attached Files
 echo Radix::block('file-list', $this->FileList);
 
+?>
+
+<div class="input-group mb-2">
+	<input class="form-control" name="file" type="file" id="attach-file">
+	<label class="input-group-text" for="attach-file"><?= $this->FileMax ?> max</label>
+</div>
+
+<?php
+
 // Buttons & Hiddden
 echo '<div class="form-inline">';
 echo Form::hidden('id',$this->AccountJournalEntry['id']);
@@ -188,14 +197,6 @@ if (empty($this->AccountJournalEntry['id'])) {
 if ($this->AccountJournalEntry['id']) {
 	echo '<input class="btn btn-danger" name="a" type="submit" value="Delete">';
 }
-
-// File
-echo '<div class="input-group">';
-echo '<div class="custom-file">';
-echo '<input class="custom-file-input" name="file" type="file" id="attach-file">';
-echo sprintf('<label class="custom-file-label" for="attach-file">Choose File (%s max)</label>', $this->FileMax);
-echo '</div>';
-echo '</div>';
 
 echo '</div>';
 
