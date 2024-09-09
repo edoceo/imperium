@@ -20,31 +20,30 @@ MySQL may work but has not been tested as much as PostgreSQL
 
 Export the latest version to some location on the system such as `/opt/edoceo/imperium/`
 
-{{{
-    svn export https://edoceo-imperium.googlecode.com/svn/trunk /opt/edoceo/imperium
-    git clone https://github.com/edoceo/imperium /opt/edoceo/imperium
-}}}
+```
+git clone https://github.com/edoceo/imperium /opt/edoceo/imperium
+```
 
 Create the database user and the database itself
 
-{{{
-    # psql -U postgres
-    postgres=# create user imperium;
-    postgres=# create database imperium with owner imperium encoding 'UTF8';
-}}}
+```
+# psql -U postgres
+postgres=# create user imperium;
+postgres=# create database imperium with owner imperium encoding 'UTF8';
+```
 
 Change to the `approot/sql` directory then run each of those files in order.
-{{{
-    # cd /opt/edoceo/imperium/approot/sql
-    # for f in *; do psql -U imperium -f $f; done
-}}}
+```
+# cd /opt/edoceo/imperium/approot/sql
+# for f in *; do psql -U imperium -f $f; done
+```
 
 Copy `approot/etc/imperium.ini` to `approot/etc/imperium-local.ini`.
 Edit imperium-local.ini to configure proper values for your environment.
 
 Install the Repos via Composer
 
-{{{
-	curl -sS https://getcomposer.org/installer | php
-	./composer.phar --no-dev install
-}}}
+```
+curl -sS https://getcomposer.org/installer | php
+    ./composer.phar --no-dev install
+```
