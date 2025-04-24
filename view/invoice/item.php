@@ -22,7 +22,7 @@ if (empty($this->InvoiceItem)) {
 
 ?>
 
-<form action="<?= Radix::link('/workorder/item?' . http_build_query( [ 'id' => $this->InvoiceItem['id'] ])) ?>" id="invoice-item-form" method="post">
+<form action="<?= Radix::link('/invoice/item?' . http_build_query( [ 'id' => $this->InvoiceItem['id'] ])) ?>" id="invoice-item-form" method="post">
 
 <div class="row">
 <div class="col-md-6">
