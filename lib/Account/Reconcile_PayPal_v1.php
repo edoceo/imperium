@@ -176,14 +176,17 @@ class Account_Reconcile_PayPal_v1
 					$le2 = array(
 						'dr' => abs($csv['Fee']),
 						'amount' => $csv['Fee'],
-						'note' => sprintf('PayPal #%s - Fee Reversal', $csv['Transaction']),
+						'note' => sprintf('PayPal #%s - Fee Reversal', $csv['Transaction ID']),
 					);
 					// $le2->account_id = 78; // Expense: PayPal Fees
 					$je['ledger_entry_list'][] = $le2;
 				}
 
 				break;
-
+			case 'COMPLETED/Payment Reversal':
+				$le0['cr'] = abs($le0['amount']);
+				$je['ledger_entry_list'][] = $le0;
+				break;
 			case 'COMPLETED/Chargeback Reversal':
 				$le0['dr'] = abs($le0['amount']);
 				$je['ledger_entry_list'][] = $le0;
@@ -253,12 +256,24 @@ class Account_Reconcile_PayPal_v1
 				));
 				$je['ledger_entry_list'][] = $le0;
 				break;
+			case 'DENIED/Cancellation of Hold for Dispute Resolution':
+				// PayPal Puts money BACK into our Account
+				$le0['dr'] = abs($le0['amount']);
+				$je['note'] = trim(sprintf('%s; %s; <%s> Original: %s',
+					$csv['Type'],
+					$csv['Status'],
+					$csv['From Email Address'],
+					$csv['Reference Txn ID'],
+				));
+				$je['ledger_entry_list'][] = $le0;
+				break;
 			case 'COMPLETED/General Authorization': // Followed by a Sale which affects balance
 			case 'COMPLETED/General Currency Conversion': // There is a charge w/USD
 			case 'PAID/Invoice Sent':
 			case 'PENDING/Account Hold for Open Authorization':
 			case 'PENDING/Bank Deposit to PP Account':
 			case 'PENDING/General Authorization':
+			case 'PENDING/Hold on Balance for Dispute Investigation':
 				// Ignore
 				break;
 			default:
