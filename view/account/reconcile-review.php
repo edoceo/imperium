@@ -2,6 +2,7 @@
 /**
  * Review the Uploaded Transactions
  *
+ * SPDX-License-Identifier: GPL-3.0-only
  */
 
 use Edoceo\Radix;

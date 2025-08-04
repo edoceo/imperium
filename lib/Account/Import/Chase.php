@@ -1,6 +1,8 @@
 <?php
 /**
  * Parse the Chase.com CC CSV Format
+ *
+ * SPDX-License-Identifier: GPL-3.0-only
  */
 
 namespace Edoceo\Imperium\Account\Import;

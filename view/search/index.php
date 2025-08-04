@@ -1,8 +1,9 @@
 <?php
 /**
-    @file
-    @brief Interface to the Search Options
-*/
+ * Interface to the Search Options
+ *
+ * SPDX-License-Identifier: GPL-3.0-only
+ */
 
 namespace Edoceo\Imperium;
 

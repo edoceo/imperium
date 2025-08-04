@@ -1,14 +1,13 @@
 <?php
 /**
  * Master Controller for Account
+ *
+ * SPDX-License-Identifier: GPL-3.0-only
  */
 
 namespace Edoceo\Imperium;
 
 use Edoceo\Radix;
-
-require_once('Account/Reconcile.php');
-require_once('Account/TaxFormLine.php');
 
 // Set Default Data
 if (empty($_SESSION['account-view']['period'])) $_SESSION['account-view']['period'] = 'm';

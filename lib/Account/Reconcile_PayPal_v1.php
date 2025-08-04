@@ -1,11 +1,13 @@
 <?php
 /**
-	PayPal Imports
-	Type 1 is from the Activity Download here:
-	The Fields are customizible, and the defaults change frequently.
-	https://business.paypal.com/merchantdata/reportHome
-	https://business.paypal.com/merchantdata/dlog
-*/
+ * PayPal Imports
+ * Type 1 is from the Activity Download here:
+ * The Fields are customizible, and the defaults change frequently.
+ * https://business.paypal.com/merchantdata/reportHome
+ * https://business.paypal.com/merchantdata/dlog
+ *
+ * SPDX-License-Identifier: GPL-3.0-only
+ */
 
 namespace Edoceo\Imperium;
 
@@ -111,13 +113,13 @@ class Account_Reconcile_PayPal_v1
 			case 'COMPLETED/Bank Deposit to PP Account':
 			case 'COMPLETED/Donation Payment':
 			case 'COMPLETED/Express Checkout Payment':
-			case 'COMPLETED/General Authorization':
 			case 'COMPLETED/General Payment':
 			case 'COMPLETED/Mass Pay Payment':
+			case 'COMPLETED/Mobile Payment':
 			case 'COMPLETED/Order':
 			case 'COMPLETED/PreApproved Payment Bill User Payment':
-			case 'COMPLETED/Subscription Payment':
 			case 'COMPLETED/Reversal of General Account Hold':
+			case 'COMPLETED/Subscription Payment':
 			case 'COMPLETED/Website Payment':
 
 				if ($le0['amount'] > 0) {
@@ -251,13 +253,18 @@ class Account_Reconcile_PayPal_v1
 				));
 				$je['ledger_entry_list'][] = $le0;
 				break;
+			case 'COMPLETED/General Authorization': // Followed by a Sale which affects balance
+			case 'COMPLETED/General Currency Conversion': // There is a charge w/USD
 			case 'PAID/Invoice Sent':
+			case 'PENDING/Account Hold for Open Authorization':
+			case 'PENDING/Bank Deposit to PP Account':
+			case 'PENDING/General Authorization':
 				// Ignore
 				break;
 			default:
 				var_dump($csv);
 				//throw new \Exception("Cannot Handle Type: '{$csv[4]}'");
-				echo "Cannot Handle Type: '{$csv['Type']}'<br>";
+				echo "Cannot Handle Type: '{$st}'<br>";
 			}
 
 			if (!empty($je['ledger_entry_list'])) {

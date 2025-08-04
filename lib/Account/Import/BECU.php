@@ -1,6 +1,8 @@
 <?php
 /**
  * Parse the BECU CSV Format
+ *
+ * SPDX-License-Identifier: GPL-3.0-only
  */
 
 namespace Edoceo\Imperium\Account\Import;
@@ -60,8 +62,13 @@ class BECU extends \Edoceo\Imperium\Account\Import
 
 			$le = [];
 			$le['account_id'] = $this->account_id;
-			$le['cr'] = abs($this->filter_number($rec['Credit']));
-			$le['dr'] = abs($this->filter_number($rec['Debit']));
+
+			// These are Reversed because
+			// in BECU they count a 'Debit' as removing money from the Asset Account
+			// But in Imperium Debits increase Assets
+
+			$le['cr'] = abs($this->filter_number($rec['Debit']));
+			$le['dr'] = abs($this->filter_number($rec['Credit']));
 
 			$je['ledger_entry_list'][] = $le;
 

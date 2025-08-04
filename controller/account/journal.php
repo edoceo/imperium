@@ -1,7 +1,9 @@
 <?php
 /**
-	Load data for Journal View
-*/
+ * Load data for Journal View
+ *
+ * SPDX-License-Identifier: GPL-3.0-only
+ */
 
 namespace Edoceo\Imperium;
 
@@ -33,6 +35,8 @@ if ( ($id = intval($_GET['id'])) > 0) {
 
 // Show this specific Account
 $_SESSION['account-id'] = $this->Account['id'];
+
+session_write_close();
 
 $this->balanceAlpha = $this->Account->balanceBefore($this->date_alpha);
 $this->balanceOmega = $this->Account->balanceAt($this->date_omega);
