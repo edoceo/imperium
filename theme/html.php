@@ -26,11 +26,21 @@ if (is_array($_ENV['title'])) {
 <meta charset="utf-8">
 <meta name="viewport" content="initial-scale=1, user-scalable=yes">
 <meta name="theme-color" content="#336699">
+
+<link as="style" rel="preload" href="/vendor/fontawesome/css/all.min.css">
+<link as="style" rel="preload" href="/vendor/bootstrap/bootstrap.min.css">
+
+<link as="script" rel="preload" href="/vendor/jquery/jquery.min.js">
+<link as="script" rel="preload" href="/vendor/jquery-ui/jquery-ui.min.js">
+<link as="script" rel="preload" href="/vendor/bootstrap/bootstrap.bundle.min.js">
+<link as="script" rel="preload" href="/vendor/echarts/echarts.min.js">
+<link as="script" rel="preload" href="/vendor/htmx/htmx.min.js">
+
 <link rel="stylesheet" href="/vendor/fontawesome/css/all.min.css">
 <link rel="stylesheet" href="/vendor/jquery-ui/jquery-ui.min.css">
 <link rel="stylesheet" href="/vendor/bootstrap/bootstrap.min.css">
+<link rel="stylesheet" href="/css/app.css" rel="stylesheet">
 <?php
-echo '<link href="' . Radix::link('/css/app.css') . '" rel="stylesheet">';
 //echo '<link href="' . Radix::link('/img/imperium-icon.ico') . '" rel="shortcut icon">';
 //echo '<link href="' . Radix::link('/img/imperium-icon.png') . '" rel="apple-touch-icon">';
 // echo '<script>Imperium.base = "' . Radix::base(true) . '";</script>';
@@ -62,13 +72,14 @@ echo '</main>';
 ?>
 
 <footer>
-	<a href="https://edoceo.com/imperium">Imperium</a> &#169; 2001-2023 <a href="https://edoceo.com/">Edoceo, Inc</a>
+	<a href="https://edoceo.com/imperium">Imperium</a> &#169; 2001-2025 <a href="https://edoceo.com/">Edoceo, Inc</a>
 </footer>
 
 <script src="/vendor/jquery/jquery.min.js"></script>
 <script src="/vendor/jquery-ui/jquery-ui.min.js"></script>
 <script src="/vendor/bootstrap/bootstrap.bundle.min.js"></script>
 <script src="/vendor/htmx/htmx.min.js"></script>
+<script src="/vendor/echarts/echarts.min.js"></script>
 <script src="/js/imperium.js"></script>
 <?= Layout::getScript() ?>
 </body>

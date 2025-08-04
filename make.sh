@@ -78,6 +78,9 @@ install)
 	mkdir -p webroot/vendor/htmx
 	cp node_modules/htmx.org/dist/htmx.min.js webroot/vendor/htmx/
 
+	# echarts
+	mkdir -p webroot/vendor/echarts
+	cp node_modules/echarts/dist/echarts.min.js    webroot/vendor/echarts/
 
 	;;
 
