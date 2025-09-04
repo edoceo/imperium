@@ -388,17 +388,24 @@ class ImperiumBase implements \ArrayAccess
 	/**
 		@return Boolean
 	*/
-	public function offsetExists($k) { return isset($this->_data[$k]); }
+	public function offsetExists(mixed $k) : bool
+	{
+		return isset($this->_data[$k]);
+	}
 
 	/**
 		@return Data
 	*/
-	public function offsetGet($k) { return $this->_data[$k]; }
+	public function offsetGet(mixed $k) : mixed
+	{
+		return $this->_data[$k];
+	}
 
 	/**
 		@return void
 	*/
-	public function offsetSet($k, $v) {
+	public function offsetSet(mixed $k, mixed $v) : void
+	{
 		if ($v != $this->_data[$k]) {
 			$this->_diff_list[$k] = true;
 		}
@@ -408,5 +415,8 @@ class ImperiumBase implements \ArrayAccess
 	/**
 		@return void
 	*/
-	public function offsetUnset($k) { unset($this->_data[$k]); }
+	public function offsetUnset(mixed $k) : void
+	{
+		unset($this->_data[$k]);
+	}
 }
